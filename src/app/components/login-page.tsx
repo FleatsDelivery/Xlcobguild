@@ -127,6 +127,15 @@ export function LoginPage() {
             )}
           </Button>
 
+          {/* Temporary Skip Button for Development */}
+          <Button
+            onClick={() => window.location.hash = '#dev-mode'}
+            variant="outline"
+            className="w-full mt-3 h-10 text-sm border-2 border-[#0f172a]/20 text-[#0f172a]/60 hover:bg-[#0f172a]/5 hover:text-[#0f172a] rounded-xl"
+          >
+            Skip Sign In (Dev Mode)
+          </Button>
+
           <div className="mt-6 text-center text-sm text-[#0f172a]/60">
             <p>By signing in, you agree to our</p>
             <div className="mt-1 space-x-2">

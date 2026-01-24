@@ -6,17 +6,54 @@ import { Navigation } from '@/app/components/navigation';
 import { HomePage } from '@/app/components/home-page';
 import { LeaderboardPage } from '@/app/components/leaderboard-page';
 import { RequestsPage } from '@/app/components/requests-page';
+import { ProfilePage } from '@/app/components/profile-page';
 import { Loader2 } from 'lucide-react';
 
-type PageType = 'home' | 'leaderboard' | 'requests';
+type PageType = 'home' | 'leaderboard' | 'requests' | 'profile';
+
+// Mock user data for development mode
+const MOCK_USER = {
+  id: 'dev-user-123',
+  discord_id: '123456789',
+  discord_username: 'GuestUser',
+  discord_avatar: null,
+  rank_id: null,
+  prestige_level: 0,
+  role: 'guest',
+  ranks: null,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+};
 
 export default function App() {
   const [session, setSession] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<PageType>('home');
+  const [devMode, setDevMode] = useState(false);
 
   useEffect(() => {
+    // Check for dev mode in hash
+    const checkDevMode = () => {
+      if (window.location.hash === '#dev-mode') {
+        setDevMode(true);
+        setUser(MOCK_USER);
+        setSession({ user: MOCK_USER }); // Mock session
+        setLoading(false);
+        return true;
+      }
+      return false;
+    };
+
+    // Check immediately
+    if (checkDevMode()) return;
+
+    // Listen for hash changes
+    const handleHashChange = () => {
+      if (checkDevMode()) return;
+    };
+    window.addEventListener('hashchange', handleHashChange);
+
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -44,6 +81,9 @@ export default function App() {
   }, []);
 
   const fetchUserData = async (accessToken: string) => {
+    // Skip fetching if in dev mode
+    if (devMode) return;
+
     try {
       // First, ensure user exists in database via server endpoint
       const discordUser = (await supabase.auth.getUser(accessToken)).data.user;
@@ -107,8 +147,10 @@ export default function App() {
       
       <main className="pt-16 pb-16">
         {currentPage === 'home' && <HomePage user={user} />}
-        {currentPage === 'leaderboard' && <LeaderboardPage />}
+        {currentPage === 'leaderboard' && user?.role !== 'guest' && <LeaderboardPage />}
+        {currentPage === 'leaderboard' && user?.role === 'guest' && <HomePage user={user} />}
         {currentPage === 'requests' && <RequestsPage user={user} />}
+        {currentPage === 'profile' && <ProfilePage user={user} />}
       </main>
     </div>
   );

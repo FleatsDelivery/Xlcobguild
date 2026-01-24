@@ -1,3 +1,5 @@
+import { Footer } from '@/app/components/footer';
+
 export function LeaderboardPage() {
   return (
     <div className="p-6">
@@ -9,6 +11,8 @@ export function LeaderboardPage() {
           </p>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

@@ -143,4 +143,163 @@ app.get("/make-server-4789f4af/auth/me", async (c) => {
   }
 });
 
+// Submit membership request
+app.post("/make-server-4789f4af/requests/membership", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('id, role')
+      .eq('discord_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Check if user is already a member
+    if (dbUser.role !== 'guest') {
+      return c.json({ error: 'Only guests can submit membership requests' }, 400);
+    }
+
+    // Check if user already has a pending request
+    const { data: existingRequest, error: checkError } = await supabase
+      .from('membership_requests')
+      .select('*')
+      .eq('user_id', dbUser.id)
+      .eq('status', 'pending')
+      .single();
+
+    if (existingRequest) {
+      return c.json({ error: 'You already have a pending membership request' }, 400);
+    }
+
+    // Create membership request
+    const { data: request, error: createError } = await supabase
+      .from('membership_requests')
+      .insert({
+        user_id: dbUser.id,
+        status: 'pending',
+      })
+      .select()
+      .single();
+
+    if (createError) {
+      console.error('Error creating membership request:', createError);
+      return c.json({ error: 'Failed to create membership request' }, 500);
+    }
+
+    return c.json({ request });
+  } catch (error) {
+    console.error('Submit membership request error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Get user's membership request
+app.get("/make-server-4789f4af/requests/membership", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('discord_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Get user's membership request
+    const { data: request, error: requestError } = await supabase
+      .from('membership_requests')
+      .select('*')
+      .eq('user_id', dbUser.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (requestError && requestError.code !== 'PGRST116') {
+      console.error('Error fetching membership request:', requestError);
+      return c.json({ error: 'Failed to fetch membership request' }, 500);
+    }
+
+    return c.json({ request: request || null });
+  } catch (error) {
+    console.error('Get membership request error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Cancel membership request
+app.delete("/make-server-4789f4af/requests/membership/:id", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('discord_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    const requestId = c.req.param('id');
+
+    // Delete the request (ensure it belongs to the user)
+    const { error: deleteError } = await supabase
+      .from('membership_requests')
+      .delete()
+      .eq('id', requestId)
+      .eq('user_id', dbUser.id);
+
+    if (deleteError) {
+      console.error('Error deleting membership request:', deleteError);
+      return c.json({ error: 'Failed to cancel membership request' }, 500);
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Cancel membership request error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
 Deno.serve(app.fetch);
