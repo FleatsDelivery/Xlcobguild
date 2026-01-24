@@ -4,9 +4,11 @@ import { UserPlus, AlertCircle, Loader2, CheckCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { projectId, publicAnonKey } from '/utils/supabase/info';
+import { UserManagement } from '@/app/components/user-management';
 
 export function HomePage({ user }: { user: any }) {
   const isGuest = user?.role === 'guest';
+  const isOwner = user?.role === 'owner';
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasRequest, setHasRequest] = useState(false);
   const [loadingRequest, setLoadingRequest] = useState(true);
@@ -176,6 +178,9 @@ export function HomePage({ user }: { user: any }) {
             </div>
           </div>
         )}
+
+        {/* Owner: User Management Section */}
+        {isOwner && <UserManagement />}
       </div>
 
       <Footer />

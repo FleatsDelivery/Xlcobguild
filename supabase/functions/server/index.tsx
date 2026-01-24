@@ -36,11 +36,13 @@ app.get("/make-server-4789f4af/health", (c) => {
 app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
   try {
     const body = await c.req.json();
-    const { discord_id, discord_username, discord_avatar } = body;
+    const { discord_id, discord_username, discord_avatar, discord_email } = body;
 
     if (!discord_id) {
       return c.json({ error: "Discord ID required" }, 400);
     }
+
+    console.log('Discord callback - ID:', discord_id, 'Username:', discord_username, 'Email:', discord_email);
 
     // Check if user exists
     const { data: existingUser, error: fetchError } = await supabase
@@ -55,14 +57,23 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
     }
 
     if (existingUser) {
+      // Check if this user should be owner
+      let updateData: any = {
+        discord_username,
+        discord_avatar,
+        updated_at: new Date().toISOString(),
+      };
+
+      // If email matches owner email and user is not already owner, upgrade them
+      if (discord_email === 'tmull_23@hotmail.com' && existingUser.role !== 'owner') {
+        updateData.role = 'owner';
+        console.log('🌽 EXISTING USER UPGRADED TO OWNER');
+      }
+
       // Update existing user info
       const { data: updatedUser, error: updateError } = await supabase
         .from('users')
-        .update({
-          discord_username,
-          discord_avatar,
-          updated_at: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq('discord_id', discord_id)
         .select()
         .single();
@@ -75,7 +86,14 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
       return c.json({ user: updatedUser });
     }
 
-    // Create new user with guest role and rank 1 (Earwig)
+    // Determine role based on email - check if this is the owner
+    let role = 'guest';
+    if (discord_email === 'tmull_23@hotmail.com') {
+      role = 'owner';
+      console.log('🌽 OWNER ACCOUNT DETECTED - Setting role to owner');
+    }
+
+    // Create new user with guest role (or owner if matched) and rank 1 (Earwig)
     const { data: newUser, error: createError } = await supabase
       .from('users')
       .insert({
@@ -84,7 +102,7 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
         discord_avatar,
         rank_id: 1, // Earwig
         prestige_level: 0,
-        role: 'guest',
+        role: role,
       })
       .select()
       .single();
@@ -94,6 +112,7 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
       return c.json({ error: 'Failed to create user' }, 500);
     }
 
+    console.log('Created new user with role:', role);
     return c.json({ user: newUser });
   } catch (error) {
     console.error('Discord callback error:', error);
@@ -298,6 +317,119 @@ app.delete("/make-server-4789f4af/requests/membership/:id", async (c) => {
     return c.json({ success: true });
   } catch (error) {
     console.error('Cancel membership request error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Get all users (Owner only)
+app.get("/make-server-4789f4af/admin/users", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database and check if owner
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('discord_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    if (dbUser.role !== 'owner') {
+      return c.json({ error: 'Only owners can access this endpoint' }, 403);
+    }
+
+    // Get all users with rank info
+    const { data: users, error: usersError } = await supabase
+      .from('users')
+      .select(`
+        *,
+        ranks (
+          id,
+          name,
+          display_order,
+          description
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (usersError) {
+      console.error('Error fetching users:', usersError);
+      return c.json({ error: 'Failed to fetch users' }, 500);
+    }
+
+    return c.json({ users });
+  } catch (error) {
+    console.error('Get users error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Update user role (Owner only)
+app.patch("/make-server-4789f4af/admin/users/:userId/role", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database and check if owner
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('discord_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    if (dbUser.role !== 'owner') {
+      return c.json({ error: 'Only owners can update user roles' }, 403);
+    }
+
+    const userId = c.req.param('userId');
+    const { role } = await c.req.json();
+
+    if (!['guest', 'member', 'admin', 'owner'].includes(role)) {
+      return c.json({ error: 'Invalid role' }, 400);
+    }
+
+    // Update user role
+    const { data: updatedUser, error: updateError } = await supabase
+      .from('users')
+      .update({ role, updated_at: new Date().toISOString() })
+      .eq('id', userId)
+      .select()
+      .single();
+
+    if (updateError) {
+      console.error('Error updating user role:', updateError);
+      return c.json({ error: 'Failed to update user role' }, 500);
+    }
+
+    return c.json({ user: updatedUser });
+  } catch (error) {
+    console.error('Update user role error:', error);
     return c.json({ error: 'Internal server error' }, 500);
   }
 });

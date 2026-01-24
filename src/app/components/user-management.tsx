@@ -1,0 +1,220 @@
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import { projectId } from '/utils/supabase/info';
+import { Users, Shield, Crown, UserX, Loader2, ChevronDown } from 'lucide-react';
+import { Button } from '@/app/components/ui/button';
+
+export function UserManagement() {
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
+  const [filterRole, setFilterRole] = useState<string>('all');
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/users`,
+        {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setUsers(data.users || []);
+      } else {
+        console.error('Failed to fetch users:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRoleChange = async (userId: string, newRole: string) => {
+    if (!confirm(`Are you sure you want to change this user's role to ${newRole}?`)) {
+      return;
+    }
+
+    setUpdatingUserId(userId);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        alert('Please sign in first');
+        setUpdatingUserId(null);
+        return;
+      }
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/users/${userId}/role`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ role: newRole }),
+        }
+      );
+
+      if (!response.ok) {
+        alert('Failed to update user role');
+        setUpdatingUserId(null);
+        return;
+      }
+
+      // Refresh users list
+      await fetchUsers();
+      alert(`🌽 User role updated to ${newRole}!`);
+    } catch (error) {
+      console.error('Error updating user role:', error);
+      alert('Failed to update user role. Please try again.');
+    } finally {
+      setUpdatingUserId(null);
+    }
+  };
+
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case 'owner':
+        return <Crown className="w-4 h-4 text-[#f59e0b]" />;
+      case 'admin':
+        return <Shield className="w-4 h-4 text-[#3b82f6]" />;
+      case 'member':
+        return <Users className="w-4 h-4 text-[#10b981]" />;
+      default:
+        return <UserX className="w-4 h-4 text-[#6b7280]" />;
+    }
+  };
+
+  const getRoleBadgeColor = (role: string) => {
+    switch (role) {
+      case 'owner':
+        return 'bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/30';
+      case 'admin':
+        return 'bg-[#3b82f6]/10 text-[#3b82f6] border-[#3b82f6]/30';
+      case 'member':
+        return 'bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30';
+      default:
+        return 'bg-[#6b7280]/10 text-[#6b7280] border-[#6b7280]/30';
+    }
+  };
+
+  const filteredUsers = filterRole === 'all' 
+    ? users 
+    : users.filter(u => u.role === filterRole);
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-2xl shadow-sm p-8 border-2 border-[#0f172a]/10 text-center">
+        <Loader2 className="w-10 h-10 animate-spin text-[#f97316] mx-auto mb-2" />
+        <p className="text-sm text-[#0f172a]/70">Loading users...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-2xl shadow-sm p-6 border-2 border-[#0f172a]/10">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-[#f97316]/10 flex items-center justify-center">
+            <Users className="w-5 h-5 text-[#f97316]" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-[#0f172a]">User Management</h3>
+            <p className="text-sm text-[#0f172a]/60">{users.length} total users</p>
+          </div>
+        </div>
+
+        <select
+          value={filterRole}
+          onChange={(e) => setFilterRole(e.target.value)}
+          className="px-3 py-2 rounded-lg border-2 border-[#0f172a]/10 bg-white text-sm text-[#0f172a] cursor-pointer hover:border-[#f97316]/30 transition-colors"
+        >
+          <option value="all">All Roles</option>
+          <option value="owner">Owner</option>
+          <option value="admin">Admin</option>
+          <option value="member">Member</option>
+          <option value="guest">Guest</option>
+        </select>
+      </div>
+
+      <div className="space-y-3 max-h-[500px] overflow-y-auto">
+        {filteredUsers.length === 0 ? (
+          <p className="text-center text-[#0f172a]/60 py-8">No users found for this filter.</p>
+        ) : (
+          filteredUsers.map((user) => (
+            <div
+              key={user.id}
+              className="flex items-center justify-between p-4 rounded-xl border-2 border-[#0f172a]/10 hover:border-[#f97316]/20 transition-colors bg-[#fdf5e9]/30"
+            >
+              <div className="flex items-center gap-3 flex-1">
+                {user.discord_avatar ? (
+                  <img
+                    src={user.discord_avatar}
+                    alt={user.discord_username}
+                    className="w-10 h-10 rounded-full border-2 border-[#f97316]/20"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-[#f97316]/20 flex items-center justify-center">
+                    <span className="text-[#f97316] font-bold">
+                      {user.discord_username?.[0]?.toUpperCase() || '?'}
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex-1">
+                  <p className="font-semibold text-[#0f172a]">{user.discord_username}</p>
+                  <div className="flex items-center gap-2 text-xs text-[#0f172a]/60">
+                    <span>{user.ranks?.name || 'No Rank'}</span>
+                    <span>•</span>
+                    <span>Prestige {user.prestige_level}</span>
+                  </div>
+                </div>
+
+                <div className={`px-3 py-1 rounded-full text-xs font-semibold border-2 flex items-center gap-1.5 ${getRoleBadgeColor(user.role)}`}>
+                  {getRoleIcon(user.role)}
+                  {user.role}
+                </div>
+              </div>
+
+              <div className="ml-4">
+                {updatingUserId === user.id ? (
+                  <Loader2 className="w-5 h-5 animate-spin text-[#f97316]" />
+                ) : (
+                  <select
+                    value={user.role}
+                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                    className="px-2 py-1 rounded-lg border-2 border-[#0f172a]/10 bg-white text-xs text-[#0f172a] cursor-pointer hover:border-[#f97316]/30 transition-colors"
+                    disabled={updatingUserId !== null}
+                  >
+                    <option value="guest">Guest</option>
+                    <option value="member">Member</option>
+                    <option value="admin">Admin</option>
+                    <option value="owner">Owner</option>
+                  </select>
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}

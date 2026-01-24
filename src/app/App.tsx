@@ -89,6 +89,23 @@ export default function App() {
       const discordUser = (await supabase.auth.getUser(accessToken)).data.user;
       
       if (discordUser) {
+        // Log Discord user metadata for debugging
+        console.log('Discord user metadata:', discordUser.user_metadata);
+        console.log('Discord user identities:', discordUser.identities);
+        
+        // Extract Discord info - Discord OAuth provides specific metadata
+        const discordUsername = discordUser.user_metadata?.custom_claims?.global_name 
+          || discordUser.user_metadata?.full_name 
+          || discordUser.user_metadata?.name 
+          || discordUser.email?.split('@')[0] 
+          || 'Unknown';
+        
+        const discordAvatar = discordUser.user_metadata?.avatar_url 
+          || discordUser.user_metadata?.picture;
+        
+        console.log('Extracted Discord username:', discordUsername);
+        console.log('Extracted Discord avatar:', discordAvatar);
+        
         // Call server to create/update user record
         const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/auth/discord-callback`, {
           method: 'POST',
@@ -98,8 +115,9 @@ export default function App() {
           },
           body: JSON.stringify({
             discord_id: discordUser.id,
-            discord_username: discordUser.user_metadata.full_name || discordUser.user_metadata.name || 'Unknown',
-            discord_avatar: discordUser.user_metadata.avatar_url || discordUser.user_metadata.picture,
+            discord_username: discordUsername,
+            discord_avatar: discordAvatar,
+            discord_email: discordUser.email,
           }),
         });
 
