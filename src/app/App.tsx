@@ -136,10 +136,16 @@ export default function App() {
           },
         });
 
+        console.log('🔍 /auth/me response status:', userResponse.status, userResponse.statusText);
+
         if (userResponse.ok) {
           const { user: dbUser } = await userResponse.json();
           console.log('✅ Fetched user from database:', dbUser);
           setUser(dbUser);
+        } else {
+          const errorText = await userResponse.text();
+          console.error('❌ Failed to fetch user from /auth/me:', userResponse.status, errorText);
+          console.error('❌ Access token used:', accessToken?.substring(0, 20) + '...');
         }
       }
     } catch (error) {

@@ -35,7 +35,13 @@ app.use(
 
 // Health check endpoint
 app.get("/make-server-4789f4af/health", (c) => {
-  return c.json({ status: "ok" });
+  return c.json({ status: "ok", version: "3.0-DEPLOYED", timestamp: Date.now() });
+});
+
+// TEST ENDPOINT - Does the new code work?
+app.get("/make-server-4789f4af/test", (c) => {
+  console.log('🚀 TEST ENDPOINT HIT - NEW CODE IS DEPLOYED!');
+  return c.json({ message: "New code is working!", emoji: "🌽" });
 });
 
 // Create or get user after Discord OAuth
@@ -130,8 +136,11 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
 
 // Get current user info
 app.get("/make-server-4789f4af/auth/me", async (c) => {
+  console.log('🌽🌽🌽 /auth/me endpoint HIT - Version 2.0');
+  
   try {
     const authHeader = c.req.header('Authorization');
+    console.log('🔍 Authorization header exists?', !!authHeader);
     
     if (!authHeader) {
       console.error('❌ No Authorization header in /auth/me');
@@ -139,53 +148,26 @@ app.get("/make-server-4789f4af/auth/me", async (c) => {
     }
 
     const accessToken = authHeader.replace('Bearer ', '');
-    console.log('🔍 /auth/me called, token starts with:', accessToken?.substring(0, 20) + '...');
+    console.log('🔍 Token received, length:', accessToken?.length);
 
-    // Use admin client to verify the JWT token
-    const { data: { user: authUser }, error: authError } = await supabase.auth.admin.getUserById(accessToken);
+    // Use anon client to verify the token
+    console.log('⏳ Calling anonSupabase.auth.getUser...');
+    const { data, error } = await anonSupabase.auth.getUser(accessToken);
     
-    // If that doesn't work, try getting the user with the regular method
-    if (authError || !authUser) {
-      console.log('⚠️  Admin getUserById failed, trying getUser with anon client');
-      
-      // Use anon client to verify the token
-      const { data, error } = await anonSupabase.auth.getUser(accessToken);
-      
-      if (error || !data.user) {
-        console.error('❌ Failed to verify token:', error);
-        return c.json({ error: 'Unauthorized - Invalid token' }, 401);
-      }
-      
-      console.log('✅ Verified user with anon client:', data.user.id);
-      
-      // Get user from database - discord_id stores the Supabase user ID
-      const { data: dbUser, error: dbError } = await supabase
-        .from('users')
-        .select(`
-          *,
-          ranks (
-            id,
-            name,
-            display_order,
-            description
-          )
-        `)
-        .eq('discord_id', data.user.id)
-        .single();
-
-      if (dbError) {
-        console.error('❌ Error fetching user from database:', dbError);
-        return c.json({ error: 'User not found in database' }, 404);
-      }
-
-      console.log('✅ Found user in database:', dbUser.discord_username, 'Role:', dbUser.role);
-      return c.json({ user: dbUser });
+    if (error) {
+      console.error('❌ Token verification failed:', error.message);
+      return c.json({ error: 'Unauthorized - Invalid token: ' + error.message }, 401);
     }
-
-    // This path is for admin getUserById success
-    console.log('✅ Authenticated user via admin:', authUser.id);
-
-    // Get user from database
+    
+    if (!data.user) {
+      console.error('❌ No user in token data');
+      return c.json({ error: 'Unauthorized - No user found' }, 401);
+    }
+    
+    console.log('✅ Verified user with anon client:', data.user.id);
+    
+    // Get user from database - discord_id stores the Supabase user ID
+    console.log('⏳ Querying database for user:', data.user.id);
     const { data: dbUser, error: dbError } = await supabase
       .from('users')
       .select(`
@@ -197,19 +179,24 @@ app.get("/make-server-4789f4af/auth/me", async (c) => {
           description
         )
       `)
-      .eq('discord_id', authUser.id)
+      .eq('discord_id', data.user.id)
       .single();
 
     if (dbError) {
-      console.error('❌ Error fetching user from database:', dbError);
+      console.error('❌ Database query error:', dbError.message, dbError.code);
+      return c.json({ error: 'User not found in database: ' + dbError.message }, 404);
+    }
+
+    if (!dbUser) {
+      console.error('❌ No user found in database for ID:', data.user.id);
       return c.json({ error: 'User not found in database' }, 404);
     }
 
-    console.log('✅ Found user in database:', dbUser.discord_username, 'Role:', dbUser.role);
+    console.log('✅ SUCCESS! Found user:', dbUser.discord_username, 'Role:', dbUser.role);
     return c.json({ user: dbUser });
   } catch (error) {
-    console.error('❌ Get user error:', error);
-    return c.json({ error: 'Internal server error' }, 500);
+    console.error('❌ Unexpected error in /auth/me:', error);
+    return c.json({ error: 'Internal server error: ' + error.message }, 500);
   }
 });
 
