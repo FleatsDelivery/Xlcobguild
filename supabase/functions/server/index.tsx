@@ -35,7 +35,7 @@ app.use(
 
 // Health check endpoint
 app.get("/make-server-4789f4af/health", (c) => {
-  return c.json({ status: "ok", version: "3.0-DEPLOYED", timestamp: Date.now() });
+  return c.json({ status: "ok", version: "4.0-FIXED-AUTH", timestamp: Date.now() });
 });
 
 // TEST ENDPOINT - Does the new code work?
