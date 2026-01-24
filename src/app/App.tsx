@@ -31,6 +31,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<PageType>('home');
   const [devMode, setDevMode] = useState(false);
+  const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
 
   useEffect(() => {
     // Check for dev mode in hash
@@ -143,6 +144,40 @@ export default function App() {
     }
   };
 
+  // Fetch pending requests count
+  useEffect(() => {
+    if (!session?.access_token || !user) return;
+
+    const fetchPendingCount = async () => {
+      try {
+        const isAdmin = user.role === 'admin' || user.role === 'owner';
+        const endpoint = isAdmin 
+          ? `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/mvp-requests`
+          : `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/requests/mvp/my`;
+
+        const response = await fetch(endpoint, {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const pendingCount = (data.requests || []).filter((r: any) => r.status === 'pending').length;
+          setPendingRequestsCount(pendingCount);
+        }
+      } catch (error) {
+        console.error('Error fetching pending requests count:', error);
+      }
+    };
+
+    fetchPendingCount();
+
+    // Refresh count every 30 seconds
+    const interval = setInterval(fetchPendingCount, 30000);
+    return () => clearInterval(interval);
+  }, [session, user]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#fdf5e9]">
@@ -160,7 +195,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#fdf5e9]">
-      <Navigation currentPage={currentPage} onNavigate={setCurrentPage} user={user} />
+      <Navigation 
+        currentPage={currentPage} 
+        onNavigate={setCurrentPage} 
+        user={user}
+        pendingRequestsCount={pendingRequestsCount}
+      />
       
       <main className="pt-16 pb-16">
         {currentPage === 'home' && <HomePage user={user} />}

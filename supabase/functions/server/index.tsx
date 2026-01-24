@@ -33,6 +33,23 @@ app.use(
   }),
 );
 
+// Create storage bucket on startup
+(async () => {
+  const bucketName = 'make-4789f4af-mvp-screenshots';
+  try {
+    const { data: buckets } = await supabase.storage.listBuckets();
+    const bucketExists = buckets?.some(bucket => bucket.name === bucketName);
+    if (!bucketExists) {
+      await supabase.storage.createBucket(bucketName, { public: false });
+      console.log(`✅ Created storage bucket: ${bucketName}`);
+    } else {
+      console.log(`✅ Storage bucket already exists: ${bucketName}`);
+    }
+  } catch (error) {
+    console.error(`❌ Error creating storage bucket:`, error);
+  }
+})();
+
 // Health check endpoint
 app.get("/make-server-4789f4af/health", (c) => {
   return c.json({ status: "ok", version: "4.0-FIXED-AUTH", timestamp: Date.now() });
@@ -490,6 +507,665 @@ app.patch("/make-server-4789f4af/admin/users/:userId/role", async (c) => {
     return c.json({ user: updatedUser });
   } catch (error) {
     console.error('Update user role error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Submit MVP screenshot for rank-up (Members only)
+app.post("/make-server-4789f4af/requests/mvp", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database - query by supabase_id
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('id, role, rank_id, prestige_level')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Only members can submit MVP requests
+    if (dbUser.role === 'guest') {
+      return c.json({ error: 'Only members can submit MVP screenshots' }, 403);
+    }
+
+    const { screenshot_url, match_id, opendota_link } = await c.req.json();
+
+    if (!screenshot_url) {
+      return c.json({ error: 'Screenshot URL is required' }, 400);
+    }
+
+    // Check for duplicate submissions (same screenshot URL, match ID, or OpenDota link)
+    const { data: duplicates, error: dupError } = await supabase
+      .from('rank_up_requests')
+      .select('*')
+      .eq('user_id', dbUser.id)
+      .or(`screenshot_url.eq.${screenshot_url}${match_id ? `,match_id.eq.${match_id}` : ''}${opendota_link ? `,opendota_link.eq.${opendota_link}` : ''}`);
+
+    if (duplicates && duplicates.length > 0) {
+      return c.json({ error: 'You have already submitted this screenshot or match' }, 400);
+    }
+
+    // Create MVP request
+    const { data: request, error: createError } = await supabase
+      .from('rank_up_requests')
+      .insert({
+        user_id: dbUser.id,
+        type: 'mvp',
+        screenshot_url,
+        match_id: match_id || null,
+        opendota_link: opendota_link || null,
+        current_rank_id: dbUser.rank_id,
+        current_prestige_level: dbUser.prestige_level,
+        status: 'pending',
+      })
+      .select()
+      .single();
+
+    if (createError) {
+      console.error('Error creating MVP request:', createError);
+      return c.json({ error: 'Failed to create MVP request' }, 500);
+    }
+
+    return c.json({ request });
+  } catch (error) {
+    console.error('Submit MVP request error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Update user rank (Owner only)
+app.patch("/make-server-4789f4af/admin/users/:userId/rank", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database and check if owner - query by supabase_id
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    if (dbUser.role !== 'owner') {
+      return c.json({ error: 'Only owners can update user ranks' }, 403);
+    }
+
+    const userId = c.req.param('userId');
+    const { action } = await c.req.json();
+
+    if (!['rank_up', 'rank_down', 'prestige'].includes(action)) {
+      return c.json({ error: 'Invalid action' }, 400);
+    }
+
+    // Get target user's current rank and prestige
+    const { data: targetUser, error: targetError } = await supabase
+      .from('users')
+      .select('rank_id, prestige_level')
+      .eq('id', userId)
+      .single();
+
+    if (targetError || !targetUser) {
+      return c.json({ error: 'Target user not found' }, 404);
+    }
+
+    let newRankId = targetUser.rank_id;
+    let newPrestigeLevel = targetUser.prestige_level;
+
+    if (action === 'rank_up') {
+      // Max rank depends on prestige level
+      const maxRank = newPrestigeLevel === 5 ? 11 : 10;
+      if (newRankId >= maxRank) {
+        return c.json({ error: `User is already at max rank for prestige level ${newPrestigeLevel}` }, 400);
+      }
+      newRankId = newRankId + 1;
+    } else if (action === 'rank_down') {
+      if (newRankId <= 1) {
+        return c.json({ error: 'User is already at minimum rank' }, 400);
+      }
+      newRankId = newRankId - 1;
+    } else if (action === 'prestige') {
+      if (newPrestigeLevel >= 5) {
+        return c.json({ error: 'User is already at max prestige level' }, 400);
+      }
+      const maxRank = newPrestigeLevel === 4 ? 10 : 10; // Current max rank before prestiging
+      if (newRankId < maxRank) {
+        return c.json({ error: 'User must be at max rank to prestige' }, 400);
+      }
+      newPrestigeLevel = newPrestigeLevel + 1;
+      newRankId = 1; // Reset to rank 1
+    }
+
+    // Update user rank/prestige
+    const { data: updatedUser, error: updateError } = await supabase
+      .from('users')
+      .update({ 
+        rank_id: newRankId, 
+        prestige_level: newPrestigeLevel,
+        updated_at: new Date().toISOString() 
+      })
+      .eq('id', userId)
+      .select()
+      .single();
+
+    if (updateError) {
+      console.error('Error updating user rank:', updateError);
+      return c.json({ error: 'Failed to update user rank' }, 500);
+    }
+
+    return c.json({ user: updatedUser });
+  } catch (error) {
+    console.error('Update user rank error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Get all membership requests (Owner/Admin only)
+app.get("/make-server-4789f4af/admin/membership-requests", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database and check if owner/admin - query by supabase_id
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+      return c.json({ error: 'Only owners and admins can access this endpoint' }, 403);
+    }
+
+    // Get all membership requests with user info
+    const { data: requests, error: requestsError } = await supabase
+      .from('membership_requests')
+      .select(`
+        *,
+        users (
+          id,
+          discord_username,
+          discord_avatar,
+          email
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (requestsError) {
+      console.error('Error fetching membership requests:', requestsError);
+      return c.json({ error: 'Failed to fetch membership requests' }, 500);
+    }
+
+    return c.json({ requests });
+  } catch (error) {
+    console.error('Get membership requests error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Approve membership request (Owner/Admin only)
+app.post("/make-server-4789f4af/admin/membership-requests/:requestId/approve", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database and check if owner/admin - query by supabase_id
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+      return c.json({ error: 'Only owners and admins can approve requests' }, 403);
+    }
+
+    const requestId = c.req.param('requestId');
+
+    // Get the request to find the user
+    const { data: request, error: fetchError } = await supabase
+      .from('membership_requests')
+      .select('user_id, status')
+      .eq('id', requestId)
+      .single();
+
+    if (fetchError || !request) {
+      console.error('Error fetching request:', fetchError);
+      return c.json({ error: 'Request not found' }, 404);
+    }
+
+    if (request.status !== 'pending') {
+      return c.json({ error: 'Request has already been processed' }, 400);
+    }
+
+    // Update the request status
+    const { error: updateRequestError } = await supabase
+      .from('membership_requests')
+      .update({ 
+        status: 'approved',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', requestId);
+
+    if (updateRequestError) {
+      console.error('Error updating request:', updateRequestError);
+      return c.json({ error: 'Failed to approve request' }, 500);
+    }
+
+    // Update the user's role to member
+    const { error: updateUserError } = await supabase
+      .from('users')
+      .update({ 
+        role: 'member',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', request.user_id);
+
+    if (updateUserError) {
+      console.error('Error updating user role:', updateUserError);
+      return c.json({ error: 'Failed to update user role' }, 500);
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Approve membership request error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Deny membership request (Owner/Admin only)
+app.post("/make-server-4789f4af/admin/membership-requests/:requestId/deny", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database and check if owner/admin - query by supabase_id
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+      return c.json({ error: 'Only owners and admins can deny requests' }, 403);
+    }
+
+    const requestId = c.req.param('requestId');
+
+    // Get the request to check status
+    const { data: request, error: fetchError } = await supabase
+      .from('membership_requests')
+      .select('status')
+      .eq('id', requestId)
+      .single();
+
+    if (fetchError || !request) {
+      console.error('Error fetching request:', fetchError);
+      return c.json({ error: 'Request not found' }, 404);
+    }
+
+    if (request.status !== 'pending') {
+      return c.json({ error: 'Request has already been processed' }, 400);
+    }
+
+    // Update the request status
+    const { error: updateError } = await supabase
+      .from('membership_requests')
+      .update({ 
+        status: 'denied',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', requestId);
+
+    if (updateError) {
+      console.error('Error denying request:', updateError);
+      return c.json({ error: 'Failed to deny request' }, 500);
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Deny membership request error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Get user's MVP requests
+app.get("/make-server-4789f4af/requests/mvp/my", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database - query by supabase_id
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Get all MVP requests for this user
+    const { data: requests, error: requestsError } = await supabase
+      .from('rank_up_requests')
+      .select('*')
+      .eq('user_id', dbUser.id)
+      .order('created_at', { ascending: false });
+
+    if (requestsError) {
+      console.error('Error fetching MVP requests:', requestsError);
+      return c.json({ error: 'Failed to fetch MVP requests' }, 500);
+    }
+
+    return c.json({ requests: requests || [] });
+  } catch (error) {
+    console.error('Get MVP requests error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Get all MVP requests (Admin/Owner only)
+app.get("/make-server-4789f4af/admin/mvp-requests", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database and check if owner/admin - query by supabase_id
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+      return c.json({ error: 'Only owners and admins can access this endpoint' }, 403);
+    }
+
+    // Get all MVP requests with user info
+    const { data: requests, error: requestsError } = await supabase
+      .from('rank_up_requests')
+      .select(`
+        *,
+        users!rank_up_requests_user_id_fkey (
+          id,
+          discord_username,
+          discord_avatar,
+          email,
+          rank_id,
+          prestige_level
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (requestsError) {
+      console.error('Error fetching MVP requests:', requestsError);
+      return c.json({ error: 'Failed to fetch MVP requests' }, 500);
+    }
+
+    return c.json({ requests: requests || [] });
+  } catch (error) {
+    console.error('Get MVP requests error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Approve MVP request and rank up user (Admin/Owner only)
+app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/approve", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database and check if owner/admin - query by supabase_id
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+      return c.json({ error: 'Only owners and admins can approve requests' }, 403);
+    }
+
+    const requestId = c.req.param('requestId');
+
+    // Get the request
+    const { data: request, error: fetchError } = await supabase
+      .from('rank_up_requests')
+      .select('user_id, status, current_rank_id, current_prestige_level')
+      .eq('id', requestId)
+      .single();
+
+    if (fetchError || !request) {
+      console.error('Error fetching request:', fetchError);
+      return c.json({ error: 'Request not found' }, 404);
+    }
+
+    if (request.status !== 'pending') {
+      return c.json({ error: 'Request has already been processed' }, 400);
+    }
+
+    // Get the user's current rank
+    const { data: targetUser, error: targetError } = await supabase
+      .from('users')
+      .select('rank_id, prestige_level')
+      .eq('id', request.user_id)
+      .single();
+
+    if (targetError || !targetUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Calculate new rank
+    const maxRank = targetUser.prestige_level === 5 ? 11 : 10;
+    let newRankId = targetUser.rank_id;
+
+    if (targetUser.rank_id < maxRank) {
+      newRankId = targetUser.rank_id + 1;
+    } else {
+      return c.json({ error: 'User is already at max rank for their prestige level' }, 400);
+    }
+
+    // Update the request status to approved
+    const { error: updateRequestError } = await supabase
+      .from('rank_up_requests')
+      .update({ 
+        status: 'approved',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', requestId);
+
+    if (updateRequestError) {
+      console.error('Error updating request:', updateRequestError);
+      return c.json({ error: 'Failed to approve request' }, 500);
+    }
+
+    // Rank up the user
+    const { error: updateUserError } = await supabase
+      .from('users')
+      .update({ 
+        rank_id: newRankId,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', request.user_id);
+
+    if (updateUserError) {
+      console.error('Error ranking up user:', updateUserError);
+      return c.json({ error: 'Failed to rank up user' }, 500);
+    }
+
+    return c.json({ success: true, new_rank_id: newRankId });
+  } catch (error) {
+    console.error('Approve MVP request error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Deny MVP request (Admin/Owner only)
+app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/deny", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database and check if owner/admin - query by supabase_id
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+      return c.json({ error: 'Only owners and admins can deny requests' }, 403);
+    }
+
+    const requestId = c.req.param('requestId');
+
+    // Get the request to check status
+    const { data: request, error: fetchError } = await supabase
+      .from('rank_up_requests')
+      .select('status')
+      .eq('id', requestId)
+      .single();
+
+    if (fetchError || !request) {
+      console.error('Error fetching request:', fetchError);
+      return c.json({ error: 'Request not found' }, 404);
+    }
+
+    if (request.status !== 'pending') {
+      return c.json({ error: 'Request has already been processed' }, 400);
+    }
+
+    // Update the request status to denied (keep it in the user's history)
+    const { error: updateError } = await supabase
+      .from('rank_up_requests')
+      .update({ 
+        status: 'denied',
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', requestId);
+
+    if (updateError) {
+      console.error('Error denying request:', updateError);
+      return c.json({ error: 'Failed to deny request' }, 500);
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Deny MVP request error:', error);
     return c.json({ error: 'Internal server error' }, 500);
   }
 });

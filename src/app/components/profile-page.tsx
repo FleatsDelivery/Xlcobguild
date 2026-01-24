@@ -1,8 +1,7 @@
-import { User, LogOut, Shield, RefreshCw } from 'lucide-react';
+import { User, LogOut, Shield } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { supabase } from '@/lib/supabase';
 import { Footer } from '@/app/components/footer';
-import { useState } from 'react';
 
 interface ProfilePageProps {
   user: any;
@@ -10,22 +9,41 @@ interface ProfilePageProps {
 }
 
 export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     window.location.reload();
   };
 
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    if (onRefresh) {
-      await onRefresh();
-    } else {
-      window.location.reload();
-    }
-    setIsRefreshing(false);
+  // Rank emojis mapping
+  const rankEmojis = [
+    '🐛', // 1. Earwig
+    '🦌', // 2. Ugandan Kob
+    '🌽', // 3. Private Maize
+    '🥄', // 4. Specialist Ingredient
+    '🍞', // 5. Corporal Corn Bread
+    '🌾', // 6. Sergeant Husk
+    '🌻', // 7. Sergeant Major Fields
+    '🎯', // 8. Captain Cornhole
+    '⭐', // 9. Major Cob
+    '🌟', // 10. Corn Star
+    '💥', // 11. Pop'd Kernel (prestige 5 only)
+  ];
+
+  // Get display name based on role
+  const getDisplayRank = () => {
+    if (user?.role === 'owner') return 'Colonel Kernel';
+    if (user?.role === 'admin') return 'Cob Officer';
+    if (user?.role === 'guest') return 'Not Yet Ranked';
+    return user?.ranks?.name || 'Earwig';
   };
+
+  // Calculate rank progression
+  const currentRankId = user?.rank_id || 1;
+  const prestigeLevel = user?.prestige_level || 0;
+  const maxRanks = prestigeLevel === 5 ? 11 : 10;
+  
+  // Calculate which ranks to show
+  const displayRanks = prestigeLevel === 5 ? 11 : 10;
 
   return (
     <div className="min-h-screen bg-[#fdf5e9] px-4 py-8">
@@ -69,7 +87,7 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
             <div className="text-center mb-6">
               <p className="text-sm text-[#0f172a]/60 mb-1">Current Rank</p>
               <p className="text-2xl font-bold text-[#0f172a]">
-                {user?.role === 'guest' ? 'Not Yet Ranked' : user?.ranks?.name || 'Earwig'}
+                {getDisplayRank()}
               </p>
               {user?.prestige_level > 0 && (
                 <p className="text-sm text-[#f97316] font-semibold">
@@ -122,29 +140,52 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
           </div>
         </div>
 
+        {/* Your Progress Card */}
+        {user?.role !== 'guest' && (
+          <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-6">
+            <h2 className="text-xl font-bold text-[#0f172a] mb-2">Your Progress</h2>
+            <p className="text-sm text-[#0f172a]/60 mb-6">
+              Rank {currentRankId}/{maxRanks}
+            </p>
+            
+            {/* Rank Progression */}
+            <div className="flex items-center justify-between gap-2">
+              {Array.from({ length: displayRanks }).map((_, index) => {
+                const rankNumber = index + 1;
+                const isUnlocked = rankNumber <= currentRankId;
+                const emoji = rankEmojis[index];
+                
+                return (
+                  <div
+                    key={rankNumber}
+                    className={`flex flex-col items-center transition-all ${
+                      isUnlocked ? 'opacity-100 scale-100' : 'opacity-30 scale-90'
+                    }`}
+                  >
+                    <div
+                      className={`text-2xl mb-1 transition-transform ${
+                        rankNumber === currentRankId ? 'scale-125 animate-pulse' : ''
+                      }`}
+                    >
+                      {emoji}
+                    </div>
+                    <div
+                      className={`h-1 w-8 rounded-full ${
+                        isUnlocked ? 'bg-[#f97316]' : 'bg-[#0f172a]/10'
+                      }`}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Actions Card */}
         <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-24">
           <h2 className="text-xl font-bold text-[#0f172a] mb-4">Actions</h2>
           
           <div className="space-y-3">
-            <Button
-              onClick={handleRefresh}
-              className="w-full bg-[#f97316] hover:bg-[#f97316]/90 text-white h-12 rounded-xl font-semibold"
-              disabled={isRefreshing}
-            >
-              {isRefreshing ? (
-                <>
-                  <RefreshCw className="mr-2 h-5 w-5 animate-spin" />
-                  Refreshing...
-                </>
-              ) : (
-                <>
-                  <RefreshCw className="mr-2 h-5 w-5" />
-                  Refresh Profile Data
-                </>
-              )}
-            </Button>
-
             <Button
               onClick={handleSignOut}
               className="w-full bg-red-500 hover:bg-red-600 text-white h-12 rounded-xl font-semibold"

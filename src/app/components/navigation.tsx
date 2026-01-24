@@ -6,9 +6,10 @@ interface NavigationProps {
   currentPage: 'home' | 'leaderboard' | 'requests' | 'profile';
   onNavigate: (page: 'home' | 'leaderboard' | 'requests' | 'profile') => void;
   user: any;
+  pendingRequestsCount?: number;
 }
 
-export function Navigation({ currentPage, onNavigate, user }: NavigationProps) {
+export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount }: NavigationProps) {
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     window.location.reload();
@@ -115,13 +116,20 @@ export function Navigation({ currentPage, onNavigate, user }: NavigationProps) {
 
             <button
               onClick={() => onNavigate('requests')}
-              className={`flex flex-col items-center justify-center gap-1.5 px-8 py-3 rounded-2xl transition-all duration-200 ${
+              className={`relative flex flex-col items-center justify-center gap-1.5 px-8 py-3 rounded-2xl transition-all duration-200 ${
                 currentPage === 'requests'
                   ? 'text-[#f97316] scale-105'
                   : 'text-[#0f172a]/40 hover:text-[#0f172a]/70 hover:scale-105'
               }`}
             >
-              <FileText className="w-7 h-7" strokeWidth={currentPage === 'requests' ? 2.5 : 2} />
+              <div className="relative">
+                <FileText className="w-7 h-7" strokeWidth={currentPage === 'requests' ? 2.5 : 2} />
+                {pendingRequestsCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-[#ef4444] text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                    {pendingRequestsCount}
+                  </span>
+                )}
+              </div>
               <span className="text-xs font-semibold">Requests</span>
             </button>
           </div>

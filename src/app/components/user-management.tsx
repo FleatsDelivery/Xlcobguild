@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
-import { Users, Shield, Crown, UserX, Loader2, ChevronDown } from 'lucide-react';
+import { Users, Shield, Crown, UserX, Loader2, ChevronDown, ChevronUp, Star } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 
 export function UserManagement() {
@@ -9,6 +9,7 @@ export function UserManagement() {
   const [loading, setLoading] = useState(true);
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
   const [filterRole, setFilterRole] = useState<string>('all');
+  const [rankActionUserId, setRankActionUserId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchUsers();
@@ -90,6 +91,53 @@ export function UserManagement() {
     }
   };
 
+  const handleRankAction = async (userId: string, action: 'rank_up' | 'rank_down' | 'prestige') => {
+    const actionText = action === 'rank_up' ? 'rank up' : action === 'rank_down' ? 'rank down' : 'prestige';
+    if (!confirm(`Are you sure you want to ${actionText} this user?`)) {
+      return;
+    }
+
+    setRankActionUserId(userId);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        alert('Please sign in first');
+        setRankActionUserId(null);
+        return;
+      }
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/users/${userId}/rank`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ action }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.error || `Failed to ${actionText} user`);
+        setRankActionUserId(null);
+        return;
+      }
+
+      // Refresh users list
+      await fetchUsers();
+      alert(`🌽 User successfully ${action === 'rank_up' ? 'ranked up' : action === 'rank_down' ? 'ranked down' : 'prestiged'}!`);
+    } catch (error) {
+      console.error(`Error ${actionText}ing user:`, error);
+      alert(`Failed to ${actionText} user. Please try again.`);
+    } finally {
+      setRankActionUserId(null);
+    }
+  };
+
   const getRoleIcon = (role: string) => {
     switch (role) {
       case 'owner':
@@ -162,55 +210,115 @@ export function UserManagement() {
           filteredUsers.map((user) => (
             <div
               key={user.id}
-              className="flex items-center justify-between p-4 rounded-xl border-2 border-[#0f172a]/10 hover:border-[#f97316]/20 transition-colors bg-[#fdf5e9]/30"
+              className="p-4 rounded-xl border-2 border-[#0f172a]/10 hover:border-[#f97316]/20 transition-colors bg-[#fdf5e9]/30"
             >
-              <div className="flex items-center gap-3 flex-1">
-                {user.discord_avatar ? (
-                  <img
-                    src={user.discord_avatar}
-                    alt={user.discord_username}
-                    className="w-10 h-10 rounded-full border-2 border-[#f97316]/20"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-[#f97316]/20 flex items-center justify-center">
-                    <span className="text-[#f97316] font-bold">
-                      {user.discord_username?.[0]?.toUpperCase() || '?'}
-                    </span>
-                  </div>
-                )}
+              {/* User Info Row */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3 flex-1">
+                  {user.discord_avatar ? (
+                    <img
+                      src={user.discord_avatar}
+                      alt={user.discord_username}
+                      className="w-10 h-10 rounded-full border-2 border-[#f97316]/20"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-[#f97316]/20 flex items-center justify-center">
+                      <span className="text-[#f97316] font-bold">
+                        {user.discord_username?.[0]?.toUpperCase() || '?'}
+                      </span>
+                    </div>
+                  )}
 
-                <div className="flex-1">
-                  <p className="font-semibold text-[#0f172a]">{user.discord_username}</p>
-                  <div className="flex items-center gap-2 text-xs text-[#0f172a]/60">
-                    <span>{user.ranks?.name || 'No Rank'}</span>
-                    <span>•</span>
-                    <span>Prestige {user.prestige_level}</span>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="font-semibold text-[#0f172a]">{user.discord_username}</p>
+                      {(user.role === 'owner' || user.role === 'admin') && (
+                        <div className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border flex items-center gap-1 ${getRoleBadgeColor(user.role)}`}>
+                          {getRoleIcon(user.role)}
+                          {user.role === 'owner' ? 'OWNER' : 'ADMIN'}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-[#0f172a]/60">
+                      <span>{user.ranks?.name || 'No Rank'}</span>
+                      <span>•</span>
+                      <span>Prestige {user.prestige_level}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className={`px-3 py-1 rounded-full text-xs font-semibold border-2 flex items-center gap-1.5 ${getRoleBadgeColor(user.role)}`}>
-                  {getRoleIcon(user.role)}
-                  {user.role}
+                {/* Role Dropdown - Hidden for Owners */}
+                <div className="ml-4">
+                  {user.role === 'owner' ? (
+                    <div className="text-xs text-[#0f172a]/40 italic">Protected</div>
+                  ) : updatingUserId === user.id ? (
+                    <Loader2 className="w-5 h-5 animate-spin text-[#f97316]" />
+                  ) : (
+                    <select
+                      value={user.role}
+                      onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                      className="px-2 py-1 rounded-lg border-2 border-[#0f172a]/10 bg-white text-xs text-[#0f172a] cursor-pointer hover:border-[#f97316]/30 transition-colors"
+                      disabled={updatingUserId !== null}
+                    >
+                      <option value="guest">Guest</option>
+                      <option value="member">Member</option>
+                      <option value="admin">Admin</option>
+                      <option value="owner">Owner</option>
+                    </select>
+                  )}
                 </div>
               </div>
 
-              <div className="ml-4">
-                {updatingUserId === user.id ? (
-                  <Loader2 className="w-5 h-5 animate-spin text-[#f97316]" />
-                ) : (
-                  <select
-                    value={user.role}
-                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                    className="px-2 py-1 rounded-lg border-2 border-[#0f172a]/10 bg-white text-xs text-[#0f172a] cursor-pointer hover:border-[#f97316]/30 transition-colors"
-                    disabled={updatingUserId !== null}
+              {/* Rank Action Buttons - Only for Members */}
+              {user.role !== 'guest' && (
+                <div className="flex items-center gap-2 pt-3 border-t border-[#0f172a]/10">
+                  <Button
+                    size="sm"
+                    className="flex-1 bg-[#10b981] hover:bg-[#059669] text-white text-xs h-8"
+                    onClick={() => handleRankAction(user.id, 'rank_up')}
+                    disabled={rankActionUserId === user.id}
                   >
-                    <option value="guest">Guest</option>
-                    <option value="member">Member</option>
-                    <option value="admin">Admin</option>
-                    <option value="owner">Owner</option>
-                  </select>
-                )}
-              </div>
+                    {rankActionUserId === user.id ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <>
+                        <ChevronUp className="w-3 h-3 mr-1" />
+                        Rank Up
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="flex-1 bg-[#ef4444] hover:bg-[#dc2626] text-white text-xs h-8"
+                    onClick={() => handleRankAction(user.id, 'rank_down')}
+                    disabled={rankActionUserId === user.id}
+                  >
+                    {rankActionUserId === user.id ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <>
+                        <ChevronDown className="w-3 h-3 mr-1" />
+                        Rank Down
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="flex-1 bg-[#f59e0b] hover:bg-[#d97706] text-white text-xs h-8"
+                    onClick={() => handleRankAction(user.id, 'prestige')}
+                    disabled={rankActionUserId === user.id}
+                  >
+                    {rankActionUserId === user.id ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <>
+                        <Star className="w-3 h-3 mr-1" />
+                        Prestige
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
             </div>
           ))
         )}

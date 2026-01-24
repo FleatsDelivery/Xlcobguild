@@ -102,9 +102,6 @@ export function LoginPage() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-8 border-2 border-[#0f172a]/10">
-          <h2 className="text-2xl font-bold text-[#0f172a] mb-4">
-            Welcome Back
-          </h2>
           <p className="text-[#0f172a]/70 mb-8">
             Sign in with Discord to access the guild portal, track your ranks, and submit MVP requests.
           </p>
@@ -125,15 +122,6 @@ export function LoginPage() {
                 Sign in with Discord
               </>
             )}
-          </Button>
-
-          {/* Temporary Skip Button for Development */}
-          <Button
-            onClick={() => window.location.hash = '#dev-mode'}
-            variant="outline"
-            className="w-full mt-3 h-10 text-sm border-2 border-[#0f172a]/20 text-[#0f172a]/60 hover:bg-[#0f172a]/5 hover:text-[#0f172a] rounded-xl"
-          >
-            Skip Sign In (Dev Mode)
           </Button>
 
           <div className="mt-6 text-center text-sm text-[#0f172a]/60">
