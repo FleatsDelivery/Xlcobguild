@@ -1,16 +1,30 @@
-import { User, LogOut, Shield } from 'lucide-react';
+import { User, LogOut, Shield, RefreshCw } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { supabase } from '@/lib/supabase';
 import { Footer } from '@/app/components/footer';
+import { useState } from 'react';
 
 interface ProfilePageProps {
   user: any;
+  onRefresh?: () => void;
 }
 
-export function ProfilePage({ user }: ProfilePageProps) {
+export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     window.location.reload();
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    if (onRefresh) {
+      await onRefresh();
+    } else {
+      window.location.reload();
+    }
+    setIsRefreshing(false);
   };
 
   return (
@@ -22,9 +36,15 @@ export function ProfilePage({ user }: ProfilePageProps) {
             {/* Avatar */}
             {user?.discord_avatar ? (
               <img
-                src={`https://cdn.discordapp.com/avatars/${user.discord_id}/${user.discord_avatar}.png`}
-                alt={user.discord_username}
+                src={user.discord_avatar.startsWith('http') 
+                  ? user.discord_avatar 
+                  : `https://cdn.discordapp.com/avatars/${user.discord_id}/${user.discord_avatar}.png?size=256`}
+                alt={user.discord_username || 'User'}
                 className="w-32 h-32 rounded-full border-4 border-[#f97316] mb-4"
+                onError={(e) => {
+                  console.error('Failed to load avatar:', user.discord_avatar);
+                  e.currentTarget.style.display = 'none';
+                }}
               />
             ) : (
               <div className="w-32 h-32 rounded-full bg-[#0f172a] flex items-center justify-center mb-4">
@@ -106,13 +126,33 @@ export function ProfilePage({ user }: ProfilePageProps) {
         <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-24">
           <h2 className="text-xl font-bold text-[#0f172a] mb-4">Actions</h2>
           
-          <Button
-            onClick={handleSignOut}
-            className="w-full bg-red-500 hover:bg-red-600 text-white h-12 rounded-xl font-semibold"
-          >
-            <LogOut className="mr-2 h-5 w-5" />
-            Sign Out
-          </Button>
+          <div className="space-y-3">
+            <Button
+              onClick={handleRefresh}
+              className="w-full bg-[#f97316] hover:bg-[#f97316]/90 text-white h-12 rounded-xl font-semibold"
+              disabled={isRefreshing}
+            >
+              {isRefreshing ? (
+                <>
+                  <RefreshCw className="mr-2 h-5 w-5 animate-spin" />
+                  Refreshing...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="mr-2 h-5 w-5" />
+                  Refresh Profile Data
+                </>
+              )}
+            </Button>
+
+            <Button
+              onClick={handleSignOut}
+              className="w-full bg-red-500 hover:bg-red-600 text-white h-12 rounded-xl font-semibold"
+            >
+              <LogOut className="mr-2 h-5 w-5" />
+              Sign Out
+            </Button>
+          </div>
         </div>
       </div>
 

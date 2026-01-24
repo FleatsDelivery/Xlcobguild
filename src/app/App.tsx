@@ -134,6 +134,7 @@ export default function App() {
 
         if (userResponse.ok) {
           const { user: dbUser } = await userResponse.json();
+          console.log('✅ Fetched user from database:', dbUser);
           setUser(dbUser);
         }
       }
@@ -141,6 +142,12 @@ export default function App() {
       console.error('Error fetching user data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRefreshUser = async () => {
+    if (session?.access_token) {
+      await fetchUserData(session.access_token);
     }
   };
 
@@ -168,7 +175,7 @@ export default function App() {
         {currentPage === 'leaderboard' && user?.role !== 'guest' && <LeaderboardPage />}
         {currentPage === 'leaderboard' && user?.role === 'guest' && <HomePage user={user} />}
         {currentPage === 'requests' && <RequestsPage user={user} />}
-        {currentPage === 'profile' && <ProfilePage user={user} />}
+        {currentPage === 'profile' && <ProfilePage user={user} onRefresh={handleRefreshUser} />}
       </main>
     </div>
   );

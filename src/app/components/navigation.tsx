@@ -46,9 +46,15 @@ export function Navigation({ currentPage, onNavigate, user }: NavigationProps) {
               >
                 {user?.discord_avatar ? (
                   <img
-                    src={`https://cdn.discordapp.com/avatars/${user.discord_id}/${user.discord_avatar}.png`}
-                    alt={user.discord_username}
+                    src={user.discord_avatar.startsWith('http') 
+                      ? user.discord_avatar 
+                      : `https://cdn.discordapp.com/avatars/${user.discord_id}/${user.discord_avatar}.png?size=128`}
+                    alt={user.discord_username || 'User'}
                     className="w-10 h-10 rounded-full border-2 border-[#f97316]"
+                    onError={(e) => {
+                      console.error('Failed to load avatar:', user.discord_avatar);
+                      e.currentTarget.style.display = 'none';
+                    }}
                   />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-[#0f172a] flex items-center justify-center">
