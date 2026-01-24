@@ -12,6 +12,12 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
 );
 
+// Create anon client for user auth verification
+const anonSupabase = createClient(
+  Deno.env.get('SUPABASE_URL') ?? '',
+  Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+);
+
 // Enable logger
 app.use('*', logger(console.log));
 
@@ -123,17 +129,59 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
 // Get current user info
 app.get("/make-server-4789f4af/auth/me", async (c) => {
   try {
-    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const authHeader = c.req.header('Authorization');
     
-    if (!accessToken) {
+    if (!authHeader) {
+      console.error('❌ No Authorization header in /auth/me');
       return c.json({ error: 'No access token provided' }, 401);
     }
 
-    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    const accessToken = authHeader.replace('Bearer ', '');
+    console.log('🔍 /auth/me called, token starts with:', accessToken?.substring(0, 20) + '...');
+
+    // Use admin client to verify the JWT token
+    const { data: { user: authUser }, error: authError } = await supabase.auth.admin.getUserById(accessToken);
     
+    // If that doesn't work, try getting the user with the regular method
     if (authError || !authUser) {
-      return c.json({ error: 'Unauthorized' }, 401);
+      console.log('⚠️  Admin getUserById failed, trying getUser with anon client');
+      
+      // Use anon client to verify the token
+      const { data, error } = await anonSupabase.auth.getUser(accessToken);
+      
+      if (error || !data.user) {
+        console.error('❌ Failed to verify token:', error);
+        return c.json({ error: 'Unauthorized - Invalid token' }, 401);
+      }
+      
+      console.log('✅ Verified user with anon client:', data.user.id);
+      
+      // Get user from database
+      const { data: dbUser, error: dbError } = await supabase
+        .from('users')
+        .select(`
+          *,
+          ranks (
+            id,
+            name,
+            display_order,
+            description
+          )
+        `)
+        .eq('discord_id', data.user.id)
+        .single();
+
+      if (dbError) {
+        console.error('❌ Error fetching user from database:', dbError);
+        return c.json({ error: 'User not found in database' }, 404);
+      }
+
+      console.log('✅ Found user in database:', dbUser.discord_username, 'Role:', dbUser.role);
+      return c.json({ user: dbUser });
     }
+
+    // This path is for admin getUserById success
+    console.log('✅ Authenticated user via admin:', authUser.id);
 
     // Get user from database
     const { data: dbUser, error: dbError } = await supabase
@@ -151,13 +199,14 @@ app.get("/make-server-4789f4af/auth/me", async (c) => {
       .single();
 
     if (dbError) {
-      console.error('Error fetching user from database:', dbError);
+      console.error('❌ Error fetching user from database:', dbError);
       return c.json({ error: 'User not found in database' }, 404);
     }
 
+    console.log('✅ Found user in database:', dbUser.discord_username, 'Role:', dbUser.role);
     return c.json({ user: dbUser });
   } catch (error) {
-    console.error('Get user error:', error);
+    console.error('❌ Get user error:', error);
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
