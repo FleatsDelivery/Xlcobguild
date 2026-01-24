@@ -231,7 +231,7 @@ app.post("/make-server-4789f4af/requests/membership", async (c) => {
       return c.json({ error: 'No access token provided' }, 401);
     }
 
-    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
     
     if (authError || !authUser) {
       return c.json({ error: 'Unauthorized' }, 401);
@@ -296,7 +296,7 @@ app.get("/make-server-4789f4af/requests/membership", async (c) => {
       return c.json({ error: 'No access token provided' }, 401);
     }
 
-    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
     
     if (authError || !authUser) {
       return c.json({ error: 'Unauthorized' }, 401);
@@ -343,7 +343,7 @@ app.delete("/make-server-4789f4af/requests/membership/:id", async (c) => {
       return c.json({ error: 'No access token provided' }, 401);
     }
 
-    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
     
     if (authError || !authUser) {
       return c.json({ error: 'Unauthorized' }, 401);
@@ -390,7 +390,7 @@ app.get("/make-server-4789f4af/admin/users", async (c) => {
       return c.json({ error: 'No access token provided' }, 401);
     }
 
-    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
     
     if (authError || !authUser) {
       return c.json({ error: 'Unauthorized' }, 401);
@@ -446,7 +446,7 @@ app.patch("/make-server-4789f4af/admin/users/:userId/role", async (c) => {
       return c.json({ error: 'No access token provided' }, 401);
     }
 
-    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(accessToken);
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
     
     if (authError || !authUser) {
       return c.json({ error: 'Unauthorized' }, 401);
