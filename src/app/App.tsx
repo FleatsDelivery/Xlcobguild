@@ -106,6 +106,10 @@ export default function App() {
         console.log('Extracted Discord username:', discordUsername);
         console.log('Extracted Discord avatar:', discordAvatar);
         
+        // For auth purposes, we'll use the Supabase user ID as the primary identifier
+        // The actual Discord ID is available in the identities array if needed
+        console.log('🌽 Supabase User ID:', discordUser.id);
+        
         // Call server to create/update user record
         const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/auth/discord-callback`, {
           method: 'POST',
@@ -114,7 +118,7 @@ export default function App() {
             'Authorization': `Bearer ${publicAnonKey}`,
           },
           body: JSON.stringify({
-            discord_id: discordUser.id,
+            supabase_user_id: discordUser.id, // Primary ID for lookups
             discord_username: discordUsername,
             discord_avatar: discordAvatar,
             discord_email: discordUser.email,

@@ -42,19 +42,19 @@ app.get("/make-server-4789f4af/health", (c) => {
 app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
   try {
     const body = await c.req.json();
-    const { discord_id, discord_username, discord_avatar, discord_email } = body;
+    const { supabase_user_id, discord_username, discord_avatar, discord_email } = body;
 
-    if (!discord_id) {
-      return c.json({ error: "Discord ID required" }, 400);
+    if (!supabase_user_id) {
+      return c.json({ error: "Supabase User ID required" }, 400);
     }
 
-    console.log('Discord callback - ID:', discord_id, 'Username:', discord_username, 'Email:', discord_email);
+    console.log('🌽 Discord callback - Supabase ID:', supabase_user_id, 'Username:', discord_username, 'Email:', discord_email);
 
-    // Check if user exists
+    // Check if user exists by discord_id (which stores the Supabase user ID)
     const { data: existingUser, error: fetchError } = await supabase
       .from('users')
       .select('*')
-      .eq('discord_id', discord_id)
+      .eq('discord_id', supabase_user_id)
       .single();
 
     if (fetchError && fetchError.code !== 'PGRST116') {
@@ -80,7 +80,7 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
       const { data: updatedUser, error: updateError } = await supabase
         .from('users')
         .update(updateData)
-        .eq('discord_id', discord_id)
+        .eq('discord_id', supabase_user_id)
         .select()
         .single();
 
@@ -89,6 +89,7 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
         return c.json({ error: 'Failed to update user' }, 500);
       }
 
+      console.log('✅ Updated existing user');
       return c.json({ user: updatedUser });
     }
 
@@ -100,10 +101,11 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
     }
 
     // Create new user with guest role (or owner if matched) and rank 1 (Earwig)
+    // Note: discord_id column stores the Supabase user ID for authentication purposes
     const { data: newUser, error: createError } = await supabase
       .from('users')
       .insert({
-        discord_id,
+        discord_id: supabase_user_id,
         discord_username,
         discord_avatar,
         rank_id: 1, // Earwig
@@ -118,7 +120,7 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
       return c.json({ error: 'Failed to create user' }, 500);
     }
 
-    console.log('Created new user with role:', role);
+    console.log('✅ Created new user with role:', role);
     return c.json({ user: newUser });
   } catch (error) {
     console.error('Discord callback error:', error);
@@ -156,7 +158,7 @@ app.get("/make-server-4789f4af/auth/me", async (c) => {
       
       console.log('✅ Verified user with anon client:', data.user.id);
       
-      // Get user from database
+      // Get user from database - discord_id stores the Supabase user ID
       const { data: dbUser, error: dbError } = await supabase
         .from('users')
         .select(`
