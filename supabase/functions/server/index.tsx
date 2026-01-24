@@ -48,19 +48,38 @@ app.get("/make-server-4789f4af/test", (c) => {
 app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
   try {
     const body = await c.req.json();
-    const { supabase_user_id, discord_username, discord_avatar, discord_email } = body;
+    const { user } = body;
 
-    if (!supabase_user_id) {
-      return c.json({ error: "Supabase User ID required" }, 400);
+    if (!user) {
+      console.error('❌ No user object provided in callback');
+      return c.json({ error: "User object required" }, 400);
     }
 
-    console.log('🌽 Discord callback - Supabase ID:', supabase_user_id, 'Username:', discord_username, 'Email:', discord_email);
+    // Extract the actual Discord user ID from identities array
+    const discordIdentity = user.identities?.find((i: any) => i.provider === 'discord');
+    const discordUserId = discordIdentity?.id || discordIdentity?.provider_id;
 
-    // Check if user exists by discord_id (which stores the Supabase user ID)
+    if (!discordUserId) {
+      console.error('❌ No Discord identity found for user:', user.id);
+      return c.json({ error: 'Discord identity not found. Please sign in with Discord.' }, 400);
+    }
+
+    const supabaseUserId = user.id; // UUID from auth.users
+    const discord_username = user.user_metadata?.custom_claims?.global_name 
+      || user.user_metadata?.full_name 
+      || user.user_metadata?.name 
+      || user.email?.split('@')[0] 
+      || 'Unknown';
+    const discord_avatar = user.user_metadata?.avatar_url || user.user_metadata?.picture || null;
+    const discord_email = user.email || null;
+
+    console.log('🌽 Discord callback - Discord ID:', discordUserId, 'Supabase ID:', supabaseUserId, 'Username:', discord_username, 'Email:', discord_email);
+
+    // Check if user exists by discord_id (the actual Discord user ID)
     const { data: existingUser, error: fetchError } = await supabase
       .from('users')
       .select('*')
-      .eq('discord_id', supabase_user_id)
+      .eq('discord_id', discordUserId)
       .single();
 
     if (fetchError && fetchError.code !== 'PGRST116') {
@@ -71,8 +90,10 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
     if (existingUser) {
       // Check if this user should be owner
       let updateData: any = {
+        supabase_id: supabaseUserId, // Update in case it changed
         discord_username,
         discord_avatar,
+        email: discord_email,
         updated_at: new Date().toISOString(),
       };
 
@@ -86,7 +107,7 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
       const { data: updatedUser, error: updateError } = await supabase
         .from('users')
         .update(updateData)
-        .eq('discord_id', supabase_user_id)
+        .eq('discord_id', discordUserId)
         .select()
         .single();
 
@@ -107,13 +128,14 @@ app.post("/make-server-4789f4af/auth/discord-callback", async (c) => {
     }
 
     // Create new user with guest role (or owner if matched) and rank 1 (Earwig)
-    // Note: discord_id column stores the Supabase user ID for authentication purposes
     const { data: newUser, error: createError } = await supabase
       .from('users')
       .insert({
-        discord_id: supabase_user_id,
+        supabase_id: supabaseUserId,  // UUID from auth.users for JWT verification
+        discord_id: discordUserId,     // Actual Discord user ID string
         discord_username,
         discord_avatar,
+        email: discord_email,
         rank_id: 1, // Earwig
         prestige_level: 0,
         role: role,
@@ -166,8 +188,8 @@ app.get("/make-server-4789f4af/auth/me", async (c) => {
     
     console.log('✅ Verified user with anon client:', data.user.id);
     
-    // Get user from database - discord_id stores the Supabase user ID
-    console.log('⏳ Querying database for user:', data.user.id);
+    // Get user from database - query by supabase_id (UUID from auth.users)
+    console.log('⏳ Querying database for user by supabase_id:', data.user.id);
     const { data: dbUser, error: dbError } = await supabase
       .from('users')
       .select(`
@@ -179,7 +201,7 @@ app.get("/make-server-4789f4af/auth/me", async (c) => {
           description
         )
       `)
-      .eq('discord_id', data.user.id)
+      .eq('supabase_id', data.user.id)
       .single();
 
     if (dbError) {
@@ -215,11 +237,11 @@ app.post("/make-server-4789f4af/requests/membership", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    // Get user from database
+    // Get user from database - query by supabase_id
     const { data: dbUser, error: userError } = await supabase
       .from('users')
       .select('id, role')
-      .eq('discord_id', authUser.id)
+      .eq('supabase_id', authUser.id)
       .single();
 
     if (userError || !dbUser) {
@@ -280,11 +302,11 @@ app.get("/make-server-4789f4af/requests/membership", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    // Get user from database
+    // Get user from database - query by supabase_id
     const { data: dbUser, error: userError } = await supabase
       .from('users')
       .select('id')
-      .eq('discord_id', authUser.id)
+      .eq('supabase_id', authUser.id)
       .single();
 
     if (userError || !dbUser) {
@@ -327,11 +349,11 @@ app.delete("/make-server-4789f4af/requests/membership/:id", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    // Get user from database
+    // Get user from database - query by supabase_id
     const { data: dbUser, error: userError } = await supabase
       .from('users')
       .select('id')
-      .eq('discord_id', authUser.id)
+      .eq('supabase_id', authUser.id)
       .single();
 
     if (userError || !dbUser) {
@@ -374,11 +396,11 @@ app.get("/make-server-4789f4af/admin/users", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    // Get user from database and check if owner
+    // Get user from database and check if owner - query by supabase_id
     const { data: dbUser, error: userError } = await supabase
       .from('users')
       .select('role')
-      .eq('discord_id', authUser.id)
+      .eq('supabase_id', authUser.id)
       .single();
 
     if (userError || !dbUser) {
@@ -430,11 +452,11 @@ app.patch("/make-server-4789f4af/admin/users/:userId/role", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    // Get user from database and check if owner
+    // Get user from database and check if owner - query by supabase_id
     const { data: dbUser, error: userError } = await supabase
       .from('users')
       .select('role')
-      .eq('discord_id', authUser.id)
+      .eq('supabase_id', authUser.id)
       .single();
 
     if (userError || !dbUser) {

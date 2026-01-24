@@ -92,25 +92,9 @@ export default function App() {
         // Log Discord user metadata for debugging
         console.log('Discord user metadata:', discordUser.user_metadata);
         console.log('Discord user identities:', discordUser.identities);
-        
-        // Extract Discord info - Discord OAuth provides specific metadata
-        const discordUsername = discordUser.user_metadata?.custom_claims?.global_name 
-          || discordUser.user_metadata?.full_name 
-          || discordUser.user_metadata?.name 
-          || discordUser.email?.split('@')[0] 
-          || 'Unknown';
-        
-        const discordAvatar = discordUser.user_metadata?.avatar_url 
-          || discordUser.user_metadata?.picture;
-        
-        console.log('Extracted Discord username:', discordUsername);
-        console.log('Extracted Discord avatar:', discordAvatar);
-        
-        // For auth purposes, we'll use the Supabase user ID as the primary identifier
-        // The actual Discord ID is available in the identities array if needed
         console.log('🌽 Supabase User ID:', discordUser.id);
         
-        // Call server to create/update user record
+        // Call server to create/update user record - send full user object
         const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/auth/discord-callback`, {
           method: 'POST',
           headers: {
@@ -118,15 +102,13 @@ export default function App() {
             'Authorization': `Bearer ${publicAnonKey}`,
           },
           body: JSON.stringify({
-            supabase_user_id: discordUser.id, // Primary ID for lookups
-            discord_username: discordUsername,
-            discord_avatar: discordAvatar,
-            discord_email: discordUser.email,
+            user: discordUser, // Send the FULL Supabase user object
           }),
         });
 
         if (!response.ok) {
-          console.error('Failed to create/update user in database');
+          const errorText = await response.text();
+          console.error('Failed to create/update user in database:', errorText);
         }
 
         // Fetch full user data with rank info
