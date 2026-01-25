@@ -3,6 +3,7 @@ import { Button } from '@/app/components/ui/button';
 import { Camera, Loader2, Upload, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
+import { SuccessModal } from '@/app/components/success-modal';
 
 export function MvpSubmissionForm() {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -10,18 +11,33 @@ export function MvpSubmissionForm() {
   const [matchId, setMatchId] = useState('');
   const [openDotaLink, setOpenDotaLink] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [modal, setModal] = useState<{
+    type: 'success' | 'error' | 'info';
+    title: string;
+    message: string;
+    helpText?: string;
+  } | null>(null);
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
-        alert('Please select an image file');
+        setModal({
+          type: 'error',
+          title: 'Invalid File Type',
+          message: 'Please select an image file (PNG, JPG, or WEBP).',
+        });
         return;
       }
       
       // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        alert('Image must be less than 5MB');
+        setModal({
+          type: 'error',
+          title: 'File Too Large',
+          message: 'Image must be less than 5MB.',
+          helpText: 'Try compressing your image or selecting a different screenshot.',
+        });
         return;
       }
 
@@ -43,7 +59,11 @@ export function MvpSubmissionForm() {
 
   const handleSubmit = async () => {
     if (!imageFile) {
-      alert('Please upload an MVP screenshot');
+      setModal({
+        type: 'info',
+        title: 'Screenshot Required',
+        message: 'Please upload an MVP screenshot before submitting.',
+      });
       return;
     }
 
@@ -52,7 +72,11 @@ export function MvpSubmissionForm() {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        alert('Please sign in first');
+        setModal({
+          type: 'error',
+          title: 'Authentication Required',
+          message: 'Please sign in first.',
+        });
         setIsSubmitting(false);
         return;
       }
@@ -71,23 +95,18 @@ export function MvpSubmissionForm() {
 
       if (uploadError) {
         console.error('Upload error:', uploadError);
-        alert('Failed to upload image. Please try again.');
+        setModal({
+          type: 'error',
+          title: 'Upload Failed',
+          message: 'Failed to upload image. Please try again.',
+          helpText: uploadError.message || 'Check your internet connection and try again.',
+        });
         setIsSubmitting(false);
         return;
       }
 
-      // Get signed URL for the uploaded image
-      const { data: urlData } = await supabase.storage
-        .from('make-4789f4af-mvp-screenshots')
-        .createSignedUrl(filePath, 60 * 60 * 24 * 365); // 1 year
-
-      if (!urlData?.signedUrl) {
-        alert('Failed to get image URL. Please try again.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Submit MVP request with image URL and optional fields
+      // Submit MVP request with file path (not signed URL)
+      // The backend will generate signed URLs when needed
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/requests/mvp`,
         {
@@ -97,7 +116,7 @@ export function MvpSubmissionForm() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            screenshot_url: urlData.signedUrl,
+            screenshot_url: filePath, // Store the file path, not signed URL
             match_id: matchId.trim() || null,
             opendota_link: openDotaLink.trim() || null,
           }),
@@ -107,12 +126,22 @@ export function MvpSubmissionForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || 'Failed to submit MVP request');
+        setModal({
+          type: 'error',
+          title: 'Submission Failed',
+          message: data.error || 'Failed to submit MVP request',
+          helpText: 'Please try again later or contact support if the issue persists.',
+        });
         setIsSubmitting(false);
         return;
       }
 
-      alert('🌽 MVP request submitted! Check the Requests tab to track its status.');
+      setModal({
+        type: 'success',
+        title: '🌽 MVP Request Submitted!',
+        message: 'Your rank-up request has been submitted successfully.',
+        helpText: 'Check the Requests tab to track its status.',
+      });
       
       // Reset form
       setImageFile(null);
@@ -122,7 +151,12 @@ export function MvpSubmissionForm() {
       setIsSubmitting(false);
     } catch (error) {
       console.error('Error submitting MVP:', error);
-      alert('Failed to submit MVP request. Please try again.');
+      setModal({
+        type: 'error',
+        title: 'Submission Failed',
+        message: 'Failed to submit MVP request. Please try again.',
+        helpText: 'If the problem persists, contact support.',
+      });
       setIsSubmitting(false);
     }
   };
@@ -231,6 +265,17 @@ export function MvpSubmissionForm() {
           )}
         </Button>
       </div>
+
+      {/* Modal */}
+      {modal && (
+        <SuccessModal
+          type={modal.type}
+          title={modal.title}
+          message={modal.message}
+          helpText={modal.helpText}
+          onClose={() => setModal(null)}
+        />
+      )}
     </div>
   );
 }

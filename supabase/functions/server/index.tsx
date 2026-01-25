@@ -27,7 +27,7 @@ app.use(
   cors({
     origin: "*",
     allowHeaders: ["Content-Type", "Authorization"],
-    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     exposeHeaders: ["Content-Length"],
     maxAge: 600,
   }),
@@ -232,6 +232,30 @@ app.get("/make-server-4789f4af/auth/me", async (c) => {
     }
 
     console.log('✅ SUCCESS! Found user:', dbUser.discord_username, 'Role:', dbUser.role);
+
+    // Auto-refresh OpenDota data if needed (non-blocking background sync)
+    if (dbUser.opendota_id) {
+      const lastSynced = dbUser.opendota_last_synced ? new Date(dbUser.opendota_last_synced) : null;
+      const now = new Date();
+      const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
+
+      if (!lastSynced || lastSynced < twoHoursAgo) {
+        console.log('🔄 Auto-refreshing OpenDota data for user:', dbUser.discord_username);
+        
+        // Trigger background sync (non-blocking - don't await)
+        fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/make-server-4789f4af/users/me/opendota/sync`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        }).catch(err => {
+          console.error('❌ Background OpenDota sync failed:', err);
+        });
+
+        console.log('✅ Background OpenDota sync triggered');
+      }
+    }
+    
     return c.json({ user: dbUser });
   } catch (error) {
     console.error('❌ Unexpected error in /auth/me:', error);
@@ -504,6 +528,26 @@ app.patch("/make-server-4789f4af/admin/users/:userId/role", async (c) => {
       return c.json({ error: 'Failed to update user role' }, 500);
     }
 
+    // If promoting a guest to member, auto-approve any pending membership requests
+    if (role === 'member') {
+      const { error: requestError } = await supabase
+        .from('membership_requests')
+        .update({ 
+          status: 'approved', 
+          reviewed_by: authUser.id,
+          reviewed_at: new Date().toISOString()
+        })
+        .eq('user_id', userId)
+        .eq('status', 'pending');
+
+      if (requestError) {
+        console.error('Error auto-approving membership request:', requestError);
+        // Don't fail the whole operation, just log it
+      } else {
+        console.log(`✅ Auto-approved pending membership request for user ${userId} (promoted via User Management)`);
+      }
+    }
+
     return c.json({ user: updatedUser });
   } catch (error) {
     console.error('Update user role error:', error);
@@ -721,7 +765,7 @@ app.get("/make-server-4789f4af/admin/membership-requests", async (c) => {
       .from('membership_requests')
       .select(`
         *,
-        users (
+        users!membership_requests_user_id_fkey (
           id,
           discord_username,
           discord_avatar,
@@ -731,7 +775,7 @@ app.get("/make-server-4789f4af/admin/membership-requests", async (c) => {
       .order('created_at', { ascending: false });
 
     if (requestsError) {
-      console.error('Error fetching membership requests:', requestsError);
+      console.error('❌ [Supabase] Error fetching membership requests:', requestsError);
       return c.json({ error: 'Failed to fetch membership requests' }, 500);
     }
 
@@ -794,13 +838,12 @@ app.post("/make-server-4789f4af/admin/membership-requests/:requestId/approve", a
     const { error: updateRequestError } = await supabase
       .from('membership_requests')
       .update({ 
-        status: 'approved',
-        updated_at: new Date().toISOString()
+        status: 'approved'
       })
       .eq('id', requestId);
 
     if (updateRequestError) {
-      console.error('Error updating request:', updateRequestError);
+      console.error('❌ [Supabase] Error updating request:', updateRequestError);
       return c.json({ error: 'Failed to approve request' }, 500);
     }
 
@@ -877,13 +920,12 @@ app.post("/make-server-4789f4af/admin/membership-requests/:requestId/deny", asyn
     const { error: updateError } = await supabase
       .from('membership_requests')
       .update({ 
-        status: 'denied',
-        updated_at: new Date().toISOString()
+        status: 'denied'
       })
       .eq('id', requestId);
 
     if (updateError) {
-      console.error('Error denying request:', updateError);
+      console.error('❌ [Supabase] Error denying request:', updateError);
       return c.json({ error: 'Failed to deny request' }, 500);
     }
 
@@ -920,19 +962,50 @@ app.get("/make-server-4789f4af/requests/mvp/my", async (c) => {
       return c.json({ error: 'User not found' }, 404);
     }
 
-    // Get all MVP requests for this user
+    // Get pagination parameters from query string
+    const limit = parseInt(c.req.query('limit') || '10', 10);
+    const offset = parseInt(c.req.query('offset') || '0', 10);
+
+    // Get total count first
+    const { count: totalCount, error: countError } = await supabase
+      .from('rank_up_requests')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', dbUser.id);
+
+    if (countError) {
+      console.error('Error counting MVP requests:', countError);
+    }
+
+    // Get MVP requests for this user with pagination
     const { data: requests, error: requestsError } = await supabase
       .from('rank_up_requests')
       .select('*')
       .eq('user_id', dbUser.id)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (requestsError) {
       console.error('Error fetching MVP requests:', requestsError);
       return c.json({ error: 'Failed to fetch MVP requests' }, 500);
     }
 
-    return c.json({ requests: requests || [] });
+    // Generate signed URLs for screenshots
+    const requestsWithSignedUrls = await Promise.all((requests || []).map(async (request) => {
+      if (request.screenshot_url && !request.screenshot_url.startsWith('http')) {
+        // It's a file path, generate signed URL
+        const { data: urlData } = await supabase.storage
+          .from('make-4789f4af-mvp-screenshots')
+          .createSignedUrl(request.screenshot_url, 60 * 60 * 24); // 24 hours
+
+        return {
+          ...request,
+          screenshot_url: urlData?.signedUrl || request.screenshot_url,
+        };
+      }
+      return request;
+    }));
+
+    return c.json({ requests: requestsWithSignedUrls, totalCount });
   } catch (error) {
     console.error('Get MVP requests error:', error);
     return c.json({ error: 'Internal server error' }, 500);
@@ -969,6 +1042,19 @@ app.get("/make-server-4789f4af/admin/mvp-requests", async (c) => {
       return c.json({ error: 'Only owners and admins can access this endpoint' }, 403);
     }
 
+    // Get pagination parameters from query string
+    const limit = parseInt(c.req.query('limit') || '10', 10);
+    const offset = parseInt(c.req.query('offset') || '0', 10);
+
+    // Get total count first
+    const { count: totalCount, error: countError } = await supabase
+      .from('rank_up_requests')
+      .select('*', { count: 'exact', head: true });
+
+    if (countError) {
+      console.error('Error counting MVP requests:', countError);
+    }
+
     // Get all MVP requests with user info
     const { data: requests, error: requestsError } = await supabase
       .from('rank_up_requests')
@@ -983,14 +1069,31 @@ app.get("/make-server-4789f4af/admin/mvp-requests", async (c) => {
           prestige_level
         )
       `)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (requestsError) {
       console.error('Error fetching MVP requests:', requestsError);
       return c.json({ error: 'Failed to fetch MVP requests' }, 500);
     }
 
-    return c.json({ requests: requests || [] });
+    // Generate signed URLs for screenshots
+    const requestsWithSignedUrls = await Promise.all((requests || []).map(async (request) => {
+      if (request.screenshot_url && !request.screenshot_url.startsWith('http')) {
+        // It's a file path, generate signed URL
+        const { data: urlData } = await supabase.storage
+          .from('make-4789f4af-mvp-screenshots')
+          .createSignedUrl(request.screenshot_url, 60 * 60 * 24); // 24 hours
+
+        return {
+          ...request,
+          screenshot_url: urlData?.signedUrl || request.screenshot_url,
+        };
+      }
+      return request;
+    }));
+
+    return c.json({ requests: requestsWithSignedUrls, totalCount });
   } catch (error) {
     console.error('Get MVP requests error:', error);
     return c.json({ error: 'Internal server error' }, 500);
@@ -1070,13 +1173,12 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/approve", async (c
     const { error: updateRequestError } = await supabase
       .from('rank_up_requests')
       .update({ 
-        status: 'approved',
-        updated_at: new Date().toISOString()
+        status: 'approved'
       })
       .eq('id', requestId);
 
     if (updateRequestError) {
-      console.error('Error updating request:', updateRequestError);
+      console.error('❌ [Supabase] Error updating request:', updateRequestError);
       return c.json({ error: 'Failed to approve request' }, 500);
     }
 
@@ -1153,13 +1255,12 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/deny", async (c) =
     const { error: updateError } = await supabase
       .from('rank_up_requests')
       .update({ 
-        status: 'denied',
-        updated_at: new Date().toISOString()
+        status: 'denied'
       })
       .eq('id', requestId);
 
     if (updateError) {
-      console.error('Error denying request:', updateError);
+      console.error('❌ [Supabase] Error denying request:', updateError);
       return c.json({ error: 'Failed to deny request' }, 500);
     }
 
@@ -1169,5 +1270,359 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/deny", async (c) =
     return c.json({ error: 'Internal server error' }, 500);
   }
 });
+
+// Get leaderboard (Members only)
+app.get("/make-server-4789f4af/leaderboard", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database - query by supabase_id
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Only members and up can access leaderboard
+    if (dbUser.role === 'guest') {
+      return c.json({ error: 'Only members can view the leaderboard' }, 403);
+    }
+
+    // Get all members (not guests) sorted by prestige and rank
+    const { data: users, error: usersError } = await supabase
+      .from('users')
+      .select(`
+        id,
+        discord_username,
+        discord_avatar,
+        rank_id,
+        prestige_level,
+        role,
+        created_at,
+        opendota_data,
+        ranks (
+          id,
+          name,
+          display_order,
+          description
+        )
+      `)
+      .neq('role', 'guest')
+      .order('prestige_level', { ascending: false })
+      .order('rank_id', { ascending: false })
+      .order('created_at', { ascending: true }); // Earlier join date wins ties
+
+    if (usersError) {
+      console.error('Error fetching leaderboard:', usersError);
+      return c.json({ error: 'Failed to fetch leaderboard' }, 500);
+    }
+
+    return c.json({ users });
+  } catch (error) {
+    console.error('Get leaderboard error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// ===========================
+// OPENDOTA API ENDPOINTS
+// ===========================
+
+// Connect OpenDota account
+app.post("/make-server-4789f4af/users/me/opendota", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const body = await c.req.json();
+    const { opendota_id } = body;
+
+    if (!opendota_id) {
+      return c.json({ error: 'OpenDota ID is required' }, 400);
+    }
+
+    // Validate that it's a valid Steam32 ID (numeric)
+    if (!/^\d+$/.test(opendota_id)) {
+      return c.json({ error: 'Invalid OpenDota ID format. Please enter a numeric Steam32 ID.' }, 400);
+    }
+
+    // Test the OpenDota API to make sure the account exists
+    const testResponse = await fetch(`https://api.opendota.com/api/players/${opendota_id}`);
+    if (!testResponse.ok) {
+      return c.json({ error: 'Failed to verify OpenDota account. Please check the ID and try again.' }, 400);
+    }
+
+    const playerData = await testResponse.json();
+    if (!playerData || playerData.profile === null) {
+      return c.json({ error: 'OpenDota account not found. Please check the ID and try again.' }, 400);
+    }
+
+    // Get user from database
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Update user with OpenDota ID
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ 
+        opendota_id,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', dbUser.id);
+
+    if (updateError) {
+      console.error('Error connecting OpenDota account:', updateError);
+      return c.json({ error: 'Failed to connect OpenDota account' }, 500);
+    }
+
+    console.log(`✅ Connected OpenDota account ${opendota_id} for user ${dbUser.id}`);
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Connect OpenDota error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Sync OpenDota data for current user
+app.post("/make-server-4789f4af/users/me/opendota/sync", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('id, opendota_id')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    if (!dbUser.opendota_id) {
+      return c.json({ error: 'No OpenDota account connected' }, 400);
+    }
+
+    // Fetch data from OpenDota API
+    const opendotaData = await fetchOpenDotaData(dbUser.opendota_id);
+
+    if (!opendotaData) {
+      return c.json({ error: 'Failed to fetch OpenDota data' }, 500);
+    }
+
+    // Update user with cached data
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ 
+        opendota_data: opendotaData,
+        opendota_last_synced: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', dbUser.id);
+
+    if (updateError) {
+      console.error('Error syncing OpenDota data:', updateError);
+      return c.json({ error: 'Failed to sync OpenDota data' }, 500);
+    }
+
+    console.log(`✅ Synced OpenDota data for user ${dbUser.id}`);
+    return c.json({ success: true, data: opendotaData });
+  } catch (error) {
+    console.error('Sync OpenDota error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Manual refresh all OpenDota accounts (Owner only)
+app.post("/make-server-4789f4af/admin/opendota/refresh-all", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Check if user is owner
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('role')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser || dbUser.role !== 'owner') {
+      return c.json({ error: 'Unauthorized - Owner only' }, 403);
+    }
+
+    // Get all users with OpenDota accounts
+    const { data: users, error: usersError } = await supabase
+      .from('users')
+      .select('id, opendota_id')
+      .not('opendota_id', 'is', null);
+
+    if (usersError) {
+      console.error('Error fetching users with OpenDota accounts:', usersError);
+      return c.json({ error: 'Failed to fetch users' }, 500);
+    }
+
+    let successCount = 0;
+    let failCount = 0;
+
+    // Refresh each user's OpenDota data
+    for (const user of users || []) {
+      try {
+        const opendotaData = await fetchOpenDotaData(user.opendota_id);
+        
+        if (opendotaData) {
+          await supabase
+            .from('users')
+            .update({ 
+              opendota_data: opendotaData,
+              opendota_last_synced: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', user.id);
+          
+          successCount++;
+          console.log(`✅ Refreshed OpenDota data for user ${user.id}`);
+        } else {
+          failCount++;
+          console.error(`❌ Failed to refresh OpenDota data for user ${user.id}`);
+        }
+      } catch (err) {
+        failCount++;
+        console.error(`❌ Error refreshing user ${user.id}:`, err);
+      }
+    }
+
+    console.log(`✅ Manual refresh complete: ${successCount} successful, ${failCount} failed`);
+    return c.json({ 
+      success: true, 
+      refreshed: successCount,
+      failed: failCount,
+      total: (users || []).length
+    });
+  } catch (error) {
+    console.error('Manual refresh error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
+// Helper function to fetch and parse OpenDota data
+async function fetchOpenDotaData(opendotaId: string) {
+  try {
+    // Fetch player profile, heroes, and win/loss
+    const [profileRes, heroesRes, wlRes] = await Promise.all([
+      fetch(`https://api.opendota.com/api/players/${opendotaId}`),
+      fetch(`https://api.opendota.com/api/players/${opendotaId}/heroes`),
+      fetch(`https://api.opendota.com/api/players/${opendotaId}/wl`)
+    ]);
+
+    if (!profileRes.ok || !heroesRes.ok || !wlRes.ok) {
+      console.error('Failed to fetch OpenDota data');
+      return null;
+    }
+
+    const profile = await profileRes.json();
+    const heroes = await heroesRes.json();
+    const wl = await wlRes.json();
+
+    // Get top 3 most played heroes
+    const top3Heroes = heroes
+      .sort((a: any, b: any) => b.games - a.games)
+      .slice(0, 3)
+      .map((hero: any) => ({
+        hero_id: hero.hero_id,
+        games: hero.games,
+        win: hero.win,
+        with_games: hero.with_games,
+        with_win: hero.with_win
+      }));
+
+    // Extract badge rank (rank_tier)
+    // rank_tier is a number like 80 = Herald[0], 81 = Herald[1], ..., 10 = Guardian[0], etc.
+    const rankTier = profile.rank_tier || 0;
+    const leaderboardRank = profile.leaderboard_rank || null;
+
+    // Parse rank tier into medal and stars
+    let medal = 'Unranked';
+    let stars = 0;
+    if (rankTier > 0) {
+      const majorRank = Math.floor(rankTier / 10);
+      stars = rankTier % 10;
+      
+      const medals = ['', 'Herald', 'Guardian', 'Crusader', 'Archon', 'Legend', 'Ancient', 'Divine', 'Immortal'];
+      medal = medals[majorRank] || 'Unknown';
+    }
+
+    // Get primary role (most played position)
+    // OpenDota doesn't have a direct "role" field, so we'll infer from lane_role
+    // For now, we'll leave it as null or use a placeholder
+    const primaryRole = null; // We can enhance this later
+
+    return {
+      badge_rank: {
+        medal,
+        stars,
+        rank_tier: rankTier,
+        leaderboard_rank: leaderboardRank
+      },
+      top_3_heroes: top3Heroes,
+      primary_role: primaryRole,
+      profile: {
+        personaname: profile.profile?.personaname || 'Unknown',
+        avatarfull: profile.profile?.avatarfull || null
+      }
+    };
+  } catch (error) {
+    console.error('Error fetching OpenDota data:', error);
+    return null;
+  }
+}
 
 Deno.serve(app.fetch);

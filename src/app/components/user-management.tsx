@@ -3,6 +3,8 @@ import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
 import { Users, Shield, Crown, UserX, Loader2, ChevronDown, ChevronUp, Star } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
+import { ConfirmModal } from '@/app/components/confirm-modal';
+import { SuccessModal } from '@/app/components/success-modal';
 
 export function UserManagement() {
   const [users, setUsers] = useState<any[]>([]);
@@ -10,6 +12,18 @@ export function UserManagement() {
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
   const [filterRole, setFilterRole] = useState<string>('all');
   const [rankActionUserId, setRankActionUserId] = useState<string | null>(null);
+  const [confirmAction, setConfirmAction] = useState<{
+    type: 'role_change' | 'rank_up' | 'rank_down' | 'prestige';
+    userId: string;
+    newRole?: string;
+    userName?: string;
+  } | null>(null);
+  const [result, setResult] = useState<{
+    type: 'success' | 'error';
+    title: string;
+    message: string;
+    helpText?: string;
+  } | null>(null);
 
   useEffect(() => {
     fetchUsers();
@@ -48,92 +62,141 @@ export function UserManagement() {
   };
 
   const handleRoleChange = async (userId: string, newRole: string) => {
-    if (!confirm(`Are you sure you want to change this user's role to ${newRole}?`)) {
-      return;
-    }
-
-    setUpdatingUserId(userId);
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        alert('Please sign in first');
-        setUpdatingUserId(null);
-        return;
-      }
-
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/users/${userId}/role`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ role: newRole }),
-        }
-      );
-
-      if (!response.ok) {
-        alert('Failed to update user role');
-        setUpdatingUserId(null);
-        return;
-      }
-
-      // Refresh users list
-      await fetchUsers();
-      alert(`🌽 User role updated to ${newRole}!`);
-    } catch (error) {
-      console.error('Error updating user role:', error);
-      alert('Failed to update user role. Please try again.');
-    } finally {
-      setUpdatingUserId(null);
-    }
+    const user = users.find(u => u.id === userId);
+    const roleLabels: any = { guest: 'Guest', member: 'Member', admin: 'Admin', owner: 'Owner' };
+    
+    setConfirmAction({
+      type: 'role_change',
+      userId,
+      newRole,
+      userName: user?.discord_username || 'User',
+    });
   };
 
   const handleRankAction = async (userId: string, action: 'rank_up' | 'rank_down' | 'prestige') => {
-    const actionText = action === 'rank_up' ? 'rank up' : action === 'rank_down' ? 'rank down' : 'prestige';
-    if (!confirm(`Are you sure you want to ${actionText} this user?`)) {
-      return;
-    }
+    const user = users.find(u => u.id === userId);
+    
+    setConfirmAction({
+      type: action,
+      userId,
+      userName: user?.discord_username || 'User',
+    });
+  };
 
-    setRankActionUserId(userId);
+  const executeAction = async () => {
+    if (!confirmAction) return;
+
+    const { type, userId, newRole, userName } = confirmAction;
+    
+    // Set loading state based on action type
+    if (type === 'role_change') {
+      setUpdatingUserId(userId);
+    } else {
+      setRankActionUserId(userId);
+    }
+    
+    setConfirmAction(null);
+
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        alert('Please sign in first');
+        setResult({
+          type: 'error',
+          title: 'Authentication Error',
+          message: 'Please sign in first',
+        });
+        setUpdatingUserId(null);
         setRankActionUserId(null);
         return;
       }
 
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/users/${userId}/rank`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ action }),
-        }
-      );
+      let response;
 
-      const data = await response.json();
+      if (type === 'role_change') {
+        response = await fetch(
+          `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/users/${userId}/role`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ role: newRole }),
+          }
+        );
+      } else {
+        response = await fetch(
+          `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/users/${userId}/rank`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: type }),
+          }
+        );
+      }
 
       if (!response.ok) {
-        alert(data.error || `Failed to ${actionText} user`);
+        const data = await response.json();
+        setResult({
+          type: 'error',
+          title: 'Update Failed',
+          message: data.error || 'Failed to update user. Please try again.',
+        });
+        setUpdatingUserId(null);
         setRankActionUserId(null);
         return;
       }
 
       // Refresh users list
       await fetchUsers();
-      alert(`🌽 User successfully ${action === 'rank_up' ? 'ranked up' : action === 'rank_down' ? 'ranked down' : 'prestiged'}!`);
+
+      const successMessages: any = {
+        role_change: {
+          title: 'Role Updated! ✅',
+          message: `${userName}'s role has been changed to ${newRole}.`,
+          helpText: 'Their permissions have been updated immediately.',
+        },
+        rank_up: {
+          title: 'Ranked Up! ✨',
+          message: `${userName} has been ranked up successfully!`,
+          helpText: 'The leaderboard will update automatically.',
+        },
+        rank_down: {
+          title: 'Ranked Down 📉',
+          message: `${userName} has been ranked down.`,
+          helpText: 'The leaderboard will update automatically.',
+        },
+        prestige: {
+          title: 'Prestiged! 🌟',
+          message: `${userName} has prestiged!`,
+          helpText: 'They have been reset to Rank 1 with increased prestige level.',
+        },
+      };
+
+      setResult({
+        type: 'success',
+        ...successMessages[type],
+      });
+
+      setUpdatingUserId(null);
+      setRankActionUserId(null);
+
+      // Auto-close success modal after 2 seconds
+      setTimeout(() => {
+        setResult(null);
+      }, 2000);
     } catch (error) {
-      console.error(`Error ${actionText}ing user:`, error);
-      alert(`Failed to ${actionText} user. Please try again.`);
-    } finally {
+      console.error('Error updating user:', error);
+      setResult({
+        type: 'error',
+        title: 'Update Failed',
+        message: 'An unexpected error occurred. Please try again.',
+      });
+      setUpdatingUserId(null);
       setRankActionUserId(null);
     }
   };
@@ -323,6 +386,31 @@ export function UserManagement() {
           ))
         )}
       </div>
+
+      {/* Confirm Modal */}
+      {confirmAction && (
+        <ConfirmModal
+          title={`Confirm ${confirmAction.type === 'role_change' ? 'Role Change' : 'Rank Action'}`}
+          message={
+            confirmAction.type === 'role_change'
+              ? `Are you sure you want to change ${confirmAction.userName}'s role to ${confirmAction.newRole}?`
+              : `Are you sure you want to ${confirmAction.type === 'rank_up' ? 'rank up' : confirmAction.type === 'rank_down' ? 'rank down' : 'prestige'} ${confirmAction.userName}?`
+          }
+          onConfirm={executeAction}
+          onCancel={() => setConfirmAction(null)}
+        />
+      )}
+
+      {/* Success Modal */}
+      {result && (
+        <SuccessModal
+          type={result.type}
+          title={result.title}
+          message={result.message}
+          helpText={result.helpText}
+          onClose={() => setResult(null)}
+        />
+      )}
     </div>
   );
 }

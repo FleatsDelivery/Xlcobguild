@@ -151,21 +151,43 @@ export default function App() {
     const fetchPendingCount = async () => {
       try {
         const isAdmin = user.role === 'admin' || user.role === 'owner';
-        const endpoint = isAdmin 
+        
+        let totalPending = 0;
+
+        // Fetch MVP requests count
+        const mvpEndpoint = isAdmin 
           ? `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/mvp-requests`
           : `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/requests/mvp/my`;
 
-        const response = await fetch(endpoint, {
+        const mvpResponse = await fetch(mvpEndpoint, {
           headers: {
             'Authorization': `Bearer ${session.access_token}`,
           },
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          const pendingCount = (data.requests || []).filter((r: any) => r.status === 'pending').length;
-          setPendingRequestsCount(pendingCount);
+        if (mvpResponse.ok) {
+          const mvpData = await mvpResponse.json();
+          totalPending += (mvpData.requests || []).filter((r: any) => r.status === 'pending').length;
         }
+
+        // Fetch membership requests count (only for admins)
+        if (isAdmin) {
+          const membershipResponse = await fetch(
+            `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/membership-requests`,
+            {
+              headers: {
+                'Authorization': `Bearer ${session.access_token}`,
+              },
+            }
+          );
+
+          if (membershipResponse.ok) {
+            const membershipData = await membershipResponse.json();
+            totalPending += (membershipData.requests || []).filter((r: any) => r.status === 'pending').length;
+          }
+        }
+
+        setPendingRequestsCount(totalPending);
       } catch (error) {
         console.error('Error fetching pending requests count:', error);
       }
@@ -204,7 +226,7 @@ export default function App() {
       
       <main className="pt-16 pb-16">
         {currentPage === 'home' && <HomePage user={user} />}
-        {currentPage === 'leaderboard' && user?.role !== 'guest' && <LeaderboardPage />}
+        {currentPage === 'leaderboard' && user?.role !== 'guest' && <LeaderboardPage user={user} />}
         {currentPage === 'leaderboard' && user?.role === 'guest' && <HomePage user={user} />}
         {currentPage === 'requests' && <RequestsPage user={user} />}
         {currentPage === 'profile' && <ProfilePage user={user} onRefresh={handleRefreshUser} />}

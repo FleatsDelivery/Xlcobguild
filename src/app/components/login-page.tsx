@@ -93,11 +93,11 @@ export function LoginPage() {
             <span className="text-5xl">🌽</span>
           </div>
           
-          <h1 className="text-4xl font-bold text-[#0f172a] mb-3">
+          <h1 className="text-4xl font-bold text-[#0f172a] mb-2">
             XLCOB
           </h1>
           <p className="text-lg text-[#0f172a]/70">
-            The Corn Field Guild Management
+            Open to The Corn Field & Friends
           </p>
         </div>
 

@@ -1,7 +1,11 @@
-import { User, LogOut, Shield } from 'lucide-react';
+import { User, LogOut, Shield, Gamepad2, Link as LinkIcon, RefreshCw } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { supabase } from '@/lib/supabase';
 import { Footer } from '@/app/components/footer';
+import { useState } from 'react';
+import { projectId } from '/utils/supabase/info';
+import { ConnectOpenDotaModal } from '@/app/components/connect-opendota-modal';
+import { SuccessModal } from '@/app/components/success-modal';
 
 interface ProfilePageProps {
   user: any;
@@ -44,6 +48,77 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
   
   // Calculate which ranks to show
   const displayRanks = prestigeLevel === 5 ? 11 : 10;
+
+  // State for OpenDota connection
+  const [openDotaModalOpen, setOpenDotaModalOpen] = useState(false);
+  const [result, setResult] = useState<{
+    type: 'success' | 'error';
+    title: string;
+    message: string;
+  } | null>(null);
+  const [syncing, setSyncing] = useState(false);
+
+  // Handle OpenDota connection
+  const handleConnectOpenDota = async (opendotaId: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error('Please sign in first');
+      }
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/users/me/opendota`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ opendota_id: opendotaId }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to connect OpenDota account');
+      }
+
+      // Now sync the data
+      setSyncing(true);
+      const syncResponse = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/users/me/opendota/sync`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+        }
+      );
+
+      if (!syncResponse.ok) {
+        console.error('Failed to sync OpenDota data');
+      }
+
+      setSyncing(false);
+      
+      setResult({
+        type: 'success',
+        title: 'Connected! 🎮',
+        message: 'Your OpenDota account has been connected and synced successfully!',
+      });
+
+      if (onRefresh) {
+        setTimeout(() => {
+          onRefresh();
+        }, 1000);
+      }
+    } catch (error: any) {
+      setSyncing(false);
+      throw error;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#fdf5e9] px-4 py-8">
@@ -140,6 +215,63 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
           </div>
         </div>
 
+        {/* OpenDota Connection Card */}
+        <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-[#0f172a]">OpenDota Connection</h2>
+            <Gamepad2 className="w-6 h-6 text-[#f97316]" />
+          </div>
+          
+          {user?.opendota_id ? (
+            <div>
+              <div className="bg-[#10b981]/5 rounded-2xl p-4 border-2 border-[#10b981]/20 mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <LinkIcon className="w-4 h-4 text-[#10b981]" />
+                  <span className="text-sm font-semibold text-[#10b981]">Connected</span>
+                </div>
+                <p className="text-xs text-[#0f172a]/60">
+                  Steam32 ID: <span className="font-mono">{user.opendota_id}</span>
+                </p>
+                {user?.opendota_last_synced && (
+                  <p className="text-xs text-[#0f172a]/60 mt-1">
+                    Last synced: {new Date(user.opendota_last_synced).toLocaleString()}
+                  </p>
+                )}
+              </div>
+              
+              {user?.opendota_data && (
+                <div className="space-y-3">
+                  {/* Badge Rank */}
+                  {user.opendota_data.badge_rank && user.opendota_data.badge_rank.medal !== 'Unranked' && (
+                    <div className="bg-[#f97316]/5 rounded-2xl p-4 border-2 border-[#f97316]/20">
+                      <p className="text-xs text-[#0f172a]/60 mb-2 font-semibold">Badge Rank</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">🏅</span>
+                        <span className="text-lg font-bold text-[#f97316]">
+                          {user.opendota_data.badge_rank.medal} [{user.opendota_data.badge_rank.stars}]
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm text-[#0f172a]/60 mb-4">
+                Connect your OpenDota account to display your Dota 2 stats on your profile
+              </p>
+              <Button
+                onClick={() => setOpenDotaModalOpen(true)}
+                className="w-full bg-[#f97316] hover:bg-[#ea580c] text-white h-12 rounded-xl font-semibold"
+              >
+                <LinkIcon className="mr-2 h-5 w-5" />
+                Connect OpenDota
+              </Button>
+            </div>
+          )}
+        </div>
+
         {/* Your Progress Card */}
         {user?.role !== 'guest' && (
           <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-6">
@@ -198,6 +330,24 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
       </div>
 
       <Footer />
+
+      {/* OpenDota Connection Modal */}
+      {openDotaModalOpen && (
+        <ConnectOpenDotaModal
+          onConnect={handleConnectOpenDota}
+          onClose={() => setOpenDotaModalOpen(false)}
+        />
+      )}
+
+      {/* Success/Error Modal */}
+      {result && (
+        <SuccessModal
+          type={result.type}
+          title={result.title}
+          message={result.message}
+          onClose={() => setResult(null)}
+        />
+      )}
     </div>
   );
 }
