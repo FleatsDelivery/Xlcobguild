@@ -79,19 +79,82 @@ function errorResponse(message: string) {
   return {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
-      content: `❌ **Error:** ${message}`,
+      embeds: [{
+        title: '❌ Error',
+        description: message,
+        color: 0xEF4444, // Red color
+        timestamp: new Date().toISOString(),
+      }],
       flags: 64, // Ephemeral (only visible to user)
     },
   };
 }
 
-// Success response helper
+// Success response helper (ephemeral)
 function successResponse(content: string) {
   return {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
-      content,
+      embeds: [{
+        title: '✅ Request Submitted',
+        description: content,
+        color: 0xF97316, // Orange (Fleats brand color)
+        timestamp: new Date().toISOString(),
+      }],
       flags: 64, // Ephemeral
+    },
+  };
+}
+
+// Public success announcement (everyone can see)
+function publicSuccessResponse(submitter: any, targetUser: any, action: string, matchId: string | null) {
+  const actionEmoji = action === 'rank_up' ? '⬆️' : action === 'rank_down' ? '⬇️' : '⭐';
+  const actionText = action === 'rank_up' ? 'Rank Up' : action === 'rank_down' ? 'Rank Down' : 'Prestige';
+  
+  return {
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      embeds: [{
+        title: `${actionEmoji} New MVP Request Submitted!`,
+        description: `**<@${submitter.discord_id}>** submitted a **${actionText}** request for **<@${targetUser.discord_id}>**`,
+        color: 0xF97316, // Orange
+        fields: [
+          {
+            name: '👤 Target Player',
+            value: `<@${targetUser.discord_id}>\n${RANK_NAMES[targetUser.rank_id]} (Prestige ${targetUser.prestige_level})`,
+            inline: true,
+          },
+          {
+            name: '⚡ Action',
+            value: actionText,
+            inline: true,
+          },
+          ...(matchId ? [{
+            name: '🎮 Match ID',
+            value: `\`${matchId}\``,
+            inline: true,
+          }] : []),
+          {
+            name: '📊 Status',
+            value: '⏳ Pending officer review',
+            inline: false,
+          },
+        ],
+        footer: {
+          text: 'View all requests at xlcob.com/requests',
+        },
+        timestamp: new Date().toISOString(),
+      }],
+    },
+  };
+}
+
+// Processing/deferred response (shows "Bot is thinking...")
+function deferredResponse() {
+  return {
+    type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      flags: 0, // Public response
     },
   };
 }
@@ -327,7 +390,7 @@ ${matchId ? `🎮 **Match ID:** ${matchId}\n` : ''}⚡ **Action:** ${action}
 
 Check status at **https://xlcob.com/requests**`;
 
-      return new Response(JSON.stringify(successResponse(successMessage)), {
+      return new Response(JSON.stringify(publicSuccessResponse(submitter, targetUser, actionLower, matchId)), {
         headers: { 'Content-Type': 'application/json' },
       });
     } catch (error) {
