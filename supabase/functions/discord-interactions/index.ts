@@ -212,7 +212,7 @@ serve(async (req) => {
       const getOption = (name: string) => options.find((opt: any) => opt.name === name)?.value;
       
       const targetDiscordUser = options.find((opt: any) => opt.name === 'user')?.value; // Discord user ID
-      const screenshotAttachment = options.find((opt: any) => opt.name === 'screenshot');
+      const screenshotAttachmentId = getOption('screenshot'); // This is the attachment ID
       const action = getOption('action');
       const matchId = getOption('match_id');
 
@@ -224,6 +224,13 @@ serve(async (req) => {
           headers: { 'Content-Type': 'application/json' },
         });
       }
+
+      // Get the actual attachment data from resolved attachments
+      const screenshotAttachment = body.data.resolved?.attachments?.[screenshotAttachmentId];
+      
+      console.log('Screenshot attachment ID:', screenshotAttachmentId);
+      console.log('Resolved attachments:', body.data.resolved?.attachments);
+      console.log('Screenshot attachment data:', screenshotAttachment);
 
       // Step 1: Lookup submitter in database
       const { data: submitter, error: submitterError } = await supabase
@@ -308,15 +315,15 @@ serve(async (req) => {
       }
 
       // Step 4: Download and upload screenshot
-      if (!screenshotAttachment || !screenshotAttachment.attachment) {
+      if (!screenshotAttachment || !screenshotAttachment.url) {
         return new Response(
           JSON.stringify(errorResponse('Screenshot attachment is missing!')),
           { headers: { 'Content-Type': 'application/json' } }
         );
       }
 
-      const screenshotUrl = screenshotAttachment.attachment.url;
-      const screenshotContentType = screenshotAttachment.attachment.content_type;
+      const screenshotUrl = screenshotAttachment.url;
+      const screenshotContentType = screenshotAttachment.content_type;
 
       // Validate image type
       if (!screenshotContentType?.startsWith('image/')) {
