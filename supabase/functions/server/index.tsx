@@ -1207,6 +1207,140 @@ app.get("/make-server-4789f4af/admin/mvp-requests", async (c) => {
   }
 });
 
+// Helper function to update Discord message when MVP request status changes
+async function updateDiscordMVPMessage(
+  requestId: string,
+  status: 'approved' | 'denied',
+  reviewerUsername: string
+) {
+  try {
+    // Get the request with Discord message info
+    const { data: request, error: requestError } = await supabase
+      .from('rank_up_requests')
+      .select(`
+        discord_message_id,
+        discord_channel_id,
+        action,
+        match_id,
+        screenshot_url,
+        users!rank_up_requests_user_id_fkey(discord_id, discord_username, rank_id, prestige_level),
+        target_user:users!rank_up_requests_target_user_id_fkey(discord_id, discord_username, rank_id, prestige_level)
+      `)
+      .eq('id', requestId)
+      .single();
+
+    if (requestError || !request) {
+      console.log('Request not found or missing Discord info:', requestError);
+      return;
+    }
+
+    // If no Discord message ID, skip updating
+    if (!request.discord_message_id || !request.discord_channel_id) {
+      console.log('No Discord message info found for request:', requestId);
+      return;
+    }
+
+    const botToken = Deno.env.get('DISCORD_BOT_TOKEN');
+    if (!botToken) {
+      console.error('DISCORD_BOT_TOKEN not found');
+      return;
+    }
+
+    // Rank names
+    const RANK_NAMES = [
+      '', // 0 index unused
+      'Earwig',
+      'Ugandan Kob',
+      'Private Maize',
+      'Specialist Ingredient',
+      'Corporal Corn Bread',
+      'Sergeant Husk',
+      'Sergeant Major Fields',
+      'Captain Cornhole',
+      'Major Cob',
+      'Corn Star',
+      "Pop'd Kernel",
+    ];
+
+    const submitter = request.users;
+    const targetUser = request.target_user || request.users;
+    const action = request.action || 'rank_up';
+    const matchId = request.match_id;
+
+    const actionEmoji = action === 'rank_up' ? '⬆️' : action === 'rank_down' ? '⬇️' : '⭐';
+    const actionText = action === 'rank_up' ? 'Rank Up' : action === 'rank_down' ? 'Rank Down' : 'Prestige';
+
+    // Status display
+    const statusText = status === 'approved' ? `✅ Approved by ${reviewerUsername}` : `❌ Denied by ${reviewerUsername}`;
+    const embedColor = status === 'approved' ? 0x10b981 : 0xef4444; // Green for approved, red for denied
+    const titleSuffix = status === 'approved' ? ' - APPROVED ✅' : ' - DENIED ❌';
+
+    // Generate signed URL for the screenshot
+    let imageUrl = '';
+    if (request.screenshot_url) {
+      const { data: signedUrlData } = await supabase.storage
+        .from('make-4789f4af-mvp-screenshots')
+        .createSignedUrl(request.screenshot_url, 60 * 60 * 24 * 7); // 7 days
+      imageUrl = signedUrlData?.signedUrl || '';
+    }
+
+    // Updated embed
+    const updatedEmbed = {
+      title: `🌽 MVP Request${titleSuffix}`,
+      color: embedColor,
+      fields: [
+        {
+          name: '👤 Requesting MVP',
+          value: `<@${submitter.discord_id}>\n${RANK_NAMES[submitter.rank_id]} (Prestige ${submitter.prestige_level})`,
+          inline: true,
+        },
+        {
+          name: '🎯 Target Player',
+          value: `<@${targetUser.discord_id}>\n${RANK_NAMES[targetUser.rank_id]} (Prestige ${targetUser.prestige_level})`,
+          inline: true,
+        },
+        {
+          name: `⚡ Action`,
+          value: `${actionEmoji} ${actionText}${matchId ? `\n🎮 Match ID: \`${matchId}\`` : ''}`,
+          inline: true,
+        },
+        {
+          name: '📊 Status',
+          value: statusText,
+          inline: true,
+        },
+      ],
+      image: imageUrl ? { url: imageUrl } : undefined,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Update the Discord message
+    const response = await fetch(
+      `https://discord.com/api/v10/channels/${request.discord_channel_id}/messages/${request.discord_message_id}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bot ${botToken}`,
+        },
+        body: JSON.stringify({
+          embeds: [updatedEmbed],
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Failed to update Discord message:', errorText);
+    } else {
+      console.log(`✅ Successfully updated Discord message for request ${requestId}`);
+    }
+  } catch (error) {
+    console.error('Error updating Discord message:', error);
+    // Don't fail the request if Discord update fails
+  }
+}
+
 // Approve MVP request and rank up user (Admin/Owner only)
 app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/approve", async (c) => {
   try {
@@ -1225,7 +1359,7 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/approve", async (c
     // Get user from database and check if owner/admin - query by supabase_id
     const { data: dbUser, error: userError } = await supabase
       .from('users')
-      .select('role')
+      .select('id, role, discord_username')
       .eq('supabase_id', authUser.id)
       .single();
 
@@ -1344,6 +1478,9 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/approve", async (c
       // Don't fail the request if history logging fails
     }
 
+    // Update Discord message (don't await - let it run async)
+    updateDiscordMVPMessage(requestId, 'approved', dbUser.discord_username || 'Unknown');
+
     return c.json({ success: true, new_rank_id: newRankId });
   } catch (error) {
     console.error('Approve MVP request error:', error);
@@ -1369,7 +1506,7 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/deny", async (c) =
     // Get user from database and check if owner/admin - query by supabase_id
     const { data: dbUser, error: userError } = await supabase
       .from('users')
-      .select('role')
+      .select('id, role, discord_username')
       .eq('supabase_id', authUser.id)
       .single();
 
@@ -1413,6 +1550,9 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/deny", async (c) =
       console.error('❌ [Supabase] Error denying request:', updateError);
       return c.json({ error: 'Failed to deny request' }, 500);
     }
+
+    // Update Discord message (don't await - let it run async)
+    updateDiscordMVPMessage(requestId, 'denied', dbUser.discord_username || 'Unknown');
 
     return c.json({ success: true });
   } catch (error) {

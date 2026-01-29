@@ -90,24 +90,8 @@ function errorResponse(message: string) {
   };
 }
 
-// Success response helper (ephemeral)
-function successResponse(content: string) {
-  return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      embeds: [{
-        title: '✅ Request Submitted',
-        description: content,
-        color: 0xF97316, // Orange (Fleats brand color)
-        timestamp: new Date().toISOString(),
-      }],
-      flags: 64, // Ephemeral
-    },
-  };
-}
-
 // Public success announcement (everyone can see)
-function publicSuccessResponse(submitter: any, targetUser: any, action: string, matchId: string | null) {
+function publicSuccessResponse(submitter: any, targetUser: any, action: string, matchId: string | null, imageUrl: string) {
   const actionEmoji = action === 'rank_up' ? '⬆️' : action === 'rank_down' ? '⬇️' : '⭐';
   const actionText = action === 'rank_up' ? 'Rank Up' : action === 'rank_down' ? 'Rank Down' : 'Prestige';
   
@@ -115,33 +99,32 @@ function publicSuccessResponse(submitter: any, targetUser: any, action: string, 
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       embeds: [{
-        title: `${actionEmoji} New MVP Request Submitted!`,
-        description: `**<@${submitter.discord_id}>** submitted a **${actionText}** request for **<@${targetUser.discord_id}>**`,
+        title: `🌽 New MVP Request Submitted!`,
         color: 0xF97316, // Orange
         fields: [
           {
-            name: '👤 Target Player',
+            name: '👤 Requesting MVP',
+            value: `<@${submitter.discord_id}>\n${RANK_NAMES[submitter.rank_id]} (Prestige ${submitter.prestige_level})`,
+            inline: true,
+          },
+          {
+            name: '🎯 Target Player',
             value: `<@${targetUser.discord_id}>\n${RANK_NAMES[targetUser.rank_id]} (Prestige ${targetUser.prestige_level})`,
             inline: true,
           },
           {
-            name: '⚡ Action',
-            value: actionText,
+            name: `⚡ Action`,
+            value: `${actionEmoji} ${actionText}${matchId ? `\n🎮 Match ID: \`${matchId}\`` : ''}`,
             inline: true,
           },
-          ...(matchId ? [{
-            name: '🎮 Match ID',
-            value: `\`${matchId}\``,
-            inline: true,
-          }] : []),
           {
             name: '📊 Status',
             value: '⏳ Pending officer review',
-            inline: false,
+            inline: true,
           },
         ],
-        footer: {
-          text: 'View all requests at xlcob.com/requests',
+        image: {
+          url: imageUrl, // Display the uploaded screenshot
         },
         timestamp: new Date().toISOString(),
       }],
@@ -242,7 +225,7 @@ serve(async (req) => {
       if (submitterError || !submitter) {
         console.error('Submitter not found:', submitterError);
         return new Response(
-          JSON.stringify(errorResponse('You must be registered at https://xlcob.com first! Sign in with Discord to create your account.')),
+          JSON.stringify(errorResponse('You must be registered at https://need-wake-20446127.figma.site/ first! Sign in with Discord to create your account.')),
           { headers: { 'Content-Type': 'application/json' } }
         );
       }
@@ -265,7 +248,7 @@ serve(async (req) => {
       if (targetError || !targetUser) {
         console.error('Target user not found:', targetError);
         return new Response(
-          JSON.stringify(errorResponse('Target user is not registered in XLCOB! They must sign in at https://xlcob.com first.')),
+          JSON.stringify(errorResponse('Target user is not registered in XLCOB! They must sign in at https://need-wake-20446127.figma.site/ first.')),
           { headers: { 'Content-Type': 'application/json' } }
         );
       }
@@ -344,9 +327,11 @@ serve(async (req) => {
 
       // Upload to Supabase Storage
       const fileName = `${Date.now()}_${submitter.discord_id}_${targetUser.discord_id}.png`;
+      const filePath = `mvp-screenshots/${fileName}`; // Store in folder to match web app
+      
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('mvp-screenshots')
-        .upload(fileName, imageBuffer, {
+        .from('make-4789f4af-mvp-screenshots')
+        .upload(filePath, imageBuffer, {
           contentType: screenshotContentType,
           upsert: false,
         });
@@ -359,45 +344,91 @@ serve(async (req) => {
         );
       }
 
-      // Get public URL
-      const { data: urlData } = supabase.storage.from('mvp-screenshots').getPublicUrl(fileName);
-      const permanentUrl = urlData.publicUrl;
+      console.log('Screenshot uploaded successfully to:', filePath);
 
-      console.log('Screenshot uploaded successfully:', permanentUrl);
+      // Step 5: Create MVP request in database
+      const { data: mvpRequest, error: insertError } = await supabase
+        .from('rank_up_requests')
+        .insert({
+          user_id: submitter.id,
+          target_user_id: targetUser.id,
+          action: actionLower,
+          match_id: matchId,
+          screenshot_url: filePath, // Store file path (not full URL)
+          status: 'pending',
+          type: 'mvp', // Required field for schema
+        })
+        .select()
+        .single();
 
-      // Step 5: Insert request into database
-      const { error: insertError } = await supabase.from('rank_up_requests').insert({
-        user_id: submitter.id,
-        target_user_id: targetUser.id,
-        action: actionLower,
-        screenshot_url: permanentUrl,
-        match_id: matchId || null,
-        status: 'pending',
-        current_rank_id: targetUser.rank_id,
-        current_prestige_level: targetUser.prestige_level,
-      });
-
-      if (insertError) {
-        console.error('Insert error:', insertError);
-        return new Response(
-          JSON.stringify(errorResponse('Failed to submit request to database!')),
-          { headers: { 'Content-Type': 'application/json' } }
-        );
+      if (insertError || !mvpRequest) {
+        console.error('Failed to create MVP request:', insertError);
+        return new Response(JSON.stringify(errorResponse('Failed to create MVP request in database')), {
+          headers: { 'Content-Type': 'application/json' },
+        });
       }
 
       console.log('MVP request created successfully');
 
-      // Step 6: Send success response
-      const successMessage = `✅ **MVP Request Submitted!**
+      // Step 6: Generate signed URL for Discord embed (7 days expiry)
+      const { data: signedUrlData } = await supabase.storage
+        .from('make-4789f4af-mvp-screenshots')
+        .createSignedUrl(filePath, 60 * 60 * 24 * 7); // 7 days
 
-🎯 **Target:** ${targetUser.discord_username} (${RANK_NAMES[targetUser.rank_id]} - Prestige ${targetUser.prestige_level})
-📸 **Screenshot:** Uploaded successfully
-${matchId ? `🎮 **Match ID:** ${matchId}\n` : ''}⚡ **Action:** ${action}
-⏳ **Status:** Pending officer review
+      const imageUrl = signedUrlData?.signedUrl || '';
 
-Check status at **https://xlcob.com/requests**`;
+      console.log('Generated signed URL for Discord:', imageUrl);
 
-      return new Response(JSON.stringify(publicSuccessResponse(submitter, targetUser, actionLower, matchId)), {
+      // Step 7: Send success response with image (this posts the message to Discord)
+      const response = publicSuccessResponse(submitter, targetUser, actionLower, matchId, imageUrl);
+
+      // Step 8: Asynchronously fetch the posted message to get its ID and update database
+      // We need to do this AFTER responding to Discord, so we don't block the response
+      const interactionToken = body.token;
+      const applicationId = Deno.env.get('DISCORD_APPLICATION_ID');
+      const channelId = body.channel_id;
+
+      // Don't await this - let it run in background
+      (async () => {
+        try {
+          // Wait a moment for Discord to process the message
+          await new Promise(resolve => setTimeout(resolve, 1000));
+
+          // Fetch the original message using the interaction token
+          const messageResponse = await fetch(
+            `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}/messages/@original`,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+
+          if (messageResponse.ok) {
+            const messageData = await messageResponse.json();
+            const messageId = messageData.id;
+
+            console.log('Fetched Discord message ID:', messageId);
+
+            // Update the MVP request with Discord message info
+            await supabase
+              .from('rank_up_requests')
+              .update({
+                discord_message_id: messageId,
+                discord_channel_id: channelId,
+              })
+              .eq('id', mvpRequest.id);
+
+            console.log('Updated MVP request with Discord message info');
+          } else {
+            console.error('Failed to fetch Discord message:', await messageResponse.text());
+          }
+        } catch (error) {
+          console.error('Error fetching Discord message ID:', error);
+        }
+      })();
+
+      return new Response(JSON.stringify(response), {
         headers: { 'Content-Type': 'application/json' },
       });
     } catch (error) {
