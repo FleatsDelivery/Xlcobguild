@@ -440,6 +440,76 @@ serve(async (req) => {
     }
   }
 
+  // Handle /leaderboard command
+  if (body.type === InteractionType.APPLICATION_COMMAND && body.data.name === 'leaderboard') {
+    try {
+      // Initialize Supabase client
+      const supabase = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      );
+
+      // Fetch all users sorted by rank (highest first) and prestige level
+      const { data: users, error } = await supabase
+        .from('users')
+        .select('username, discord_id, rank_id, prestige_level, role')
+        .order('rank_id', { ascending: false })
+        .order('prestige_level', { ascending: false })
+        .order('username', { ascending: true });
+
+      if (error || !users) {
+        console.error('Failed to fetch leaderboard:', error);
+        return new Response(
+          JSON.stringify(errorResponse('Failed to load leaderboard data!')),
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+
+      // Build leaderboard display
+      const leaderboardLines = users.map((user, index) => {
+        const rankName = RANK_NAMES[user.rank_id] || 'Unknown';
+        const prestige = user.prestige_level > 0 ? ` ⭐×${user.prestige_level}` : '';
+        const position = index + 1;
+        
+        // Medal emojis for top 3
+        let medal = '';
+        if (position === 1) medal = '🥇';
+        else if (position === 2) medal = '🥈';
+        else if (position === 3) medal = '🥉';
+        else medal = `${position}.`;
+
+        return `${medal} **${rankName}${prestige}** - <@${user.discord_id}>`;
+      });
+
+      // Split into chunks if too long (Discord has 4096 char limit per field)
+      const description = leaderboardLines.join('\n');
+
+      return new Response(
+        JSON.stringify({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            embeds: [{
+              title: '🌽 XLCOB Leaderboard',
+              description: description,
+              color: 0xF97316, // Orange
+              footer: {
+                text: `Total Members: ${users.length}`,
+              },
+              timestamp: new Date().toISOString(),
+            }],
+          },
+        }),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+    } catch (error) {
+      console.error('Error handling /leaderboard command:', error);
+      return new Response(
+        JSON.stringify(errorResponse('An unexpected error occurred. Please try again later.')),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+  }
+
   // Unknown command
   return new Response(
     JSON.stringify(errorResponse('Unknown command')),

@@ -59,6 +59,10 @@ serve(async (req) => {
           },
         ],
       },
+      {
+        name: 'leaderboard',
+        description: 'Display the current XLCOB leaderboard rankings',
+      },
     ];
 
     // Register command with Discord
@@ -96,7 +100,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: '✅ Successfully registered /mvp command with Discord!',
+        message: '✅ Successfully registered /mvp and /leaderboard commands with Discord!',
         commands: data,
       }),
       {
