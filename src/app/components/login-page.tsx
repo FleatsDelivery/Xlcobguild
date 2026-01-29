@@ -10,12 +10,11 @@ export function LoginPage() {
     try {
       setIsLoading(true);
 
-      // Get the OAuth URL from Supabase
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      // Direct redirect to Discord OAuth (no popup)
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'discord',
         options: {
           redirectTo: window.location.origin,
-          skipBrowserRedirect: true, // Don't redirect, we'll handle it
         },
       });
 
@@ -23,60 +22,9 @@ export function LoginPage() {
         console.error('Discord login error:', error);
         alert('Failed to sign in with Discord. Please try again.');
         setIsLoading(false);
-        return;
       }
-
-      if (data?.url) {
-        // Open OAuth in a centered popup window
-        const width = 500;
-        const height = 700;
-        const left = (window.screen.width - width) / 2;
-        const top = (window.screen.height - height) / 2;
-
-        const popup = window.open(
-          data.url,
-          'Discord Login',
-          `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
-        );
-
-        // Poll to check if popup is closed or auth is complete
-        const checkPopup = setInterval(() => {
-          if (!popup || popup.closed) {
-            clearInterval(checkPopup);
-            setIsLoading(false);
-            
-            // Check if auth was successful
-            supabase.auth.getSession().then(({ data: { session } }) => {
-              if (session) {
-                // Successfully authenticated, the app will handle the session change
-                console.log('Authentication successful!');
-              } else {
-                console.log('Authentication cancelled or failed');
-              }
-            });
-          }
-        }, 500);
-
-        // Also listen for hash changes (when Discord redirects back)
-        const handleHashChange = () => {
-          supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) {
-              if (popup && !popup.closed) {
-                popup.close();
-              }
-              clearInterval(checkPopup);
-              setIsLoading(false);
-            }
-          });
-        };
-
-        window.addEventListener('hashchange', handleHashChange);
-        
-        // Cleanup
-        setTimeout(() => {
-          window.removeEventListener('hashchange', handleHashChange);
-        }, 60000); // 1 minute timeout
-      }
+      // If successful, browser will redirect to Discord
+      // User will be redirected back after authorization
     } catch (err) {
       console.error('Login error:', err);
       alert('An error occurred. Please try again.');
@@ -97,7 +45,7 @@ export function LoginPage() {
             XLCOB
           </h1>
           <p className="text-lg text-[#0f172a]/70">
-            Open to The Corn Field & Friends
+            Welcome To The Guild
           </p>
         </div>
 

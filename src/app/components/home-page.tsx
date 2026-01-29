@@ -2,14 +2,14 @@ import { UserManagement } from '@/app/components/user-management';
 import { MvpSubmissionForm } from '@/app/components/mvp-submission-form';
 import { Footer } from '@/app/components/footer';
 import { Button } from '@/app/components/ui/button';
-import { UserPlus, AlertCircle, Loader2, CheckCircle, ExternalLink, Gamepad2, RefreshCw } from 'lucide-react';
+import { UserPlus, AlertCircle, Loader2, CheckCircle, ExternalLink, Gamepad2, RefreshCw, Popcorn, ArrowUp, ArrowDown, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { projectId, publicAnonKey } from '/utils/supabase/info';
 import { ConfirmModal } from '@/app/components/confirm-modal';
 import { SuccessModal } from '@/app/components/success-modal';
 
-export function HomePage({ user }: { user: any }) {
+export function HomePage({ user, onRefresh }: { user: any; onRefresh?: () => Promise<void> }) {
   const isGuest = user?.role === 'guest';
   const isOwner = user?.role === 'owner';
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,6 +17,8 @@ export function HomePage({ user }: { user: any }) {
   const [loadingRequest, setLoadingRequest] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
   const [refreshingOpenDota, setRefreshingOpenDota] = useState(false);
+  const [rankActions, setRankActions] = useState<any[]>([]);
+  const [loadingActions, setLoadingActions] = useState(true);
   const [result, setResult] = useState<{
     type: 'success' | 'error' | 'info';
     title: string;
@@ -80,8 +82,43 @@ export function HomePage({ user }: { user: any }) {
       checkExistingRequest();
     } else {
       setLoadingRequest(false);
+      fetchRankActions();
     }
-  }, [isGuest]);
+  }, [isGuest, user?.id]);
+
+  const fetchRankActions = async () => {
+    if (!user?.id) {
+      setLoadingActions(false);
+      return;
+    }
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        setLoadingActions(false);
+        return;
+      }
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/rank-actions/${user.id}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setRankActions(data.actions || []);
+      }
+    } catch (error) {
+      console.error('Error fetching rank actions:', error);
+    } finally {
+      setLoadingActions(false);
+    }
+  };
 
   const checkExistingRequest = async () => {
     try {
@@ -101,29 +138,35 @@ export function HomePage({ user }: { user: any }) {
         }
       );
 
-      const data = await response.json();
-      
-      if (response.ok && data.request) {
-        setHasRequest(true);
+      if (response.ok) {
+        const data = await response.json();
+        setHasRequest(data.hasRequest);
       }
     } catch (error) {
-      console.error('Error checking request:', error);
+      console.error('Error checking membership request:', error);
     } finally {
       setLoadingRequest(false);
     }
   };
 
-  const handleSubmitRequest = async () => {
-    setShowConfirm(false);
+  const handleMembershipRequest = async () => {
+    if (isSubmitting) return;
+
+    setShowConfirm(true);
+  };
+
+  const submitMembershipRequest = async () => {
     setIsSubmitting(true);
+    setShowConfirm(false);
+
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
         setResult({
           type: 'error',
-          title: 'Authentication Error',
-          message: 'Please sign in first',
+          title: 'Not Signed In',
+          message: 'Please sign in to submit a membership request.',
         });
         setIsSubmitting(false);
         return;
@@ -140,13 +183,12 @@ export function HomePage({ user }: { user: any }) {
         }
       );
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const error = await response.json();
         setResult({
           type: 'error',
-          title: 'Request Failed',
-          message: data.error || 'Failed to submit membership request. Please try again.',
+          title: 'Submission Failed',
+          message: error.error || 'Failed to submit membership request. Please try again.',
         });
         setIsSubmitting(false);
         return;
@@ -154,45 +196,41 @@ export function HomePage({ user }: { user: any }) {
 
       setResult({
         type: 'success',
-        title: 'Request Submitted! 🌽',
+        title: 'Request Submitted!',
         message: 'Your membership request has been submitted successfully.',
-        helpText: 'Navigate to the Requests page to track the status of your request. Guild officers will review it shortly!',
+        helpText: 'An admin will review your request soon. Check the Requests tab to track your progress.',
       });
-
-      setIsSubmitting(false);
-      
-      // Reload after showing success
-      setTimeout(() => {
-        window.location.reload();
-      }, 2500);
+      setHasRequest(true);
     } catch (error) {
-      console.error('Error submitting request:', error);
+      console.error('Error submitting membership request:', error);
       setResult({
         type: 'error',
-        title: 'Request Failed',
+        title: 'Submission Failed',
         message: 'An unexpected error occurred. Please try again.',
       });
+    } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleRefreshAllOpenDota = async () => {
+  const handleRefreshOpenDota = async () => {
     setRefreshingOpenDota(true);
+
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
         setResult({
           type: 'error',
-          title: 'Authentication Error',
-          message: 'Please sign in first',
+          title: 'Not Signed In',
+          message: 'Please sign in to refresh OpenDota data.',
         });
         setRefreshingOpenDota(false);
         return;
       }
 
       const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/opendota/refresh-all`,
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/refresh-opendota`,
         {
           method: 'POST',
           headers: {
@@ -201,209 +239,379 @@ export function HomePage({ user }: { user: any }) {
         }
       );
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const error = await response.json();
         setResult({
           type: 'error',
           title: 'Refresh Failed',
-          message: data.error || 'Failed to refresh OpenDota accounts. Please try again.',
+          message: error.error || 'Failed to refresh OpenDota data.',
         });
         setRefreshingOpenDota(false);
         return;
       }
 
+      const data = await response.json();
       setResult({
         type: 'success',
-        title: 'OpenDota Refresh Complete! 🎮',
-        message: `Successfully refreshed ${data.refreshed} accounts${data.failed > 0 ? `. ${data.failed} failed.` : '.'}`,
-        helpText: 'All connected OpenDota accounts have been synced with the latest data.',
+        title: 'OpenDota Refresh Complete!',
+        message: `Successfully synced ${data.updatedCount || 0} user(s) with OpenDota.`,
+        helpText: 'All user Dota 2 stats have been updated with the latest information.',
       });
-
-      setRefreshingOpenDota(false);
     } catch (error) {
-      console.error('Error refreshing OpenDota accounts:', error);
+      console.error('Error refreshing OpenDota data:', error);
       setResult({
         type: 'error',
         title: 'Refresh Failed',
         message: 'An unexpected error occurred. Please try again.',
       });
+    } finally {
       setRefreshingOpenDota(false);
     }
   };
 
-  return (
-    <div className="p-6">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {isGuest ? (
-          /* Guest: Welcome Card */
-          <>
-            <div className="bg-gradient-to-br from-[#f97316]/10 to-[#f97316]/5 rounded-3xl p-8 border-2 border-[#f97316]/20">
-              <h2 className="text-3xl font-bold text-[#0f172a] mb-2">
-                Welcome, {user?.discord_username || 'Corny Friend'}! 🌽
-              </h2>
-              <p className="text-[#0f172a]/70">
-                You're currently a guest. Submit a membership request below to join The Corn Field guild!
-              </p>
-            </div>
+  // Wrapper function to refresh both user data and rank actions
+  const handleRefreshWithActions = async () => {
+    if (onRefresh) {
+      await onRefresh();
+    }
+    await fetchRankActions();
+  };
 
-            {/* Guest: Membership Request Section */}
-            {loadingRequest ? (
-              <div className="bg-white rounded-2xl shadow-sm p-8 border-2 border-[#0f172a]/10 text-center">
-                <Loader2 className="w-10 h-10 animate-spin text-[#f97316] mx-auto mb-2" />
-                <p className="text-sm text-[#0f172a]/70">Checking request status...</p>
-              </div>
-            ) : hasRequest ? (
-              <div className="bg-gradient-to-br from-[#10b981]/10 to-[#10b981]/5 rounded-3xl p-8 border-2 border-[#10b981]/20">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#10b981] flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="w-6 h-6 text-white" />
+  return (
+    <div className="p-4 sm:p-6">
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Combined Welcome & Rank Progress Card - Members Only */}
+        {!isGuest && (
+          <div className="bg-gradient-to-br from-[#f97316]/20 to-[#ea580c]/10 rounded-3xl p-6 sm:p-8 border-2 border-[#f97316]/20 shadow-xl">
+            {/* User Info Header */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-6">
+              {user?.discord_avatar ? (
+                <img 
+                  src={user.discord_avatar} 
+                  alt={user.discord_username}
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-white shadow-lg"
+                />
+              ) : (
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#f97316] flex items-center justify-center border-4 border-white shadow-lg">
+                  <span className="text-white font-bold text-2xl sm:text-3xl">
+                    {user?.discord_username?.[0]?.toUpperCase() || '?'}
+                  </span>
+                </div>
+              )}
+              <div className="flex-1 text-center sm:text-left">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#0f172a] mb-2">
+                  Welcome back, {user?.discord_username || 'Player'}! 🌽
+                </h2>
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-4">
+                  <div className="text-center sm:text-left">
+                    <p className="text-xs text-[#0f172a]/60 mb-0.5">Current Rank</p>
+                    <p className="text-lg font-bold text-[#0f172a] flex items-center gap-2 justify-center sm:justify-start">
+                      {currentRankId === 11 ? (
+                        <Popcorn className="w-7 h-7 text-[#f97316]" />
+                      ) : (
+                        <span className="text-2xl">{rankEmojis[currentRankId - 1]}</span>
+                      )}
+                      {getDisplayRank()}
+                    </p>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-[#0f172a] mb-2">Request Submitted! 🌽</h3>
-                    <p className="text-[#0f172a]/70 text-sm leading-relaxed">
-                      Your membership request is being reviewed. Check the <span className="font-medium text-[#f97316]">Requests</span> tab to track its status and manage your request.
+                  <div className="text-center sm:text-left">
+                    <p className="text-xs text-[#0f172a]/60 mb-0.5">Next Rank</p>
+                    <p className="text-lg font-bold text-[#f97316] flex items-center gap-2 justify-center sm:justify-start">
+                      {currentRankId >= maxRanks ? (
+                        <span className="text-2xl">
+                          {prestigeLevel < 5 ? '⬆️' : '👑'}
+                        </span>
+                      ) : currentRankId === 10 && prestigeLevel === 5 ? (
+                        <Popcorn className="w-7 h-7 text-[#f97316]" />
+                      ) : (
+                        <span className="text-2xl">{rankEmojis[currentRankId]}</span>
+                      )}
+                      {getNextRankName()}
                     </p>
                   </div>
                 </div>
               </div>
-            ) : (
-              <>
-                <div className="bg-gradient-to-br from-[#f97316]/10 to-[#f97316]/5 rounded-3xl p-8 border-2 border-[#f97316]/20">
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-full bg-[#f97316] flex items-center justify-center flex-shrink-0">
-                      <UserPlus className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-[#0f172a] mb-2">Request Membership</h3>
-                      <p className="text-[#0f172a]/70 text-sm leading-relaxed">
-                        Ready to become a member of The Corn Field? Submit a membership request to gain full access to the guild, leaderboard, and all features.
-                      </p>
-                    </div>
-                  </div>
-
-                  <Button className="w-full bg-[#f97316] hover:bg-[#ea580c] text-white h-12 rounded-xl font-semibold" onClick={() => setShowConfirm(true)} disabled={isSubmitting}>
-                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Submit Membership Request'}
-                  </Button>
-                </div>
-
-                <div className="bg-[#3b82f6]/5 rounded-2xl p-6 border-2 border-[#3b82f6]/20">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-[#3b82f6] flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold text-[#0f172a] mb-1">What happens next?</h4>
-                      <p className="text-sm text-[#0f172a]/70 leading-relaxed">
-                        Your request will be reviewed by guild officers. You can check the status of your request in the <span className="font-medium text-[#f97316]">Requests</span> tab. Once approved, you'll gain full access to all guild features!
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </>
-        ) : (
-          /* Member: Welcome + Rank Progress Section */
-          <div className="bg-gradient-to-br from-[#f97316]/10 to-[#f97316]/5 rounded-3xl p-8 border-2 border-[#f97316]/20">
-            {/* Header Section */}
-            <div className="flex items-center justify-between pb-6 border-b-2 border-[#f97316]/20 mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-[#0f172a]">
-                  Welcome back, {user?.discord_username}!
-                </h2>
-              </div>
-              <div className="text-right">
-                <p className="text-sm text-[#0f172a]/60 mb-1">Rank Progress</p>
-                <p className="text-2xl font-bold text-[#0f172a]">
-                  {currentRankId}/{maxRanks}
-                </p>
-              </div>
             </div>
 
-            {/* Current Rank Display */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="text-5xl">
-                {rankEmojis[currentRankId - 1]}
+            {/* Rank Progress Bar */}
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm font-semibold text-[#0f172a]">
+                  Rank {currentRankId} / {displayRanks}
+                </span>
+                <span className="text-xs text-[#0f172a]/60">
+                  {Math.round((currentRankId / displayRanks) * 100)}% Complete
+                </span>
               </div>
-              <div>
-                <p className="text-3xl font-bold text-[#f97316]">{getDisplayRank()}</p>
-                {prestigeLevel > 0 && (
-                  <p className="text-sm text-[#0f172a]/60 font-semibold">
-                    ⭐ Prestige Level {prestigeLevel}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Rank Progression Bar */}
-            <div className="space-y-2 mb-6">
-              <div className="h-3 bg-[#0f172a]/10 rounded-full overflow-hidden">
+              <div className="h-3 bg-white/60 rounded-full overflow-hidden shadow-inner">
                 <div 
                   className="h-full bg-gradient-to-r from-[#f97316] to-[#ea580c] transition-all duration-500 rounded-full"
-                  style={{ width: `${(currentRankId / maxRanks) * 100}%` }}
+                  style={{ width: `${(currentRankId / displayRanks) * 100}%` }}
                 />
               </div>
             </div>
 
-            {/* All Ranks Visual with Hover Effects */}
-            <div className="flex items-center justify-between gap-1 flex-wrap mb-4">
-              {Array.from({ length: displayRanks }).map((_, index) => {
-                const rankNumber = index + 1;
-                const isUnlocked = rankNumber <= currentRankId;
-                const isCurrent = rankNumber === currentRankId;
-                const emoji = rankEmojis[index];
-                const rankName = rankNames[index];
-                
-                return (
-                  <div
-                    key={rankNumber}
-                    className="group relative flex flex-col items-center transition-all"
-                  >
-                    {/* Tooltip on hover */}
-                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                      <div className="bg-[#0f172a] text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap shadow-lg">
-                        {rankName}
-                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2 h-2 bg-[#0f172a] rotate-45"></div>
+            {/* Visual Rank Progression */}
+            <div className="space-y-5">
+              {/* Rank Emojis Row */}
+              <div>
+                <p className="text-xs text-[#0f172a]/70 mb-3 font-semibold">Rank Progression:</p>
+                <div className="flex items-center justify-between gap-1 sm:gap-2">
+                  {rankEmojis.slice(0, displayRanks).map((emoji, index) => {
+                    const rankNum = index + 1;
+                    const isCompleted = currentRankId > rankNum;
+                    const isCurrent = currentRankId === rankNum;
+                    const isLocked = currentRankId < rankNum;
+                    const isPopdKernel = rankNum === 11; // Pop'd Kernel
+                    
+                    return (
+                      <div
+                        key={rankNum}
+                        className={`group relative flex-1 flex items-center justify-center transition-all duration-300 ${
+                          isCurrent ? 'scale-125' : 'hover:scale-110'
+                        }`}
+                      >
+                        {isPopdKernel ? (
+                          <Popcorn
+                            className={`w-7 h-7 sm:w-8 sm:h-8 transition-all duration-300 cursor-pointer ${
+                              isCompleted ? 'opacity-100 text-[#f97316] hover:scale-110' :
+                              isCurrent ? 'opacity-100 text-[#f97316] animate-pulse drop-shadow-lg' :
+                              'opacity-30 text-[#0f172a]/40 hover:opacity-50 hover:text-[#f97316]/60'
+                            }`}
+                          />
+                        ) : (
+                          <div
+                            className={`text-2xl sm:text-3xl transition-all duration-300 cursor-pointer ${
+                              isCompleted ? 'opacity-100 grayscale-0 hover:scale-110' :
+                              isCurrent ? 'opacity-100 grayscale-0 animate-pulse drop-shadow-lg' :
+                              'opacity-30 grayscale hover:opacity-50 hover:grayscale-0'
+                            }`}
+                          >
+                            {emoji}
+                          </div>
+                        )}
+                        
+                        {/* Tooltip on hover */}
+                        <div className="absolute bottom-full mb-2 hidden group-hover:block z-10 pointer-events-none">
+                          <div className="bg-[#0f172a] text-white text-xs px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap">
+                            <span className="font-semibold">{rankNames[index]}</span>
+                            {isCurrent && <span className="text-[#f97316]"> (Current)</span>}
+                            {isCompleted && <span className="text-[#22c55e]"> ✓</span>}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    );
+                  })}
+                </div>
+              </div>
 
-                    {/* Emoji with hover effects */}
-                    <div
-                      className={`text-2xl mb-1 transition-all duration-300 cursor-pointer ${
-                        isUnlocked ? 'opacity-100' : 'opacity-30 grayscale'
-                      } ${
-                        isCurrent ? 'scale-125 animate-pulse' : ''
-                      } group-hover:scale-150 group-hover:drop-shadow-[0_0_12px_rgba(249,115,22,0.8)]`}
-                    >
-                      {emoji}
-                    </div>
+              {/* Prestige Level Stars */}
+              <div>
+                <p className="text-xs text-[#0f172a]/70 mb-3 font-semibold">Prestige Level:</p>
+                <div className="flex items-center justify-center gap-3 sm:gap-4">
+                  {[1, 2, 3, 4, 5].map((level) => {
+                    const isAchieved = prestigeLevel >= level;
+                    const isCurrent = prestigeLevel === level;
+                    const emoji = level === 5 ? '💥' : '🌟';
                     
-                    {/* Progress indicator */}
-                    <div
-                      className={`h-1 w-6 rounded-full transition-all ${
-                        isUnlocked ? 'bg-[#f97316]' : 'bg-[#0f172a]/10'
-                      }`}
-                    />
-                    
-                    {/* Current rank label */}
-                    {isCurrent && (
-                      <div className="text-[10px] text-[#f97316] font-bold mt-1">YOU</div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Next Rank Display - Bottom Right */}
-            <div className="text-right">
-              <p className="text-sm text-[#0f172a]/60">
-                Next Rank: <span className="font-semibold text-[#f97316]">{getNextRankName()}</span>
-              </p>
+                    return (
+                      <div
+                        key={level}
+                        className={`group relative transition-all duration-300 cursor-pointer ${
+                          isCurrent ? 'scale-125' : 'hover:scale-110'
+                        }`}
+                      >
+                        <div
+                          className={`text-3xl sm:text-4xl transition-all duration-300 ${
+                            isAchieved ? 'opacity-100 grayscale-0 hover:scale-110 drop-shadow-lg' : 
+                            'opacity-20 grayscale hover:opacity-40 hover:grayscale-0'
+                          } ${isCurrent ? 'animate-pulse' : ''}`}
+                        >
+                          {emoji}
+                        </div>
+                        
+                        {/* Tooltip on hover */}
+                        <div className="absolute bottom-full mb-2 hidden group-hover:block z-10 left-1/2 -translate-x-1/2 pointer-events-none">
+                          <div className="bg-[#0f172a] text-white text-xs px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap">
+                            <span className="font-semibold">Prestige {level}</span>
+                            {isCurrent && <span className="text-[#f97316]"> (Current)</span>}
+                            {isAchieved && !isCurrent && <span className="text-[#22c55e]"> ✓</span>}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         )}
 
+        {/* Guest: Welcome & Membership Request Section */}
+        {isGuest && (
+          <div className="bg-gradient-to-br from-[#f97316]/20 to-[#ea580c]/10 rounded-3xl p-6 sm:p-8 border-2 border-[#f97316]/20 shadow-xl">
+            {/* User Info Header */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-6">
+              {user?.discord_avatar ? (
+                <img 
+                  src={user.discord_avatar} 
+                  alt={user.discord_username}
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-white shadow-lg"
+                />
+              ) : (
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#f97316] flex items-center justify-center border-4 border-white shadow-lg">
+                  <span className="text-white font-bold text-2xl sm:text-3xl">
+                    {user?.discord_username?.[0]?.toUpperCase() || '?'}
+                  </span>
+                </div>
+              )}
+              <div className="flex-1 text-center sm:text-left">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#0f172a] mb-2">
+                  Welcome, {user?.discord_username || 'Player'}! 🌽
+                </h2>
+                <p className="text-[#0f172a]/70 text-sm sm:text-base">
+                  Submit a membership request to join The Corn Field and start your journey through the ranks!
+                </p>
+              </div>
+            </div>
+
+            {/* Membership Request Action */}
+            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/80">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-[#f97316] flex items-center justify-center flex-shrink-0">
+                  <UserPlus className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-[#0f172a] mb-1">Join The Corn Field</h3>
+                  <p className="text-[#0f172a]/70 text-xs sm:text-sm">
+                    Submit your membership application to become part of our community!
+                  </p>
+                </div>
+              </div>
+
+              {loadingRequest ? (
+                <div className="text-center py-4">
+                  <Loader2 className="w-8 h-8 animate-spin text-[#f97316] mx-auto mb-2" />
+                  <p className="text-sm text-[#0f172a]/60">Checking request status...</p>
+                </div>
+              ) : hasRequest ? (
+                <div className="bg-[#f59e0b]/10 border-2 border-[#f59e0b]/20 rounded-2xl p-4 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-[#f59e0b] flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-[#0f172a] mb-1">Request Pending</p>
+                    <p className="text-sm text-[#0f172a]/70">
+                      Your membership request is being reviewed. Check the Requests tab for updates.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <Button 
+                  onClick={handleMembershipRequest}
+                  disabled={isSubmitting}
+                  className="w-full bg-[#f97316] hover:bg-[#ea580c] text-white h-12 rounded-xl font-semibold text-base transition-all"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="w-5 h-5 mr-2" />
+                      Submit Membership Request
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Recent Actions - Members Only */}
+        {!isGuest && (
+          <div className="bg-white rounded-3xl p-4 sm:p-6 border-2 border-[#0f172a]/10 shadow-md">
+            <h3 className="text-lg font-bold text-[#0f172a] mb-4">⚔️ Your Recent Actions</h3>
+            
+            {loadingActions ? (
+              <div className="text-center py-8">
+                <Loader2 className="w-8 h-8 animate-spin text-[#f97316] mx-auto mb-2" />
+                <p className="text-sm text-[#0f172a]/60">Loading your action history...</p>
+              </div>
+            ) : rankActions.length === 0 ? (
+              <div className="text-center py-8 bg-[#0f172a]/5 rounded-2xl">
+                <div className="text-4xl mb-3">🌽</div>
+                <p className="text-sm text-[#0f172a]/70 font-medium">No rank actions yet</p>
+                <p className="text-xs text-[#0f172a]/50 mt-1">Your rank changes will appear here</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <div className="flex gap-3 sm:gap-4 pb-2">
+                  {rankActions.slice(0, 10).map((action, index) => {
+                    const actionIcon = action.action === 'rank_up' ? (
+                      <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5 text-[#10b981]" />
+                    ) : action.action === 'rank_down' ? (
+                      <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 text-[#ef4444]" />
+                    ) : (
+                      <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#fbbf24]" />
+                    );
+
+                    return (
+                      <div
+                        key={index}
+                        className="flex-shrink-0 flex items-center gap-2 sm:gap-3 bg-[#0f172a]/5 rounded-2xl p-3 border-2 border-[#0f172a]/10"
+                      >
+                        {/* Performer Profile Pic */}
+                        {action.performer?.discord_avatar ? (
+                          <img
+                            src={action.performer.discord_avatar}
+                            alt={action.performer.discord_username}
+                            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white shadow-sm"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#f97316] flex items-center justify-center border-2 border-white shadow-sm">
+                            <span className="text-white font-bold text-sm">
+                              {action.performer?.discord_username?.[0]?.toUpperCase() || '?'}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Action Icon */}
+                        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-sm ${
+                          action.action === 'rank_up' ? 'bg-[#10b981]/10 border-2 border-[#10b981]/20' :
+                          action.action === 'rank_down' ? 'bg-[#ef4444]/10 border-2 border-[#ef4444]/20' :
+                          'bg-[#fbbf24]/10 border-2 border-[#fbbf24]/20'
+                        }`}>
+                          {actionIcon}
+                        </div>
+
+                        {/* Recipient Profile Pic */}
+                        {action.recipient?.discord_avatar ? (
+                          <img
+                            src={action.recipient.discord_avatar}
+                            alt={action.recipient.discord_username}
+                            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white shadow-sm"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#f97316] flex items-center justify-center border-2 border-white shadow-sm">
+                            <span className="text-white font-bold text-sm">
+                              {action.recipient?.discord_username?.[0]?.toUpperCase() || '?'}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* MVP Submission Form - Members Only */}
+        {!isGuest && <MvpSubmissionForm user={user} onRefresh={handleRefreshWithActions} />}
+
         {/* Owner: User Management Section */}
-        {isOwner && <UserManagement />}
+        {isOwner && <UserManagement onRefresh={handleRefreshWithActions} />}
 
         {/* Owner: OpenDota Refresh Section */}
         {isOwner && (
@@ -414,145 +622,47 @@ export function HomePage({ user }: { user: any }) {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-[#0f172a] mb-2">OpenDota Sync Control</h3>
-                <p className="text-[#0f172a]/70 text-sm leading-relaxed">
-                  Manually refresh all connected OpenDota accounts to sync the latest Dota 2 stats. This will update badge ranks, top heroes, and player data for all guild members.
+                <p className="text-[#0f172a]/70 text-sm">
+                  Manually refresh all user Dota 2 stats from OpenDota API. This updates MMR, rank medals, and match history for all guild members.
                 </p>
               </div>
             </div>
 
             <Button 
-              className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white h-12 rounded-xl font-semibold" 
-              onClick={handleRefreshAllOpenDota}
+              onClick={handleRefreshOpenDota}
               disabled={refreshingOpenDota}
+              className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white h-12 rounded-xl font-semibold transition-all"
             >
               {refreshingOpenDota ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                  Refreshing All Accounts...
+                  Syncing with OpenDota...
                 </>
               ) : (
                 <>
                   <RefreshCw className="w-5 h-5 mr-2" />
-                  Refresh All OpenDota Accounts
+                  Refresh All User Stats
                 </>
               )}
             </Button>
-
-            <div className="mt-4 bg-[#3b82f6]/10 rounded-xl p-4 border-2 border-[#3b82f6]/20">
-              <p className="text-xs text-[#0f172a]/70 leading-relaxed">
-                💡 <span className="font-semibold">Owner Tip:</span> OpenDota accounts are automatically synced when users log in (if 2+ hours have passed). Use this manual refresh if you need to update stats immediately for all members at once.
-              </p>
-            </div>
           </div>
         )}
-        
-        {/* Test Forms Section (for testing MVP submissions) */}
-        {!isGuest && <MvpSubmissionForm />}
-
-        {/* Custom Games Section - All Logged In Users */}
-        <div className="bg-white rounded-3xl p-8 border-2 border-[#0f172a]/10 mt-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-full bg-[#f97316] flex items-center justify-center">
-              <Gamepad2 className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold text-[#0f172a]">Custom Dota 2 Games</h3>
-              <p className="text-sm text-[#0f172a]/60">Vibe coded with love by jeffwonderpouch 🌽</p>
-            </div>
-          </div>
-
-          {/* Game Cards - Responsive Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Heaps N' Reaps */}
-            <a
-              href="https://steamcommunity.com/sharedfiles/filedetails/?id=3585929337"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-gradient-to-br from-[#f97316]/10 to-[#f97316]/5 rounded-2xl p-6 border-2 border-[#f97316]/20 hover:border-[#f97316]/50 transition-all hover:shadow-lg hover:scale-105"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className="text-3xl">🌾</div>
-                <ExternalLink className="w-5 h-5 text-[#0f172a]/40 group-hover:text-[#f97316] transition-colors" />
-              </div>
-              <h4 className="text-xl font-bold text-[#0f172a] mb-2 group-hover:text-[#f97316] transition-colors">
-                Heaps N' Reaps
-              </h4>
-              <p className="text-sm text-[#0f172a]/70 leading-relaxed mb-4">
-                A farming frenzy where you collect resources and build your agricultural empire in Dota 2!
-              </p>
-              <div className="flex items-center gap-2 text-xs text-[#0f172a]/60">
-                <span className="px-2 py-1 bg-[#f97316]/10 rounded-full">Solo Project</span>
-              </div>
-            </a>
-
-            {/* Hide & Heap */}
-            <a
-              href="https://steamcommunity.com/sharedfiles/filedetails/?id=3580844386"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-gradient-to-br from-[#10b981]/10 to-[#10b981]/5 rounded-2xl p-6 border-2 border-[#10b981]/20 hover:border-[#10b981]/50 transition-all hover:shadow-lg hover:scale-105"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className="text-3xl">👁️</div>
-                <ExternalLink className="w-5 h-5 text-[#0f172a]/40 group-hover:text-[#10b981] transition-colors" />
-              </div>
-              <h4 className="text-xl font-bold text-[#0f172a] mb-2 group-hover:text-[#10b981] transition-colors">
-                Hide & Heap
-              </h4>
-              <p className="text-sm text-[#0f172a]/70 leading-relaxed mb-4">
-                A thrilling hide-and-seek experience with unique Dota mechanics. Can you outsmart your friends?
-              </p>
-              <div className="flex items-center gap-2 text-xs text-[#0f172a]/60">
-                <span className="px-2 py-1 bg-[#10b981]/10 rounded-full">w/ @businessCasual</span>
-              </div>
-            </a>
-
-            {/* Axe's Dunk Contest */}
-            <a
-              href="https://steamcommunity.com/sharedfiles/filedetails/?id=3592388680"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-gradient-to-br from-[#ef4444]/10 to-[#ef4444]/5 rounded-2xl p-6 border-2 border-[#ef4444]/20 hover:border-[#ef4444]/50 transition-all hover:shadow-lg hover:scale-105"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className="text-3xl">🏀</div>
-                <ExternalLink className="w-5 h-5 text-[#0f172a]/40 group-hover:text-[#ef4444] transition-colors" />
-              </div>
-              <h4 className="text-xl font-bold text-[#0f172a] mb-2 group-hover:text-[#ef4444] transition-colors">
-                Axe's Dunk Contest
-              </h4>
-              <p className="text-sm text-[#0f172a]/70 leading-relaxed mb-4">
-                Show off your dunking skills as Axe! Compete for the highest score in this action-packed mini-game.
-              </p>
-              <div className="flex items-center gap-2 text-xs text-[#0f172a]/60">
-                <span className="px-2 py-1 bg-[#ef4444]/10 rounded-full">Solo Project</span>
-              </div>
-            </a>
-          </div>
-
-          {/* Footer note */}
-          <div className="mt-6 pt-6 border-t border-[#0f172a]/10">
-            <p className="text-sm text-[#0f172a]/60 text-center">
-              Click any game card to view it on the Steam Workshop! 🎮
-            </p>
-          </div>
-        </div>
       </div>
 
-      {/* Confirmation Modal */}
+      <Footer />
+
+      {/* Modals */}
       {showConfirm && (
         <ConfirmModal
-          title="Submit Membership Request"
-          message="Ready to join The Corn Field guild? Submit your membership request to gain full access to all features!"
+          title="Submit Membership Request?"
+          message="Are you sure you want to submit a membership request to join The Corn Field?"
           confirmText="Submit Request"
-          cancelText="Cancel"
           confirmVariant="primary"
-          onConfirm={handleSubmitRequest}
+          onConfirm={submitMembershipRequest}
           onCancel={() => setShowConfirm(false)}
         />
       )}
 
-      {/* Result Modal */}
       {result && (
         <SuccessModal
           type={result.type}
@@ -562,8 +672,6 @@ export function HomePage({ user }: { user: any }) {
           onClose={() => setResult(null)}
         />
       )}
-
-      <Footer />
     </div>
   );
 }

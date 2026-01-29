@@ -6,10 +6,11 @@ import { Navigation } from '@/app/components/navigation';
 import { HomePage } from '@/app/components/home-page';
 import { LeaderboardPage } from '@/app/components/leaderboard-page';
 import { RequestsPage } from '@/app/components/requests-page';
+import { RulesPage } from '@/app/components/rules-page';
 import { ProfilePage } from '@/app/components/profile-page';
 import { Loader2 } from 'lucide-react';
 
-type PageType = 'home' | 'leaderboard' | 'requests' | 'profile';
+type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile';
 
 // Mock user data for development mode
 const MOCK_USER = {
@@ -32,6 +33,62 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<PageType>('home');
   const [devMode, setDevMode] = useState(false);
   const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
+
+  // Set up favicon and social meta tags
+  useEffect(() => {
+    // Set page title
+    document.title = 'XLCOB - The Corn Field Guild Portal';
+
+    // Create or update favicon (corn emoji as data URI)
+    const setFavicon = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 64;
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.font = '48px serif';
+        ctx.fillText('🌽', 8, 52);
+      }
+      const link = document.querySelector("link[rel*='icon']") as HTMLLinkElement || document.createElement('link');
+      link.type = 'image/x-icon';
+      link.rel = 'shortcut icon';
+      link.href = canvas.toDataURL();
+      document.getElementsByTagName('head')[0].appendChild(link);
+    };
+    setFavicon();
+
+    // Set Open Graph meta tags for social sharing
+    const setMetaTag = (property: string, content: string) => {
+      let meta = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('property', property);
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
+
+    setMetaTag('og:title', 'XLCOB - The Corn Field Guild Portal');
+    setMetaTag('og:description', 'Digital guild management system for The Corn Field Dota community. Track ranks, submit MVP requests, and compete on the leaderboard.');
+    setMetaTag('og:image', 'https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f33d.png'); // Corn emoji
+    setMetaTag('og:type', 'website');
+    
+    // Twitter Card tags
+    const setTwitterTag = (name: string, content: string) => {
+      let meta = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement;
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', name);
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
+
+    setTwitterTag('twitter:card', 'summary_large_image');
+    setTwitterTag('twitter:title', 'XLCOB - The Corn Field Guild Portal');
+    setTwitterTag('twitter:description', 'Digital guild management system for The Corn Field Dota community.');
+    setTwitterTag('twitter:image', 'https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f33d.png');
+  }, []);
 
   useEffect(() => {
     // Check for dev mode in hash
@@ -225,10 +282,11 @@ export default function App() {
       />
       
       <main className="pt-16 pb-16">
-        {currentPage === 'home' && <HomePage user={user} />}
+        {currentPage === 'home' && <HomePage user={user} onRefresh={handleRefreshUser} />}
         {currentPage === 'leaderboard' && user?.role !== 'guest' && <LeaderboardPage user={user} />}
-        {currentPage === 'leaderboard' && user?.role === 'guest' && <HomePage user={user} />}
+        {currentPage === 'leaderboard' && user?.role === 'guest' && <HomePage user={user} onRefresh={handleRefreshUser} />}
         {currentPage === 'requests' && <RequestsPage user={user} />}
+        {currentPage === 'rules' && <RulesPage />}
         {currentPage === 'profile' && <ProfilePage user={user} onRefresh={handleRefreshUser} />}
       </main>
     </div>

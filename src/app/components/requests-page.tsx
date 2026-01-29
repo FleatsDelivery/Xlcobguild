@@ -1,5 +1,5 @@
 import { Footer } from '@/app/components/footer';
-import { Clock, CheckCircle, XCircle, Loader2, ExternalLink, Image as ImageIcon, UserPlus } from 'lucide-react';
+import { Clock, CheckCircle, XCircle, Loader2, ExternalLink, Image as ImageIcon, UserPlus, Shield, User, Trash2, ChevronUp, ChevronDown, Star, ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
@@ -10,22 +10,34 @@ import { SuccessModal } from '@/app/components/success-modal';
 interface RankUpRequest {
   id: string;
   user_id: string;
+  target_user_id?: string;
+  action?: 'rank_up' | 'rank_down' | 'prestige';
   type: string;
   screenshot_url: string;
   match_id: string | null;
-  opendota_link: string | null;
   status: 'pending' | 'approved' | 'denied';
   current_rank_id: number;
   current_prestige_level: number;
   created_at: string;
   updated_at: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
   users?: {
     id: string;
     discord_username: string;
     discord_avatar: string | null;
     email: string | null;
-    rank_id: number;
-    prestige_level: number;
+  };
+  target_user?: {
+    id: string;
+    discord_username: string;
+    discord_avatar: string | null;
+    email: string | null;
+  };
+  reviewed_by_user?: {
+    id: string;
+    discord_username: string;
+    discord_avatar: string | null;
   };
 }
 
@@ -35,11 +47,18 @@ interface MembershipRequest {
   status: 'pending' | 'approved' | 'denied';
   created_at: string;
   updated_at: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
   users?: {
     id: string;
     discord_username: string;
     discord_avatar: string | null;
     email: string | null;
+  };
+  reviewed_by_user?: {
+    id: string;
+    discord_username: string;
+    discord_avatar: string | null;
   };
 }
 
@@ -63,7 +82,11 @@ const RANK_NAMES = [
 export function RequestsPage({ user }: { user: any }) {
   const isGuest = user?.role === 'guest';
   const isAdmin = user?.role === 'admin' || user?.role === 'owner';
+  const isOwner = user?.role === 'owner';
   const isMember = !isGuest && !isAdmin;
+  
+  // Tab state for admins
+  const [activeTab, setActiveTab] = useState<'all' | 'my'>('all');
   
   const [pendingRequests, setPendingRequests] = useState<AnyRequest[]>([]);
   const [historyRequests, setHistoryRequests] = useState<AnyRequest[]>([]);
@@ -158,14 +181,18 @@ export function RequestsPage({ user }: { user: any }) {
     }
   };
 
-  const handleApproveMVP = async (requestId: string) => {
+  const handleApproveMVP = async (request: RankUpRequest & { request_type: 'mvp' }) => {
+    const action = request.action || 'rank_up';
+    const targetUser = request.target_user || request.users;
+    const actionText = action === 'rank_up' ? 'rank up' : action === 'rank_down' ? 'rank down' : 'prestige';
+    
     setConfirmModal({
       title: 'Approve MVP Request',
-      message: 'Approve this MVP request and rank up the user?',
+      message: `Approve this MVP request and ${actionText} ${targetUser?.discord_username || 'the user'}?`,
       confirmText: 'Approve',
       confirmVariant: 'success',
       onConfirm: async () => {
-        setActionLoading(requestId);
+        setActionLoading(request.id);
         try {
           const { data: { session } } = await supabase.auth.getSession();
           
@@ -176,7 +203,7 @@ export function RequestsPage({ user }: { user: any }) {
           }
 
           const response = await fetch(
-            `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/mvp-requests/${requestId}/approve`,
+            `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/mvp-requests/${request.id}/approve`,
             {
               method: 'POST',
               headers: {
@@ -192,10 +219,14 @@ export function RequestsPage({ user }: { user: any }) {
             return;
           }
 
+          const successMessage = action === 'rank_up' ? 'User has been ranked up!' :
+                                 action === 'rank_down' ? 'User has been ranked down!' :
+                                 'User has been prestiged!';
+
           setSuccessModal({
             type: 'success',
             title: 'Request Approved',
-            message: 'User has been ranked up!',
+            message: successMessage,
             helpText: 'You can view the updated rank in the history section.'
           });
           fetchRequests();
@@ -414,11 +445,76 @@ export function RequestsPage({ user }: { user: any }) {
     });
   };
 
+  const handleDeleteRequest = async (requestId: string, requestType: 'mvp' | 'membership') => {
+    setConfirmModal({
+      title: 'Delete Request',
+      message: 'Are you sure you want to permanently delete this request? This action cannot be undone.',
+      confirmText: 'Delete',
+      confirmVariant: 'danger',
+      onConfirm: async () => {
+        setActionLoading(requestId);
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          
+          if (!session) {
+            alert('Please sign in first');
+            setActionLoading(null);
+            return;
+          }
+
+          const endpoint = requestType === 'mvp'
+            ? `rank_up_requests`
+            : `membership_requests`;
+
+          const { error } = await supabase
+            .from(endpoint)
+            .delete()
+            .eq('id', requestId);
+
+          if (error) {
+            alert('Failed to delete request. Please try again.');
+            setActionLoading(null);
+            return;
+          }
+
+          setSuccessModal({
+            type: 'success',
+            title: 'Request Deleted',
+            message: 'The request has been permanently deleted.',
+          });
+          fetchRequests();
+        } catch (error) {
+          console.error('Error deleting request:', error);
+          alert('Failed to delete request. Please try again.');
+        } finally {
+          setActionLoading(null);
+        }
+      }
+    });
+  };
+
   const MVPRequestCard = ({ request }: { request: RankUpRequest & { request_type: 'mvp' } }) => {
     const isPending = request.status === 'pending';
     const isApproved = request.status === 'approved';
     const isDenied = request.status === 'denied';
     const requestUser = request.users;
+    const targetUser = request.target_user || requestUser;
+    const action = request.action || 'rank_up';
+    const isSelfRequest = !request.target_user || request.target_user?.id === requestUser?.id;
+
+    // Get action display info
+    const getActionInfo = () => {
+      switch (action) {
+        case 'rank_up':
+          return { icon: ChevronUp, label: 'Rank Up', color: 'text-[#22c55e]', bg: 'bg-[#22c55e]/10' };
+        case 'rank_down':
+          return { icon: ChevronDown, label: 'Rank Down', color: 'text-[#ef4444]', bg: 'bg-[#ef4444]/10' };
+        case 'prestige':
+          return { icon: Star, label: 'Prestige', color: 'text-[#fbbf24]', bg: 'bg-[#fbbf24]/10' };
+      }
+    };
+
+    const actionInfo = getActionInfo();
 
     return (
       <div className="bg-white rounded-xl shadow-sm p-6 border-2 border-[#0f172a]/10">
@@ -444,13 +540,19 @@ export function RequestsPage({ user }: { user: any }) {
                 {RANK_NAMES[request.current_rank_id]} (Prestige {request.current_prestige_level})
               </p>
             </div>
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-              isPending ? 'bg-[#f59e0b]/10 text-[#f59e0b]' :
-              isApproved ? 'bg-[#10b981]/10 text-[#10b981]' :
-              'bg-[#ef4444]/10 text-[#ef4444]'
-            }`}>
-              {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
-            </span>
+            {/* Status Badge with Reviewer */}
+            {isPending ? (
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#f59e0b]/10 text-[#f59e0b]">
+                Pending
+              </span>
+            ) : (
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                isApproved ? 'bg-[#10b981]/10 text-[#10b981]' : 'bg-[#ef4444]/10 text-[#ef4444]'
+              }`}>
+                {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                {request.reviewed_by_user?.discord_username && ` by ${request.reviewed_by_user.discord_username}`}
+              </span>
+            )}
           </div>
         )}
 
@@ -458,18 +560,24 @@ export function RequestsPage({ user }: { user: any }) {
         {!isAdmin && (
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              {isPending && <Clock className="w-5 h-5 text-[#f59e0b]" />}
-              {isApproved && <CheckCircle className="w-5 h-5 text-[#10b981]" />}
-              {isDenied && <XCircle className="w-5 h-5 text-[#ef4444]" />}
+              {isPending && <Clock className="w-5 h-5 text-[#f59e0b]\\" />}
+              {isApproved && <CheckCircle className="w-5 h-5 text-[#10b981]\\" />}
+              {isDenied && <XCircle className="w-5 h-5 text-[#ef4444]\\" />}
               <span className="font-semibold text-[#0f172a]">MVP Screenshot</span>
             </div>
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-              isPending ? 'bg-[#f59e0b]/10 text-[#f59e0b]' :
-              isApproved ? 'bg-[#10b981]/10 text-[#10b981]' :
-              'bg-[#ef4444]/10 text-[#ef4444]'
-            }`}>
-              {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
-            </span>
+            {/* Status with Reviewer */}
+            {isPending ? (
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#f59e0b]/10 text-[#f59e0b]">
+                Pending
+              </span>
+            ) : (
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                isApproved ? 'bg-[#10b981]/10 text-[#10b981]' : 'bg-[#ef4444]/10 text-[#ef4444]'
+              }`}>
+                {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+                {request.reviewed_by_user?.discord_username && ` by ${request.reviewed_by_user.discord_username}`}
+              </span>
+            )}
           </div>
         )}
 
@@ -495,24 +603,43 @@ export function RequestsPage({ user }: { user: any }) {
           </a>
         </div>
 
+        {/* Action Info Badge - Show who and what action */}
+        {!isSelfRequest && isAdmin && targetUser && (
+          <div className="mb-4 p-2 rounded-lg border border-[#0f172a]/10 bg-[#0f172a]/5">
+            <div className="flex items-center gap-2">
+              <p className="text-[10px] text-[#0f172a]/50">Action:</p>
+              <div className={`flex items-center gap-1 px-2 py-0.5 rounded-md ${actionInfo.bg}`}>
+                <actionInfo.icon className={`w-3 h-3 ${actionInfo.color}`} />
+                <span className={`text-xs font-semibold ${actionInfo.color}`}>{actionInfo.label}</span>
+              </div>
+              <ArrowRight className="w-3 h-3 text-[#0f172a]/30" />
+              <span className="text-xs font-semibold text-[#0f172a]">{targetUser.discord_username}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Self-request action badge */}
+        {isSelfRequest && (
+          <div className="mb-4">
+            <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md ${actionInfo.bg}`}>
+              <actionInfo.icon className={`w-3 h-3 ${actionInfo.color}`} />
+              <span className={`text-xs font-semibold ${actionInfo.color}`}>Request to {actionInfo.label}</span>
+            </div>
+          </div>
+        )}
+
         {/* Match Info */}
-        {(request.match_id || request.opendota_link) && (
-          <div className="mb-4 space-y-2">
-            {request.match_id && (
-              <p className="text-sm text-[#0f172a]/70">
-                <span className="font-semibold">Match ID:</span> {request.match_id}
-              </p>
-            )}
-            {request.opendota_link && (
-              <a 
-                href={request.opendota_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-[#f97316] hover:text-[#f97316]/80 flex items-center gap-1"
-              >
-                View on OpenDota <ExternalLink className="w-3 h-3" />
-              </a>
-            )}
+        {request.match_id && (
+          <div className="mb-4">
+            <a 
+              href={`https://www.opendota.com/matches/${request.match_id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-[#f97316] hover:text-[#f97316]/80 flex items-center gap-1.5 font-semibold"
+            >
+              <ExternalLink className="w-4 h-4" />
+              View Match {request.match_id} on OpenDota
+            </a>
           </div>
         )}
 
@@ -528,12 +655,12 @@ export function RequestsPage({ user }: { user: any }) {
         </p>
 
         {/* Action Buttons */}
-        {isPending && (
+        {isPending ? (
           <div className="flex gap-2">
             {isAdmin ? (
               <>
                 <Button
-                  onClick={() => handleApproveMVP(request.id)}
+                  onClick={() => handleApproveMVP(request)}
                   disabled={actionLoading === request.id}
                   className="flex-1 bg-[#10b981] hover:bg-[#10b981]/90"
                 >
@@ -577,6 +704,25 @@ export function RequestsPage({ user }: { user: any }) {
               </Button>
             )}
           </div>
+        ) : (
+          // History section - show delete button for owners
+          isOwner && (
+            <Button
+              onClick={() => handleDeleteRequest(request.id, 'mvp')}
+              disabled={actionLoading === request.id}
+              variant="outline"
+              className="w-full border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444]/10"
+            >
+              {actionLoading === request.id ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <>
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete Request
+                </>
+              )}
+            </Button>
+          )
         )}
       </div>
     );
@@ -622,6 +768,7 @@ export function RequestsPage({ user }: { user: any }) {
               'bg-[#ef4444]/10 text-[#ef4444]'
             }`}>
               {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
+              {request.reviewed_by_user?.discord_username && ` by ${request.reviewed_by_user.discord_username}`}
             </span>
           </div>
         )}
@@ -676,18 +823,48 @@ export function RequestsPage({ user }: { user: any }) {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header Card */}
-        <div className="bg-white rounded-xl shadow-md p-6 border-2 border-[#0f172a]/10 mb-6">
-          <h2 className="text-2xl font-bold text-[#0f172a] mb-2">
-            {isAdmin ? 'Manage Requests' : 'My Requests'}
-          </h2>
-          <p className="text-[#0f172a]/70 text-sm">
+        <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-2 border-[#0f172a]/10 mb-4 sm:mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#0f172a]">
+              {isAdmin ? '📋 Admin Requests Panel' : '📄 My Requests'}
+            </h2>
+          </div>
+          <p className="text-[#0f172a]/70 text-xs sm:text-sm mb-4">
             {isAdmin 
-              ? 'Review and approve membership applications and rank-up requests from guild members.' 
+              ? 'Review and approve membership applications and rank-up requests from all guild members.' 
               : 'Track your rank-up requests and view your submission history.'}
           </p>
+
+          {/* Tabs for Admin/Owner */}
+          {isAdmin && (
+            <div className="flex items-center gap-3 pt-4 border-t border-[#0f172a]/10">
+              <button
+                onClick={() => setActiveTab('all')}
+                className={`flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${
+                  activeTab === 'all'
+                    ? 'bg-[#f97316] text-white'
+                    : 'bg-[#0f172a]/5 text-[#0f172a]/70 hover:bg-[#0f172a]/10'
+                }`}
+              >
+                <Shield className="w-4 h-4 inline mr-1.5" />
+                All Requests
+              </button>
+              <button
+                onClick={() => setActiveTab('my')}
+                className={`flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${
+                  activeTab === 'my'
+                    ? 'bg-[#f97316] text-white'
+                    : 'bg-[#0f172a]/5 text-[#0f172a]/70 hover:bg-[#0f172a]/10'
+                }`}
+              >
+                <User className="w-4 h-4 inline mr-1.5" />
+                My Requests
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Guest View */}
@@ -709,74 +886,89 @@ export function RequestsPage({ user }: { user: any }) {
               </div>
             ) : (
               <>
-                {/* Pending Requests Section */}
-                <div className="mb-8">
-                  <h3 className="text-xl font-bold text-[#0f172a] mb-4 flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-[#f59e0b]" />
-                    Pending Requests
-                    <span className="text-sm font-normal text-[#0f172a]/60">({pendingRequests.length})</span>
-                  </h3>
+                {(() => {
+                  // Filter requests based on active tab
+                  const filteredPending = isAdmin && activeTab === 'my'
+                    ? pendingRequests.filter(r => r.user_id === user.id)
+                    : pendingRequests;
                   
-                  {pendingRequests.length === 0 ? (
-                    <div className="bg-white rounded-xl shadow-sm p-6 border-2 border-[#0f172a]/10 text-center">
-                      <p className="text-sm text-[#0f172a]/70">No pending requests.</p>
-                    </div>
-                  ) : (
-                    <div className="grid gap-4">
-                      {pendingRequests.map(request => (
-                        request.request_type === 'mvp' ? (
-                          <MVPRequestCard key={request.id} request={request as RankUpRequest & { request_type: 'mvp' }} />
-                        ) : (
-                          <MembershipRequestCard key={request.id} request={request as MembershipRequest & { request_type: 'membership' }} />
-                        )
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  const filteredHistory = isAdmin && activeTab === 'my'
+                    ? historyRequests.filter(r => r.user_id === user.id)
+                    : historyRequests;
 
-                {/* History Section */}
-                <div>
-                  <h3 className="text-xl font-bold text-[#0f172a] mb-4 flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-[#10b981]" />
-                    History
-                    <span className="text-sm font-normal text-[#0f172a]/60">({historyRequests.length})</span>
-                  </h3>
-                  
-                  {historyRequests.length === 0 ? (
-                    <div className="bg-white rounded-xl shadow-sm p-6 border-2 border-[#0f172a]/10 text-center">
-                      <p className="text-sm text-[#0f172a]/70">No request history yet.</p>
-                    </div>
-                  ) : (
+                  return (
                     <>
-                      <div className="grid gap-4">
-                        {historyRequests.slice(0, historyOffset + HISTORY_PAGE_SIZE).map(request => (
-                          request.request_type === 'mvp' ? (
-                            <MVPRequestCard key={request.id} request={request as RankUpRequest & { request_type: 'mvp' }} />
-                          ) : (
-                            <MembershipRequestCard key={request.id} request={request as MembershipRequest & { request_type: 'membership' }} />
-                          )
-                        ))}
+                      {/* Pending Requests Section */}
+                      <div className="mb-8">
+                        <h3 className="text-xl font-bold text-[#0f172a] mb-4 flex items-center gap-2">
+                          <Clock className="w-5 h-5 text-[#f59e0b]" />
+                          Pending Requests
+                          <span className="text-sm font-normal text-[#0f172a]/60">({filteredPending.length})</span>
+                        </h3>
+                        
+                        {filteredPending.length === 0 ? (
+                          <div className="bg-white rounded-xl shadow-sm p-6 border-2 border-[#0f172a]/10 text-center">
+                            <p className="text-sm text-[#0f172a]/70">No pending requests.</p>
+                          </div>
+                        ) : (
+                          <div className="grid gap-4">
+                            {filteredPending.map(request => (
+                                request.request_type === 'mvp' ? (
+                                  <MVPRequestCard key={request.id} request={request as RankUpRequest & { request_type: 'mvp' }} />
+                                ) : (
+                                  <MembershipRequestCard key={request.id} request={request as MembershipRequest & { request_type: 'membership' }} />
+                                )
+                            ))}
+                          </div>
+                        )}
                       </div>
 
-                      {/* Load More Button */}
-                      {historyRequests.length > historyOffset + HISTORY_PAGE_SIZE && (
-                        <div className="mt-6 text-center">
-                          <Button
-                            onClick={() => setHistoryOffset(historyOffset + HISTORY_PAGE_SIZE)}
-                            disabled={loadingMore}
-                            className="bg-[#f97316] hover:bg-[#ea580c] text-white px-8 h-12 rounded-xl font-semibold"
-                          >
-                            {loadingMore ? (
-                              <Loader2 className="w-5 h-5 animate-spin" />
-                            ) : (
-                              `Load More (${Math.min(HISTORY_PAGE_SIZE, historyRequests.length - (historyOffset + HISTORY_PAGE_SIZE))} more)`
+                      {/* History Section */}
+                      <div>
+                        <h3 className="text-xl font-bold text-[#0f172a] mb-4 flex items-center gap-2">
+                          <CheckCircle className="w-5 h-5 text-[#10b981]" />
+                          History
+                          <span className="text-sm font-normal text-[#0f172a]/60">({filteredHistory.length})</span>
+                        </h3>
+                        
+                        {filteredHistory.length === 0 ? (
+                          <div className="bg-white rounded-xl shadow-sm p-6 border-2 border-[#0f172a]/10 text-center">
+                            <p className="text-sm text-[#0f172a]/70">No request history yet.</p>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="grid gap-4">
+                              {filteredHistory.slice(0, historyOffset + HISTORY_PAGE_SIZE).map(request => (
+                                request.request_type === 'mvp' ? (
+                                  <MVPRequestCard key={request.id} request={request as RankUpRequest & { request_type: 'mvp' }} />
+                                ) : (
+                                  <MembershipRequestCard key={request.id} request={request as MembershipRequest & { request_type: 'membership' }} />
+                                )
+                              ))}
+                            </div>
+
+                            {/* Load More Button */}
+                            {filteredHistory.length > historyOffset + HISTORY_PAGE_SIZE && (
+                              <div className="mt-6 text-center">
+                                <Button
+                                  onClick={() => setHistoryOffset(historyOffset + HISTORY_PAGE_SIZE)}
+                                  disabled={loadingMore}
+                                  className="bg-[#f97316] hover:bg-[#ea580c] text-white px-8 h-12 rounded-xl font-semibold"
+                                >
+                                  {loadingMore ? (
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                  ) : (
+                                    `Load More (${Math.min(HISTORY_PAGE_SIZE, filteredHistory.length - (historyOffset + HISTORY_PAGE_SIZE))} more)`
+                                  )}
+                                </Button>
+                              </div>
                             )}
-                          </Button>
-                        </div>
-                      )}
+                          </>
+                        )}
+                      </div>
                     </>
-                  )}
-                </div>
+                  );
+                })()}
               </>
             )}
           </>

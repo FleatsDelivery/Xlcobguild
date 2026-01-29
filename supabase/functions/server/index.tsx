@@ -511,7 +511,7 @@ app.patch("/make-server-4789f4af/admin/users/:userId/role", async (c) => {
     const userId = c.req.param('userId');
     const { role } = await c.req.json();
 
-    if (!['guest', 'member', 'admin', 'owner'].includes(role)) {
+    if (!['guest', 'member', 'admin', 'queen_of_hog', 'owner'].includes(role)) {
       return c.json({ error: 'Invalid role' }, 400);
     }
 
@@ -570,57 +570,123 @@ app.post("/make-server-4789f4af/requests/mvp", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    // Get user from database - query by supabase_id
-    const { data: dbUser, error: userError } = await supabase
+    // Get submitting user from database - query by supabase_id
+    const { data: submittingUser, error: userError } = await supabase
       .from('users')
       .select('id, role, rank_id, prestige_level')
       .eq('supabase_id', authUser.id)
       .single();
 
-    if (userError || !dbUser) {
+    if (userError || !submittingUser) {
       return c.json({ error: 'User not found' }, 404);
     }
 
     // Only members can submit MVP requests
-    if (dbUser.role === 'guest') {
+    if (submittingUser.role === 'guest') {
       return c.json({ error: 'Only members can submit MVP screenshots' }, 403);
     }
 
-    const { screenshot_url, match_id, opendota_link } = await c.req.json();
+    const { screenshot_url, match_id, user_id, action } = await c.req.json();
 
     if (!screenshot_url) {
       return c.json({ error: 'Screenshot URL is required' }, 400);
     }
 
-    // Check for duplicate submissions (same screenshot URL, match ID, or OpenDota link)
+    if (!user_id) {
+      return c.json({ error: 'User ID is required' }, 400);
+    }
+
+    if (!action || !['rank_up', 'rank_down', 'prestige'].includes(action)) {
+      return c.json({ error: 'Valid action is required (rank_up, rank_down, or prestige)' }, 400);
+    }
+
+    // Get target user
+    const { data: targetUser, error: targetError } = await supabase
+      .from('users')
+      .select('id, rank_id, prestige_level, role')
+      .eq('id', user_id)
+      .single();
+
+    if (targetError || !targetUser) {
+      return c.json({ error: 'Target user not found' }, 404);
+    }
+
+    // Validate action permissions
+    const isSelf = submittingUser.id === targetUser.id;
+    const submitterIsRank10 = submittingUser.prestige_level === 5 
+      ? submittingUser.rank_id >= 11 
+      : submittingUser.rank_id >= 10;
+
+    const targetMaxRank = targetUser.prestige_level === 5 ? 11 : 10;
+    const targetIsAtMaxRank = targetUser.rank_id >= targetMaxRank;
+    const targetCanPrestige = targetUser.prestige_level < 5 && targetIsAtMaxRank;
+
+    // Validate rank_up
+    if (action === 'rank_up') {
+      if (targetIsAtMaxRank && !targetCanPrestige) {
+        return c.json({ error: 'User is already at maximum rank and prestige level' }, 400);
+      }
+      if (targetIsAtMaxRank && targetCanPrestige) {
+        return c.json({ error: 'User is at max rank - use Prestige action instead' }, 400);
+      }
+    }
+
+    // Validate rank_down
+    if (action === 'rank_down') {
+      if (isSelf) {
+        return c.json({ error: 'You cannot rank yourself down' }, 403);
+      }
+      if (!submitterIsRank10) {
+        return c.json({ error: 'Only Rank 10 players can rank down others' }, 403);
+      }
+      if (targetUser.rank_id <= 1) {
+        return c.json({ error: 'User is already at minimum rank' }, 400);
+      }
+    }
+
+    // Validate prestige
+    if (action === 'prestige') {
+      if (!submitterIsRank10) {
+        return c.json({ error: 'Only Rank 10 players can prestige others' }, 403);
+      }
+      if (targetUser.prestige_level >= 5) {
+        return c.json({ error: 'User is already at maximum prestige level' }, 400);
+      }
+      if (!targetIsAtMaxRank) {
+        return c.json({ error: 'User must be at maximum rank to prestige' }, 400);
+      }
+    }
+
+    // Check for duplicate submissions (same screenshot URL or match ID)
     const { data: duplicates, error: dupError } = await supabase
       .from('rank_up_requests')
       .select('*')
-      .eq('user_id', dbUser.id)
-      .or(`screenshot_url.eq.${screenshot_url}${match_id ? `,match_id.eq.${match_id}` : ''}${opendota_link ? `,opendota_link.eq.${opendota_link}` : ''}`);
+      .eq('user_id', submittingUser.id)
+      .or(`screenshot_url.eq.${screenshot_url}${match_id ? `,match_id.eq.${match_id}` : ''}`);
 
     if (duplicates && duplicates.length > 0) {
       return c.json({ error: 'You have already submitted this screenshot or match' }, 400);
     }
 
-    // Create MVP request
-    const { data: request, error: createError } = await supabase
+    // Insert new MVP request
+    const { data: request, error: insertError } = await supabase
       .from('rank_up_requests')
       .insert({
-        user_id: dbUser.id,
+        user_id: submittingUser.id,
+        target_user_id: user_id,
+        action: action,
         type: 'mvp',
         screenshot_url,
         match_id: match_id || null,
-        opendota_link: opendota_link || null,
-        current_rank_id: dbUser.rank_id,
-        current_prestige_level: dbUser.prestige_level,
+        current_rank_id: targetUser.rank_id,
+        current_prestige_level: targetUser.prestige_level,
         status: 'pending',
       })
       .select()
       .single();
 
-    if (createError) {
-      console.error('Error creating MVP request:', createError);
+    if (insertError) {
+      console.error('Error creating MVP request:', insertError);
       return c.json({ error: 'Failed to create MVP request' }, 500);
     }
 
@@ -649,7 +715,7 @@ app.patch("/make-server-4789f4af/admin/users/:userId/rank", async (c) => {
     // Get user from database and check if owner - query by supabase_id
     const { data: dbUser, error: userError } = await supabase
       .from('users')
-      .select('role')
+      .select('id, role')
       .eq('supabase_id', authUser.id)
       .single();
 
@@ -681,6 +747,8 @@ app.patch("/make-server-4789f4af/admin/users/:userId/rank", async (c) => {
 
     let newRankId = targetUser.rank_id;
     let newPrestigeLevel = targetUser.prestige_level;
+    const oldRankId = targetUser.rank_id;
+    const oldPrestigeLevel = targetUser.prestige_level;
 
     if (action === 'rank_up') {
       // Max rank depends on prestige level
@@ -723,6 +791,25 @@ app.patch("/make-server-4789f4af/admin/users/:userId/rank", async (c) => {
       return c.json({ error: 'Failed to update user rank' }, 500);
     }
 
+    // Log the rank action to KV store for activity history
+    try {
+      const actionId = `rank_action:${userId}:${Date.now()}`;
+      await kv.set(actionId, {
+        action: action,
+        performed_by_user_id: dbUser.id,
+        target_user_id: userId,
+        old_rank_id: oldRankId,
+        new_rank_id: newRankId,
+        old_prestige_level: oldPrestigeLevel,
+        new_prestige_level: newPrestigeLevel,
+        timestamp: new Date().toISOString()
+      });
+      console.log('🌽 Logged rank action:', actionId);
+    } catch (historyError) {
+      console.error('Error logging rank action history:', historyError);
+      // Don't fail the request if history logging fails
+    }
+
     return c.json({ user: updatedUser });
   } catch (error) {
     console.error('Update user rank error:', error);
@@ -756,7 +843,7 @@ app.get("/make-server-4789f4af/admin/membership-requests", async (c) => {
       return c.json({ error: 'User not found' }, 404);
     }
 
-    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin' && dbUser.role !== 'queen_of_hog') {
       return c.json({ error: 'Only owners and admins can access this endpoint' }, 403);
     }
 
@@ -770,6 +857,11 @@ app.get("/make-server-4789f4af/admin/membership-requests", async (c) => {
           discord_username,
           discord_avatar,
           email
+        ),
+        reviewed_by_user:users!membership_requests_reviewed_by_fkey (
+          id,
+          discord_username,
+          discord_avatar
         )
       `)
       .order('created_at', { ascending: false });
@@ -812,7 +904,7 @@ app.post("/make-server-4789f4af/admin/membership-requests/:requestId/approve", a
       return c.json({ error: 'User not found' }, 404);
     }
 
-    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin' && dbUser.role !== 'queen_of_hog') {
       return c.json({ error: 'Only owners and admins can approve requests' }, 403);
     }
 
@@ -838,7 +930,9 @@ app.post("/make-server-4789f4af/admin/membership-requests/:requestId/approve", a
     const { error: updateRequestError } = await supabase
       .from('membership_requests')
       .update({ 
-        status: 'approved'
+        status: 'approved',
+        reviewed_by: dbUser.id,
+        reviewed_at: new Date().toISOString()
       })
       .eq('id', requestId);
 
@@ -894,7 +988,7 @@ app.post("/make-server-4789f4af/admin/membership-requests/:requestId/deny", asyn
       return c.json({ error: 'User not found' }, 404);
     }
 
-    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin' && dbUser.role !== 'queen_of_hog') {
       return c.json({ error: 'Only owners and admins can deny requests' }, 403);
     }
 
@@ -920,7 +1014,9 @@ app.post("/make-server-4789f4af/admin/membership-requests/:requestId/deny", asyn
     const { error: updateError } = await supabase
       .from('membership_requests')
       .update({ 
-        status: 'denied'
+        status: 'denied',
+        reviewed_by: dbUser.id,
+        reviewed_at: new Date().toISOString()
       })
       .eq('id', requestId);
 
@@ -1038,7 +1134,7 @@ app.get("/make-server-4789f4af/admin/mvp-requests", async (c) => {
       return c.json({ error: 'User not found' }, 404);
     }
 
-    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin' && dbUser.role !== 'queen_of_hog') {
       return c.json({ error: 'Only owners and admins can access this endpoint' }, 403);
     }
 
@@ -1055,7 +1151,7 @@ app.get("/make-server-4789f4af/admin/mvp-requests", async (c) => {
       console.error('Error counting MVP requests:', countError);
     }
 
-    // Get all MVP requests with user info
+    // Get all MVP requests with user info and target_user info
     const { data: requests, error: requestsError } = await supabase
       .from('rank_up_requests')
       .select(`
@@ -1067,6 +1163,17 @@ app.get("/make-server-4789f4af/admin/mvp-requests", async (c) => {
           email,
           rank_id,
           prestige_level
+        ),
+        target_user:users!rank_up_requests_target_user_id_fkey (
+          id,
+          discord_username,
+          discord_avatar,
+          email
+        ),
+        reviewed_by_user:users!rank_up_requests_reviewed_by_fkey (
+          id,
+          discord_username,
+          discord_avatar
         )
       `)
       .order('created_at', { ascending: false })
@@ -1126,7 +1233,7 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/approve", async (c
       return c.json({ error: 'User not found' }, 404);
     }
 
-    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin' && dbUser.role !== 'queen_of_hog') {
       return c.json({ error: 'Only owners and admins can approve requests' }, 403);
     }
 
@@ -1135,7 +1242,7 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/approve", async (c
     // Get the request
     const { data: request, error: fetchError } = await supabase
       .from('rank_up_requests')
-      .select('user_id, status, current_rank_id, current_prestige_level')
+      .select('user_id, target_user_id, action, status, current_rank_id, current_prestige_level')
       .eq('id', requestId)
       .single();
 
@@ -1148,32 +1255,54 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/approve", async (c
       return c.json({ error: 'Request has already been processed' }, 400);
     }
 
+    // Determine which user to rank up - use target_user_id if present, otherwise user_id
+    const userToRankUp = request.target_user_id || request.user_id;
+    const action = request.action || 'rank_up';
+
     // Get the user's current rank
     const { data: targetUser, error: targetError } = await supabase
       .from('users')
       .select('rank_id, prestige_level')
-      .eq('id', request.user_id)
+      .eq('id', userToRankUp)
       .single();
 
     if (targetError || !targetUser) {
       return c.json({ error: 'User not found' }, 404);
     }
 
-    // Calculate new rank
+    // Calculate new rank based on action
     const maxRank = targetUser.prestige_level === 5 ? 11 : 10;
     let newRankId = targetUser.rank_id;
+    let newPrestigeLevel = targetUser.prestige_level;
 
-    if (targetUser.rank_id < maxRank) {
-      newRankId = targetUser.rank_id + 1;
-    } else {
-      return c.json({ error: 'User is already at max rank for their prestige level' }, 400);
+    if (action === 'rank_up') {
+      if (targetUser.rank_id < maxRank) {
+        newRankId = targetUser.rank_id + 1;
+      } else {
+        return c.json({ error: 'User is already at max rank for their prestige level' }, 400);
+      }
+    } else if (action === 'rank_down') {
+      if (targetUser.rank_id > 1) {
+        newRankId = targetUser.rank_id - 1;
+      } else {
+        return c.json({ error: 'User is already at minimum rank' }, 400);
+      }
+    } else if (action === 'prestige') {
+      if (targetUser.prestige_level < 5) {
+        newRankId = 1;
+        newPrestigeLevel = targetUser.prestige_level + 1;
+      } else {
+        return c.json({ error: 'User is already at max prestige level' }, 400);
+      }
     }
 
     // Update the request status to approved
     const { error: updateRequestError } = await supabase
       .from('rank_up_requests')
       .update({ 
-        status: 'approved'
+        status: 'approved',
+        reviewed_by: dbUser.id,
+        reviewed_at: new Date().toISOString()
       })
       .eq('id', requestId);
 
@@ -1182,18 +1311,37 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/approve", async (c
       return c.json({ error: 'Failed to approve request' }, 500);
     }
 
-    // Rank up the user
+    // Update the user with new rank/prestige
     const { error: updateUserError } = await supabase
       .from('users')
       .update({ 
         rank_id: newRankId,
+        prestige_level: newPrestigeLevel,
         updated_at: new Date().toISOString()
       })
-      .eq('id', request.user_id);
+      .eq('id', userToRankUp);
 
     if (updateUserError) {
       console.error('Error ranking up user:', updateUserError);
       return c.json({ error: 'Failed to rank up user' }, 500);
+    }
+
+    // Log rank action history
+    try {
+      const actionKey = `rank_action:${userToRankUp}:${Date.now()}`;
+      await kv.set(actionKey, {
+        target_user_id: userToRankUp,
+        performed_by_user_id: request.user_id,
+        action: action,
+        old_rank_id: targetUser.rank_id,
+        new_rank_id: newRankId,
+        old_prestige_level: targetUser.prestige_level,
+        new_prestige_level: newPrestigeLevel,
+        timestamp: new Date().toISOString()
+      });
+    } catch (historyError) {
+      console.error('Error logging rank action history:', historyError);
+      // Don't fail the request if history logging fails
     }
 
     return c.json({ success: true, new_rank_id: newRankId });
@@ -1229,7 +1377,7 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/deny", async (c) =
       return c.json({ error: 'User not found' }, 404);
     }
 
-    if (dbUser.role !== 'owner' && dbUser.role !== 'admin') {
+    if (dbUser.role !== 'owner' && dbUser.role !== 'admin' && dbUser.role !== 'queen_of_hog') {
       return c.json({ error: 'Only owners and admins can deny requests' }, 403);
     }
 
@@ -1255,7 +1403,9 @@ app.post("/make-server-4789f4af/admin/mvp-requests/:requestId/deny", async (c) =
     const { error: updateError } = await supabase
       .from('rank_up_requests')
       .update({ 
-        status: 'denied'
+        status: 'denied',
+        reviewed_by: dbUser.id,
+        reviewed_at: new Date().toISOString()
       })
       .eq('id', requestId);
 
@@ -1313,6 +1463,7 @@ app.get("/make-server-4789f4af/leaderboard", async (c) => {
         prestige_level,
         role,
         created_at,
+        opendota_id,
         opendota_data,
         ranks (
           id,
@@ -1444,29 +1595,28 @@ app.post("/make-server-4789f4af/users/me/opendota/sync", async (c) => {
     }
 
     // Fetch data from OpenDota API
-    const opendotaData = await fetchOpenDotaData(dbUser.opendota_id);
+    const openDotaData = await fetchOpenDotaData(dbUser.opendota_id);
 
-    if (!opendotaData) {
+    if (!openDotaData) {
       return c.json({ error: 'Failed to fetch OpenDota data' }, 500);
     }
 
-    // Update user with cached data
+    // Update user's OpenDota data in database
     const { error: updateError } = await supabase
       .from('users')
-      .update({ 
-        opendota_data: opendotaData,
+      .update({
+        opendota_data: openDotaData,
         opendota_last_synced: new Date().toISOString(),
-        updated_at: new Date().toISOString()
       })
       .eq('id', dbUser.id);
 
     if (updateError) {
-      console.error('Error syncing OpenDota data:', updateError);
-      return c.json({ error: 'Failed to sync OpenDota data' }, 500);
+      console.error('Error updating OpenDota data:', updateError);
+      return c.json({ error: 'Failed to update OpenDota data' }, 500);
     }
 
     console.log(`✅ Synced OpenDota data for user ${dbUser.id}`);
-    return c.json({ success: true, data: opendotaData });
+    return c.json({ success: true, data: openDotaData });
   } catch (error) {
     console.error('Sync OpenDota error:', error);
     return c.json({ error: 'Internal server error' }, 500);
@@ -1553,6 +1703,67 @@ app.post("/make-server-4789f4af/admin/opendota/refresh-all", async (c) => {
   }
 });
 
+// Update user account details (Twitch, Chess.com, etc.)
+app.patch("/make-server-4789f4af/users/me/account", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    // Get user from database
+    const { data: dbUser, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('supabase_id', authUser.id)
+      .single();
+
+    if (userError || !dbUser) {
+      return c.json({ error: 'User not found' }, 404);
+    }
+
+    // Get the update fields from request body
+    const body = await c.req.json();
+    const allowedFields = ['twitch_username', 'chesscom_username'];
+    const updateData: any = {};
+
+    // Only allow updating specific fields
+    for (const field of allowedFields) {
+      if (field in body) {
+        updateData[field] = body[field];
+      }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return c.json({ error: 'No valid fields to update' }, 400);
+    }
+
+    // Update user in database
+    const { error: updateError } = await supabase
+      .from('users')
+      .update(updateData)
+      .eq('id', dbUser.id);
+
+    if (updateError) {
+      console.error('Error updating user account:', updateError);
+      return c.json({ error: 'Failed to update account' }, 500);
+    }
+
+    console.log(`✅ Updated account details for user ${dbUser.id}:`, updateData);
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('Update account error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
+
 // Helper function to fetch and parse OpenDota data
 async function fetchOpenDotaData(opendotaId: string) {
   try {
@@ -1624,5 +1835,89 @@ async function fetchOpenDotaData(opendotaId: string) {
     return null;
   }
 }
+
+// Get recent rank actions for a user (actions performed by them OR done to them)
+app.get("/make-server-4789f4af/rank-actions/:userId", async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    
+    if (!accessToken) {
+      return c.json({ error: 'No access token provided' }, 401);
+    }
+
+    const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+    
+    if (authError || !authUser) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const userId = c.req.param('userId');
+
+    // Get ALL rank actions from KV store
+    const allActions = await kv.getByPrefix(`rank_action:`);
+    
+    console.log('🌽 Total rank actions in system:', allActions?.length || 0);
+    
+    if (!allActions || allActions.length === 0) {
+      return c.json({ actions: [] });
+    }
+
+    // Filter to only actions where user is either the performer OR the recipient
+    const userActions = allActions.filter(action => 
+      action && 
+      action.timestamp && 
+      (action.performed_by_user_id === userId || action.target_user_id === userId)
+    );
+
+    console.log('🌽 User-related rank actions:', userActions?.length || 0);
+
+    if (userActions.length === 0) {
+      return c.json({ actions: [] });
+    }
+
+    // Sort by timestamp (newest first) and limit to 20
+    const sortedActions = userActions
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+      .slice(0, 20);
+
+    // Fetch user info for each action (both performer and recipient)
+    const actionsWithUserInfo = await Promise.all(
+      sortedActions.map(async (action) => {
+        // Get performer's info
+        const { data: performer, error: perfError } = await supabase
+          .from('users')
+          .select('id, discord_username, discord_avatar')
+          .eq('id', action.performed_by_user_id)
+          .single();
+
+        if (perfError) {
+          console.error('Error fetching performer info:', perfError);
+        }
+
+        // Get recipient's info
+        const { data: recipient, error: recError } = await supabase
+          .from('users')
+          .select('id, discord_username, discord_avatar')
+          .eq('id', action.target_user_id)
+          .single();
+
+        if (recError) {
+          console.error('Error fetching recipient info:', recError);
+        }
+
+        return {
+          ...action,
+          performer: performer || null,
+          recipient: recipient || null,
+        };
+      })
+    );
+
+    return c.json({ actions: actionsWithUserInfo });
+  } catch (error) {
+    console.error('Get rank actions error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+});
 
 Deno.serve(app.fetch);

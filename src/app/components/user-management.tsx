@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
-import { Users, Shield, Crown, UserX, Loader2, ChevronDown, ChevronUp, Star } from 'lucide-react';
+import { Users, Shield, Crown, UserX, Loader2, ChevronDown, ChevronUp, Star, Sparkles } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { ConfirmModal } from '@/app/components/confirm-modal';
 import { SuccessModal } from '@/app/components/success-modal';
 
-export function UserManagement() {
+export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> }) {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
@@ -63,7 +63,7 @@ export function UserManagement() {
 
   const handleRoleChange = async (userId: string, newRole: string) => {
     const user = users.find(u => u.id === userId);
-    const roleLabels: any = { guest: 'Guest', member: 'Member', admin: 'Admin', owner: 'Owner' };
+    const roleLabels: any = { guest: 'Guest', member: 'Member', admin: 'Admin', queen_of_hog: 'Queen Of Hog', owner: 'Owner' };
     
     setConfirmAction({
       type: 'role_change',
@@ -185,6 +185,11 @@ export function UserManagement() {
       setUpdatingUserId(null);
       setRankActionUserId(null);
 
+      // Refresh user data if callback provided
+      if (onRefresh) {
+        await onRefresh();
+      }
+
       // Auto-close success modal after 2 seconds
       setTimeout(() => {
         setResult(null);
@@ -205,6 +210,8 @@ export function UserManagement() {
     switch (role) {
       case 'owner':
         return <Crown className="w-4 h-4 text-[#f59e0b]" />;
+      case 'queen_of_hog':
+        return <span className="text-sm">🐗</span>;
       case 'admin':
         return <Shield className="w-4 h-4 text-[#3b82f6]" />;
       case 'member':
@@ -218,6 +225,8 @@ export function UserManagement() {
     switch (role) {
       case 'owner':
         return 'bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/30';
+      case 'queen_of_hog':
+        return 'bg-[#ec4899]/10 text-[#ec4899] border-[#ec4899]/30';
       case 'admin':
         return 'bg-[#3b82f6]/10 text-[#3b82f6] border-[#3b82f6]/30';
       case 'member':
@@ -266,7 +275,7 @@ export function UserManagement() {
         </select>
       </div>
 
-      <div className="space-y-3 max-h-[500px] overflow-y-auto">
+      <div className="space-y-3">
         {filteredUsers.length === 0 ? (
           <p className="text-center text-[#0f172a]/60 py-8">No users found for this filter.</p>
         ) : (
@@ -292,26 +301,27 @@ export function UserManagement() {
                     </div>
                   )}
 
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="font-semibold text-[#0f172a]">{user.discord_username}</p>
-                      {(user.role === 'owner' || user.role === 'admin') && (
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <p className="font-semibold text-[#0f172a] truncate">{user.discord_username}</p>
+                      {(user.role === 'owner' || user.role === 'queen_of_hog' || user.role === 'admin') && (
                         <div className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border flex items-center gap-1 ${getRoleBadgeColor(user.role)}`}>
                           {getRoleIcon(user.role)}
-                          {user.role === 'owner' ? 'OWNER' : 'ADMIN'}
+                          {user.role === 'owner' ? 'OWNER' : user.role === 'queen_of_hog' ? 'QUEEN OF HOG' : 'ADMIN'}
                         </div>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-xs text-[#0f172a]/60">
                       <span>{user.ranks?.name || 'No Rank'}</span>
                       <span>•</span>
-                      <span>Prestige {user.prestige_level}</span>
+                      <span className="sm:hidden">Lvl {user.prestige_level}</span>
+                      <span className="hidden sm:inline">Prestige Level {user.prestige_level}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Role Dropdown - Hidden for Owners */}
-                <div className="ml-4">
+                <div className="ml-2 sm:ml-4 flex-shrink-0">
                   {user.role === 'owner' ? (
                     <div className="text-xs text-[#0f172a]/40 italic">Protected</div>
                   ) : updatingUserId === user.id ? (
@@ -326,6 +336,7 @@ export function UserManagement() {
                       <option value="guest">Guest</option>
                       <option value="member">Member</option>
                       <option value="admin">Admin</option>
+                      <option value="queen_of_hog">Queen Of Hog</option>
                       <option value="owner">Owner</option>
                     </select>
                   )}
@@ -337,46 +348,46 @@ export function UserManagement() {
                 <div className="flex items-center gap-2 pt-3 border-t border-[#0f172a]/10">
                   <Button
                     size="sm"
-                    className="flex-1 bg-[#10b981] hover:bg-[#059669] text-white text-xs h-8"
+                    className="flex-1 bg-[#10b981] hover:bg-[#059669] text-white text-xs h-8 sm:h-9"
                     onClick={() => handleRankAction(user.id, 'rank_up')}
                     disabled={rankActionUserId === user.id}
                   >
                     {rankActionUserId === user.id ? (
-                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" />
                     ) : (
                       <>
-                        <ChevronUp className="w-3 h-3 mr-1" />
-                        Rank Up
+                        <ChevronUp className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
+                        <span className="hidden sm:inline">Rank Up</span>
                       </>
                     )}
                   </Button>
                   <Button
                     size="sm"
-                    className="flex-1 bg-[#ef4444] hover:bg-[#dc2626] text-white text-xs h-8"
+                    className="flex-1 bg-[#ef4444] hover:bg-[#dc2626] text-white text-xs h-8 sm:h-9"
                     onClick={() => handleRankAction(user.id, 'rank_down')}
                     disabled={rankActionUserId === user.id}
                   >
                     {rankActionUserId === user.id ? (
-                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" />
                     ) : (
                       <>
-                        <ChevronDown className="w-3 h-3 mr-1" />
-                        Rank Down
+                        <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
+                        <span className="hidden sm:inline">Rank Down</span>
                       </>
                     )}
                   </Button>
                   <Button
                     size="sm"
-                    className="flex-1 bg-[#f59e0b] hover:bg-[#d97706] text-white text-xs h-8"
+                    className="flex-1 bg-[#f59e0b] hover:bg-[#d97706] text-white text-xs h-8 sm:h-9"
                     onClick={() => handleRankAction(user.id, 'prestige')}
                     disabled={rankActionUserId === user.id}
                   >
                     {rankActionUserId === user.id ? (
-                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" />
                     ) : (
                       <>
-                        <Star className="w-3 h-3 mr-1" />
-                        Prestige
+                        <Star className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
+                        <span className="hidden sm:inline">Prestige</span>
                       </>
                     )}
                   </Button>
