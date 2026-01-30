@@ -910,10 +910,10 @@ app.post("/make-server-4789f4af/admin/membership-requests/:requestId/approve", a
 
     const requestId = c.req.param('requestId');
 
-    // Get the request to find the user
+    // Get the request to find the user and Discord info
     const { data: request, error: fetchError } = await supabase
       .from('membership_requests')
-      .select('user_id, status')
+      .select('user_id, status, discord_message_id, discord_channel_id')
       .eq('id', requestId)
       .single();
 
@@ -924,6 +924,18 @@ app.post("/make-server-4789f4af/admin/membership-requests/:requestId/approve", a
 
     if (request.status !== 'pending') {
       return c.json({ error: 'Request has already been processed' }, 400);
+    }
+
+    // Get user info for Discord message
+    const { data: user, error: requestUserError } = await supabase
+      .from('users')
+      .select('discord_id, discord_username')
+      .eq('id', request.user_id)
+      .single();
+
+    if (requestUserError || !user) {
+      console.error('Error fetching user:', requestUserError);
+      return c.json({ error: 'User not found' }, 404);
     }
 
     // Update the request status
@@ -953,6 +965,35 @@ app.post("/make-server-4789f4af/admin/membership-requests/:requestId/approve", a
     if (updateUserError) {
       console.error('Error updating user role:', updateUserError);
       return c.json({ error: 'Failed to update user role' }, 500);
+    }
+
+    // Send Discord approval message if we have Discord info
+    if (request.discord_channel_id && user.discord_id) {
+      const botToken = Deno.env.get('DISCORD_BOT_TOKEN');
+      
+      if (botToken) {
+        try {
+          // Send public approval message to the same channel
+          await fetch(
+            `https://discord.com/api/v10/channels/${request.discord_channel_id}/messages`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bot ${botToken}`,
+              },
+              body: JSON.stringify({
+                content: `🌽 <@${user.discord_id}> has been accepted to <@&1157795286584926309>!\nWelcome to the guild! You can now use \`/mvp\` to submit rank requests.`,
+              }),
+            }
+          );
+          
+          console.log('✅ Sent Discord approval message for:', user.discord_username);
+        } catch (error) {
+          console.error('Failed to send Discord approval message:', error);
+          // Don't fail the request if Discord message fails
+        }
+      }
     }
 
     return c.json({ success: true });
@@ -2028,7 +2069,7 @@ app.get("/make-server-4789f4af/rank-actions/:userId", async (c) => {
           .from('users')
           .select('id, discord_username, discord_avatar')
           .eq('id', action.performed_by_user_id)
-          .single();
+          .maybeSingle();
 
         if (perfError) {
           console.error('Error fetching performer info:', perfError);
@@ -2039,7 +2080,7 @@ app.get("/make-server-4789f4af/rank-actions/:userId", async (c) => {
           .from('users')
           .select('id, discord_username, discord_avatar')
           .eq('id', action.target_user_id)
-          .single();
+          .maybeSingle();
 
         if (recError) {
           console.error('Error fetching recipient info:', recError);

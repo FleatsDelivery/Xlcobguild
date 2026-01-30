@@ -440,6 +440,181 @@ serve(async (req) => {
     }
   }
 
+  // Handle /signup command
+  if (body.type === InteractionType.APPLICATION_COMMAND && body.data.name === 'signup') {
+    try {
+      // Initialize Supabase client
+      const supabase = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      );
+
+      // Get user's Discord info
+      const discordUser = body.member?.user || body.user;
+      const discordId = discordUser.id;
+      const discordUsername = discordUser.username;
+      const discordAvatar = discordUser.avatar;
+
+      if (!discordId || !discordUsername) {
+        return new Response(
+          JSON.stringify(errorResponse('Could not identify your Discord account.')),
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+
+      // Check if user already exists
+      const { data: existingUser, error: userCheckError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('discord_id', discordId)
+        .single();
+
+      let userId: string;
+
+      if (existingUser) {
+        // User already exists
+        userId = existingUser.id;
+
+        // If they're already a member or higher, they don't need to sign up
+        if (existingUser.role !== 'guest') {
+          return new Response(
+            JSON.stringify(errorResponse(`You're already a member of XLCOB! Your role: **${existingUser.role}**`)),
+            { headers: { 'Content-Type': 'application/json' } }
+          );
+        }
+      } else {
+        // Create new guest account
+        const { data: newUser, error: createError } = await supabase
+          .from('users')
+          .insert({
+            discord_id: discordId,
+            discord_username: discordUsername,
+            discord_avatar: discordAvatar,
+            role: 'guest',
+            rank_id: 1, // Earwig
+            prestige_level: 0,
+          })
+          .select()
+          .single();
+
+        if (createError || !newUser) {
+          console.error('Failed to create user account:', createError);
+          return new Response(
+            JSON.stringify(errorResponse('Failed to create your account. Please try again later.')),
+            { headers: { 'Content-Type': 'application/json' } }
+          );
+        }
+
+        userId = newUser.id;
+        console.log('✅ Created new guest account for:', discordUsername);
+      }
+
+      // Check if user already has a pending membership request
+      const { data: existingRequest, error: requestCheckError } = await supabase
+        .from('membership_requests')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('status', 'pending')
+        .single();
+
+      if (existingRequest) {
+        return new Response(
+          JSON.stringify(errorResponse('You already have a pending membership request! Officers will review it soon.')),
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+
+      // Create membership request
+      const { data: membershipRequest, error: createRequestError } = await supabase
+        .from('membership_requests')
+        .insert({
+          user_id: userId,
+          status: 'pending',
+        })
+        .select()
+        .single();
+
+      if (createRequestError || !membershipRequest) {
+        console.error('Failed to create membership request:', createRequestError);
+        return new Response(
+          JSON.stringify(errorResponse('Failed to submit membership request. Please try again later.')),
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+
+      console.log('✅ Created membership request for:', discordUsername);
+
+      // Ephemeral success response (only visible to user)
+      const response = {
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          embeds: [{
+            title: '✅ Welcome to XLCOB!',
+            description: `Welcome <@${discordId}>!\n\nYour account has been created and a membership request has been submitted!\n\n📊 **Status:** Guest (Pending Approval)\n🎯 **Starting Rank:** Earwig\n\n<@&1195280340370079764> will review your request soon. Check the web app to track your request status:\n👉 https://need-wake-20446127.figma.site/`,
+            color: 0xF97316, // Orange
+            timestamp: new Date().toISOString(),
+          }],
+          flags: 64, // Ephemeral (only visible to user)
+        },
+      };
+
+      // Asynchronously update membership request with Discord message info
+      const interactionToken = body.token;
+      const applicationId = Deno.env.get('DISCORD_APPLICATION_ID');
+      const channelId = body.channel_id;
+
+      // Don't await this - let it run in background
+      (async () => {
+        try {
+          // Wait a moment for Discord to process the message
+          await new Promise(resolve => setTimeout(resolve, 1000));
+
+          // Fetch the original message using the interaction token
+          const messageResponse = await fetch(
+            `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}/messages/@original`,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+
+          if (messageResponse.ok) {
+            const messageData = await messageResponse.json();
+            const messageId = messageData.id;
+
+            console.log('Fetched Discord message ID for signup:', messageId);
+
+            // Update the membership request with Discord message info
+            await supabase
+              .from('membership_requests')
+              .update({
+                discord_message_id: messageId,
+                discord_channel_id: channelId,
+              })
+              .eq('id', membershipRequest.id);
+
+            console.log('Updated membership request with Discord message info');
+          } else {
+            console.error('Failed to fetch Discord message:', await messageResponse.text());
+          }
+        } catch (error) {
+          console.error('Error fetching Discord message ID:', error);
+        }
+      })();
+
+      return new Response(JSON.stringify(response), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } catch (error) {
+      console.error('Error handling /signup command:', error);
+      return new Response(
+        JSON.stringify(errorResponse('An unexpected error occurred. Please try again later.')),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+  }
+
   // Handle /leaderboard command
   if (body.type === InteractionType.APPLICATION_COMMAND && body.data.name === 'leaderboard') {
     try {
@@ -452,10 +627,10 @@ serve(async (req) => {
       // Fetch all users sorted by rank (highest first) and prestige level
       const { data: users, error } = await supabase
         .from('users')
-        .select('username, discord_id, rank_id, prestige_level, role')
+        .select('discord_username, discord_id, rank_id, prestige_level, role')
         .order('rank_id', { ascending: false })
         .order('prestige_level', { ascending: false })
-        .order('username', { ascending: true });
+        .order('discord_username', { ascending: true });
 
       if (error || !users) {
         console.error('Failed to fetch leaderboard:', error);

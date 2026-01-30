@@ -46,16 +46,16 @@ serve(async (req) => {
             ],
           },
           {
-            name: 'match_id',
-            description: 'Dota 2 Match ID (optional)',
-            type: 3, // STRING type
-            required: false,
-          },
-          {
             name: 'screenshot',
             description: 'MVP screenshot from Dota 2',
             type: 11, // ATTACHMENT type
             required: true,
+          },
+          {
+            name: 'match_id',
+            description: 'Dota 2 Match ID (optional)',
+            type: 3, // STRING type
+            required: false,
           },
         ],
       },
