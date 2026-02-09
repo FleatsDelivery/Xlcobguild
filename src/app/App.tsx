@@ -1,16 +1,27 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { projectId, publicAnonKey } from '/utils/supabase/info';
+import { Loader2 } from 'lucide-react';
 import { LoginPage } from '@/app/components/login-page';
+import { SignupPage } from '@/app/components/signup-page';
 import { Navigation } from '@/app/components/navigation';
 import { HomePage } from '@/app/components/home-page';
 import { LeaderboardPage } from '@/app/components/leaderboard-page';
 import { RequestsPage } from '@/app/components/requests-page';
 import { RulesPage } from '@/app/components/rules-page';
 import { ProfilePage } from '@/app/components/profile-page';
-import { Loader2 } from 'lucide-react';
+import { KKUPPage } from '@/app/components/kkup-page';
+import { KKupDetailPage } from '@/app/components/kkup-detail-page';
+import { LogoManagementPage } from '@/app/components/logo-management-page';
+import { SteamResearchPage } from '@/app/components/steam-research-page';
+import { TournamentBuilderPage } from '@/app/components/tournament-builder-page';
+import { NonLeagueTournamentBuilder } from '@/app/components/non-league-tournament-builder';
+import { ManualTournamentBuilder } from '@/app/components/manual-tournament-builder';
+import { HallOfFamePage } from '@/app/components/hall-of-fame-page-v2';
+import { KKupStinger } from '@/app/components/kkup-stinger';
 
-type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile';
+type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup' | 'kkup-detail' | 'logo-management' | 'steam-research' | 'tournament-builder' | 'non-league-tournament-builder' | 'manual-tournament-builder' | 'hall-of-fame';
 
 // Mock user data for development mode
 const MOCK_USER = {
@@ -33,11 +44,43 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState<PageType>('home');
   const [devMode, setDevMode] = useState(false);
   const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
+  const [showStinger, setShowStinger] = useState(false);
+
+  // Determine current page from hash
+  const getCurrentPageFromHash = (): PageType => {
+    const hash = window.location.hash;
+    if (hash.startsWith('#kkup/')) return 'kkup-detail';
+    if (hash === '#kernel-kup' || hash === '#kkup') return 'kkup';
+    if (hash === '#logo-management') return 'logo-management';
+    if (hash === '#leaderboard') return 'leaderboard';
+    if (hash === '#requests') return 'requests';
+    if (hash === '#rules') return 'rules';
+    if (hash === '#profile') return 'profile';
+    if (hash === '#steam-research') return 'steam-research';
+    if (hash === '#tournament-builder') return 'tournament-builder';
+    if (hash === '#non-league-tournament-builder') return 'non-league-tournament-builder';
+    if (hash === '#manual-tournament-builder') return 'manual-tournament-builder';
+    if (hash === '#hall-of-fame') return 'hall-of-fame';
+    return 'home';
+  };
+
+  useEffect(() => {
+    const updatePage = () => {
+      setCurrentPage(getCurrentPageFromHash());
+    };
+    
+    // Update on mount
+    updatePage();
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', updatePage);
+    return () => window.removeEventListener('hashchange', updatePage);
+  }, []);
 
   // Set up favicon and social meta tags
   useEffect(() => {
     // Set page title
-    document.title = 'XLCOB - The Corn Field Guild Portal';
+    document.title = 'XLCOB - Home of the Kernel Kup';
 
     // Create or update favicon (corn emoji as data URI)
     const setFavicon = () => {
@@ -116,6 +159,8 @@ export default function App() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session?.user) {
+        // Store token for other components
+        localStorage.setItem('supabase_token', session.access_token);
         fetchUserData(session.access_token);
       } else {
         setLoading(false);
@@ -128,9 +173,12 @@ export default function App() {
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
       if (session?.user) {
+        // Store token for other components
+        localStorage.setItem('supabase_token', session.access_token);
         await fetchUserData(session.access_token);
       } else {
         setUser(null);
+        localStorage.removeItem('supabase_token');
         setLoading(false);
       }
     });
@@ -201,13 +249,23 @@ export default function App() {
     }
   };
 
+  // Function to trigger KKUP stinger
+  const handleKKupNavigate = () => {
+    if (currentPage !== 'kkup') {
+      // Update hash to navigate
+      window.location.hash = '#kkup';
+      // Show stinger on top while page loads
+      setShowStinger(true);
+    }
+  };
+
   // Fetch pending requests count
   useEffect(() => {
     if (!session?.access_token || !user) return;
 
     const fetchPendingCount = async () => {
       try {
-        const isAdmin = user.role === 'admin' || user.role === 'owner';
+        const isAdmin = user.role === 'admin' || user.role === 'owner' || user.role === 'queen_of_hog';
         
         let totalPending = 0;
 
@@ -268,8 +326,23 @@ export default function App() {
     );
   }
 
+  // Check if we're on the signup route
+  const isSignupRoute = window.location.hash === '#signup';
+
+  if (!session && isSignupRoute) {
+    return <SignupPage onComplete={() => window.location.reload()} />;
+  }
+
   if (!session) {
     return <LoginPage />;
+  }
+
+  // If user is logged in but on signup route, show signup page
+  if (isSignupRoute) {
+    return <SignupPage onComplete={() => {
+      window.location.hash = '';
+      window.location.reload();
+    }} />;
   }
 
   return (
@@ -277,6 +350,7 @@ export default function App() {
       <Navigation 
         currentPage={currentPage} 
         onNavigate={setCurrentPage} 
+        onKKupNavigate={handleKKupNavigate}
         user={user}
         pendingRequestsCount={pendingRequestsCount}
       />
@@ -288,7 +362,22 @@ export default function App() {
         {currentPage === 'requests' && <RequestsPage user={user} />}
         {currentPage === 'rules' && <RulesPage />}
         {currentPage === 'profile' && <ProfilePage user={user} onRefresh={handleRefreshUser} />}
+        {currentPage === 'kkup' && <KKUPPage user={user} />}
+        {currentPage === 'kkup-detail' && <KKupDetailPage id={window.location.hash.replace('#kkup/', '')} />}
+        {currentPage === 'logo-management' && <LogoManagementPage />}
+        {currentPage === 'steam-research' && <SteamResearchPage />}
+        {currentPage === 'tournament-builder' && <TournamentBuilderPage user={user} />}
+        {currentPage === 'non-league-tournament-builder' && <NonLeagueTournamentBuilder user={user} />}
+        {currentPage === 'manual-tournament-builder' && <ManualTournamentBuilder user={user} />}
+        {currentPage === 'hall-of-fame' && <HallOfFamePage />}
       </main>
+
+      {/* KKUP Stinger - renders on top of everything */}
+      {showStinger && (
+        <KKupStinger
+          onComplete={() => setShowStinger(false)}
+        />
+      )}
     </div>
   );
 }

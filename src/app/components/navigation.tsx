@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { Home, Trophy, FileText, BookOpen, User, LogOut, X, Menu } from 'lucide-react';
+import { Home, Trophy, FileText, BookOpen, User, LogOut, X, Menu, Crown } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { supabase } from '@/lib/supabase';
 
 interface NavigationProps {
-  currentPage: 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile';
-  onNavigate: (page: 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile') => void;
+  currentPage: 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup';
+  onNavigate: (page: 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup') => void;
+  onKKupNavigate: () => void;
   user: any;
   pendingRequestsCount?: number;
 }
 
-export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount }: NavigationProps) {
+export function Navigation({ currentPage, onNavigate, onKKupNavigate, user, pendingRequestsCount }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -18,9 +19,29 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
     window.location.reload();
   };
 
-  const handleMobileNavigate = (page: 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile') => {
-    onNavigate(page);
+  const handleNavigate = (page: 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup') => {
+    // Update URL hash for all pages
+    if (page === 'home') {
+      window.location.hash = '';
+    } else {
+      window.location.hash = `#${page}`;
+    }
+    // The hash change will trigger the App.tsx listener to update currentPage
+  };
+
+  const handleMobileNavigate = (page: 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup') => {
+    handleNavigate(page);
     setIsMobileMenuOpen(false);
+  };
+
+  const handleKKupNavigation = () => {
+    // Only navigate if we're NOT already on the KKUP page
+    if (currentPage !== 'kkup') {
+      // Close mobile menu
+      setIsMobileMenuOpen(false);
+      // Call the App.tsx handler which does both navigation and stinger
+      onKKupNavigate();
+    }
   };
 
   return (
@@ -29,12 +50,12 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
       <nav className="fixed top-0 left-0 right-0 bg-white border-b-2 border-[#0f172a]/10 z-50">
         <div className="max-w-2xl mx-auto px-3 sm:px-4">
           <div className="flex items-center justify-between h-14 sm:h-16">
-            {/* Left side - Hamburger menu (mobile) + Logo */}
+            {/* Left side - Hamburger menu + Logo */}
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Hamburger Menu Button - Mobile only */}
+              {/* Hamburger Menu Button - All screen sizes */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="sm:hidden p-2 hover:bg-[#0f172a]/5 rounded-lg transition-colors"
+                className="p-2 hover:bg-[#0f172a]/5 rounded-lg transition-colors"
               >
                 {isMobileMenuOpen ? (
                   <X className="w-5 h-5 text-[#0f172a]" />
@@ -45,7 +66,7 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
 
               {/* Corn Logo - Always navigates to home */}
               <button
-                onClick={() => onNavigate('home')}
+                onClick={() => handleNavigate('home')}
                 className="flex items-center hover:opacity-80 transition-opacity"
               >
                 <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#f97316] flex items-center justify-center">
@@ -56,7 +77,7 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
 
             {/* Center Title - Links to home */}
             <button
-              onClick={() => onNavigate('home')}
+              onClick={() => handleNavigate('home')}
               className="text-lg sm:text-xl font-bold text-[#0f172a] absolute left-1/2 transform -translate-x-1/2 hover:text-[#f97316] transition-colors"
             >
               XLCOB
@@ -65,7 +86,7 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
             {/* Profile Button & Logout (desktop only for logout) */}
             <div className="flex items-center space-x-2 sm:space-x-3">
               <button
-                onClick={() => onNavigate('profile')}
+                onClick={() => handleNavigate('profile')}
                 className="hover:opacity-80 transition-opacity"
               >
                 {user?.discord_avatar ? (
@@ -105,12 +126,12 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/50 z-40 sm:hidden"
+            className="fixed inset-0 bg-black/50 z-40"
             onClick={() => setIsMobileMenuOpen(false)}
           />
           
           {/* Side Menu - Starts below top nav */}
-          <div className="fixed top-14 left-0 bottom-0 w-64 bg-white z-50 shadow-2xl sm:hidden animate-in slide-in-from-left duration-300">
+          <div className="fixed top-14 sm:top-16 left-0 bottom-0 w-64 bg-white z-50 shadow-2xl animate-in slide-in-from-left duration-300">
             <div className="flex flex-col h-full">
               {/* Menu Items */}
               <div className="flex-1 py-4 overflow-y-auto">
@@ -184,6 +205,19 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
                     <span className="font-semibold">Rules</span>
                   </button>
 
+                  {/* KKUP */}
+                  <button
+                    onClick={handleKKupNavigation}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                      currentPage === 'kkup'
+                        ? 'bg-[#f97316] text-white'
+                        : 'text-[#0f172a]/70 hover:bg-[#0f172a]/5'
+                    }`}
+                  >
+                    <Crown className="w-5 h-5" />
+                    <span className="font-semibold">KKUP</span>
+                  </button>
+
                   {/* Profile */}
                   <button
                     onClick={() => handleMobileNavigate('profile')}
@@ -219,7 +253,7 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
         <div className="max-w-md mx-auto px-4 sm:px-8 py-2 sm:py-3">
           <div className="flex items-center justify-center gap-2 sm:gap-4">
             <button
-              onClick={() => onNavigate('home')}
+              onClick={() => handleNavigate('home')}
               className={`flex flex-col items-center justify-center gap-1 sm:gap-1.5 px-4 sm:px-8 py-2 sm:py-3 rounded-2xl transition-all duration-200 ${
                 currentPage === 'home'
                   ? 'text-[#f97316] scale-105'
@@ -231,7 +265,7 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
             </button>
 
             <button
-              onClick={() => onNavigate('leaderboard')}
+              onClick={() => handleNavigate('leaderboard')}
               disabled={user?.role === 'guest'}
               className={`relative flex flex-col items-center justify-center gap-1 sm:gap-1.5 px-4 sm:px-8 py-2 sm:py-3 rounded-2xl transition-all duration-200 ${
                 user?.role === 'guest'
@@ -249,11 +283,11 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
                   </div>
                 )}
               </div>
-              <span className="text-[10px] sm:text-xs font-semibold">Leaderboard</span>
+              <span className="text-[10px] sm:text-xs font-semibold">Guild</span>
             </button>
 
             <button
-              onClick={() => onNavigate('requests')}
+              onClick={() => handleNavigate('requests')}
               className={`relative flex flex-col items-center justify-center gap-1 sm:gap-1.5 px-4 sm:px-8 py-2 sm:py-3 rounded-2xl transition-all duration-200 ${
                 currentPage === 'requests'
                   ? 'text-[#f97316] scale-105'
@@ -272,7 +306,7 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
             </button>
 
             <button
-              onClick={() => onNavigate('rules')}
+              onClick={() => handleNavigate('rules')}
               className={`flex flex-col items-center justify-center gap-1 sm:gap-1.5 px-4 sm:px-8 py-2 sm:py-3 rounded-2xl transition-all duration-200 ${
                 currentPage === 'rules'
                   ? 'text-[#f97316] scale-105'
@@ -281,6 +315,18 @@ export function Navigation({ currentPage, onNavigate, user, pendingRequestsCount
             >
               <BookOpen className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={currentPage === 'rules' ? 2.5 : 2} />
               <span className="text-[10px] sm:text-xs font-semibold">Rules</span>
+            </button>
+
+            <button
+              onClick={handleKKupNavigation}
+              className={`flex flex-col items-center justify-center gap-1 sm:gap-1.5 px-4 sm:px-8 py-2 sm:py-3 rounded-2xl transition-all duration-200 ${
+                currentPage === 'kkup'
+                  ? 'text-[#f97316] scale-105'
+                  : 'text-[#0f172a]/40 hover:text-[#0f172a]/70 hover:scale-105'
+              }`}
+            >
+              <Crown className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={currentPage === 'kkup' ? 2.5 : 2} />
+              <span className="text-[10px] sm:text-xs font-semibold">KKUP</span>
             </button>
           </div>
         </div>

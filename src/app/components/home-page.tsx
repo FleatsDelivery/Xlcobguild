@@ -1,4 +1,3 @@
-import { UserManagement } from '@/app/components/user-management';
 import { MvpSubmissionForm } from '@/app/components/mvp-submission-form';
 import { Footer } from '@/app/components/footer';
 import { Button } from '@/app/components/ui/button';
@@ -11,12 +10,10 @@ import { SuccessModal } from '@/app/components/success-modal';
 
 export function HomePage({ user, onRefresh }: { user: any; onRefresh?: () => Promise<void> }) {
   const isGuest = user?.role === 'guest';
-  const isOwner = user?.role === 'owner';
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasRequest, setHasRequest] = useState(false);
   const [loadingRequest, setLoadingRequest] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [refreshingOpenDota, setRefreshingOpenDota] = useState(false);
   const [rankActions, setRankActions] = useState<any[]>([]);
   const [loadingActions, setLoadingActions] = useState(true);
   const [result, setResult] = useState<{
@@ -210,62 +207,6 @@ export function HomePage({ user, onRefresh }: { user: any; onRefresh?: () => Pro
       });
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleRefreshOpenDota = async () => {
-    setRefreshingOpenDota(true);
-
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        setResult({
-          type: 'error',
-          title: 'Not Signed In',
-          message: 'Please sign in to refresh OpenDota data.',
-        });
-        setRefreshingOpenDota(false);
-        return;
-      }
-
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/refresh-opendota`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        setResult({
-          type: 'error',
-          title: 'Refresh Failed',
-          message: error.error || 'Failed to refresh OpenDota data.',
-        });
-        setRefreshingOpenDota(false);
-        return;
-      }
-
-      const data = await response.json();
-      setResult({
-        type: 'success',
-        title: 'OpenDota Refresh Complete!',
-        message: `Successfully synced ${data.updatedCount || 0} user(s) with OpenDota.`,
-        helpText: 'All user Dota 2 stats have been updated with the latest information.',
-      });
-    } catch (error) {
-      console.error('Error refreshing OpenDota data:', error);
-      setResult({
-        type: 'error',
-        title: 'Refresh Failed',
-        message: 'An unexpected error occurred. Please try again.',
-      });
-    } finally {
-      setRefreshingOpenDota(false);
     }
   };
 
@@ -527,6 +468,9 @@ export function HomePage({ user, onRefresh }: { user: any; onRefresh?: () => Pro
           </div>
         )}
 
+        {/* MVP Submission Form - Members Only */}
+        {!isGuest && <MvpSubmissionForm user={user} onRefresh={handleRefreshWithActions} />}
+
         {/* Recent Actions - Members Only */}
         {!isGuest && (
           <div className="bg-white rounded-3xl p-4 sm:p-6 border-2 border-[#0f172a]/10 shadow-md">
@@ -607,46 +551,51 @@ export function HomePage({ user, onRefresh }: { user: any; onRefresh?: () => Pro
           </div>
         )}
 
-        {/* MVP Submission Form - Members Only */}
-        {!isGuest && <MvpSubmissionForm user={user} onRefresh={handleRefreshWithActions} />}
-
-        {/* Owner: User Management Section */}
-        {isOwner && <UserManagement onRefresh={handleRefreshWithActions} />}
-
-        {/* Owner: OpenDota Refresh Section */}
-        {isOwner && (
-          <div className="bg-gradient-to-br from-[#3b82f6]/10 to-[#3b82f6]/5 rounded-3xl p-8 border-2 border-[#3b82f6]/20">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="w-12 h-12 rounded-full bg-[#3b82f6] flex items-center justify-center flex-shrink-0">
-                <RefreshCw className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-[#0f172a] mb-2">OpenDota Sync Control</h3>
-                <p className="text-[#0f172a]/70 text-sm">
-                  Manually refresh all user Dota 2 stats from OpenDota API. This updates MMR, rank medals, and match history for all guild members.
-                </p>
-              </div>
-            </div>
-
-            <Button 
-              onClick={handleRefreshOpenDota}
-              disabled={refreshingOpenDota}
-              className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white h-12 rounded-xl font-semibold transition-all"
-            >
-              {refreshingOpenDota ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                  Syncing with OpenDota...
-                </>
-              ) : (
-                <>
-                  <RefreshCw className="w-5 h-5 mr-2" />
-                  Refresh All User Stats
-                </>
-              )}
-            </Button>
+        {/* Custom Games Section */}
+        <div className="bg-white rounded-3xl p-4 sm:p-6 border-2 border-[#0f172a]/10 shadow-md">
+          <h3 className="text-lg font-bold text-[#0f172a] mb-4">🎮 Custom Games</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              {
+                title: "Axe's Dunk Contest",
+                workshopId: '3592388680',
+                cover: 'https://zizrvkkuqzwzxgwpuvxb.supabase.co/storage/v1/object/public/custom-game-modes/cover-photos/axes_dunk_contest.png',
+              },
+              {
+                title: "Heaps n' Reaps",
+                workshopId: '3585929337',
+                cover: 'https://zizrvkkuqzwzxgwpuvxb.supabase.co/storage/v1/object/public/custom-game-modes/cover-photos/heaps_n_reaps.png',
+              },
+              {
+                title: 'Hide & Heap',
+                workshopId: '3580844386',
+                cover: 'https://zizrvkkuqzwzxgwpuvxb.supabase.co/storage/v1/object/public/custom-game-modes/cover-photos/hide_n_heap.png',
+              },
+            ].map((game) => (
+              <a
+                key={game.workshopId}
+                href={`https://steamcommunity.com/sharedfiles/filedetails/?id=${game.workshopId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative rounded-2xl overflow-hidden border-2 border-[#0f172a]/10 hover:border-[#f97316]/40 transition-all hover:shadow-lg hover:-translate-y-1"
+              >
+                <div className="aspect-[16/9] overflow-hidden">
+                  <img
+                    src={game.cover}
+                    alt={game.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 flex items-end justify-between">
+                  <p className="text-white font-bold text-sm drop-shadow-lg">{game.title}</p>
+                  <ExternalLink className="w-4 h-4 text-white/70 group-hover:text-white flex-shrink-0 transition-colors" />
+                </div>
+              </a>
+            ))}
           </div>
-        )}
+        </div>
+
       </div>
 
       <Footer />

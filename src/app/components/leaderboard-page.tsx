@@ -53,6 +53,7 @@ export function LeaderboardPage({ user }: { user: any }) {
   const [selectedUser, setSelectedUser] = useState<LeaderboardUser | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [kkupStatsMap, setKkupStatsMap] = useState<Record<string, any>>({});
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -80,6 +81,8 @@ export function LeaderboardPage({ user }: { user: any }) {
       if (response.ok) {
         const data = await response.json();
         setUsers(data.users || []);
+        // Fetch KKUP stats for all users
+        fetchAllKkupStats(data.users || []);
       } else {
         console.error('Failed to fetch leaderboard');
       }
@@ -87,6 +90,42 @@ export function LeaderboardPage({ user }: { user: any }) {
       console.error('Error fetching leaderboard:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAllKkupStats = async (usersList: LeaderboardUser[]) => {
+    try {
+      // Fetch KKUP stats for all users in parallel
+      const statsPromises = usersList.map(async (u) => {
+        try {
+          const response = await fetch(
+            `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/users/${u.id}/kkup-stats`,
+            {
+              headers: {
+                'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token || ''}`,
+              },
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            return { userId: u.id, stats: data };
+          }
+        } catch (err) {
+          console.error(`Failed to fetch KKUP stats for user ${u.id}`, err);
+        }
+        return null;
+      });
+
+      const results = await Promise.all(statsPromises);
+      const statsMap: Record<string, any> = {};
+      results.forEach((result) => {
+        if (result) {
+          statsMap[result.userId] = result.stats;
+        }
+      });
+      setKkupStatsMap(statsMap);
+    } catch (error) {
+      console.error('Error fetching KKUP stats:', error);
     }
   };
 
@@ -157,7 +196,7 @@ export function LeaderboardPage({ user }: { user: any }) {
               <Trophy className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
             </div>
             <div className="flex-1">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0f172a]">Leaderboard</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0f172a]">Guild Leaderboard</h2>
               <p className="text-[#0f172a]/70 text-xs sm:text-sm">
                 Top ranked members of The Corn Field 🌽
               </p>
@@ -296,12 +335,38 @@ export function LeaderboardPage({ user }: { user: any }) {
                           </div>
                         )}
 
+                        {/* Championship Badge */}
+                        {kkupStatsMap[user.id]?.linked && kkupStatsMap[user.id]?.championships?.total > 0 && (
+                          <div className="flex flex-col items-center">
+                            <span className="text-base sm:text-xl mb-0.5">🏆</span>
+                            <p className="text-[10px] sm:text-xs font-bold text-[#f97316] text-center leading-tight">
+                              {kkupStatsMap[user.id].championships.total}x
+                            </p>
+                            <p className="text-[10px] sm:text-xs text-[#0f172a]/60">
+                              Champ
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Pop'd Kernel MVP Award */}
+                        {kkupStatsMap[user.id]?.linked && kkupStatsMap[user.id]?.popd_kernels > 0 && (
+                          <div className="flex flex-col items-center">
+                            <span className="text-base sm:text-xl mb-0.5">🍿</span>
+                            <p className="text-[10px] sm:text-xs font-bold text-[#dc2626] text-center leading-tight">
+                              {kkupStatsMap[user.id].popd_kernels}x
+                            </p>
+                            <p className="text-[10px] sm:text-xs text-[#0f172a]/60">
+                              MVP
+                            </p>
+                          </div>
+                        )}
+
                         {/* Prestige Badge */}
                         <div className="flex flex-col items-center">
                           {user.prestige_level === 0 ? (
                             <Star className="w-4 h-4 sm:w-5 sm:h-5 text-[#fbbf24] fill-[#fbbf24] mb-0.5" />
                           ) : user.prestige_level === 5 ? (
-                            <span className="text-2xl sm:text-3xl mb-0.5">💥</span>
+                            <span className="text-2xl sm:text-3xl mb-0.5">🌟</span>
                           ) : (
                             <span className="text-2xl sm:text-3xl mb-0.5">🌟</span>
                           )}

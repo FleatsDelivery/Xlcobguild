@@ -1,6 +1,138 @@
-// Dota 2 Hero ID to Name Mapping
-// Based on the official Dota 2 hero list
-export const DOTA_HEROES: Record<number, string> = {
+// Dota 2 Hero ID to CDN name mapping
+// Source: OpenDota API hero data
+// https://api.opendota.com/api/heroes
+
+export const HERO_ID_TO_IMAGE: Record<number, string> = {
+  1: 'antimage',
+  2: 'axe',
+  3: 'bane',
+  4: 'bloodseeker',
+  5: 'crystal_maiden',
+  6: 'drow_ranger',
+  7: 'earthshaker',
+  8: 'juggernaut',
+  9: 'mirana',
+  10: 'morphling',
+  11: 'nevermore', // Shadow Fiend
+  12: 'phantom_lancer',
+  13: 'puck',
+  14: 'pudge',
+  15: 'razor',
+  16: 'sand_king',
+  17: 'storm_spirit',
+  18: 'sven',
+  19: 'tiny',
+  20: 'vengefulspirit',
+  21: 'windrunner', // Windranger
+  22: 'zuus', // Zeus
+  23: 'kunkka',
+  25: 'lina',
+  26: 'lion',
+  27: 'shadow_shaman',
+  28: 'slardar',
+  29: 'tidehunter',
+  30: 'witch_doctor',
+  31: 'lich',
+  32: 'riki',
+  33: 'enigma',
+  34: 'tinker',
+  35: 'sniper',
+  36: 'necrolyte', // Necrophos
+  37: 'warlock',
+  38: 'beastmaster',
+  39: 'queenofpain',
+  40: 'venomancer',
+  41: 'faceless_void',
+  42: 'skeleton_king', // Wraith King
+  43: 'death_prophet',
+  44: 'phantom_assassin',
+  45: 'pugna',
+  46: 'templar_assassin',
+  47: 'viper',
+  48: 'luna',
+  49: 'dragon_knight',
+  50: 'dazzle',
+  51: 'rattletrap', // Clockwerk
+  52: 'leshrac',
+  53: 'furion', // Nature's Prophet
+  54: 'life_stealer',
+  55: 'dark_seer',
+  56: 'clinkz',
+  57: 'omniknight',
+  58: 'enchantress',
+  59: 'huskar',
+  60: 'night_stalker',
+  61: 'broodmother',
+  62: 'bounty_hunter',
+  63: 'weaver',
+  64: 'jakiro',
+  65: 'batrider',
+  66: 'chen',
+  67: 'spectre',
+  68: 'ancient_apparition',
+  69: 'doom_bringer', // Doom
+  70: 'ursa',
+  71: 'spirit_breaker',
+  72: 'gyrocopter',
+  73: 'alchemist',
+  74: 'invoker',
+  75: 'silencer',
+  76: 'obsidian_destroyer', // Outworld Destroyer
+  77: 'lycan',
+  78: 'brewmaster',
+  79: 'shadow_demon',
+  80: 'lone_druid',
+  81: 'chaos_knight',
+  82: 'meepo',
+  83: 'treant',
+  84: 'ogre_magi',
+  85: 'undying',
+  86: 'rubick',
+  87: 'disruptor',
+  88: 'nyx_assassin',
+  89: 'naga_siren',
+  90: 'keeper_of_the_light',
+  91: 'wisp', // Io
+  92: 'visage',
+  93: 'slark',
+  94: 'medusa',
+  95: 'troll_warlord',
+  96: 'centaur',
+  97: 'magnataur',
+  98: 'shredder', // Timbersaw
+  99: 'bristleback',
+  100: 'tusk',
+  101: 'skywrath_mage',
+  102: 'abaddon',
+  103: 'elder_titan',
+  104: 'legion_commander',
+  105: 'techies',
+  106: 'ember_spirit',
+  107: 'earth_spirit',
+  108: 'abyssal_underlord', // Underlord
+  109: 'terrorblade',
+  110: 'phoenix',
+  111: 'oracle',
+  112: 'winter_wyvern',
+  113: 'arc_warden',
+  114: 'monkey_king',
+  119: 'dark_willow',
+  120: 'pangolier',
+  121: 'grimstroke',
+  123: 'hoodwink',
+  126: 'void_spirit',
+  128: 'snapfire',
+  129: 'mars',
+  135: 'dawnbreaker',
+  136: 'marci',
+  137: 'primal_beast',
+  138: 'muerta',
+  145: 'ringmaster',
+  146: 'kez',
+};
+
+// Hero ID to Display Name mapping
+export const HERO_ID_TO_NAME: Record<number, string> = {
   1: 'Anti-Mage',
   2: 'Axe',
   3: 'Bane',
@@ -129,6 +261,54 @@ export const DOTA_HEROES: Record<number, string> = {
   146: 'Kez',
 };
 
+/**
+ * Get the hero display name from hero ID
+ * @param heroId - The Dota 2 hero ID
+ * @returns Hero display name (e.g., "Anti-Mage")
+ */
 export function getHeroName(heroId: number): string {
-  return DOTA_HEROES[heroId] || `Hero #${heroId}`;
+  return HERO_ID_TO_NAME[heroId] || `Hero ${heroId}`;
+}
+
+/**
+ * Get the hero portrait image URL from OpenDota CDN
+ * @param heroId - The Dota 2 hero ID
+ * @returns URL to the hero portrait image
+ */
+export function getHeroImageUrl(heroId: number): string {
+  const heroName = HERO_ID_TO_IMAGE[heroId];
+  if (!heroName) {
+    console.warn(`Unknown hero ID: ${heroId}`);
+    return ''; // Return empty string for unknown heroes
+  }
+  // Use Steam's CDN which is more reliable
+  return `https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/${heroName}.png`;
+}
+
+/**
+ * Get the hero full portrait image URL (larger version)
+ * @param heroId - The Dota 2 hero ID
+ * @returns URL to the hero full portrait image
+ */
+export function getHeroFullImageUrl(heroId: number): string {
+  const heroName = HERO_ID_TO_IMAGE[heroId];
+  if (!heroName) {
+    console.warn(`Unknown hero ID: ${heroId}`);
+    return '';
+  }
+  return `https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/${heroName}.png`;
+}
+
+/**
+ * Get the hero icon URL (small version)
+ * @param heroId - The Dota 2 hero ID
+ * @returns URL to the hero icon
+ */
+export function getHeroIconUrl(heroId: number): string {
+  const heroName = HERO_ID_TO_IMAGE[heroId];
+  if (!heroName) {
+    console.warn(`Unknown hero ID: ${heroId}`);
+    return '';
+  }
+  return `https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/${heroName}.png`;
 }

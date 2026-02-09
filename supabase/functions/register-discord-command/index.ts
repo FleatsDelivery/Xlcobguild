@@ -63,6 +63,72 @@ serve(async (req) => {
         name: 'leaderboard',
         description: 'Display the current XLCOB leaderboard rankings',
       },
+      {
+        name: 'joinguild',
+        description: 'Join The Corn Field guild and get your XLCOB account',
+      },
+      {
+        name: 'register',
+        description: 'Register for the upcoming Kernel Kup tournament',
+        options: [
+          {
+            name: 'role',
+            description: 'Your role in the tournament',
+            type: 3, // STRING type
+            required: true,
+            choices: [
+              { name: 'Player', value: 'player' },
+              { name: 'Coach', value: 'coach' },
+              { name: 'Caster', value: 'caster' },
+              { name: 'Spectator', value: 'spectator' },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'kkup',
+        description: 'View Kernel Kup tournament standings and stats',
+        options: [
+          {
+            name: 'tournament',
+            description: 'Which Kernel Kup tournament',
+            type: 4, // INTEGER type
+            required: true,
+            choices: [
+              { name: 'Kernel Kup 1', value: 1 },
+              { name: 'Kernel Kup 2', value: 2 },
+              { name: 'Kernel Kup 3', value: 3 },
+              { name: 'Kernel Kup 4', value: 4 },
+              { name: 'Kernel Kup 5', value: 5 },
+              { name: 'Kernel Kup 6', value: 6 },
+              { name: 'Kernel Kup 7', value: 7 },
+              { name: 'Kernel Kup 8', value: 8 },
+              { name: 'Kernel Kup 9', value: 9 },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'hof',
+        description: 'View the Kernel Kup Hall of Fame — top players and teams of all time',
+      },
+      {
+        name: 'derba',
+        description: 'Find a Dota 2 party — creates a lobby with slots for 5 players and 1 coach',
+        options: [
+          {
+            name: 'mode',
+            description: 'Which game mode / role to ping',
+            type: 3, // STRING type
+            required: true,
+            choices: [
+              { name: 'DERBA-DOS', value: 'dos' },
+              { name: 'turba-durbs', value: 'turba' },
+              { name: 'bcup-bummers', value: 'bcup' },
+            ],
+          },
+        ],
+      },
     ];
 
     // Register command with Discord
@@ -95,12 +161,12 @@ serve(async (req) => {
       );
     }
 
-    console.log('✅ Successfully registered /mvp command:', data);
+    console.log('✅ Successfully registered commands:', data);
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: '✅ Successfully registered /mvp and /leaderboard commands with Discord!',
+        message: '✅ Successfully registered all Discord commands: /mvp, /leaderboard, /joinguild, /register, /kkup, /hof, /derba',
         commands: data,
       }),
       {

@@ -1,11 +1,12 @@
-import { X, TrendingUp, ArrowUp, ArrowDown, Sparkles, Shield, Crown, Calendar, Gamepad2 } from 'lucide-react';
+import { X, TrendingUp, ArrowUp, ArrowDown, Sparkles, Shield, Crown, Calendar, Gamepad2, Trophy } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { projectId } from '/utils/supabase/info';
+import { projectId, publicAnonKey } from '/utils/supabase/info';
 import { ConfirmModal } from '@/app/components/confirm-modal';
 import { SuccessModal } from '@/app/components/success-modal';
 import { getHeroName } from '@/lib/dota-heroes';
+import { TrophyBadges } from '@/app/components/trophy-badges';
 
 interface UserProfileModalProps {
   user: {
@@ -43,7 +44,7 @@ interface UserProfileModalProps {
 const rankEmojis = [
   '🐛', // 1. Earwig
   '🦌', // 2. Ugandan Kob
-  '🌽', // 3. Private Maize
+  '', // 3. Private Maize
   '🥄', // 4. Specialist Ingredient
   '🍞', // 5. Corporal Corn Bread
   '', // 6. Sergeant Husk
@@ -56,6 +57,10 @@ const rankEmojis = [
 
 export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserProfileModalProps) {
   const [loading, setLoading] = useState(false);
+  const [achievements, setAchievements] = useState<any[]>([]);
+  const [loadingAchievements, setLoadingAchievements] = useState(false);
+  const [kkupStats, setKkupStats] = useState<any>(null);
+  const [loadingKkupStats, setLoadingKkupStats] = useState(false);
   const [confirmAction, setConfirmAction] = useState<{
     type: 'rank_up' | 'rank_down' | 'prestige' | 'role_change';
     title: string;
@@ -214,6 +219,65 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchAchievements = async () => {
+      setLoadingAchievements(true);
+      try {
+        const response = await fetch(
+          `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/user/${user.id}/achievements`,
+          {
+            headers: {
+              Authorization: `Bearer ${publicAnonKey}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          console.error('Failed to fetch achievements');
+          setLoadingAchievements(false);
+          return;
+        }
+
+        const data = await response.json();
+        setAchievements(data.achievements || []);
+      } catch (error) {
+        console.error('Error fetching achievements:', error);
+      } finally {
+        setLoadingAchievements(false);
+      }
+    };
+
+    const fetchKkupStats = async () => {
+      setLoadingKkupStats(true);
+      try {
+        const response = await fetch(
+          `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/users/${user.id}/kkup-stats`,
+          {
+            headers: {
+              Authorization: `Bearer ${publicAnonKey}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          console.error('Failed to fetch KKUP stats');
+          setLoadingKkupStats(false);
+          return;
+        }
+
+        const data = await response.json();
+        setKkupStats(data);
+      } catch (error) {
+        console.error('Error fetching KKUP stats:', error);
+      } finally {
+        setLoadingKkupStats(false);
+      }
+    };
+
+    fetchAchievements();
+    fetchKkupStats();
+  }, [user.id]);
 
   return (
     <>
@@ -382,6 +446,129 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
               </div>
             )}
 
+            {/* Kernel Kup Profile */}
+            {kkupStats && kkupStats.linked && (
+              <div className="bg-gradient-to-br from-[#fbbf24]/10 to-[#f97316]/10 rounded-2xl p-4 border-2 border-[#f97316]/30">
+                <p className="text-xs text-[#0f172a]/60 font-semibold mb-3">🏆 KERNEL KUP PROFILE</p>
+                
+                {/* Championships Section */}
+                {kkupStats.championships.total > 0 && (
+                  <div className="mb-3 pb-3 border-b border-[#f97316]/20">
+                    <p className="text-xs text-[#0f172a]/60 font-semibold mb-2">Championships</p>
+                    <div className="flex items-center gap-3">
+                      {kkupStats.championships.kernel_kup > 0 && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-2xl">🏆</span>
+                          <div>
+                            <p className="text-sm font-bold text-[#f97316]">{kkupStats.championships.kernel_kup}x</p>
+                            <p className="text-[10px] text-[#0f172a]/60">Kernel Kup</p>
+                          </div>
+                        </div>
+                      )}
+                      {kkupStats.championships.heaps_n_hooks > 0 && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-2xl">⚓</span>
+                          <div>
+                            <p className="text-sm font-bold text-[#10b981]">{kkupStats.championships.heaps_n_hooks}x</p>
+                            <p className="text-[10px] text-[#0f172a]/60">Heaps n' Hooks</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Pop'd Kernel Awards */}
+                {kkupStats.popd_kernels > 0 && (
+                  <div className="mb-3 pb-3 border-b border-[#f97316]/20">
+                    <p className="text-xs text-[#0f172a]/60 font-semibold mb-2">Special Awards</p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">💥</span>
+                      <div>
+                        <p className="text-lg font-bold text-[#dc2626]">{kkupStats.popd_kernels}x Pop'd Kernel</p>
+                        <p className="text-[10px] text-[#0f172a]/60">Tournament MVP</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tournament Stats */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[#0f172a]/60">Tournaments Played:</span>
+                    <span className="font-bold text-[#0f172a]">{kkupStats.tournaments_played}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[#0f172a]/60">Total Games:</span>
+                    <span className="font-bold text-[#0f172a]">{kkupStats.total_games}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[#0f172a]/60">Win/Loss Record:</span>
+                    <span className="font-bold">
+                      <span className="text-[#10b981]">{kkupStats.wins}W</span>
+                      <span className="text-[#0f172a]/40"> / </span>
+                      <span className="text-[#ef4444]">{kkupStats.losses}L</span>
+                    </span>
+                  </div>
+                  {kkupStats.total_games > 0 && (
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-[#0f172a]/60">Win Rate:</span>
+                      <span className={`font-bold ${((kkupStats.wins / kkupStats.total_games) * 100) >= 50 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                        {((kkupStats.wins / kkupStats.total_games) * 100).toFixed(1)}%
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Profile Links */}
+                {kkupStats.profile && (kkupStats.profile.dotabuff_url || kkupStats.profile.opendota_url) && (
+                  <div className="mt-3 pt-3 border-t border-[#f97316]/20 space-y-2">
+                    {kkupStats.profile.dotabuff_url && (
+                      <button
+                        onClick={() => window.open(kkupStats.profile.dotabuff_url, '_blank')}
+                        className="w-full flex items-center justify-between p-2 bg-[#3b82f6]/5 hover:bg-[#3b82f6]/10 border border-[#3b82f6]/20 rounded-xl transition-colors group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Gamepad2 className="w-4 h-4 text-[#3b82f6]" />
+                          <span className="text-xs font-semibold text-[#0f172a]">Dotabuff Profile</span>
+                        </div>
+                        <svg className="w-4 h-4 text-[#3b82f6] group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    )}
+                    {kkupStats.profile.opendota_url && (
+                      <button
+                        onClick={() => window.open(kkupStats.profile.opendota_url, '_blank')}
+                        className="w-full flex items-center justify-between p-2 bg-[#6366f1]/5 hover:bg-[#6366f1]/10 border border-[#6366f1]/20 rounded-xl transition-colors group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Trophy className="w-4 h-4 text-[#6366f1]" />
+                          <span className="text-xs font-semibold text-[#0f172a]">OpenDota Profile</span>
+                        </div>
+                        <svg className="w-4 h-4 text-[#6366f1] group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* No Championships/Awards */}
+                {kkupStats.championships.total === 0 && kkupStats.popd_kernels === 0 && kkupStats.tournaments_played === 0 && (
+                  <p className="text-xs text-[#0f172a]/60 text-center py-2">
+                    Linked to Kernel Kup profile but no tournament history yet
+                  </p>
+                )}
+              </div>
+            )}
+
+            {loadingKkupStats && (
+              <div className="bg-[#fbbf24]/5 rounded-2xl p-4 border-2 border-[#f97316]/10 flex justify-center">
+                <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#f97316] border-t-transparent" />
+              </div>
+            )}
+
             {/* OpenDota Stats */}
             {user.opendota_data && (
               <div className="bg-gradient-to-br from-[#3b82f6]/10 to-[#3b82f6]/5 rounded-2xl p-4 border-2 border-[#3b82f6]/20">
@@ -459,6 +646,27 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                 </div>
               </div>
             </div>
+
+            {/* Achievements */}
+            {achievements.length > 0 && (
+              <div className="bg-gradient-to-br from-[#f97316]/10 to-[#f97316]/5 rounded-2xl p-4 border-2 border-[#f97316]/20">
+                <p className="text-xs text-[#0f172a]/60 font-semibold mb-3">🏆 KERNEL KUP TROPHIES</p>
+                <div className="flex justify-center">
+                  <TrophyBadges achievements={achievements} size="lg" maxDisplay={10} />
+                </div>
+                <div className="mt-3 pt-3 border-t border-[#f97316]/20">
+                  <p className="text-xs text-center text-[#0f172a]/60">
+                    {achievements.length} trophy{achievements.length !== 1 ? 'ies' : ''} earned
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {loadingAchievements && (
+              <div className="bg-[#f97316]/5 rounded-2xl p-4 border-2 border-[#f97316]/10 flex justify-center">
+                <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#f97316] border-t-transparent" />
+              </div>
+            )}
           </div>
 
           {/* Officer actions removed - home page user management is sufficient */}

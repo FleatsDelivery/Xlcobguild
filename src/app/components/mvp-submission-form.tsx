@@ -1,10 +1,87 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/app/components/ui/button';
-import { Camera, Loader2, Upload, X, TrendingUp, Clipboard, User as UserIcon, Star, ChevronUp, ChevronDown } from 'lucide-react';
+import { Camera, Loader2, Upload, X, TrendingUp, Clipboard, User as UserIcon, Star, ChevronUp, ChevronDown, Bell, BellOff } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
 import { SuccessModal } from '@/app/components/success-modal';
 import { ConfirmModal } from '@/app/components/confirm-modal';
+
+// --- Image Compression Utility ---
+// Compresses images client-side using Canvas API before upload.
+// Converts to JPEG at 75% quality and caps dimensions at 1920x1080.
+// Typically reduces 2-4MB PNGs down to 200-400KB with no visible quality loss.
+const MAX_WIDTH = 1920;
+const MAX_HEIGHT = 1080;
+const JPEG_QUALITY = 0.75;
+
+function compressImage(file: File): Promise<File> {
+  return new Promise((resolve, reject) => {
+    // If already small enough (< 200KB), skip compression
+    if (file.size < 200 * 1024) {
+      resolve(file);
+      return;
+    }
+
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+
+      let { width, height } = img;
+
+      // Scale down if exceeding max dimensions
+      if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+        const ratio = Math.min(MAX_WIDTH / width, MAX_HEIGHT / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Failed to get canvas context'));
+        return;
+      }
+
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            reject(new Error('Failed to compress image'));
+            return;
+          }
+
+          // Create a new File with .jpg extension
+          const compressedFile = new File(
+            [blob],
+            file.name.replace(/\.[^.]+$/, '.jpg'),
+            { type: 'image/jpeg' }
+          );
+
+          console.log(
+            `🌽 Image compressed: ${(file.size / 1024).toFixed(0)}KB → ${(compressedFile.size / 1024).toFixed(0)}KB (${Math.round((1 - compressedFile.size / file.size) * 100)}% reduction)`
+          );
+
+          resolve(compressedFile);
+        },
+        'image/jpeg',
+        JPEG_QUALITY
+      );
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Failed to load image for compression'));
+    };
+
+    img.src = url;
+  });
+}
 
 type User = {
   id: string;
@@ -37,6 +114,7 @@ export function MvpSubmissionForm({ user, onRefresh }: { user?: any; onRefresh?:
   const [selectedAction, setSelectedAction] = useState<ActionType>('rank_up');
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [notifyDiscord, setNotifyDiscord] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Fetch current user and all users
@@ -219,14 +297,23 @@ export function MvpSubmissionForm({ user, onRefresh }: { user?: any; onRefresh?:
         return;
       }
 
+      // Compress the image before uploading (Canvas API, JPEG @ 75%)
+      let fileToUpload = imageFile;
+      try {
+        fileToUpload = await compressImage(imageFile);
+      } catch (compressError) {
+        console.warn('Image compression failed, uploading original:', compressError);
+        // Fall back to original file if compression fails
+      }
+
       // Upload image to Supabase Storage
-      const fileExt = imageFile.name.split('.').pop();
+      const fileExt = fileToUpload.name.split('.').pop();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
       const filePath = `mvp-screenshots/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('make-4789f4af-mvp-screenshots')
-        .upload(filePath, imageFile, {
+        .upload(filePath, fileToUpload, {
           cacheControl: '3600',
           upsert: false
         });
@@ -258,6 +345,7 @@ export function MvpSubmissionForm({ user, onRefresh }: { user?: any; onRefresh?:
             match_id: matchId.trim() || null,
             user_id: selectedUserId,
             action: selectedAction,
+            notify_discord: notifyDiscord,
           }),
         }
       );
@@ -577,6 +665,32 @@ export function MvpSubmissionForm({ user, onRefresh }: { user?: any; onRefresh?:
                 {availableActions[selectedAction].reason}
               </p>
             )}
+          </div>
+        )}
+
+        {/* Notify Discord Checkbox */}
+        {selectedUserId && (
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={notifyDiscord}
+              onChange={(e) => setNotifyDiscord(e.target.checked)}
+              className="h-4 w-4 text-[#3b82f6] bg-gray-100 border-gray-300 rounded focus:ring-[#3b82f6] focus:ring-2"
+            />
+            <label className="text-sm text-[#0f172a]">
+              Notify user via Discord
+            </label>
+            <button
+              type="button"
+              onClick={() => setNotifyDiscord(!notifyDiscord)}
+              className="ml-2 text-sm text-[#3b82f6] hover:text-[#2563eb] focus:outline-none"
+            >
+              {notifyDiscord ? (
+                <Bell className="w-4 h-4" />
+              ) : (
+                <BellOff className="w-4 h-4" />
+              )}
+            </button>
           </div>
         )}
 

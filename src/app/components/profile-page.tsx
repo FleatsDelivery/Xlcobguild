@@ -1,12 +1,19 @@
-import { User, LogOut, Shield, Gamepad2, Link as LinkIcon, RefreshCw } from 'lucide-react';
+import { User, LogOut, Shield, Gamepad2, Link as LinkIcon, RefreshCw, Settings, Trophy, Image, Award, Database, Loader2, Crown, Swords, Target, TrendingUp } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { supabase } from '@/lib/supabase';
 import { Footer } from '@/app/components/footer';
-import { useState } from 'react';
-import { projectId } from '/utils/supabase/info';
+import { useState, useEffect } from 'react';
+import { projectId, publicAnonKey } from '/utils/supabase/info';
 import { ConnectOpenDotaModal } from '@/app/components/connect-opendota-modal';
 import { SuccessModal } from '@/app/components/success-modal';
 import { ConnectAccountModal } from '@/app/components/connect-account-modal';
+import { AwardChampionshipModal } from '@/app/components/award-championship-modal';
+import { AwardPopdKernelModal } from '@/app/components/award-popd-kernel-modal';
+import { ConfirmModal } from '@/app/components/confirm-modal';
+import { SeedKernelKupModal } from '@/app/components/seed-kernel-kup-modal';
+import { TournamentBuilderModal } from '@/app/components/tournament-builder-modal';
+import { UserManagement } from '@/app/components/user-management';
+import { toast } from 'sonner';
 
 interface ProfilePageProps {
   user: any;
@@ -28,7 +35,7 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
     '🍞', // 5. Corporal Corn Bread
     '🌾', // 6. Sergeant Husk
     '🌻', // 7. Sergeant Major Fields
-    '🎯', // 8. Captain Cornhole
+    '', // 8. Captain Cornhole
     '⭐', // 9. Major Cob
     '🌟', // 10. Corn Star
     '💥', // 11. Pop'd Kernel (prestige 5 only)
@@ -65,6 +72,260 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
     type: 'twitch' | 'chesscom';
     currentUsername?: string;
   } | null>(null);
+
+  // State for award achievement
+  const [showAwardChampionshipModal, setShowAwardChampionshipModal] = useState(false);
+  const [showAwardPopdKernelModal, setShowAwardPopdKernelModal] = useState(false);
+
+  // State for admin buttons
+  const [isSeedingKK1, setIsSeedingKK1] = useState(false);
+  const [isSeedingKK2, setIsSeedingKK2] = useState(false);
+  const [isSeeding, setIsSeeding] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [selectedKernelKup, setSelectedKernelKup] = useState<number>(1);
+  const [seededKernelKups, setSeededKernelKups] = useState<Set<number>>(new Set());
+  const [showSyncConfirm, setShowSyncConfirm] = useState(false);
+  const [showSeedConfirm, setShowSeedConfirm] = useState(false);
+  const [showTournamentBuilder, setShowTournamentBuilder] = useState(false);
+
+  // State for KKUP stats
+  const [kkupStats, setKkupStats] = useState<any>(null);
+  const [loadingKkupStats, setLoadingKkupStats] = useState(false);
+
+  // State for OpenDota refresh
+  const [refreshingOpenDota, setRefreshingOpenDota] = useState(false);
+
+  // Fetch KKUP stats for linked users
+  useEffect(() => {
+    if (user?.kkup_player_profile_id) {
+      const fetchKkupStats = async () => {
+        setLoadingKkupStats(true);
+        try {
+          const response = await fetch(
+            `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/users/${user.id}/kkup-stats`,
+            {
+              headers: {
+                Authorization: `Bearer ${publicAnonKey}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            console.error('Failed to fetch KKUP stats');
+            setLoadingKkupStats(false);
+            return;
+          }
+
+          const data = await response.json();
+          setKkupStats(data);
+        } catch (error) {
+          console.error('Error fetching KKUP stats:', error);
+        } finally {
+          setLoadingKkupStats(false);
+        }
+      };
+
+      fetchKkupStats();
+    }
+  }, [user?.id, user?.kkup_player_profile_id]);
+
+  // Handler for seeding Kernel Kup 1
+  const handleSeedKK1 = async () => {
+    setIsSeedingKK1(true);
+    
+    try {
+      const token = localStorage.getItem('supabase_token');
+      
+      if (!token) {
+        toast.error('Authentication token not found. Please log in again.');
+        return;
+      }
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/seed-kk1`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      toast.success(`✅ Seeded Kernel Kup 1! Created ${data.matchCount} matches.`);
+    } catch (error) {
+      console.error('Seed error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to seed Kernel Kup 1';
+      toast.error(`Seed failed: ${errorMessage}`);
+    } finally {
+      setIsSeedingKK1(false);
+    }
+  };
+
+  // Handler for seeding Kernel Kup 2
+  const handleSeedKK2 = async () => {
+    setIsSeedingKK2(true);
+    
+    try {
+      const token = localStorage.getItem('supabase_token');
+      
+      if (!token) {
+        toast.error('Authentication token not found. Please log in again.');
+        return;
+      }
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/seed-kernel-kup-2`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      toast.success(`✅ Seeded Kernel Kup 2! Tournament created successfully.`);
+      
+      // Navigate to the newly created tournament
+      if (data.tournament?.id) {
+        window.location.hash = `#/kernel-kup/${data.tournament.id}`;
+      }
+    } catch (error) {
+      console.error('Seed error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to seed Kernel Kup 2';
+      toast.error(`Seed failed: ${errorMessage}`);
+    } finally {
+      setIsSeedingKK2(false);
+    }
+  };
+
+  // Handler for seeding Kernel Kup
+  const handleSeedKernelKup = async () => {
+    setIsSeeding(true);
+    
+    try {
+      const token = localStorage.getItem('supabase_token');
+      
+      if (!token) {
+        toast.error('Authentication token not found. Please log in again.');
+        return;
+      }
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/seed-kernel-kup`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ kup_id: selectedKernelKup }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      toast.success(`✅ Seeded Kernel Kup ${selectedKernelKup}! Created ${data.matchCount} matches.`);
+      setSeededKernelKups(new Set([...seededKernelKups, selectedKernelKup]));
+    } catch (error) {
+      console.error('Seed error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to seed Kernel Kup';
+      toast.error(`Seed failed: ${errorMessage}`);
+    } finally {
+      setIsSeeding(false);
+    }
+  };
+
+  // Handler for syncing names and logos
+  const handleSyncNamesAndLogos = async () => {
+    setIsSyncing(true);
+    
+    try {
+      const token = localStorage.getItem('supabase_token');
+      
+      if (!token) {
+        toast.error('Authentication token not found. Please log in again.');
+        return;
+      }
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/sync-names-logos`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      toast.success(`✅ Synced ${data.playersUpdated} players and ${data.teamsUpdated} teams!`);
+    } catch (error) {
+      console.error('Sync error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to sync names & logos';
+      toast.error(`Sync failed: ${errorMessage}`);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  // Handler for refreshing all OpenDota stats
+  const handleRefreshOpenDota = async () => {
+    setRefreshingOpenDota(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Please sign in to refresh OpenDota data.');
+        setRefreshingOpenDota(false);
+        return;
+      }
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/refresh-opendota`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.error || 'Failed to refresh OpenDota data.');
+        setRefreshingOpenDota(false);
+        return;
+      }
+      const data = await response.json();
+      toast.success(`Synced ${data.updatedCount || 0} user(s) with OpenDota!`);
+    } catch (error) {
+      console.error('Error refreshing OpenDota data:', error);
+      toast.error('An unexpected error occurred. Please try again.');
+    } finally {
+      setRefreshingOpenDota(false);
+    }
+  };
 
   // Handle OpenDota connection
   const handleConnectOpenDota = async (opendotaId: string) => {
@@ -278,47 +539,46 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
           </div>
         </div>
 
-        {/* Account Details Card */}
-        <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-6">
-          <h2 className="text-xl font-bold text-[#0f172a] mb-4">Account Details</h2>
-          
-          <div className="space-y-4">
-            <div className="flex justify-between items-center py-3 border-b border-[#0f172a]/10">
-              <span className="text-[#0f172a]/60">Discord ID</span>
-              <span className="font-mono text-sm text-[#0f172a]">
-                {user?.discord_id || 'N/A'}
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center py-3 border-b border-[#0f172a]/10">
-              <span className="text-[#0f172a]/60">Member Since</span>
-              <span className="text-sm text-[#0f172a]">
-                {user?.created_at 
-                  ? new Date(user.created_at).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })
-                  : 'N/A'
-                }
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center py-3">
-              <span className="text-[#0f172a]/60">Last Updated</span>
-              <span className="text-sm text-[#0f172a]">
-                {user?.updated_at 
-                  ? new Date(user.updated_at).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })
-                  : 'N/A'
-                }
-              </span>
+        {/* Your Progress Card */}
+        {user?.role !== 'guest' && (
+          <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-6">
+            <h2 className="text-xl font-bold text-[#0f172a] mb-2">Your Progress</h2>
+            <p className="text-sm text-[#0f172a]/60 mb-6">
+              Rank {currentRankId}/{maxRanks}
+            </p>
+            
+            {/* Rank Progression */}
+            <div className="flex items-center justify-between gap-2">
+              {Array.from({ length: displayRanks }).map((_, index) => {
+                const rankNumber = index + 1;
+                const isUnlocked = rankNumber <= currentRankId;
+                const emoji = rankEmojis[index];
+                
+                return (
+                  <div
+                    key={rankNumber}
+                    className={`flex flex-col items-center transition-all ${
+                      isUnlocked ? 'opacity-100 scale-100' : 'opacity-30 scale-90'
+                    }`}
+                  >
+                    <div
+                      className={`text-2xl mb-1 transition-transform ${
+                        rankNumber === currentRankId ? 'scale-125 animate-pulse' : ''
+                      }`}
+                    >
+                      {emoji}
+                    </div>
+                    <div
+                      className={`h-1 w-8 rounded-full ${
+                        isUnlocked ? 'bg-[#f97316]' : 'bg-[#0f172a]/10'
+                      }`}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
-        </div>
+        )}
 
         {/* OpenDota Connection Card */}
         <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-6">
@@ -377,6 +637,138 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
           )}
         </div>
 
+        {/* Kernel Kup Stats Card - For linked KKUP users */}
+        {loadingKkupStats && (
+          <div className="bg-gradient-to-br from-[#fbbf24]/10 to-[#f97316]/10 rounded-3xl p-8 shadow-sm border-2 border-[#f97316]/20 mb-6 flex justify-center">
+            <div className="flex items-center gap-3">
+              <Loader2 className="w-6 h-6 animate-spin text-[#f97316]" />
+              <p className="text-sm text-[#0f172a]/60">Loading Kernel Kup stats...</p>
+            </div>
+          </div>
+        )}
+
+        {kkupStats && kkupStats.linked && (
+          <div className="bg-gradient-to-br from-[#fbbf24]/10 to-[#f97316]/10 rounded-3xl p-6 sm:p-8 shadow-sm border-2 border-[#f97316]/20 mb-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#fbbf24] to-[#f97316] flex items-center justify-center">
+                  <Trophy className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-[#0f172a]">Kernel Kup Stats</h2>
+                  {kkupStats.profile?.name && (
+                    <p className="text-xs text-[#0f172a]/60">Profile: {kkupStats.profile.name}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Achievements Row */}
+            {(kkupStats.championships?.total > 0 || kkupStats.popd_kernels > 0) && (
+              <div className="flex gap-3 mb-5">
+                {kkupStats.championships?.kernel_kup > 0 && (
+                  <div className="flex-1 bg-white/80 rounded-2xl p-4 border border-[#f97316]/20 text-center">
+                    <span className="text-3xl block mb-1">🏆</span>
+                    <p className="text-2xl font-black text-[#f97316]">{kkupStats.championships.kernel_kup}x</p>
+                    <p className="text-[10px] font-semibold text-[#0f172a]/60 uppercase tracking-wide">KK Champ</p>
+                  </div>
+                )}
+                {kkupStats.championships?.heaps_n_hooks > 0 && (
+                  <div className="flex-1 bg-white/80 rounded-2xl p-4 border border-[#10b981]/20 text-center">
+                    <span className="text-3xl block mb-1">⚓</span>
+                    <p className="text-2xl font-black text-[#10b981]">{kkupStats.championships.heaps_n_hooks}x</p>
+                    <p className="text-[10px] font-semibold text-[#0f172a]/60 uppercase tracking-wide">H&H Champ</p>
+                  </div>
+                )}
+                {kkupStats.popd_kernels > 0 && (
+                  <div className="flex-1 bg-white/80 rounded-2xl p-4 border border-[#dc2626]/20 text-center">
+                    <span className="text-3xl block mb-1">💥</span>
+                    <p className="text-2xl font-black text-[#dc2626]">{kkupStats.popd_kernels}x</p>
+                    <p className="text-[10px] font-semibold text-[#0f172a]/60 uppercase tracking-wide">Pop'd Kernel</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
+              <div className="bg-white/80 rounded-xl p-3 border border-[#0f172a]/10 text-center">
+                <p className="text-xs text-[#0f172a]/50 font-medium mb-1">Tournaments</p>
+                <p className="text-xl font-black text-[#0f172a]">{kkupStats.tournaments_played}</p>
+              </div>
+              <div className="bg-white/80 rounded-xl p-3 border border-[#0f172a]/10 text-center">
+                <p className="text-xs text-[#0f172a]/50 font-medium mb-1">Win Rate</p>
+                <p className={`text-xl font-black ${kkupStats.total_games > 0 && ((kkupStats.wins / kkupStats.total_games) * 100) >= 50 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                  {kkupStats.total_games > 0 ? `${((kkupStats.wins / kkupStats.total_games) * 100).toFixed(1)}%` : '-'}
+                </p>
+              </div>
+              <div className="bg-white/80 rounded-xl p-3 border border-[#0f172a]/10 text-center">
+                <p className="text-xs text-[#0f172a]/50 font-medium mb-1">Record</p>
+                <p className="text-xl font-black">
+                  <span className="text-[#10b981]">{kkupStats.wins}W</span>
+                  <span className="text-[#0f172a]/30"> / </span>
+                  <span className="text-[#ef4444]">{kkupStats.losses}L</span>
+                </p>
+              </div>
+              <div className="bg-white/80 rounded-xl p-3 border border-[#0f172a]/10 text-center">
+                <p className="text-xs text-[#0f172a]/50 font-medium mb-1">Total Kills</p>
+                <p className="text-xl font-black text-[#ef4444]">{kkupStats.total_kills?.toLocaleString() || 0}</p>
+              </div>
+              <div className="bg-white/80 rounded-xl p-3 border border-[#0f172a]/10 text-center">
+                <p className="text-xs text-[#0f172a]/50 font-medium mb-1">Total Deaths</p>
+                <p className="text-xl font-black text-[#0f172a]/60">{kkupStats.total_deaths?.toLocaleString() || 0}</p>
+              </div>
+              <div className="bg-white/80 rounded-xl p-3 border border-[#0f172a]/10 text-center">
+                <p className="text-xs text-[#0f172a]/50 font-medium mb-1">Total Assists</p>
+                <p className="text-xl font-black text-[#3b82f6]">{kkupStats.total_assists?.toLocaleString() || 0}</p>
+              </div>
+            </div>
+
+            {/* KDA Average */}
+            {kkupStats.total_games > 0 && (
+              <div className="bg-white/80 rounded-xl p-3 border border-[#0f172a]/10 mb-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-[#0f172a]/50 font-medium">Avg KDA per Game</p>
+                  <p className="text-sm font-black text-[#0f172a]">
+                    <span className="text-[#ef4444]">{(kkupStats.total_kills / kkupStats.total_games).toFixed(1)}</span>
+                    <span className="text-[#0f172a]/30"> / </span>
+                    <span className="text-[#0f172a]/60">{(kkupStats.total_deaths / kkupStats.total_games).toFixed(1)}</span>
+                    <span className="text-[#0f172a]/30"> / </span>
+                    <span className="text-[#3b82f6]">{(kkupStats.total_assists / kkupStats.total_games).toFixed(1)}</span>
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* View Kernel Kups Button */}
+            <button
+              type="button"
+              onClick={() => { window.location.hash = '#/kernel-kup'; }}
+              className="w-full flex items-center justify-between p-4 bg-white hover:bg-[#f97316]/5 border-2 border-[#f97316]/20 hover:border-[#f97316]/40 rounded-2xl transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#fbbf24] to-[#f97316] flex items-center justify-center">
+                  <Trophy className="w-5 h-5 text-white" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-bold text-[#0f172a]">View Kernel Kups</p>
+                  <p className="text-xs text-[#0f172a]/60">Browse all tournaments</p>
+                </div>
+              </div>
+              <svg className="w-5 h-5 text-[#f97316] group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            {/* No Stats State */}
+            {kkupStats.championships?.total === 0 && kkupStats.popd_kernels === 0 && kkupStats.tournaments_played === 0 && (
+              <p className="text-xs text-[#0f172a]/60 text-center mt-4">
+                Linked to Kernel Kup profile but no tournament history yet
+              </p>
+            )}
+          </div>
+        )}
+
         {/* Connected Accounts Card */}
         {user?.opendota_id && (
           <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-6">
@@ -391,7 +783,7 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[#6366f1] flex items-center justify-center">
                     <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                      <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
                     </svg>
                   </div>
                   <div className="text-left">
@@ -547,49 +939,50 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
           </div>
         )}
 
-        {/* Your Progress Card */}
-        {user?.role !== 'guest' && (
-          <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-6">
-            <h2 className="text-xl font-bold text-[#0f172a] mb-2">Your Progress</h2>
-            <p className="text-sm text-[#0f172a]/60 mb-6">
-              Rank {currentRankId}/{maxRanks}
-            </p>
-            
-            {/* Rank Progression */}
-            <div className="flex items-center justify-between gap-2">
-              {Array.from({ length: displayRanks }).map((_, index) => {
-                const rankNumber = index + 1;
-                const isUnlocked = rankNumber <= currentRankId;
-                const emoji = rankEmojis[index];
-                
-                return (
-                  <div
-                    key={rankNumber}
-                    className={`flex flex-col items-center transition-all ${
-                      isUnlocked ? 'opacity-100 scale-100' : 'opacity-30 scale-90'
-                    }`}
-                  >
-                    <div
-                      className={`text-2xl mb-1 transition-transform ${
-                        rankNumber === currentRankId ? 'scale-125 animate-pulse' : ''
-                      }`}
-                    >
-                      {emoji}
-                    </div>
-                    <div
-                      className={`h-1 w-8 rounded-full ${
-                        isUnlocked ? 'bg-[#f97316]' : 'bg-[#0f172a]/10'
-                      }`}
-                    />
-                  </div>
-                );
-              })}
+        {/* Account Details Card */}
+        <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-6">
+          <h2 className="text-xl font-bold text-[#0f172a] mb-4">Account Details</h2>
+          
+          <div className="space-y-4">
+            <div className="flex justify-between items-center py-3 border-b border-[#0f172a]/10">
+              <span className="text-[#0f172a]/60">Discord ID</span>
+              <span className="font-mono text-sm text-[#0f172a]">
+                {user?.discord_id || 'N/A'}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center py-3 border-b border-[#0f172a]/10">
+              <span className="text-[#0f172a]/60">Member Since</span>
+              <span className="text-sm text-[#0f172a]">
+                {user?.created_at 
+                  ? new Date(user.created_at).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })
+                  : 'N/A'
+                }
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center py-3">
+              <span className="text-[#0f172a]/60">Last Updated</span>
+              <span className="text-sm text-[#0f172a]">
+                {user?.updated_at 
+                  ? new Date(user.updated_at).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })
+                  : 'N/A'
+                }
+              </span>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Actions Card */}
-        <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-24">
+        <div className="bg-white rounded-3xl p-8 shadow-sm border-2 border-[#0f172a]/10 mb-6">
           <h2 className="text-xl font-bold text-[#0f172a] mb-4">Actions</h2>
           
           <div className="space-y-3">
@@ -602,6 +995,183 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
             </Button>
           </div>
         </div>
+
+        {/* Admin Tools Card - Only for Owner and Queen of Hog */}
+        {(user?.role === 'owner' || user?.role === 'queen_of_hog') && (
+          <div className="bg-gradient-to-br from-[#f97316]/5 to-[#ea580c]/5 rounded-3xl p-8 shadow-sm border-2 border-[#f97316]/20 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-[#0f172a]">Admin Tools</h2>
+              <Settings className="w-6 h-6 text-[#f97316]" />
+            </div>
+            
+            <p className="text-sm text-[#0f172a]/60 mb-6">
+              Manage tournaments, teams, and community assets
+            </p>
+
+            <div className="space-y-3">
+              {/* Tournament Builder */}
+              <button
+                onClick={() => setShowTournamentBuilder(true)}
+                className="w-full flex items-center justify-between p-4 bg-white hover:bg-[#f97316]/5 border-2 border-[#f97316]/20 hover:border-[#f97316]/40 rounded-2xl transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#f97316] to-[#ea580c] flex items-center justify-center shadow-md">
+                    <Trophy className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-bold text-[#0f172a]">Create Regular Tournament</p>
+                    <p className="text-xs text-[#0f172a]/60">For tournaments with League IDs</p>
+                  </div>
+                </div>
+                <svg className="w-5 h-5 text-[#f97316] group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              {/* Seed Kernel Kup Selector */}
+              <div className="bg-white p-4 border-2 border-[#f97316]/20 rounded-2xl">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#f97316] to-[#ea580c] flex items-center justify-center shadow-md">
+                    <Database className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-left flex-1">
+                    <p className="text-sm font-bold text-[#0f172a]">Seed Historical Kernel Kup</p>
+                    <p className="text-xs text-[#0f172a]/60">Import tournament data</p>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <select
+                    value={selectedKernelKup}
+                    onChange={(e) => setSelectedKernelKup(Number(e.target.value))}
+                    className="w-full px-4 py-2 bg-[#fdf5e9] border-2 border-[#0f172a]/20 rounded-xl text-[#0f172a] font-medium focus:outline-none focus:border-[#f97316] transition-colors"
+                  >
+                    <option value={1}>Kernel Kup 1 {seededKernelKups.has(1) ? '(Seeded ✓)' : ''}</option>
+                    <option value={2}>Kernel Kup 2 {seededKernelKups.has(2) ? '(Seeded ✓)' : ''}</option>
+                    <option value={3}>Kernel Kup 3 {seededKernelKups.has(3) ? '(Seeded ✓)' : ''}</option>
+                    <option value={8}>Kernel Kup 8 {seededKernelKups.has(8) ? '(Seeded ✓)' : ''}</option>
+                    <option value={9}>Kernel Kup 9 {seededKernelKups.has(9) ? '(Seeded ✓)' : ''}</option>
+                  </select>
+                  
+                  <button
+                    onClick={() => setShowSeedConfirm(true)}
+                    disabled={isSeeding || seededKernelKups.has(selectedKernelKup)}
+                    className="w-full px-4 py-3 bg-gradient-to-br from-[#f97316] to-[#ea580c] hover:from-[#ea580c] hover:to-[#c2410c] text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {isSeeding ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Seeding Kernel Kup {selectedKernelKup}...
+                      </>
+                    ) : seededKernelKups.has(selectedKernelKup) ? (
+                      <>
+                        ✓ Already Seeded
+                      </>
+                    ) : (
+                      <>
+                        <Database className="w-5 h-5" />
+                        Seed Kernel Kup {selectedKernelKup}
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Award Championship */}
+              <button
+                onClick={() => setShowAwardChampionshipModal(true)}
+                className="w-full flex items-center justify-between p-4 bg-white hover:bg-[#f97316]/5 border-2 border-[#f97316]/20 hover:border-[#f97316]/40 rounded-2xl transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center shadow-md">
+                    <Trophy className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-bold text-[#0f172a]">🏆 Award Championship</p>
+                    <p className="text-xs text-[#0f172a]/60">Award winning team for a Kernel Kup</p>
+                  </div>
+                </div>
+                <svg className="w-5 h-5 text-[#f97316] group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              {/* Award Pop'd Kernel */}
+              <button
+                onClick={() => setShowAwardPopdKernelModal(true)}
+                className="w-full flex items-center justify-between p-4 bg-white hover:bg-[#f97316]/5 border-2 border-[#f97316]/20 hover:border-[#f97316]/40 rounded-2xl transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-md">
+                    <Crown className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-bold text-[#0f172a]">👑 Award Pop'd Kernel</p>
+                    <p className="text-xs text-[#0f172a]/60">Award MVP player for a Kernel Kup</p>
+                  </div>
+                </div>
+                <svg className="w-5 h-5 text-[#f97316] group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              {/* Sync Names and Logos */}
+              <button
+                onClick={() => setShowSyncConfirm(true)}
+                disabled={isSyncing}
+                className="w-full flex items-center justify-between p-4 bg-white hover:bg-[#f97316]/5 border-2 border-[#f97316]/20 hover:border-[#f97316]/40 rounded-2xl transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#f97316] to-[#ea580c] flex items-center justify-center shadow-md">
+                    {isSyncing ? (
+                      <Loader2 className="w-6 h-6 text-white animate-spin" />
+                    ) : (
+                      <RefreshCw className="w-6 h-6 text-white" />
+                    )}
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-bold text-[#0f172a]">{isSyncing ? 'Syncing...' : 'Sync Names & Logos'}</p>
+                    <p className="text-xs text-[#0f172a]/60">Update player and team names/logos</p>
+                  </div>
+                </div>
+                <svg className="w-5 h-5 text-[#f97316] group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              {/* Refresh All OpenDota Stats */}
+              <button
+                onClick={handleRefreshOpenDota}
+                disabled={refreshingOpenDota}
+                className="w-full flex items-center justify-between p-4 bg-white hover:bg-[#3b82f6]/5 border-2 border-[#3b82f6]/20 hover:border-[#3b82f6]/40 rounded-2xl transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#2563eb] flex items-center justify-center shadow-md">
+                    {refreshingOpenDota ? (
+                      <Loader2 className="w-6 h-6 text-white animate-spin" />
+                    ) : (
+                      <Gamepad2 className="w-6 h-6 text-white" />
+                    )}
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-bold text-[#0f172a]">{refreshingOpenDota ? 'Syncing with OpenDota...' : 'Refresh All User Stats'}</p>
+                    <p className="text-xs text-[#0f172a]/60">Sync MMR, medals & match history for all members</p>
+                  </div>
+                </div>
+                <svg className="w-5 h-5 text-[#3b82f6] group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Owner: User Management Section */}
+        {user?.role === 'owner' && (
+          <div className="mb-24">
+            <UserManagement onRefresh={onRefresh ? async () => { onRefresh(); } : undefined} />
+          </div>
+        )}
       </div>
 
       <Footer />
@@ -632,6 +1202,62 @@ export function ProfilePage({ user, onRefresh }: ProfilePageProps) {
           onConnect={(username) => handleConnectAccount(connectAccountModal.type, username)}
           onDisconnect={() => handleDisconnectAccount(connectAccountModal.type)}
           onClose={() => setConnectAccountModal(null)}
+        />
+      )}
+
+      {/* Award Championship Modal */}
+      {showAwardChampionshipModal && (
+        <AwardChampionshipModal
+          onClose={() => setShowAwardChampionshipModal(false)}
+          onSuccess={() => {
+            setShowAwardChampionshipModal(false);
+            toast.success('Championship awarded successfully!');
+          }}
+        />
+      )}
+
+      {/* Award Pop'd Kernel Modal */}
+      {showAwardPopdKernelModal && (
+        <AwardPopdKernelModal
+          onClose={() => setShowAwardPopdKernelModal(false)}
+          onSuccess={() => {
+            setShowAwardPopdKernelModal(false);
+            toast.success('Pop\'d Kernel awarded successfully!');
+          }}
+        />
+      )}
+
+      {/* Sync Confirm Modal */}
+      {showSyncConfirm && (
+        <ConfirmModal
+          title="Confirm Sync"
+          message="This will update all player names and avatars from Steam, and all team logos from the kkupassets bucket. Existing data will be overwritten. Are you sure?"
+          confirmText="Sync Now"
+          confirmVariant="primary"
+          onConfirm={() => {
+            setShowSyncConfirm(false);
+            handleSyncNamesAndLogos();
+          }}
+          onCancel={() => setShowSyncConfirm(false)}
+        />
+      )}
+
+      {/* Seed Confirm Modal */}
+      {showSeedConfirm && (
+        <SeedKernelKupModal
+          kernelKupId={selectedKernelKup}
+          onConfirm={() => {
+            setShowSeedConfirm(false);
+            handleSeedKernelKup();
+          }}
+          onCancel={() => setShowSeedConfirm(false)}
+        />
+      )}
+
+      {/* Tournament Builder Modal */}
+      {showTournamentBuilder && (
+        <TournamentBuilderModal
+          onClose={() => setShowTournamentBuilder(false)}
         />
       )}
     </div>
