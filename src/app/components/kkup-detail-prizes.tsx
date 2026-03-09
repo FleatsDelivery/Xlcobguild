@@ -1,7 +1,7 @@
 /**
  * KKup Detail — Prizes Tab
  *
- * Shows the prize pool breakdown (pie chart) and award recipients for a tournament.
+ * Shows the prize pool breakdown and award recipients for a tournament.
  * Reads per-tournament prize config from KV (via API), falling back to defaults.
  * Officers see an "Edit Prize Pool" button to customize categories/amounts.
  *
@@ -14,7 +14,7 @@ import {
   Trophy, Crown, Star, Swords, Users, DollarSign,
   Heart, Settings, Loader2,
 } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+// REMOVED: import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { TeamLogo } from '@/app/components/team-logo';
 import { Button } from '@/app/components/ui/button';
 import { EditPrizeConfigModal, DEFAULT_CATEGORIES } from '@/app/components/edit-prize-config-modal';
@@ -184,19 +184,6 @@ export function KKupDetailPrizes({
   // Donations come from Stripe contributions tracked on the tournament record
   const donationCents = Math.round((tournament.prize_pool_donations ?? 0) * 100);
 
-  // Pie data
-  const pieData = useMemo(() => {
-    const items = categories.map(c => ({
-      name: c.label,
-      value: c.amount_cents,
-      color: c.color,
-    }));
-    if (donationCents > 0) {
-      items.push({ name: 'Donations', value: donationCents, color: '#10b981' });
-    }
-    return items.filter(d => d.value > 0);
-  }, [categories, donationCents]);
-
   const displayTotal = totalCents + donationCents;
 
   // Champion team
@@ -282,50 +269,8 @@ export function KKupDetailPrizes({
           </div>
         ) : (
           <div className="flex flex-col md:flex-row items-center gap-6">
-            {/* Pie Chart */}
-            <div className="w-48 h-48 sm:w-56 sm:h-56 flex-shrink-0">
-              {pieData.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius="45%"
-                      outerRadius="85%"
-                      paddingAngle={2}
-                      dataKey="value"
-                      strokeWidth={0}
-                      label={renderCustomLabel}
-                      labelLine={false}
-                    >
-                      {pieData.map((entry, i) => (
-                        <Cell key={i} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      content={({ payload }) => {
-                        if (!payload?.[0]) return null;
-                        const d = payload[0].payload;
-                        const pct = displayTotal > 0 ? ((d.value / displayTotal) * 100).toFixed(1) : '0';
-                        return (
-                          <div className="bg-card border border-border rounded-lg px-3 py-2 shadow-lg text-xs">
-                            <p className="font-bold text-foreground">{d.name}</p>
-                            <p className="text-muted-foreground">
-                              ${(d.value / 100).toFixed(2)} ({pct}%)
-                            </p>
-                          </div>
-                        );
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="w-full h-full rounded-full border-2 border-dashed border-border flex items-center justify-center">
-                  <p className="text-xs text-muted-foreground text-center px-4">No prize pool configured</p>
-                </div>
-              )}
-            </div>
+            {/* REMOVED: Pie Chart — caused recharts TDZ crashes on both Netlify and Figma Make */}
+            {/* The data is still visible in the category breakdown below */}
 
             {/* Category Legend */}
             <div className="flex-1 w-full space-y-2">

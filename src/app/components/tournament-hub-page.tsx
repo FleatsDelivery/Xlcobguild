@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { 
   Crown, Calendar, ArrowLeft, Loader2, AlertCircle,
   UserPlus, Edit, Youtube, ChevronLeft, ChevronRight
@@ -26,11 +26,8 @@ import { AddExistingTeamModal } from './add-existing-team-modal';
 import { TournamentHubStaff } from './tournament-hub-staff';
 import { TournamentHubHistory } from './tournament-hub-history';
 import type { FinishedTab } from './tournament-hub-history';
-// LAZY LOAD: These components pull in recharts, which has circular ESM/CJS dependencies
-// that cause TDZ errors when statically imported. Lazy loading defers initialization
-// until the tab is actually clicked, avoiding bundle initialization race conditions.
-const KKupDetailPrizes = lazy(() => import('./kkup-detail-prizes').then(m => ({ default: m.KKupDetailPrizes })));
-const TournamentHubBracket = lazy(() => import('./tournament-hub-bracket').then(m => ({ default: m.TournamentHubBracket })));
+import { KKupDetailPrizes } from './kkup-detail-prizes';
+import { TournamentHubBracket } from './tournament-hub-bracket';
 import type { PrizeAward } from '@/lib/connect-api';
 import { getTournamentAwards } from '@/lib/connect-api';
 import { fireRoleConfetti, fireLockInConfetti } from '@/lib/confetti';
@@ -1378,25 +1375,19 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
             finished tournaments delegate remaining tabs to TournamentHubHistory,
             pre-tournament phases use lifecycle components */}
         {activeTab === 'bracket' ? (
-          <Suspense fallback={
-            <div className="flex justify-center items-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-harvest" />
-            </div>
-          }>
-            <TournamentHubBracket
-              bracket={bracketData}
-              loading={bracketLoading}
-              error={bracketError}
-              isOwner={isOwner}
-              tournamentStatus={tournament?.status || ''}
-              onGenerateBracket={handleGenerateBracket}
-              onDeleteBracket={handleDeleteBracket}
-              onResetChannels={handleResetVoiceChannels}
-              onRecordSeriesResult={handleRecordSeriesResult}
-              generating={bracketGenerating}
-              deleting={bracketDeleting}
-            />
-          </Suspense>
+          <TournamentHubBracket
+            bracket={bracketData}
+            loading={bracketLoading}
+            error={bracketError}
+            isOwner={isOwner}
+            tournamentStatus={tournament?.status || ''}
+            onGenerateBracket={handleGenerateBracket}
+            onDeleteBracket={handleDeleteBracket}
+            onResetChannels={handleResetVoiceChannels}
+            onRecordSeriesResult={handleRecordSeriesResult}
+            generating={bracketGenerating}
+            deleting={bracketDeleting}
+          />
         ) : isFinished ? (
           <TournamentHubHistory
             tournamentId={tournamentId}
@@ -1472,25 +1463,19 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
               </>
             )}
             {activeTab === 'prizes' && (
-              <Suspense fallback={
-                <div className="flex justify-center items-center py-12">
-                  <Loader2 className="h-8 w-8 animate-spin text-harvest" />
-                </div>
-              }>
-                <KKupDetailPrizes
-                  tournament={{
-                    ...tournament,
-                    prize_pool: tournament.prize_pool ? String(tournament.prize_pool) : '0',
-                    prize_pool_donations: tournament.prize_pool_donations ?? 0,
-                  }}
-                  teams={[]}
-                  playerStats={[]}
-                  prizeAwards={prizeAwards}
-                  awardsLoading={awardsLoading}
-                  isOfficer={isOfficerUser}
-                  accessToken={accessToken}
-                />
-              </Suspense>
+              <KKupDetailPrizes
+                tournament={{
+                  ...tournament,
+                  prize_pool: tournament.prize_pool ? String(tournament.prize_pool) : '0',
+                  prize_pool_donations: tournament.prize_pool_donations ?? 0,
+                }}
+                teams={[]}
+                playerStats={[]}
+                prizeAwards={prizeAwards}
+                awardsLoading={awardsLoading}
+                isOfficer={isOfficerUser}
+                accessToken={accessToken}
+              />
             )}
             {activeTab === 'staff' && (
               <TournamentHubStaff

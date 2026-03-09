@@ -2,7 +2,7 @@
  * Edit Prize Config Modal — per-tournament prize pool editor
  *
  * Officers can add/remove prize categories, edit amounts, and preview
- * the pie chart before saving. Saves to KV via PUT /kkup/:id/prize-config.
+ * the distribution before saving. Saves to KV via PUT /kkup/:id/prize-config.
  */
 import { useState, useMemo, useCallback } from 'react';
 import {
@@ -10,7 +10,6 @@ import {
   Plus, Trash2, GripVertical, Loader2, Check, X,
   Palette, Save, RotateCcw,
 } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 import { BottomSheetModal } from '@/app/components/bottom-sheet-modal';
@@ -234,48 +233,9 @@ export function EditPrizeConfigModal({
 
       <BottomSheetModal.Body>
         <div className="space-y-5">
-          {/* ── Pie Chart Preview ── */}
+          {/* ── Total Preview ── */}
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <div className="w-44 h-44 flex-shrink-0">
-              {pieData.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={40}
-                      outerRadius={70}
-                      paddingAngle={2}
-                      dataKey="value"
-                      strokeWidth={0}
-                    >
-                      {pieData.map((entry, i) => (
-                        <Cell key={i} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      content={({ payload }) => {
-                        if (!payload?.[0]) return null;
-                        const d = payload[0].payload;
-                        return (
-                          <div className="bg-card border border-border rounded-lg px-3 py-2 shadow-lg text-xs">
-                            <p className="font-bold text-foreground">{d.name}</p>
-                            <p className="text-muted-foreground">
-                              ${(d.value / 100).toFixed(2)} ({d.percent}%)
-                            </p>
-                          </div>
-                        );
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="w-full h-full rounded-full border-2 border-dashed border-border flex items-center justify-center">
-                  <p className="text-xs text-muted-foreground text-center">No prizes<br />configured</p>
-                </div>
-              )}
-            </div>
+            {/* REMOVED: Pie Chart Preview — eliminated recharts dependency */}
             <div className="flex-1 text-center sm:text-left">
               <p className="text-3xl font-black text-foreground">
                 ${(totalCents / 100).toFixed(2)}
