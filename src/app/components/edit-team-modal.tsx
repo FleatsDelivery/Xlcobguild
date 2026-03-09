@@ -4,6 +4,8 @@ import { X, Loader2, Upload, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { projectId } from '/utils/supabase/info';
 import { TeamLogo } from '@/app/components/team-logo';
+import { ImageUpload } from '@/app/components/image-upload';
+import { slugifyTournamentName } from '@/lib/slugify';
 
 interface Team {
   id: string;
@@ -114,30 +116,28 @@ export function EditTeamModal({ team, tournamentId, onClose, onSave }: EditTeamM
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-[#0f172a]">Edit Team</h2>
+          <h2 className="text-2xl font-bold text-field-dark">Edit Team</h2>
           <button
             onClick={onClose}
-            className="text-[#0f172a]/60 hover:text-[#0f172a]"
+            className="text-field-dark/60 hover:text-field-dark"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
         <div className="space-y-6">
-          {/* Logo Preview */}
-          <div className="flex items-center gap-4 p-4 bg-[#fdf5e9] rounded-xl">
-            <TeamLogo logoUrl={formData.logo_url} teamName={formData.name} size="xl" />
-            <div className="flex-1">
-              <p className="text-sm font-semibold text-[#0f172a]/60 mb-1">Current Logo</p>
-              <p className="text-xs text-[#0f172a]/40">
-                {formData.logo_url ? 'Custom logo URL provided' : '🌽 Using default corn logo'}
-              </p>
-            </div>
-          </div>
+          {/* Team Logo Upload */}
+          <ImageUpload
+            currentUrl={formData.logo_url}
+            onUploadComplete={(url) => setFormData({ ...formData, logo_url: url })}
+            label="Team Logo"
+            folder="team-logos"
+            filename={formData.name?.trim() ? `${slugifyTournamentName(formData.name)}.png` : undefined}
+          />
 
           {/* Team Name */}
           <div>
-            <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+            <label className="block text-sm font-semibold text-field-dark mb-2">
               Team Name *
             </label>
             <input
@@ -145,13 +145,13 @@ export function EditTeamModal({ team, tournamentId, onClose, onSave }: EditTeamM
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="e.g., Team Liquid"
-              className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+              className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
             />
           </div>
 
           {/* Team Tag */}
           <div>
-            <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+            <label className="block text-sm font-semibold text-field-dark mb-2">
               Team Tag
             </label>
             <input
@@ -160,33 +160,16 @@ export function EditTeamModal({ team, tournamentId, onClose, onSave }: EditTeamM
               onChange={(e) => setFormData({ ...formData, tag: e.target.value })}
               placeholder="e.g., TL"
               maxLength={10}
-              className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+              className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
             />
-            <p className="text-xs text-[#0f172a]/60 mt-1">
+            <p className="text-xs text-field-dark/60 mt-1">
               Short abbreviation (auto-generated if left empty)
-            </p>
-          </div>
-
-          {/* Logo URL */}
-          <div>
-            <label className="block text-sm font-semibold text-[#0f172a] mb-2">
-              Logo URL
-            </label>
-            <input
-              type="url"
-              value={formData.logo_url}
-              onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
-              placeholder="https://example.com/team-logo.png"
-              className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
-            />
-            <p className="text-xs text-[#0f172a]/60 mt-1">
-              Leave empty to use the 🌽 corn logo
             </p>
           </div>
 
           {/* Valve Team ID */}
           <div>
-            <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+            <label className="block text-sm font-semibold text-field-dark mb-2">
               Valve Team ID (Optional)
             </label>
             <input
@@ -194,20 +177,22 @@ export function EditTeamModal({ team, tournamentId, onClose, onSave }: EditTeamM
               value={formData.valve_team_id}
               onChange={(e) => setFormData({ ...formData, valve_team_id: e.target.value })}
               placeholder="e.g., 2163"
-              className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+              className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
             />
-            <p className="text-xs text-[#0f172a]/60 mt-1">
+            <p className="text-xs text-field-dark/60 mt-1">
               Used for matching teams during OpenDota scraping
             </p>
           </div>
 
+
+
           {/* Stats Display */}
-          <div className="p-4 bg-[#fdf5e9] rounded-xl border-2 border-[#0f172a]/10">
-            <p className="text-sm font-semibold text-[#0f172a]/60 mb-2">Current Record</p>
-            <p className="text-2xl font-black text-[#f97316]">
+          <div className="p-4 bg-silk rounded-xl border-2 border-field-dark/10">
+            <p className="text-sm font-semibold text-field-dark/60 mb-2">Current Record</p>
+            <p className="text-2xl font-black text-harvest">
               {team.wins}W - {team.losses}L
             </p>
-            <p className="text-xs text-[#0f172a]/60 mt-1">
+            <p className="text-xs text-field-dark/60 mt-1">
               Win rate: {((team.wins / (team.wins + team.losses || 1)) * 100).toFixed(0)}%
             </p>
           </div>
@@ -216,7 +201,7 @@ export function EditTeamModal({ team, tournamentId, onClose, onSave }: EditTeamM
           <div className="flex gap-3">
             <Button
               onClick={onClose}
-              className="flex-1 bg-white hover:bg-[#0f172a]/5 text-[#0f172a] border-2 border-[#0f172a]/10"
+              className="flex-1 bg-white hover:bg-field-dark/5 text-field-dark border-2 border-field-dark/10"
             >
               Cancel
             </Button>
@@ -240,7 +225,7 @@ export function EditTeamModal({ team, tournamentId, onClose, onSave }: EditTeamM
             <Button
               onClick={handleSave}
               disabled={saving || deleting}
-              className="flex-1 bg-[#f97316] hover:bg-[#ea580c] text-white"
+              className="flex-1 bg-harvest hover:bg-amber text-white"
             >
               {saving ? (
                 <>

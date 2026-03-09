@@ -142,13 +142,13 @@ export function SignupPage({ onComplete }: SignupPageProps) {
       case 'authenticating':
         return (
           <>
-            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#f97316] flex items-center justify-center shadow-lg">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-harvest flex items-center justify-center shadow-lg">
               <Loader2 className="w-10 h-10 text-white animate-spin" />
             </div>
-            <h1 className="text-3xl font-bold text-[#0f172a] mb-4">
+            <h1 className="text-3xl font-bold text-field-dark mb-4">
               Connecting to Discord...
             </h1>
-            <p className="text-lg text-[#0f172a]/70">
+            <p className="text-lg text-field-dark/70">
               Please wait while we redirect you to Discord to complete your registration.
             </p>
           </>
@@ -157,14 +157,14 @@ export function SignupPage({ onComplete }: SignupPageProps) {
       case 'submitting':
         return (
           <>
-            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#f97316] flex items-center justify-center shadow-lg">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-harvest flex items-center justify-center shadow-lg">
               <Loader2 className="w-10 h-10 text-white animate-spin" />
             </div>
-            <h1 className="text-3xl font-bold text-[#0f172a] mb-4">
+            <h1 className="text-3xl font-bold text-field-dark mb-4">
               Creating Your Account...
             </h1>
-            <p className="text-lg text-[#0f172a]/70">
-              Setting up your XLCOB profile and submitting your membership request.
+            <p className="text-lg text-field-dark/70">
+              Setting up your profile and submitting your membership request.
             </p>
           </>
         );
@@ -175,20 +175,20 @@ export function SignupPage({ onComplete }: SignupPageProps) {
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#22c55e] flex items-center justify-center shadow-lg">
               <CheckCircle2 className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-[#0f172a] mb-4">
-              Welcome to XLCOB! 🌽
+            <h1 className="text-3xl font-bold text-field-dark mb-4">
+              Welcome to The Corn Field! 🌽
             </h1>
-            <p className="text-lg text-[#0f172a]/70 mb-6">
+            <p className="text-lg text-field-dark/70 mb-6">
               Your account has been created and your membership request has been submitted!
             </p>
-            <div className="bg-[#f97316]/10 rounded-xl p-6 mb-6 border-2 border-[#f97316]/20">
-              <p className="text-[#0f172a] mb-2">
+            <div className="bg-harvest/10 rounded-xl p-6 mb-6 border-2 border-harvest/20">
+              <p className="text-field-dark mb-2">
                 <strong>Status:</strong> Guest (Pending Approval)
               </p>
-              <p className="text-[#0f172a] mb-2">
+              <p className="text-field-dark mb-2">
                 <strong>Starting Rank:</strong> Earwig
               </p>
-              <p className="text-[#0f172a]/70 text-sm mt-4">
+              <p className="text-field-dark/70 text-sm mt-4">
                 Officers will review your request soon. You can track your request status on the home page!
               </p>
             </div>
@@ -197,7 +197,7 @@ export function SignupPage({ onComplete }: SignupPageProps) {
                 window.location.hash = '';
                 if (onComplete) onComplete();
               }}
-              className="w-full bg-[#f97316] hover:bg-[#ea580c] text-white h-12 text-lg font-medium rounded-xl transition-all shadow-md hover:shadow-lg"
+              className="w-full bg-harvest hover:bg-amber text-white h-12 text-lg font-medium rounded-xl transition-all shadow-md hover:shadow-lg"
             >
               Go to Home Page
             </Button>
@@ -207,20 +207,20 @@ export function SignupPage({ onComplete }: SignupPageProps) {
       case 'already_member':
         return (
           <>
-            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#f97316] flex items-center justify-center shadow-lg">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-harvest flex items-center justify-center shadow-lg">
               <CheckCircle2 className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-[#0f172a] mb-4">
+            <h1 className="text-3xl font-bold text-field-dark mb-4">
               You're Already a Member! 🌽
             </h1>
-            <p className="text-lg text-[#0f172a]/70 mb-6">
-              {user?.discord_username}, you're already part of XLCOB!
+            <p className="text-lg text-field-dark/70 mb-6">
+              {user?.discord_username}, you're already part of The Corn Field!
             </p>
-            <div className="bg-[#f97316]/10 rounded-xl p-6 mb-6 border-2 border-[#f97316]/20">
-              <p className="text-[#0f172a] mb-2">
+            <div className="bg-harvest/10 rounded-xl p-6 mb-6 border-2 border-harvest/20">
+              <p className="text-field-dark mb-2">
                 <strong>Role:</strong> {user?.role}
               </p>
-              <p className="text-[#0f172a] mb-2">
+              <p className="text-field-dark mb-2">
                 <strong>Rank:</strong> {user?.ranks?.name || 'Earwig'} (Prestige {user?.prestige_level || 0})
               </p>
             </div>
@@ -229,7 +229,7 @@ export function SignupPage({ onComplete }: SignupPageProps) {
                 window.location.hash = '';
                 if (onComplete) onComplete();
               }}
-              className="w-full bg-[#f97316] hover:bg-[#ea580c] text-white h-12 text-lg font-medium rounded-xl transition-all shadow-md hover:shadow-lg"
+              className="w-full bg-harvest hover:bg-amber text-white h-12 text-lg font-medium rounded-xl transition-all shadow-md hover:shadow-lg"
             >
               Go to Home Page
             </Button>
@@ -242,15 +242,15 @@ export function SignupPage({ onComplete }: SignupPageProps) {
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#ef4444] flex items-center justify-center shadow-lg">
               <AlertCircle className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-[#0f172a] mb-4">
+            <h1 className="text-3xl font-bold text-field-dark mb-4">
               Something Went Wrong
             </h1>
-            <p className="text-lg text-[#0f172a]/70 mb-6">
+            <p className="text-lg text-field-dark/70 mb-6">
               {errorMessage || 'An unexpected error occurred during signup.'}
             </p>
             <Button
               onClick={handleSignup}
-              className="w-full bg-[#f97316] hover:bg-[#ea580c] text-white h-12 text-lg font-medium rounded-xl transition-all shadow-md hover:shadow-lg"
+              className="w-full bg-harvest hover:bg-amber text-white h-12 text-lg font-medium rounded-xl transition-all shadow-md hover:shadow-lg"
             >
               Try Again
             </Button>
@@ -263,9 +263,9 @@ export function SignupPage({ onComplete }: SignupPageProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#fdf5e9] px-6">
+    <div className="min-h-screen flex items-center justify-center bg-silk px-6">
       <div className="max-w-xl w-full">
-        <div className="bg-white rounded-3xl shadow-xl p-8 sm:p-12 border-2 border-[#0f172a]/10 text-center">
+        <div className="bg-white rounded-3xl shadow-xl p-8 sm:p-12 border-2 border-field-dark/10 text-center">
           {renderContent()}
         </div>
       </div>

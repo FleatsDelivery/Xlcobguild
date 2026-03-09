@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface TeamLogoProps {
   logoUrl?: string | null;
@@ -8,6 +8,8 @@ interface TeamLogoProps {
 }
 
 export function TeamLogo({ logoUrl, teamName, size = 'md', className = '' }: TeamLogoProps) {
+  const [broken, setBroken] = useState(false);
+
   const sizeClasses = {
     sm: 'w-12 h-8 text-lg',
     md: 'w-16 h-11 text-2xl',
@@ -15,7 +17,7 @@ export function TeamLogo({ logoUrl, teamName, size = 'md', className = '' }: Tea
     xl: 'w-32 h-22 text-5xl',
   };
 
-  if (!logoUrl) {
+  if (!logoUrl || broken) {
     return (
       <div 
         className={`${sizeClasses[size]} rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md ${className}`}
@@ -31,6 +33,7 @@ export function TeamLogo({ logoUrl, teamName, size = 'md', className = '' }: Tea
       src={logoUrl}
       alt={`${teamName} logo`}
       className={`${sizeClasses[size]} rounded-lg object-cover shadow-md ${className}`}
+      onError={() => setBroken(true)}
     />
   );
 }

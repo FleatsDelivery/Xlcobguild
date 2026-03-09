@@ -1,7 +1,7 @@
 
-  # XLCOB.io
+  # TheCornField
 
-  This is a code bundle for XLCOB.io. The original project is available at https://www.figma.com/design/v2LeyVoRepb963B2WEL7yg/XLCOB.io.
+  This is a code bundle for TheCornField. The original project is available at https://www.figma.com/design/v2LeyVoRepb963B2WEL7yg/TheCornField.
 
   ## Running the code
 

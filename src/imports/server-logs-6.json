@@ -1,0 +1,802 @@
+[
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 633ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "00c9139e-599c-404a-9d70-b0aa582e9c78",
+    "level": "info",
+    "timestamp": 1772751360434000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5dfad508-eb5d-401b-a5c4-09a89704683a",
+    "level": "info",
+    "timestamp": 1772751359801000
+  },
+  {
+    "event_message": "booted (time: 82ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "27a08803-d938-4b7b-8deb-820ecf191781",
+    "level": "log",
+    "timestamp": 1772751359647000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 329ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cb4e28d1-52a7-47d5-96b9-13cb99728da2",
+    "level": "info",
+    "timestamp": 1772751359270000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9ecce134-6b44-4c5a-8d2f-6eba470db135",
+    "level": "info",
+    "timestamp": 1772751358940000
+  },
+  {
+    "event_message": "booted (time: 72ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a76b79c9-dcbd-4347-b019-5a158918a6b9",
+    "level": "log",
+    "timestamp": 1772751358818000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "61e5d2cc-5963-417a-be4d-ee35d6f2cfc8",
+    "level": "log",
+    "timestamp": 1772751354146000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 525ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "117108d6-4d25-470b-8b3a-6c9061cac0d0",
+    "level": "info",
+    "timestamp": 1772751345260000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "90067a2a-f0b7-4ad2-ae37-bfeee4a242e9",
+    "level": "info",
+    "timestamp": 1772751344735000
+  },
+  {
+    "event_message": "booted (time: 74ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f0f49d32-6912-4308-bcb8-cede831e4100",
+    "level": "log",
+    "timestamp": 1772751344615000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 349ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0042412d-3048-4378-a0ae-b34f93a62b32",
+    "level": "info",
+    "timestamp": 1772751344292000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7340b225-9aa6-47e9-96d5-0572b9b8ff25",
+    "level": "info",
+    "timestamp": 1772751343942000
+  },
+  {
+    "event_message": "booted (time: 88ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "03b981da-8b41-48fb-b153-a570d2d12e25",
+    "level": "log",
+    "timestamp": 1772751343833000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 484ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cc09c792-c95b-4f0d-99b8-5af416675558",
+    "level": "info",
+    "timestamp": 1772751330255000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "33d16a2b-936c-4c24-aa85-e8d313fdbfa8",
+    "level": "info",
+    "timestamp": 1772751329771000
+  },
+  {
+    "event_message": "booted (time: 58ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fa99eac7-cbd2-4410-82ad-5c041828a1e2",
+    "level": "log",
+    "timestamp": 1772751329691000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 384ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d2408922-fafb-4ec6-bee4-cade0c14c6f5",
+    "level": "info",
+    "timestamp": 1772751329407000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e279aaac-b0cd-46e4-8e9a-94594b820fc3",
+    "level": "info",
+    "timestamp": 1772751329022000
+  },
+  {
+    "event_message": "booted (time: 95ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f9cc9153-c53d-4a4c-9594-70b205476047",
+    "level": "log",
+    "timestamp": 1772751328872000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 583ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8b9b7451-7024-4b98-bbd1-a2890c7e785a",
+    "level": "info",
+    "timestamp": 1772751315355000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "dab7fe55-a4ea-4447-a7bb-5182ab79adf8",
+    "level": "info",
+    "timestamp": 1772751314772000
+  },
+  {
+    "event_message": "booted (time: 56ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6ee1d337-7cca-40d3-937b-3b6f86365492",
+    "level": "log",
+    "timestamp": 1772751314691000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 518ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "017ab404-a525-46c8-9770-b06483ef793c",
+    "level": "info",
+    "timestamp": 1772751314389000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "df7901d7-644c-4328-9973-2d76f47593ce",
+    "level": "info",
+    "timestamp": 1772751313871000
+  },
+  {
+    "event_message": "booted (time: 60ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3f043d70-9502-4892-99ee-f6ae7bcb44f0",
+    "level": "log",
+    "timestamp": 1772751313785000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/connect/onboard 500 496ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e2811968-3edc-4dd9-b990-d411f865aa08",
+    "level": "info",
+    "timestamp": 1772751310827000
+  },
+  {
+    "event_message": "Connect onboard error: Error: Please review the responsibilities of managing losses for connected accounts at https://dashboard.stripe.com/settings/connect/platform-profile.\n    at generateV1Error (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/stripe/17.7.0/esm/Error.js:8:20)\n    at res.toJSON.then.StripeAPIError.message (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/stripe/17.7.0/esm/RequestSender.js:105:31)\n    at eventLoopTick (ext:core/01_core.js:175:7) {\n  type: \"StripeInvalidRequestError\",\n  raw: {\n    message: \"Please review the responsibilities of managing losses for connected accounts at https://dashboard.stripe.com/settings/connect/platform-profile.\",\n    request_log_url: \"https://dashboard.stripe.com/acct_1T2I6wJITiGcAD00/workbench/logs?object=req_ybUUAkcrbI6ABI\",\n    type: \"invalid_request_error\",\n    headers: {\n      \"access-control-allow-credentials\": \"true\",\n      \"access-control-allow-methods\": \"GET, HEAD, PUT, PATCH, POST, DELETE\",\n      \"access-control-allow-origin\": \"*\",\n      \"access-control-expose-headers\": \"Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required\",\n      \"access-control-max-age\": \"300\",\n      \"cache-control\": \"no-cache, no-store\",\n      \"content-length\": \"337\",\n      \"content-security-policy\": \"base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none'; img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=eZiRVsohS0ubuTfZA05Dzy799F98uNnIdSnyhfqzeOuDzwSvqHdEzQeRys_dBxOIdOs9U6w5NqOlriNE\",\n      \"content-type\": \"application/json\",\n      date: \"Thu, 05 Mar 2026 22:55:10 GMT\",\n      \"idempotency-key\": \"stripe-node-retry-cba153bf-3e21-4fcc-9b89-7652020afc07\",\n      \"original-request\": \"req_ybUUAkcrbI6ABI\",\n      \"request-id\": \"req_ybUUAkcrbI6ABI\",\n      server: \"nginx\",\n      \"strict-transport-security\": \"max-age=63072000; includeSubDomains; preload\",\n      \"stripe-should-retry\": \"false\",\n      \"stripe-version\": \"2024-12-18.acacia\",\n      vary: \"Origin\",\n      \"x-stripe-priority-routing-enabled\": \"true\",\n      \"x-stripe-routing-context-priority-tier\": \"livemode\",\n      \"x-wc\": \"ABGHIJ\"\n    },\n    statusCode: 400,\n    requestId: \"req_ybUUAkcrbI6ABI\"\n  },\n  rawType: \"invalid_request_error\",\n  code: undefined,\n  doc_url: undefined,\n  param: undefined,\n  detail: undefined,\n  headers: {\n    \"access-control-allow-credentials\": \"true\",\n    \"access-control-allow-methods\": \"GET, HEAD, PUT, PATCH, POST, DELETE\",\n    \"access-control-allow-origin\": \"*\",\n    \"access-control-expose-headers\": \"Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required\",\n    \"access-control-max-age\": \"300\",\n    \"cache-control\": \"no-cache, no-store\",\n    \"content-length\": \"337\",\n    \"content-security-policy\": \"base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none'; img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=eZiRVsohS0ubuTfZA05Dzy799F98uNnIdSnyhfqzeOuDzwSvqHdEzQeRys_dBxOIdOs9U6w5NqOlriNE\",\n    \"content-type\": \"application/json\",\n    date: \"Thu, 05 Mar 2026 22:55:10 GMT\",\n    \"idempotency-key\": \"stripe-node-retry-cba153bf-3e21-4fcc-9b89-7652020afc07\",\n    \"original-request\": \"req_ybUUAkcrbI6ABI\",\n    \"request-id\": \"req_ybUUAkcrbI6ABI\",\n    server: \"nginx\",\n    \"strict-transport-security\": \"max-age=63072000; includeSubDomains; preload\",\n    \"stripe-should-retry\": \"false\",\n    \"stripe-version\": \"2024-12-18.acacia\",\n    vary: \"Origin\",\n    \"x-stripe-priority-routing-enabled\": \"true\",\n    \"x-stripe-routing-context-priority-tier\": \"livemode\",\n    \"x-wc\": \"ABGHIJ\"\n  },\n  requestId: \"req_ybUUAkcrbI6ABI\",\n  statusCode: 400,\n  userMessage: undefined,\n  charge: undefined,\n  decline_code: undefined,\n  payment_intent: undefined,\n  payment_method: undefined,\n  payment_method_type: undefined,\n  setup_intent: undefined,\n  source: undefined\n}\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "27b6a808-556c-4856-b31b-b0348d6650e9",
+    "level": "error",
+    "timestamp": 1772751310826000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/connect/onboard\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e6b5fe23-e6ea-4244-973a-f605b98c369d",
+    "level": "info",
+    "timestamp": 1772751310331000
+  },
+  {
+    "event_message": "booted (time: 89ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "dc29b7c4-73df-4cbb-af90-73477af8b5d8",
+    "level": "log",
+    "timestamp": 1772751310220000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/users/d531472d-e798-4593-9cd6-c6617cc89f0b/kkup-stats 200 1s\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7c6d6e42-ad80-4c07-87a5-d4a97ce9da5f",
+    "level": "info",
+    "timestamp": 1772751308830000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/user-activity?limit=5&offset=0 200 721ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5d5499cc-86da-47c9-ab82-f3ac737a313c",
+    "level": "info",
+    "timestamp": 1772751308457000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/connect/status 200 330ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8fc71d18-3d75-409d-a29d-5509f9238154",
+    "level": "info",
+    "timestamp": 1772751308034000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/user-activity?limit=5&offset=0\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1831a0bc-1738-4793-9b5a-edc473c21443",
+    "level": "info",
+    "timestamp": 1772751307735000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/connect/status\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "91522df1-e8ab-49ab-98e2-667d7d53d51d",
+    "level": "info",
+    "timestamp": 1772751307703000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/users/d531472d-e798-4593-9cd6-c6617cc89f0b/kkup-stats\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4ba4fa66-cd96-4c11-a976-9a7176839710",
+    "level": "info",
+    "timestamp": 1772751307689000
+  },
+  {
+    "event_message": "booted (time: 81ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f857f392-648a-4851-b52f-fef23762cdf8",
+    "level": "log",
+    "timestamp": 1772751307594000
+  },
+  {
+    "event_message": "booted (time: 75ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8aada53f-0587-4071-93d5-c91b22e8ddbc",
+    "level": "log",
+    "timestamp": 1772751307587000
+  },
+  {
+    "event_message": "booted (time: 70ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "61925ca3-ef0b-4d49-8c11-e6c933861c7b",
+    "level": "log",
+    "timestamp": 1772751307576000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/users/773546e6-2296-457d-8003-b2332f8e64b5/profile 200 204ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8aba12cd-505c-4c04-a815-a298af26c493",
+    "level": "info",
+    "timestamp": 1772751303764000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/users/773546e6-2296-457d-8003-b2332f8e64b5/kkup-stats 200 154ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "20971e53-3412-440f-a6a1-01504fea33fd",
+    "level": "info",
+    "timestamp": 1772751303763000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/users/773546e6-2296-457d-8003-b2332f8e64b5/kkup-stats\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b54fcc74-76f8-4124-9046-1d0fa34321ed",
+    "level": "info",
+    "timestamp": 1772751303609000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/users/773546e6-2296-457d-8003-b2332f8e64b5/profile\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a204967d-d6c0-41ae-9109-a492d64e0469",
+    "level": "info",
+    "timestamp": 1772751303560000
+  },
+  {
+    "event_message": "booted (time: 73ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ffaa69eb-ed87-4ec9-a0f7-9943bf77568d",
+    "level": "log",
+    "timestamp": 1772751303497000
+  },
+  {
+    "event_message": "booted (time: 72ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "96993c9f-0f68-44c8-911a-cb82d7a3e1a6",
+    "level": "log",
+    "timestamp": 1772751303481000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/users/773546e6-2296-457d-8003-b2332f8e64b5/profile 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5d45c13b-facd-47f1-89ec-9c898d9bf58d",
+    "level": "info",
+    "timestamp": 1772751303166000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/users/773546e6-2296-457d-8003-b2332f8e64b5/profile\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "646e5dca-5d14-45ec-82e2-90df569b6e29",
+    "level": "info",
+    "timestamp": 1772751303165000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/users/773546e6-2296-457d-8003-b2332f8e64b5/kkup-stats 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f84d94b5-23d0-4af2-a7fd-3c1e909d0118",
+    "level": "info",
+    "timestamp": 1772751303099000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/users/773546e6-2296-457d-8003-b2332f8e64b5/kkup-stats\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3a58b1cf-ec41-45f1-af96-24e82e1bbabb",
+    "level": "info",
+    "timestamp": 1772751303098000
+  },
+  {
+    "event_message": "booted (time: 86ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c6da4d12-2107-4429-99a6-5915beb3509d",
+    "level": "log",
+    "timestamp": 1772751303028000
+  },
+  {
+    "event_message": "booted (time: 56ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cbe03ee5-7bb8-42a3-8b62-b4ab37e5cd6a",
+    "level": "log",
+    "timestamp": 1772751303013000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 725ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2c3f0a43-9893-452c-8cef-2dcba4ce5b8b",
+    "level": "info",
+    "timestamp": 1772751302306000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4cc059be-7cc8-4659-a4a4-f125df405304",
+    "level": "info",
+    "timestamp": 1772751301581000
+  },
+  {
+    "event_message": "booted (time: 79ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8b0a4339-1053-47f8-919a-796e1aae820e",
+    "level": "log",
+    "timestamp": 1772751301470000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 568ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cb2ab13c-58d6-4cb6-9198-1a22ab5fa511",
+    "level": "info",
+    "timestamp": 1772751301143000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c47c17df-86bc-40f7-aef6-3201a6061c77",
+    "level": "info",
+    "timestamp": 1772751300574000
+  },
+  {
+    "event_message": "booted (time: 93ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d68f1f31-aded-4e77-9ad3-d2a71c7c4368",
+    "level": "log",
+    "timestamp": 1772751300347000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 352ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8e340d8c-3e26-45c4-833f-6cb7b5387d09",
+    "level": "info",
+    "timestamp": 1772751300244000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 485ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "17f11521-e998-493f-84e3-1a44d2e19644",
+    "level": "info",
+    "timestamp": 1772751299990000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "47545e44-5bec-4036-98ef-f9cb789e329e",
+    "level": "info",
+    "timestamp": 1772751299892000
+  },
+  {
+    "event_message": "booted (time: 75ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d5af9092-c373-4be5-8a1a-007d9c913a7c",
+    "level": "log",
+    "timestamp": 1772751299792000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cfffe32d-153f-4c0a-9322-e4550d6dba09",
+    "level": "info",
+    "timestamp": 1772751299505000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 342ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2bc5aa8a-e8fa-4499-9270-1055c864107b",
+    "level": "info",
+    "timestamp": 1772751299466000
+  },
+  {
+    "event_message": "booted (time: 59ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d614a8b1-a47f-4e3f-8e1f-490e3739329e",
+    "level": "log",
+    "timestamp": 1772751299422000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 510ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "aae91aae-96c8-471e-b4f4-5be964a21228",
+    "level": "info",
+    "timestamp": 1772751299128000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "eb9d489a-844c-415d-b242-18d1e5d6ee93",
+    "level": "info",
+    "timestamp": 1772751299123000
+  },
+  {
+    "event_message": "booted (time: 76ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "559e4d17-0c5c-49be-bd77-775219502bb2",
+    "level": "log",
+    "timestamp": 1772751299009000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 374ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "94d0ba44-2871-41e3-b000-00e3d0846960",
+    "level": "info",
+    "timestamp": 1772751298684000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a2472e2d-7016-4787-ab38-903e0032792c",
+    "level": "info",
+    "timestamp": 1772751298618000
+  },
+  {
+    "event_message": "booted (time: 82ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9da3cbe6-7678-403b-9397-0b55b3e18c20",
+    "level": "log",
+    "timestamp": 1772751298506000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 315ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0f9a07c7-7b37-43d3-8899-86941c83dea6",
+    "level": "info",
+    "timestamp": 1772751298489000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b37b2f59-5ddf-4dd9-ace8-927602e9853e",
+    "level": "info",
+    "timestamp": 1772751298309000
+  },
+  {
+    "event_message": "booted (time: 61ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f5f90a1a-6c6b-4c1d-95b1-f4ac31a2b321",
+    "level": "log",
+    "timestamp": 1772751298217000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5cf9658b-f18f-4964-ad48-560fa26e33b7",
+    "level": "info",
+    "timestamp": 1772751298173000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 571ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f199805a-568a-47d2-a39a-f0f86c82aa6d",
+    "level": "info",
+    "timestamp": 1772751298149000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e492f1f0-f6df-4e02-aa2e-84c5e9fb9bc3",
+    "level": "log",
+    "timestamp": 1772751298082000
+  },
+  {
+    "event_message": "booted (time: 68ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1d435c4f-853c-4bb6-979f-266bd27d8e12",
+    "level": "log",
+    "timestamp": 1772751298063000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9ca0bac0-501e-4828-8b9e-8ac337566d97",
+    "level": "log",
+    "timestamp": 1772751298028000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 347ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9ac3d3c0-49c4-437a-b4be-2b15b7e55c0c",
+    "level": "info",
+    "timestamp": 1772751297917000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 208ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2024b0ac-3836-4c1e-aca7-1df77780c398",
+    "level": "info",
+    "timestamp": 1772751297804000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 319ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e0515fe7-d8a6-4675-9661-e01ddf878d5a",
+    "level": "info",
+    "timestamp": 1772751297743000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f8634644-e0f0-4a68-a9d7-4293acb19107",
+    "level": "log",
+    "timestamp": 1772751297599000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "addf8d2f-0c62-4c37-9f66-b8b7e0e26b6e",
+    "level": "info",
+    "timestamp": 1772751297596000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "46fe14ff-bcc2-4778-9e81-a5a1f4b422ba",
+    "level": "info",
+    "timestamp": 1772751297578000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "38ed053f-db13-458b-b621-8a2223becc1d",
+    "level": "info",
+    "timestamp": 1772751297571000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "be634b71-2ee0-434b-a2de-a26ca881fbae",
+    "level": "log",
+    "timestamp": 1772751297556000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/leaderboard 200 607ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0c43c3e4-7ec8-4f89-b5e7-85c0c0fd3ca3",
+    "level": "info",
+    "timestamp": 1772751297531000
+  },
+  {
+    "event_message": "booted (time: 71ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c21084fa-7fb5-40b6-875f-696c9b054f86",
+    "level": "log",
+    "timestamp": 1772751297480000
+  },
+  {
+    "event_message": "booted (time: 77ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "14e7ede6-4bf6-4145-9354-9a13c3d6b1d1",
+    "level": "log",
+    "timestamp": 1772751297460000
+  },
+  {
+    "event_message": "booted (time: 74ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a6f0ac30-3d8c-4c05-8027-a7a9a8f99bce",
+    "level": "log",
+    "timestamp": 1772751297456000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2310f00b-f287-4531-9aea-924b25e63ea3",
+    "level": "info",
+    "timestamp": 1772751297424000
+  },
+  {
+    "event_message": "booted (time: 70ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "defbd73a-fb4b-401e-812b-999a0f2ee3bb",
+    "level": "log",
+    "timestamp": 1772751297305000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 272ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9943520e-4a96-4e22-bb70-8188851a39e2",
+    "level": "info",
+    "timestamp": 1772751297300000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c9292633-e3e9-4d8d-a2e4-dab2ad8a06c6",
+    "level": "info",
+    "timestamp": 1772751297299000
+  },
+  {
+    "event_message": "Twitch identity found: the_corn_field ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "eaa8f2fc-ba80-4d43-b373-7cf8b30849ff",
+    "level": "info",
+    "timestamp": 1772751297192000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 230ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "79e8e6b2-df15-4174-b281-1f942e4176b2",
+    "level": "info",
+    "timestamp": 1772751297129000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 312ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2af4b327-f65d-440f-b73d-9a1aa85a44e0",
+    "level": "info",
+    "timestamp": 1772751297116000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cc6cfb18-f22b-4c9a-80db-d69a2fb7361e",
+    "level": "info",
+    "timestamp": 1772751297029000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6c48a44f-d588-414f-8e86-faf1929839c6",
+    "level": "info",
+    "timestamp": 1772751297028000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1455fa41-033b-4d8e-8d25-03635f54ae19",
+    "level": "info",
+    "timestamp": 1772751296959000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 194ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "076b7dc2-1872-407d-abad-af13e3d4f7df",
+    "level": "info",
+    "timestamp": 1772751296959000
+  }
+]

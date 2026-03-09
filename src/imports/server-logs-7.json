@@ -1,0 +1,802 @@
+[
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5d972c01-9e5b-4b1c-80e4-7bc84dacb1f3",
+    "level": "log",
+    "timestamp": 1772753232186000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2a64305f-ffa0-48eb-8b9c-b6b1b6a70fad",
+    "level": "log",
+    "timestamp": 1772753231424000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 483ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e14f27a6-7f39-48c2-b2cb-7409cc2983da",
+    "level": "info",
+    "timestamp": 1772753230785000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c72a3d92-cb57-444c-bead-9837fd210f50",
+    "level": "info",
+    "timestamp": 1772753230302000
+  },
+  {
+    "event_message": "booted (time: 51ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ef6c128b-18f5-44f0-9af2-725153120ec4",
+    "level": "log",
+    "timestamp": 1772753230223000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 416ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "95289443-c56c-4685-b11f-29eb3d1db67e",
+    "level": "info",
+    "timestamp": 1772753229945000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3fe3bcd0-04cf-465d-850c-9ecaef62412a",
+    "level": "info",
+    "timestamp": 1772753229528000
+  },
+  {
+    "event_message": "booted (time: 87ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "09663168-8106-40e8-b1f2-df0989736f3b",
+    "level": "log",
+    "timestamp": 1772753229412000
+  },
+  {
+    "event_message": "--> PATCH /make-server-4789f4af/notifications/read 200 430ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f486bfaa-c439-4de8-a09d-d2e4ce45188c",
+    "level": "info",
+    "timestamp": 1772753222786000
+  },
+  {
+    "event_message": "<-- PATCH /make-server-4789f4af/notifications/read\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ff6e6a92-989e-4dd2-84a7-a79f76337f38",
+    "level": "info",
+    "timestamp": 1772753222356000
+  },
+  {
+    "event_message": "booted (time: 63ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "78746478-7aa8-49f4-b199-bbacf647b330",
+    "level": "log",
+    "timestamp": 1772753222270000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/notifications/read 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "87c4908a-fdbc-4ebc-bd7f-49a5a0518cb3",
+    "level": "info",
+    "timestamp": 1772753221963000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/notifications/read\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ea2a5174-5f87-49e0-be57-435c0bf2c4dc",
+    "level": "info",
+    "timestamp": 1772753221962000
+  },
+  {
+    "event_message": "booted (time: 103ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d35fb81a-7b3c-4220-9185-77bf836e4c4d",
+    "level": "log",
+    "timestamp": 1772753221845000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications?limit=25&offset=0&pending=true 200 319ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b62d381e-9d47-4546-830b-4dd198b97f63",
+    "level": "info",
+    "timestamp": 1772753217581000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications?limit=25&offset=0&pending=true\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ae20bdd3-e94e-416a-a955-53fdd40699d0",
+    "level": "info",
+    "timestamp": 1772753217262000
+  },
+  {
+    "event_message": "booted (time: 85ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "191fb3cd-b16e-49ff-a731-b1d8d114c06c",
+    "level": "log",
+    "timestamp": 1772753217133000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 488ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "119089d9-2905-4883-a417-315363039506",
+    "level": "info",
+    "timestamp": 1772753216959000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications?limit=25&offset=0&pending=true 200 320ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5be0459b-4179-4e32-a212-5e184539f04e",
+    "level": "info",
+    "timestamp": 1772753216787000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "df7460f4-cb99-44da-bf64-9a1b824b2e49",
+    "level": "log",
+    "timestamp": 1772753216547000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c27ad7cf-94cc-4987-931b-1600d70c9fa7",
+    "level": "info",
+    "timestamp": 1772753216471000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications?limit=25&offset=0&pending=true\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bae0afb1-7b6f-41dd-b319-0b6892677596",
+    "level": "info",
+    "timestamp": 1772753216466000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 334ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9d9fdf4f-f389-4612-af0c-95d6f6a3db93",
+    "level": "info",
+    "timestamp": 1772753216392000
+  },
+  {
+    "event_message": "booted (time: 96ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bb40c5f7-b7b6-4574-b9da-4ad734026d0c",
+    "level": "log",
+    "timestamp": 1772753216329000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/notifications?limit=25&offset=0&pending=true 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8257aa15-d22f-428b-80a6-23e8f9fadb4a",
+    "level": "info",
+    "timestamp": 1772753216138000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/notifications?limit=25&offset=0&pending=true\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "025284d3-c712-47d2-854b-cd3cde5c1e42",
+    "level": "info",
+    "timestamp": 1772753216136000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cb09e4c7-1ddc-486a-93c1-b7d27f9022a1",
+    "level": "info",
+    "timestamp": 1772753216058000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fc060364-7918-4396-b644-7d7fb25829e6",
+    "level": "log",
+    "timestamp": 1772753216034000
+  },
+  {
+    "event_message": "booted (time: 76ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c135ddb7-28c4-4607-bebf-bd11de1b87a7",
+    "level": "log",
+    "timestamp": 1772753216012000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/notifications?limit=25&offset=0&pending=true 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "18a72725-0ba3-47c5-bb60-133c978355c0",
+    "level": "info",
+    "timestamp": 1772753215969000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/notifications?limit=25&offset=0&pending=true\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2b1b9f45-063f-482d-9546-0e05ae953479",
+    "level": "info",
+    "timestamp": 1772753215968000
+  },
+  {
+    "event_message": "booted (time: 55ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "32bbf6ee-9661-4203-8a2e-acb5df947176",
+    "level": "log",
+    "timestamp": 1772753215958000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 475ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6429d741-9f3c-4b4a-8165-32bc6ffda4e5",
+    "level": "info",
+    "timestamp": 1772753215751000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b854cb80-4959-4e59-9682-7aae50bac4ca",
+    "level": "info",
+    "timestamp": 1772753215275000
+  },
+  {
+    "event_message": "booted (time: 70ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "30b1ee68-f822-4147-80bd-a5e8327d76a5",
+    "level": "log",
+    "timestamp": 1772753215162000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 318ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "34dc4b2f-cfd3-4402-80c7-0687a67990ee",
+    "level": "info",
+    "timestamp": 1772753214837000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b928cd98-a3de-4083-9a2b-1bb879818ddf",
+    "level": "info",
+    "timestamp": 1772753214519000
+  },
+  {
+    "event_message": "booted (time: 75ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c6aadc35-baad-4a76-8dc9-aedec688a592",
+    "level": "log",
+    "timestamp": 1772753214410000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/connect/awards/all 200 384ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "82c5b0e7-4193-49fe-b771-2bf1ddbfdf9b",
+    "level": "info",
+    "timestamp": 1772753208578000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/connect/awards/all\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d4dec351-462d-41bb-878c-a089873494fb",
+    "level": "info",
+    "timestamp": 1772753208194000
+  },
+  {
+    "event_message": "booted (time: 75ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9dca479b-4977-4b06-bc66-fc7ade47df4c",
+    "level": "log",
+    "timestamp": 1772753208114000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/connect/award 200 2s\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cdb38f8c-5b5a-4443-91b7-62729d33db9e",
+    "level": "info",
+    "timestamp": 1772753207788000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/connect/award\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "baf283f9-4ce1-470e-8604-f4db2878aba2",
+    "level": "info",
+    "timestamp": 1772753205302000
+  },
+  {
+    "event_message": "booted (time: 81ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1304eed7-738c-483c-bcd9-1c00c9e1fec4",
+    "level": "log",
+    "timestamp": 1772753205174000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/connect/award 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7365133b-88d3-4900-a99f-913fb6125ead",
+    "level": "info",
+    "timestamp": 1772753204844000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/connect/award\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9ac4acdf-c3c6-4066-ae73-cbe6639aae1e",
+    "level": "info",
+    "timestamp": 1772753204843000
+  },
+  {
+    "event_message": "booted (time: 67ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4c83625a-108d-4055-b0e9-8f20bc005f57",
+    "level": "log",
+    "timestamp": 1772753204760000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "08016e11-e592-4156-a973-e79205d27e10",
+    "level": "log",
+    "timestamp": 1772753202478000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a1bc8918-8a18-4e38-8b84-b1ea16c941a6",
+    "level": "log",
+    "timestamp": 1772753201560000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 498ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "03f636f7-2f58-400c-96de-63e27341a96a",
+    "level": "info",
+    "timestamp": 1772753200804000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b27cc696-b4b3-443e-99fb-1e609a1eb784",
+    "level": "info",
+    "timestamp": 1772753200306000
+  },
+  {
+    "event_message": "booted (time: 70ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f22c8cf8-8170-42b6-9efc-cac69773e479",
+    "level": "log",
+    "timestamp": 1772753200195000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 315ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5b76948b-cfc4-48a7-83c2-b707ed232191",
+    "level": "info",
+    "timestamp": 1772753199861000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "61e065ca-957c-4b5c-85df-79d92e53c579",
+    "level": "info",
+    "timestamp": 1772753199546000
+  },
+  {
+    "event_message": "booted (time: 106ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a3710ddd-6d48-4b36-8846-c7de09da128c",
+    "level": "log",
+    "timestamp": 1772753199443000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a9ce4827-0966-4a2b-a516-611ac6213df2",
+    "level": "log",
+    "timestamp": 1772753198228000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a9d69d43-0d5c-4a78-91f7-869406b8ebbb",
+    "level": "log",
+    "timestamp": 1772753196034000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "67809c2f-2d9b-4775-89f4-c090ad308cbc",
+    "level": "log",
+    "timestamp": 1772753195546000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 487ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2e7d4e6f-7186-4124-ba50-816cb4ba9d56",
+    "level": "info",
+    "timestamp": 1772753187220000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d796549a-45c6-4b48-95ca-5131d639ccd5",
+    "level": "log",
+    "timestamp": 1772753187187000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a8672c37-de51-485e-99ac-3bd725891046",
+    "level": "info",
+    "timestamp": 1772753186733000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 509ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1ccb4107-3341-4824-9f52-83b2acd6154e",
+    "level": "info",
+    "timestamp": 1772753186632000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cf276dc5-b7c8-4e7d-bac7-9058121debfa",
+    "level": "log",
+    "timestamp": 1772753186435000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/admin/users 200 320ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "af132ba7-27b1-4bde-bff4-d353740cea5f",
+    "level": "info",
+    "timestamp": 1772753186409000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "da525641-b964-4766-9267-854f35d8c40f",
+    "level": "info",
+    "timestamp": 1772753186123000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/admin/users\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "88f7d037-1336-4b17-8429-8c738710e90f",
+    "level": "info",
+    "timestamp": 1772753186089000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a3a55027-5654-4e22-84a3-106e9e840d7c",
+    "level": "log",
+    "timestamp": 1772753186033000
+  },
+  {
+    "event_message": "booted (time: 79ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c2766205-1c3a-4ae3-89f4-f570964b84b1",
+    "level": "log",
+    "timestamp": 1772753186015000
+  },
+  {
+    "event_message": "booted (time: 66ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1c1a5ecb-673a-4d49-a33d-5bb2abef09ea",
+    "level": "log",
+    "timestamp": 1772753185994000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 544ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9842ee46-1c11-415d-8b20-d7095e323365",
+    "level": "info",
+    "timestamp": 1772753185665000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 337ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6bef1547-014b-4b42-b5d7-6056982793d6",
+    "level": "info",
+    "timestamp": 1772753185339000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bfc44d56-fed1-43e5-9f1c-3cdfe7cabc7d",
+    "level": "info",
+    "timestamp": 1772753185121000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4c2b527e-909d-49af-a93e-80c61e90279c",
+    "level": "info",
+    "timestamp": 1772753185001000
+  },
+  {
+    "event_message": "booted (time: 71ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5ab09512-c4e3-4f16-887a-3e4f42864963",
+    "level": "log",
+    "timestamp": 1772753184986000
+  },
+  {
+    "event_message": "booted (time: 72ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1388308d-da25-46ad-b07c-3a086ece2437",
+    "level": "log",
+    "timestamp": 1772753184879000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 509ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cd50a5d5-d392-4bf3-9463-d72695767368",
+    "level": "info",
+    "timestamp": 1772753184652000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 343ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "714c4c46-6bd5-4b9d-8af6-916974db5f55",
+    "level": "info",
+    "timestamp": 1772753184510000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "32b2e686-b591-4067-9c98-1b19df183514",
+    "level": "info",
+    "timestamp": 1772753184166000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a3518558-bef6-4f06-8c41-8f9f5d064664",
+    "level": "info",
+    "timestamp": 1772753184142000
+  },
+  {
+    "event_message": "booted (time: 57ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "21ad0b61-4ece-4faf-a001-3d6c9de76833",
+    "level": "log",
+    "timestamp": 1772753184083000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 391ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "eaa127ea-0f9d-4146-a74e-6dfca07a7754",
+    "level": "info",
+    "timestamp": 1772753184018000
+  },
+  {
+    "event_message": "booted (time: 128ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e7d36c49-6c95-4cf9-b9a0-a37c5942e13f",
+    "level": "log",
+    "timestamp": 1772753183965000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 292ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e3d1a570-627f-40a8-b721-26753806cd60",
+    "level": "info",
+    "timestamp": 1772753183778000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "256c42f2-98eb-4d7b-8217-eb5472c2c960",
+    "level": "info",
+    "timestamp": 1772753183627000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/master-teams 200 261ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d94e7c69-8861-433c-98ad-cb069cbcdc5c",
+    "level": "info",
+    "timestamp": 1772753183613000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/admin/users 200 433ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f1308f9d-0145-4112-bed1-1400d6eb7749",
+    "level": "info",
+    "timestamp": 1772753183603000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/connect/awards/all 200 328ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b179320e-6618-47ec-8257-52e9eeb45916",
+    "level": "info",
+    "timestamp": 1772753183532000
+  },
+  {
+    "event_message": "booted (time: 82ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9dd630ec-d322-4eb9-b830-c55cd8ae0cea",
+    "level": "log",
+    "timestamp": 1772753183513000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0907b753-9a02-4541-83f6-f88b180d5112",
+    "level": "info",
+    "timestamp": 1772753183486000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 549ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "702c16ba-db91-49a9-a224-9a6623aea84e",
+    "level": "info",
+    "timestamp": 1772753183471000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notification-configs 200 129ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "838941f7-6998-49d7-b15e-216882ec0794",
+    "level": "info",
+    "timestamp": 1772753183465000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 212ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cf7fb6f2-fdf4-4c5c-88de-8e7f188b2a00",
+    "level": "info",
+    "timestamp": 1772753183457000
+  },
+  {
+    "event_message": "booted (time: 79ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "62a86ab1-0718-4799-8fab-f00911d16357",
+    "level": "log",
+    "timestamp": 1772753183360000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/master-teams\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0bba4912-7d4f-4666-b350-e007aec4cd20",
+    "level": "info",
+    "timestamp": 1772753183352000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notification-configs\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d9236442-0469-476e-81ca-16711592107b",
+    "level": "info",
+    "timestamp": 1772753183336000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/config/rank-eligibility 200 157ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2b485bed-2337-4a6f-869c-dc65da1ad21d",
+    "level": "info",
+    "timestamp": 1772753183328000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/giveaway-config/prize-types 200 119ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "53928f0a-4fda-455c-a6dd-4a6105f040df",
+    "level": "info",
+    "timestamp": 1772753183246000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3bf088dd-26da-490e-b513-ebde4464e9b6",
+    "level": "info",
+    "timestamp": 1772753183245000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/connect/awards/all\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d0e16989-c0f3-4407-b338-f55269b525d3",
+    "level": "info",
+    "timestamp": 1772753183204000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 340ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2416ad94-8dff-4694-a415-fbacea30b170",
+    "level": "info",
+    "timestamp": 1772753183171000
+  }
+]

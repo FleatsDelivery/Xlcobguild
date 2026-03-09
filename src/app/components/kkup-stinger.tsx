@@ -1,81 +1,109 @@
 import { useEffect, useRef, useState } from 'react';
 
-interface KKupStingerProps {
-  onComplete: () => void;
+const STINGER_VIDEO_URL =
+  'https://zizrvkkuqzwzxgwpuvxb.supabase.co/storage/v1/object/public/make-4789f4af-kkup-assets/TCF_scene_transition.mp4';
+
+/**
+ * Call once on app startup to warm the browser cache.
+ * Uses a hidden <link rel="preload"> so the MP4 is already
+ * downloaded (or downloading) by the time the user clicks.
+ */
+export function preloadStingerVideo() {
+  if (typeof document === 'undefined') return;
+  // Don't add twice
+  if (document.querySelector('link[data-stinger-preload]')) return;
+  const link = document.createElement('link');
+  link.rel = 'preload';
+  link.as = 'video';
+  link.href = STINGER_VIDEO_URL;
+  link.setAttribute('data-stinger-preload', '1');
+  document.head.appendChild(link);
 }
 
-export function KKupStinger({ onComplete }: KKupStingerProps) {
+interface KKupStingerProps {
+  onComplete: () => void;
+  /** Called partway through the video so the page can navigate behind the stinger */
+  onMidpoint?: () => void;
+}
+
+export function KKupStinger({ onComplete, onMidpoint }: KKupStingerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [fadeState, setFadeState] = useState<'fade-in' | 'playing' | 'fade-out'>('fade-in');
-  const [videoError, setVideoError] = useState(false);
+  const midpointFiredRef = useRef(false);
+  const onCompleteRef = useRef(onComplete);
+  const onMidpointRef = useRef(onMidpoint);
+  const [fadingOut, setFadingOut] = useState(false);
+
+  // Keep the refs current without re-triggering the effect
+  onCompleteRef.current = onComplete;
+  onMidpointRef.current = onMidpoint;
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video) {
+      onMidpointRef.current?.();
+      onCompleteRef.current();
+      return;
+    }
 
-    // Fade in animation
-    setTimeout(() => {
-      setFadeState('playing');
-    }, 200);
+    // Just play it — the video is preloaded and should be cached
+    video.currentTime = 0;
+    video.play().catch(() => {
+      // Autoplay blocked or error — skip stinger entirely
+      onMidpointRef.current?.();
+      onCompleteRef.current();
+    });
 
-    // Try to play the video
-    const playVideo = async () => {
-      try {
-        video.currentTime = 0;
-        await video.play();
-      } catch (error) {
-        console.error('Failed to play stinger video:', error);
-        setVideoError(true);
-        // If autoplay fails, complete immediately
-        onComplete();
+    // Safety timeout — if video somehow stalls for >10s, bail out
+    const safetyTimer = setTimeout(() => {
+      if (!midpointFiredRef.current) onMidpointRef.current?.();
+      onCompleteRef.current();
+    }, 10000);
+
+    const handleTimeUpdate = () => {
+      if (midpointFiredRef.current) return;
+      if (video.duration && video.currentTime >= video.duration * 0.02) {
+        midpointFiredRef.current = true;
+        onMidpointRef.current?.();
       }
     };
 
-    playVideo();
-
-    // Handle video end - start fade out before completing
     const handleEnded = () => {
-      setFadeState('fade-out');
-      setTimeout(() => {
-        onComplete();
-      }, 300); // Wait for fade out animation
+      clearTimeout(safetyTimer);
+      if (!midpointFiredRef.current) {
+        midpointFiredRef.current = true;
+        onMidpointRef.current?.();
+      }
+      setFadingOut(true);
+      setTimeout(() => onCompleteRef.current(), 250);
     };
 
+    video.addEventListener('timeupdate', handleTimeUpdate);
     video.addEventListener('ended', handleEnded);
 
     return () => {
+      clearTimeout(safetyTimer);
+      video.removeEventListener('timeupdate', handleTimeUpdate);
       video.removeEventListener('ended', handleEnded);
     };
-  }, [onComplete]);
-
-  // If video fails to load, don't show anything
-  if (videoError) {
-    return null;
-  }
+  }, []);
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] bg-black flex items-center justify-center transition-opacity duration-300 ${
-        fadeState === 'fade-in' ? 'opacity-0' : fadeState === 'fade-out' ? 'opacity-0' : 'opacity-100'
-      }`}
+      className="fixed inset-0 z-[9999] flex items-center justify-center animate-[fadeIn_250ms_ease-out_forwards]"
+      style={fadingOut ? { opacity: 0, transition: 'opacity 250ms ease-in' } : undefined}
     >
       <video
         ref={videoRef}
-        className={`w-full h-full object-cover transition-opacity duration-200 ${
-          fadeState === 'fade-in' ? 'opacity-0' : 'opacity-100'
-        }`}
+        className="w-full h-full object-cover"
         playsInline
         muted={false}
         preload="auto"
         onError={() => {
-          setVideoError(true);
-          onComplete();
+          onMidpointRef.current?.();
+          onCompleteRef.current();
         }}
       >
-        <source
-          src="https://zizrvkkuqzwzxgwpuvxb.supabase.co/storage/v1/object/public/make-4789f4af-kkup-assets/TCF_scene_transition.mp4"
-          type="video/mp4"
-        />
+        <source src={STINGER_VIDEO_URL} type="video/mp4" />
       </video>
     </div>
   );

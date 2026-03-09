@@ -1,4 +1,51 @@
-// Dota 2 Hero ID to CDN name mapping
+// ═══════════════════════════════════════════════════════
+// DYNAMIC HERO CACHE — fetches from OpenDota to cover newly added heroes
+// ═══════════════════════════════════════════════════════
+
+/** Runtime cache: hero_id → { name, internal_name } fetched from OpenDota */
+let _dynamicHeroCache: Record<number, { name: string; internal_name: string }> | null = null;
+let _dynamicHeroFetchPromise: Promise<void> | null = null;
+
+/** Fetch all heroes from OpenDota and cache. Call once on app load or first miss. */
+export async function ensureDynamicHeroCache(): Promise<void> {
+  if (_dynamicHeroCache) return;
+  if (_dynamicHeroFetchPromise) { await _dynamicHeroFetchPromise; return; }
+
+  _dynamicHeroFetchPromise = (async () => {
+    try {
+      const res = await fetch('https://api.opendota.com/api/heroes');
+      if (res.ok) {
+        const heroes = await res.json();
+        const cache: Record<number, { name: string; internal_name: string }> = {};
+        for (const hero of heroes) {
+          if (hero.id && hero.localized_name) {
+            const internal = (hero.name || '').replace(/^npc_dota_hero_/, '');
+            cache[hero.id] = { name: hero.localized_name, internal_name: internal };
+          }
+        }
+        if (Object.keys(cache).length > 50) {
+          _dynamicHeroCache = cache;
+          // Also backfill the static maps for immediate use
+          for (const [id, data] of Object.entries(cache)) {
+            const numId = Number(id);
+            if (!HERO_ID_TO_IMAGE[numId]) HERO_ID_TO_IMAGE[numId] = data.internal_name;
+            if (!HERO_ID_TO_NAME[numId]) HERO_ID_TO_NAME[numId] = data.name;
+          }
+          // Clear name→id cache so it rebuilds with new entries
+          _nameToIdCache = null;
+          console.log(`[dota-heroes] Dynamic hero cache loaded: ${Object.keys(cache).length} heroes`);
+        }
+      }
+    } catch (err) {
+      console.warn('[dota-heroes] Failed to fetch dynamic hero data:', err);
+    }
+    if (!_dynamicHeroCache) _dynamicHeroCache = {};
+  })();
+
+  await _dynamicHeroFetchPromise;
+}
+
+// Hero ID to CDN name mapping
 // Source: OpenDota API hero data
 // https://api.opendota.com/api/heroes
 
@@ -311,4 +358,27 @@ export function getHeroIconUrl(heroId: number): string {
     return '';
   }
   return `https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/icons/${heroName}.png`;
+}
+
+// Reverse lookup: Display Name → Hero ID (built lazily)
+let _nameToIdCache: Record<string, number> | null = null;
+function getNameToIdMap(): Record<string, number> {
+  if (!_nameToIdCache) {
+    _nameToIdCache = {};
+    for (const [id, name] of Object.entries(HERO_ID_TO_NAME)) {
+      _nameToIdCache[name.toLowerCase()] = Number(id);
+    }
+  }
+  return _nameToIdCache;
+}
+
+/**
+ * Get hero portrait image URL from hero display name (e.g. "Disruptor")
+ * Useful when you only have a name string (e.g. from KKup match stats)
+ */
+export function getHeroImageByName(heroName: string): string {
+  const map = getNameToIdMap();
+  const heroId = map[heroName.toLowerCase()];
+  if (!heroId) return '';
+  return getHeroImageUrl(heroId);
 }

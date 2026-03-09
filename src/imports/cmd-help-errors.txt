@@ -1,0 +1,802 @@
+[
+  {
+    "event_message": "worker boot error: Uncaught SyntaxError: Identifier 'InteractionResponseType' has already been declared\n    at file:///var/tmp/sb-compile-edge-runtime/source/cmd-help.ts:105:10",
+    "event_type": "BootFailure",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "5c6ac086-686a-4677-8246-c0bc55ece4ed",
+    "level": "error",
+    "timestamp": 1772838381690000
+  },
+  {
+    "event_message": "worker boot error: Uncaught SyntaxError: Identifier 'InteractionResponseType' has already been declared\n    at file:///var/tmp/sb-compile-edge-runtime/source/cmd-help.ts:105:10",
+    "event_type": "BootFailure",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "19203a3c-b2c3-4d33-bc2c-4c16d3a5f5c6",
+    "level": "error",
+    "timestamp": 1772838304869000
+  },
+  {
+    "event_message": "worker boot error: Uncaught SyntaxError: Identifier 'InteractionResponseType' has already been declared\n    at file:///var/tmp/sb-compile-edge-runtime/source/cmd-help.ts:105:10",
+    "event_type": "BootFailure",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "25dd655e-9729-43b4-b429-13c796adcf56",
+    "level": "error",
+    "timestamp": 1772838285313000
+  },
+  {
+    "event_message": "worker boot error: Uncaught SyntaxError: Identifier 'InteractionResponseType' has already been declared\n    at file:///var/tmp/sb-compile-edge-runtime/source/cmd-help.ts:105:10",
+    "event_type": "BootFailure",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "633d039d-0598-4fdc-97d8-b7503a9282ec",
+    "level": "error",
+    "timestamp": 1772838096747000
+  },
+  {
+    "event_message": "worker boot error: Uncaught SyntaxError: Identifier 'InteractionResponseType' has already been declared\n    at file:///var/tmp/sb-compile-edge-runtime/source/cmd-help.ts:105:10",
+    "event_type": "BootFailure",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "f9631160-ad68-4e58-8b34-15d0a420b525",
+    "level": "error",
+    "timestamp": 1772838082894000
+  },
+  {
+    "event_message": "worker boot error: Uncaught SyntaxError: Identifier 'InteractionResponseType' has already been declared\n    at file:///var/tmp/sb-compile-edge-runtime/source/cmd-help.ts:105:10",
+    "event_type": "BootFailure",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "51501dac-b1e6-4849-9453-5745580a6540",
+    "level": "error",
+    "timestamp": 1772838008987000
+  },
+  {
+    "event_message": "worker boot error: Uncaught SyntaxError: Identifier 'InteractionResponseType' has already been declared\n    at file:///var/tmp/sb-compile-edge-runtime/source/cmd-help.ts:105:10",
+    "event_type": "BootFailure",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "f7851a94-74bb-41fa-a664-21b22d34c8a6",
+    "level": "error",
+    "timestamp": 1772837791803000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "aa0363aa-9fe1-4750-9a74-08c884679a6f",
+    "level": "log",
+    "timestamp": 1772837776911000
+  },
+  {
+    "event_message": "Listening on http://localhost:9999/\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "106bbea4-65b8-4dd9-b3fd-69abcaa5f055",
+    "level": "info",
+    "timestamp": 1772837701904000
+  },
+  {
+    "event_message": "booted (time: 46ms)",
+    "event_type": "Boot",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "cbcbed48-c4a8-4d60-872f-44ede9375fe6",
+    "level": "log",
+    "timestamp": 1772837701901000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "74597dae-5684-49be-91a7-07749186aa64",
+    "level": "log",
+    "timestamp": 1772837477014000
+  },
+  {
+    "event_message": "Listening on http://localhost:9999/\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "94b805b4-8d73-43ea-85c9-4bee008d9a00",
+    "level": "info",
+    "timestamp": 1772837402005000
+  },
+  {
+    "event_message": "booted (time: 34ms)",
+    "event_type": "Boot",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "6f6c8c95-253e-4465-9b52-8f8d896207a6",
+    "level": "log",
+    "timestamp": 1772837402003000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "f2a96923-0a7f-4fff-81b4-5db1ac3514b3",
+    "level": "log",
+    "timestamp": 1772837180146000
+  },
+  {
+    "event_message": "Listening on http://localhost:9999/\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "ca835252-c363-48ad-9b62-a21a6c3066db",
+    "level": "info",
+    "timestamp": 1772837105134000
+  },
+  {
+    "event_message": "booted (time: 33ms)",
+    "event_type": "Boot",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "9b090fa3-de41-4fb4-9d8a-4ba187c2a529",
+    "level": "log",
+    "timestamp": 1772837105132000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "4a74e312-ff97-4ca6-acbe-f5021f074965",
+    "level": "log",
+    "timestamp": 1772836881515000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "028a8b9c-44a2-41f1-af59-8f61c1ca1719",
+    "level": "log",
+    "timestamp": 1772836879280000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "0f338b10-382f-4561-8906-7a165afbe790",
+    "level": "log",
+    "timestamp": 1772836878368000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "101939f9-92c0-41cd-ae7d-33dcc31d0d68",
+    "level": "log",
+    "timestamp": 1772836877095000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "317bcfc6-067c-432d-a07f-d28b2e1044e6",
+    "level": "log",
+    "timestamp": 1772836874166000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "cdca9e84-a1f9-4d1c-a419-60bbd8a4c72a",
+    "level": "log",
+    "timestamp": 1772836871569000
+  },
+  {
+    "event_message": "Party finder: jeffwonderpouch joined lobby mmfh61i1_ezda as Player 1\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "3cba9978-e427-4e1f-88ce-9bcf363691b4",
+    "level": "info",
+    "timestamp": 1772836806637000
+  },
+  {
+    "event_message": "Discord interaction received: {\n  \"app_permissions\": \"9007199254740991\",\n  \"application_id\": \"1479589587415470091\",\n  \"attachment_size_limit\": 10485760,\n  \"authorizing_integration_owners\": {\n    \"0\": \"1475609583086075904\"\n  },\n  \"channel\": {\n    \"flags\": 0,\n    \"guild_id\": \"1475609583086075904\",\n    \"id\": \"1476082806601027674\",\n    \"last_message_id\": \"1479608899043856524\",\n    \"name\": \"bot-testing\",\n    \"nsfw\": false,\n    \"parent_id\": \"1476088947317669929\",\n    \"permissions\": \"9007199254740991\",\n    \"position\": 14,\n    \"rate_limit_per_user\": 0,\n    \"topic\": null,\n    \"type\": 0\n  },\n  \"channel_id\": \"1476082806601027674\",\n  \"context\": 0,\n  \"data\": {\n    \"component_type\": 2,\n    \"custom_id\": \"party_play:mmfh61i1_ezda\",\n    \"id\": 2\n  },\n  \"entitlement_sku_ids\": [],\n  \"entitlements\": [],\n  \"guild\": {\n    \"features\": [\n      \"NEWS\",\n      \"COMMUNITY\"\n    ],\n    \"id\": \"1475609583086075904\",\n    \"locale\": \"en-US\"\n  },\n  \"guild_id\": \"1475609583086075904\",\n  \"guild_locale\": \"en-US\",\n  \"id\": \"1479609548867240088\",\n  \"locale\": \"en-US\",\n  \"member\": {\n    \"avatar\": null,\n    \"banner\": null,\n    \"collectibles\": null,\n    \"communication_disabled_until\": null,\n    \"deaf\": false,\n    \"display_name_styles\": null,\n    \"flags\": 0,\n    \"joined_at\": \"2026-02-23T21:45:41.201000+00:00\",\n    \"mute\": false,\n    \"nick\": null,\n    \"pending\": false,\n    \"permissions\": \"9007199254740991\",\n    \"premium_since\": null,\n    \"roles\": [\n      \"1478543981272105054\"\n    ],\n    \"unusual_dm_activity_until\": null,\n    \"user\": {\n      \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n      \"avatar_decoration_data\": null,\n      \"clan\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"collectibles\": null,\n      \"discriminator\": \"0\",\n      \"display_name_styles\": null,\n      \"global_name\": \"Tate\",\n      \"id\": \"239193203486621706\",\n      \"primary_guild\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"public_flags\": 0,\n      \"username\": \"jeffwonderpouch\"\n    }\n  },\n  \"message\": {\n    \"application_id\": \"1479589587415470091\",\n    \"attachments\": [],\n    \"author\": {\n      \"avatar\": \"e9d46aed75ebfc57986403d9b7f2909d\",\n      \"avatar_decoration_data\": null,\n      \"bot\": true,\n      \"clan\": null,\n      \"collectibles\": null,\n      \"discriminator\": \"2684\",\n      \"display_name_styles\": null,\n      \"global_name\": null,\n      \"id\": \"1479589587415470091\",\n      \"primary_guild\": null,\n      \"public_flags\": 524288,\n      \"username\": \"The Corn Field\"\n    },\n    \"channel_id\": \"1476082806601027674\",\n    \"components\": [\n      {\n        \"components\": [\n          {\n            \"custom_id\": \"party_play:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"🎮\"\n            },\n            \"id\": 2,\n            \"label\": \"I'll Play\",\n            \"style\": 3,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_coach:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"📋\"\n            },\n            \"id\": 3,\n            \"label\": \"I'll Coach\",\n            \"style\": 1,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_leave:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"🚪\"\n            },\n            \"id\": 4,\n            \"label\": \"Leave\",\n            \"style\": 4,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_cancel:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"✖️\"\n            },\n            \"id\": 5,\n            \"label\": \"Cancel\",\n            \"style\": 2,\n            \"type\": 2\n          }\n        ],\n        \"id\": 1,\n        \"type\": 1\n      }\n    ],\n    \"content\": \"\",\n    \"edited_timestamp\": \"2026-03-06T22:40:04.697000+00:00\",\n    \"embeds\": [\n      {\n        \"color\": 14427686,\n        \"content_scan_version\": 0,\n        \"description\": \"<@239193203486621706> is lookin to play some <@&1479584707896414279> who's in?\",\n        \"fields\": [\n          {\n            \"inline\": false,\n            \"name\": \"—— Players (0/5) ——\",\n            \"value\": \"`1.` 🔲 *Empty*\\n`2.` 🔲 *Empty*\\n`3.` 🔲 *Empty*\\n`4.` 🔲 *Empty*\\n`5.` 🔲 *Empty*\"\n          },\n          {\n            \"inline\": false,\n            \"name\": \"—— Coach (0/1) ——\",\n            \"value\": \"🔲 *Empty*\"\n          },\n          {\n            \"inline\": false,\n            \"name\": \"​\",\n            \"value\": \"⏰ Lobby closes <t:1772837249:R>\"\n          }\n        ],\n        \"footer\": {\n          \"text\": \"The Corn Field • DERBA-DOS\"\n        },\n        \"id\": \"1479609542739492904\",\n        \"title\": \"🌽 It's time for some Dota...\",\n        \"type\": \"rich\"\n      }\n    ],\n    \"flags\": 0,\n    \"id\": \"1479608899043856524\",\n    \"interaction\": {\n      \"id\": \"1479608888977526885\",\n      \"name\": \"createparty\",\n      \"type\": 2,\n      \"user\": {\n        \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n        \"avatar_decoration_data\": null,\n        \"clan\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"collectibles\": null,\n        \"discriminator\": \"0\",\n        \"display_name_styles\": null,\n        \"global_name\": \"Tate\",\n        \"id\": \"239193203486621706\",\n        \"primary_guild\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"public_flags\": 0,\n        \"username\": \"jeffwonderpouch\"\n      }\n    },\n    \"interaction_metadata\": {\n      \"authorizing_integration_owners\": {\n        \"0\": \"1475609583086075904\"\n      },\n      \"command_type\": 1,\n      \"id\": \"1479608888977526885\",\n      \"name\": \"createparty\",\n      \"type\": 2,\n      \"user\": {\n        \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n        \"avatar_decoration_data\": null,\n        \"clan\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"collectibles\": null,\n        \"discriminator\": \"0\",\n        \"display_name_styles\": null,\n        \"global_name\": \"Tate\",\n        \"id\": \"239193203486621706\",\n        \"primary_guild\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"public_flags\": 0,\n        \"username\": \"jeffwonderpouch\"\n      }\n    },\n    \"mention_everyone\": false,\n    \"mention_roles\": [],\n    \"mentions\": [],\n    \"pinned\": false,\n    \"timestamp\": \"2026-03-06T22:37:31.336000+00:00\",\n    \"tts\": false,\n    \"type\": 20,\n    \"webhook_id\": \"1479589587415470091\"\n  },\n  \"token\": \"aW50ZXJhY3Rpb246MTQ3OTYwOTU0ODg2NzI0MDA4ODowS3diU1F3TG5CY1lqZURSQVZKb0J1Z3dpQmlBUkNKVVhNRGVTN2VqdzRWN3dmbEkyVXo0ME5zZFZidFhmcjFEdVlUMzZhNzhWSUhLaTFWcjlMbmpuRzdzeGVkZFowdUoxaGxyT0lCaUdYRmVCTHpnTzNPRkIzUTBkUTNTdUFQUg\",\n  \"type\": 3,\n  \"version\": 1\n}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "7136f66b-437f-40f2-acf3-778922cadca0",
+    "level": "info",
+    "timestamp": 1772836806512000
+  },
+  {
+    "event_message": "  Signature valid: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "4006d7ac-8057-4867-9fd4-20e996097480",
+    "level": "info",
+    "timestamp": 1772836806512000
+  },
+  {
+    "event_message": "  Request body: {\"app_permissions\":\"9007199254740991\",\"application_id\":\"1479589587415470091\",\"attachment_size_limit\":10485760,\"authorizing_integration_owners\":{\"0\":\"1475609583086075904\"},\"channel\":{\"flags\":0,\"guild_id\":\"1475609583086075904\",\"id\":\"1476082806601027674\",\"last_message_id\":\"1479608899043856524\",\"name\":\"bot-testing\",\"nsfw\":false,\"parent_id\":\"1476088947317669929\",\"permissions\":\"9007199254740991\",\"position\":14,\"rate_limit_per_user\":0,\"topic\":null,\"type\":0},\"channel_id\":\"1476082806601027674\",\"context\":0,\"data\":{\"component_type\":2,\"custom_id\":\"party_play:mmfh61i1_ezda\",\"id\":2},\"entitlement_sku_ids\":[],\"entitlements\":[],\"guild\":{\"features\":[\"NEWS\",\"COMMUNITY\"],\"id\":\"1475609583086075904\",\"locale\":\"en-US\"},\"guild_id\":\"1475609583086075904\",\"guild_locale\":\"en-US\",\"id\":\"1479609548867240088\",\"locale\":\"en-US\",\"member\":{\"avatar\":null,\"banner\":null,\"collectibles\":null,\"communication_disabled_until\":null,\"deaf\":false,\"display_name_styles\":null,\"flags\":0,\"joined_at\":\"2026-02-23T21:45:41.201000+00:00\",\"mute\":false,\"nick\":null,\"pending\":false,\"permissions\":\"9007199254740991\",\"premium_since\":null,\"roles\":[\"1478543981272105054\"],\"unusual_dm_activity_until\":null,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"message\":{\"application_id\":\"1479589587415470091\",\"attachments\":[],\"author\":{\"avatar\":\"e9d46aed75ebfc57986403d9b7f2909d\",\"avatar_decoration_data\":null,\"bot\":true,\"clan\":null,\"collectibles\":null,\"discriminator\":\"2684\",\"display_name_styles\":null,\"global_name\":null,\"id\":\"1479589587415470091\",\"primary_guild\":null,\"public_flags\":524288,\"username\":\"The Corn Field\"},\"channel_id\":\"1476082806601027674\",\"components\":[{\"components\":[{\"custom_id\":\"party_play:mmfh61i1_ezda\",\"emoji\":{\"name\":\"🎮\"},\"id\":2,\"label\":\"I'll Play\",\"style\":3,\"type\":2},{\"custom_id\":\"party_coach:mmfh61i1_ezda\",\"emoji\":{\"name\":\"📋\"},\"id\":3,\"label\":\"I'll Coach\",\"style\":1,\"type\":2},{\"custom_id\":\"party_leave:mmfh61i1_ezda\",\"emoji\":{\"name\":\"🚪\"},\"id\":4,\"label\":\"Leave\",\"style\":4,\"type\":2},{\"custom_id\":\"party_cancel:mmfh61i1_ezda\",\"emoji\":{\"name\":\"✖️\"},\"id\":5,\"label\":\"Cancel\",\"style\":2,\"type\":2}],\"id\":1,\"type\":1}],\"content\":\"\",\"edited_timestamp\":\"2026-03-06T22:40:04.697000+00:00\",\"embeds\":[{\"color\":14427686,\"content_scan_version\":0,\"description\":\"<@239193203486621706> is lookin to play some <@&1479584707896414279> who's in?\",\"fields\":[{\"inline\":false,\"name\":\"—— Players (0/5) ——\",\"value\":\"`1.` 🔲 *Empty*\\n`2.` 🔲 *Empty*\\n`3.` 🔲 *Empty*\\n`4.` 🔲 *Empty*\\n`5.` 🔲 *Empty*\"},{\"inline\":false,\"name\":\"—— Coach (0/1) ——\",\"value\":\"🔲 *Empty*\"},{\"inline\":false,\"name\":\"​\",\"value\":\"⏰ Lobby closes <t:1772837249:R>\"}],\"footer\":{\"text\":\"The Corn Field • DERBA-DOS\"},\"id\":\"1479609542739492904\",\"title\":\"🌽 It's time for some Dota...\",\"type\":\"rich\"}],\"flags\":0,\"id\":\"1479608899043856524\",\"interaction\":{\"id\":\"1479608888977526885\",\"name\":\"createparty\",\"type\":2,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"interaction_metadata\":{\"authorizing_integration_owners\":{\"0\":\"1475609583086075904\"},\"command_type\":1,\"id\":\"1479608888977526885\",\"name\":\"createparty\",\"type\":2,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"mention_everyone\":false,\"mention_roles\":[],\"mentions\":[],\"pinned\":false,\"timestamp\":\"2026-03-06T22:37:31.336000+00:00\",\"tts\":false,\"type\":20,\"webhook_id\":\"1479589587415470091\"},\"token\":\"aW50ZXJhY3Rpb246MTQ3OTYwOTU0ODg2NzI0MDA4ODowS3diU1F3TG5CY1lqZURSQVZKb0J1Z3dpQmlBUkNKVVhNRGVTN2VqdzRWN3dmbEkyVXo0ME5zZFZidFhmcjFEdVlUMzZhNzhWSUhLaTFWcjlMbmpuRzdzeGVkZFowdUoxaGxyT0lCaUdYRmVCTHpnTzNPRkIzUTBkUTNTdUFQUg\",\"type\":3,\"version\":1}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "27db1813-9a93-4ba7-b3bf-6a74d33414bc",
+    "level": "info",
+    "timestamp": 1772836806511000
+  },
+  {
+    "event_message": "  Message to verify length: 4946\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "28abf779-3fc9-457c-9fcf-8ec166b3d8f5",
+    "level": "info",
+    "timestamp": 1772836806511000
+  },
+  {
+    "event_message": "  Signature bytes length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "0fd81050-b16c-423e-811e-a283e74d9fb7",
+    "level": "info",
+    "timestamp": 1772836806511000
+  },
+  {
+    "event_message": "  Public key bytes length: 32\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "744d479a-3f59-4fa9-929d-f4e439513656",
+    "level": "info",
+    "timestamp": 1772836806511000
+  },
+  {
+    "event_message": "  Public Key length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "3e31fc57-b0e1-4f5f-a512-010b6e8458cc",
+    "level": "info",
+    "timestamp": 1772836806509000
+  },
+  {
+    "event_message": "  Signature present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "8c61938d-b097-4990-a5cb-dd77772860e6",
+    "level": "info",
+    "timestamp": 1772836806509000
+  },
+  {
+    "event_message": "  Public Key present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "d3cc7c57-fa42-4ea2-9bc3-331eb7b63237",
+    "level": "info",
+    "timestamp": 1772836806509000
+  },
+  {
+    "event_message": "Verifying Discord request...\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "9fd8dd37-4123-44af-b0d9-bdc6d1b95df2",
+    "level": "info",
+    "timestamp": 1772836806509000
+  },
+  {
+    "event_message": "  Timestamp present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "d2df813f-b2ef-474d-bb05-60892d3639c0",
+    "level": "info",
+    "timestamp": 1772836806509000
+  },
+  {
+    "event_message": "Listening on http://localhost:9999/\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "2df229fd-195b-4b3c-9ee6-9303c53810c2",
+    "level": "info",
+    "timestamp": 1772836806505000
+  },
+  {
+    "event_message": "booted (time: 32ms)",
+    "event_type": "Boot",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "cb853679-1c4f-4651-9860-9d0e1aca61dc",
+    "level": "log",
+    "timestamp": 1772836806503000
+  },
+  {
+    "event_message": "Party finder: jeffwonderpouch left lobby mmfh61i1_ezda\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "8ee2614d-9dd0-4be9-876d-71d867d014fa",
+    "level": "info",
+    "timestamp": 1772836804495000
+  },
+  {
+    "event_message": "Discord interaction received: {\n  \"app_permissions\": \"9007199254740991\",\n  \"application_id\": \"1479589587415470091\",\n  \"attachment_size_limit\": 10485760,\n  \"authorizing_integration_owners\": {\n    \"0\": \"1475609583086075904\"\n  },\n  \"channel\": {\n    \"flags\": 0,\n    \"guild_id\": \"1475609583086075904\",\n    \"id\": \"1476082806601027674\",\n    \"last_message_id\": \"1479608899043856524\",\n    \"name\": \"bot-testing\",\n    \"nsfw\": false,\n    \"parent_id\": \"1476088947317669929\",\n    \"permissions\": \"9007199254740991\",\n    \"position\": 14,\n    \"rate_limit_per_user\": 0,\n    \"topic\": null,\n    \"type\": 0\n  },\n  \"channel_id\": \"1476082806601027674\",\n  \"context\": 0,\n  \"data\": {\n    \"component_type\": 2,\n    \"custom_id\": \"party_leave:mmfh61i1_ezda\",\n    \"id\": 3\n  },\n  \"entitlement_sku_ids\": [],\n  \"entitlements\": [],\n  \"guild\": {\n    \"features\": [\n      \"NEWS\",\n      \"COMMUNITY\"\n    ],\n    \"id\": \"1475609583086075904\",\n    \"locale\": \"en-US\"\n  },\n  \"guild_id\": \"1475609583086075904\",\n  \"guild_locale\": \"en-US\",\n  \"id\": \"1479609539849617599\",\n  \"locale\": \"en-US\",\n  \"member\": {\n    \"avatar\": null,\n    \"banner\": null,\n    \"collectibles\": null,\n    \"communication_disabled_until\": null,\n    \"deaf\": false,\n    \"display_name_styles\": null,\n    \"flags\": 0,\n    \"joined_at\": \"2026-02-23T21:45:41.201000+00:00\",\n    \"mute\": false,\n    \"nick\": null,\n    \"pending\": false,\n    \"permissions\": \"9007199254740991\",\n    \"premium_since\": null,\n    \"roles\": [\n      \"1478543981272105054\"\n    ],\n    \"unusual_dm_activity_until\": null,\n    \"user\": {\n      \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n      \"avatar_decoration_data\": null,\n      \"clan\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"collectibles\": null,\n      \"discriminator\": \"0\",\n      \"display_name_styles\": null,\n      \"global_name\": \"Tate\",\n      \"id\": \"239193203486621706\",\n      \"primary_guild\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"public_flags\": 0,\n      \"username\": \"jeffwonderpouch\"\n    }\n  },\n  \"message\": {\n    \"application_id\": \"1479589587415470091\",\n    \"attachments\": [],\n    \"author\": {\n      \"avatar\": \"e9d46aed75ebfc57986403d9b7f2909d\",\n      \"avatar_decoration_data\": null,\n      \"bot\": true,\n      \"clan\": null,\n      \"collectibles\": null,\n      \"discriminator\": \"2684\",\n      \"display_name_styles\": null,\n      \"global_name\": null,\n      \"id\": \"1479589587415470091\",\n      \"primary_guild\": null,\n      \"public_flags\": 524288,\n      \"username\": \"The Corn Field\"\n    },\n    \"channel_id\": \"1476082806601027674\",\n    \"components\": [\n      {\n        \"components\": [\n          {\n            \"custom_id\": \"party_play:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"🎮\"\n            },\n            \"id\": 2,\n            \"label\": \"I'll Play\",\n            \"style\": 3,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_leave:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"🚪\"\n            },\n            \"id\": 3,\n            \"label\": \"Leave\",\n            \"style\": 4,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_cancel:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"✖️\"\n            },\n            \"id\": 4,\n            \"label\": \"Cancel\",\n            \"style\": 2,\n            \"type\": 2\n          }\n        ],\n        \"id\": 1,\n        \"type\": 1\n      }\n    ],\n    \"content\": \"\",\n    \"edited_timestamp\": \"2026-03-06T22:39:59.553000+00:00\",\n    \"embeds\": [\n      {\n        \"color\": 14427686,\n        \"content_scan_version\": 0,\n        \"description\": \"<@239193203486621706> is lookin to play some <@&1479584707896414279> who's in?\",\n        \"fields\": [\n          {\n            \"inline\": false,\n            \"name\": \"—— Players (0/5) ——\",\n            \"value\": \"`1.` 🔲 *Empty*\\n`2.` 🔲 *Empty*\\n`3.` 🔲 *Empty*\\n`4.` 🔲 *Empty*\\n`5.` 🔲 *Empty*\"\n          },\n          {\n            \"inline\": false,\n            \"name\": \"—— Coach (1/1) ——\",\n            \"value\": \"✅ <@239193203486621706>\"\n          },\n          {\n            \"inline\": false,\n            \"name\": \"​\",\n            \"value\": \"⏰ Lobby closes <t:1772837249:R>\"\n          }\n        ],\n        \"footer\": {\n          \"text\": \"The Corn Field • DERBA-DOS\"\n        },\n        \"id\": \"1479609520933044448\",\n        \"title\": \"🌽 It's time for some Dota...\",\n        \"type\": \"rich\"\n      }\n    ],\n    \"flags\": 0,\n    \"id\": \"1479608899043856524\",\n    \"interaction\": {\n      \"id\": \"1479608888977526885\",\n      \"name\": \"createparty\",\n      \"type\": 2,\n      \"user\": {\n        \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n        \"avatar_decoration_data\": null,\n        \"clan\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"collectibles\": null,\n        \"discriminator\": \"0\",\n        \"display_name_styles\": null,\n        \"global_name\": \"Tate\",\n        \"id\": \"239193203486621706\",\n        \"primary_guild\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"public_flags\": 0,\n        \"username\": \"jeffwonderpouch\"\n      }\n    },\n    \"interaction_metadata\": {\n      \"authorizing_integration_owners\": {\n        \"0\": \"1475609583086075904\"\n      },\n      \"command_type\": 1,\n      \"id\": \"1479608888977526885\",\n      \"name\": \"createparty\",\n      \"type\": 2,\n      \"user\": {\n        \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n        \"avatar_decoration_data\": null,\n        \"clan\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"collectibles\": null,\n        \"discriminator\": \"0\",\n        \"display_name_styles\": null,\n        \"global_name\": \"Tate\",\n        \"id\": \"239193203486621706\",\n        \"primary_guild\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"public_flags\": 0,\n        \"username\": \"jeffwonderpouch\"\n      }\n    },\n    \"mention_everyone\": false,\n    \"mention_roles\": [],\n    \"mentions\": [],\n    \"pinned\": false,\n    \"timestamp\": \"2026-03-06T22:37:31.336000+00:00\",\n    \"tts\": false,\n    \"type\": 20,\n    \"webhook_id\": \"1479589587415470091\"\n  },\n  \"token\": \"aW50ZXJhY3Rpb246MTQ3OTYwOTUzOTg0OTYxNzU5OTptd2FJNDBIZm1UWENsNnl0c2tONEV3VUdUSUZvU0RyNVNGRXN6eTJJeXpyYmJYVThOZzhrd3czZE1QRHBXbVk2N05aaGxXUnVqRXF1RUsxTUszWkFsS0NNMXpISVVBQnI3eURBQmhvWFdqMVVVclljeUp6bTNUekVrS0hXYkR6RQ\",\n  \"type\": 3,\n  \"version\": 1\n}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "5ba7a535-35e4-4801-acfd-5d7f61ebed4b",
+    "level": "info",
+    "timestamp": 1772836804276000
+  },
+  {
+    "event_message": "  Signature valid: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "1eb04ed5-5bcd-44d1-8d3c-b182894f25c0",
+    "level": "info",
+    "timestamp": 1772836804276000
+  },
+  {
+    "event_message": "  Request body: {\"app_permissions\":\"9007199254740991\",\"application_id\":\"1479589587415470091\",\"attachment_size_limit\":10485760,\"authorizing_integration_owners\":{\"0\":\"1475609583086075904\"},\"channel\":{\"flags\":0,\"guild_id\":\"1475609583086075904\",\"id\":\"1476082806601027674\",\"last_message_id\":\"1479608899043856524\",\"name\":\"bot-testing\",\"nsfw\":false,\"parent_id\":\"1476088947317669929\",\"permissions\":\"9007199254740991\",\"position\":14,\"rate_limit_per_user\":0,\"topic\":null,\"type\":0},\"channel_id\":\"1476082806601027674\",\"context\":0,\"data\":{\"component_type\":2,\"custom_id\":\"party_leave:mmfh61i1_ezda\",\"id\":3},\"entitlement_sku_ids\":[],\"entitlements\":[],\"guild\":{\"features\":[\"NEWS\",\"COMMUNITY\"],\"id\":\"1475609583086075904\",\"locale\":\"en-US\"},\"guild_id\":\"1475609583086075904\",\"guild_locale\":\"en-US\",\"id\":\"1479609539849617599\",\"locale\":\"en-US\",\"member\":{\"avatar\":null,\"banner\":null,\"collectibles\":null,\"communication_disabled_until\":null,\"deaf\":false,\"display_name_styles\":null,\"flags\":0,\"joined_at\":\"2026-02-23T21:45:41.201000+00:00\",\"mute\":false,\"nick\":null,\"pending\":false,\"permissions\":\"9007199254740991\",\"premium_since\":null,\"roles\":[\"1478543981272105054\"],\"unusual_dm_activity_until\":null,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"message\":{\"application_id\":\"1479589587415470091\",\"attachments\":[],\"author\":{\"avatar\":\"e9d46aed75ebfc57986403d9b7f2909d\",\"avatar_decoration_data\":null,\"bot\":true,\"clan\":null,\"collectibles\":null,\"discriminator\":\"2684\",\"display_name_styles\":null,\"global_name\":null,\"id\":\"1479589587415470091\",\"primary_guild\":null,\"public_flags\":524288,\"username\":\"The Corn Field\"},\"channel_id\":\"1476082806601027674\",\"components\":[{\"components\":[{\"custom_id\":\"party_play:mmfh61i1_ezda\",\"emoji\":{\"name\":\"🎮\"},\"id\":2,\"label\":\"I'll Play\",\"style\":3,\"type\":2},{\"custom_id\":\"party_leave:mmfh61i1_ezda\",\"emoji\":{\"name\":\"🚪\"},\"id\":3,\"label\":\"Leave\",\"style\":4,\"type\":2},{\"custom_id\":\"party_cancel:mmfh61i1_ezda\",\"emoji\":{\"name\":\"✖️\"},\"id\":4,\"label\":\"Cancel\",\"style\":2,\"type\":2}],\"id\":1,\"type\":1}],\"content\":\"\",\"edited_timestamp\":\"2026-03-06T22:39:59.553000+00:00\",\"embeds\":[{\"color\":14427686,\"content_scan_version\":0,\"description\":\"<@239193203486621706> is lookin to play some <@&1479584707896414279> who's in?\",\"fields\":[{\"inline\":false,\"name\":\"—— Players (0/5) ——\",\"value\":\"`1.` 🔲 *Empty*\\n`2.` 🔲 *Empty*\\n`3.` 🔲 *Empty*\\n`4.` 🔲 *Empty*\\n`5.` 🔲 *Empty*\"},{\"inline\":false,\"name\":\"—— Coach (1/1) ——\",\"value\":\"✅ <@239193203486621706>\"},{\"inline\":false,\"name\":\"​\",\"value\":\"⏰ Lobby closes <t:1772837249:R>\"}],\"footer\":{\"text\":\"The Corn Field • DERBA-DOS\"},\"id\":\"1479609520933044448\",\"title\":\"🌽 It's time for some Dota...\",\"type\":\"rich\"}],\"flags\":0,\"id\":\"1479608899043856524\",\"interaction\":{\"id\":\"1479608888977526885\",\"name\":\"createparty\",\"type\":2,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"interaction_metadata\":{\"authorizing_integration_owners\":{\"0\":\"1475609583086075904\"},\"command_type\":1,\"id\":\"1479608888977526885\",\"name\":\"createparty\",\"type\":2,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"mention_everyone\":false,\"mention_roles\":[],\"mentions\":[],\"pinned\":false,\"timestamp\":\"2026-03-06T22:37:31.336000+00:00\",\"tts\":false,\"type\":20,\"webhook_id\":\"1479589587415470091\"},\"token\":\"aW50ZXJhY3Rpb246MTQ3OTYwOTUzOTg0OTYxNzU5OTptd2FJNDBIZm1UWENsNnl0c2tONEV3VUdUSUZvU0RyNVNGRXN6eTJJeXpyYmJYVThOZzhrd3czZE1QRHBXbVk2N05aaGxXUnVqRXF1RUsxTUszWkFsS0NNMXpISVVBQnI3eURBQmhvWFdqMVVVclljeUp6bTNUekVrS0hXYkR6RQ\",\"type\":3,\"version\":1}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "f5947d48-3a1e-4bac-b1e1-fb5a24cbca45",
+    "level": "info",
+    "timestamp": 1772836804275000
+  },
+  {
+    "event_message": "  Message to verify length: 4847\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "6fb36e5c-6dda-4cb2-83a4-029e007bea46",
+    "level": "info",
+    "timestamp": 1772836804275000
+  },
+  {
+    "event_message": "  Signature bytes length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "64f3e2ee-93ec-43ca-98c8-969fb78a6201",
+    "level": "info",
+    "timestamp": 1772836804275000
+  },
+  {
+    "event_message": "  Public key bytes length: 32\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "8ec34e0e-d886-4788-813b-1b5f6cbcda1c",
+    "level": "info",
+    "timestamp": 1772836804275000
+  },
+  {
+    "event_message": "  Signature present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "fc6fb553-6477-4495-985d-053c4df4dcf5",
+    "level": "info",
+    "timestamp": 1772836804273000
+  },
+  {
+    "event_message": "  Timestamp present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "3b99abfb-b126-4c5a-832f-be683233c5d4",
+    "level": "info",
+    "timestamp": 1772836804273000
+  },
+  {
+    "event_message": "  Public Key length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "7456ddb2-b2dc-470a-8eb6-7ea633a274d7",
+    "level": "info",
+    "timestamp": 1772836804273000
+  },
+  {
+    "event_message": "  Public Key present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "126ebd94-30e3-43c7-b017-2cd558be43d8",
+    "level": "info",
+    "timestamp": 1772836804273000
+  },
+  {
+    "event_message": "Verifying Discord request...\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "9909e57b-5ce4-45f3-b5ef-fc63bfe5605e",
+    "level": "info",
+    "timestamp": 1772836804272000
+  },
+  {
+    "event_message": "Listening on http://localhost:9999/\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "63b566b2-5d04-4565-b468-222b7e678834",
+    "level": "info",
+    "timestamp": 1772836804269000
+  },
+  {
+    "event_message": "booted (time: 33ms)",
+    "event_type": "Boot",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "7270e99c-1243-4a6e-af2e-1b65929406d7",
+    "level": "log",
+    "timestamp": 1772836804266000
+  },
+  {
+    "event_message": "Listening on http://localhost:9999/\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "08de9316-76a2-4757-9c1d-494034ee119d",
+    "level": "info",
+    "timestamp": 1772836803361000
+  },
+  {
+    "event_message": "booted (time: 27ms)",
+    "event_type": "Boot",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "7aba2704-d367-4731-82d7-f8c046012d8a",
+    "level": "log",
+    "timestamp": 1772836803359000
+  },
+  {
+    "event_message": "Discord interaction received: {\n  \"app_permissions\": \"9007199254740991\",\n  \"application_id\": \"1479589587415470091\",\n  \"attachment_size_limit\": 10485760,\n  \"authorizing_integration_owners\": {\n    \"0\": \"1475609583086075904\"\n  },\n  \"channel\": {\n    \"flags\": 0,\n    \"guild_id\": \"1475609583086075904\",\n    \"id\": \"1476082806601027674\",\n    \"last_message_id\": \"1479608899043856524\",\n    \"name\": \"bot-testing\",\n    \"nsfw\": false,\n    \"parent_id\": \"1476088947317669929\",\n    \"permissions\": \"9007199254740991\",\n    \"position\": 14,\n    \"rate_limit_per_user\": 0,\n    \"topic\": null,\n    \"type\": 0\n  },\n  \"channel_id\": \"1476082806601027674\",\n  \"context\": 0,\n  \"data\": {\n    \"component_type\": 2,\n    \"custom_id\": \"party_play:mmfh61i1_ezda\",\n    \"id\": 2\n  },\n  \"entitlement_sku_ids\": [],\n  \"entitlements\": [],\n  \"guild\": {\n    \"features\": [\n      \"NEWS\",\n      \"COMMUNITY\"\n    ],\n    \"id\": \"1475609583086075904\",\n    \"locale\": \"en-US\"\n  },\n  \"guild_id\": \"1475609583086075904\",\n  \"guild_locale\": \"en-US\",\n  \"id\": \"1479609528789241876\",\n  \"locale\": \"en-US\",\n  \"member\": {\n    \"avatar\": null,\n    \"banner\": null,\n    \"collectibles\": null,\n    \"communication_disabled_until\": null,\n    \"deaf\": false,\n    \"display_name_styles\": null,\n    \"flags\": 0,\n    \"joined_at\": \"2026-02-23T21:45:41.201000+00:00\",\n    \"mute\": false,\n    \"nick\": null,\n    \"pending\": false,\n    \"permissions\": \"9007199254740991\",\n    \"premium_since\": null,\n    \"roles\": [\n      \"1478543981272105054\"\n    ],\n    \"unusual_dm_activity_until\": null,\n    \"user\": {\n      \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n      \"avatar_decoration_data\": null,\n      \"clan\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"collectibles\": null,\n      \"discriminator\": \"0\",\n      \"display_name_styles\": null,\n      \"global_name\": \"Tate\",\n      \"id\": \"239193203486621706\",\n      \"primary_guild\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"public_flags\": 0,\n      \"username\": \"jeffwonderpouch\"\n    }\n  },\n  \"message\": {\n    \"application_id\": \"1479589587415470091\",\n    \"attachments\": [],\n    \"author\": {\n      \"avatar\": \"e9d46aed75ebfc57986403d9b7f2909d\",\n      \"avatar_decoration_data\": null,\n      \"bot\": true,\n      \"clan\": null,\n      \"collectibles\": null,\n      \"discriminator\": \"2684\",\n      \"display_name_styles\": null,\n      \"global_name\": null,\n      \"id\": \"1479589587415470091\",\n      \"primary_guild\": null,\n      \"public_flags\": 524288,\n      \"username\": \"The Corn Field\"\n    },\n    \"channel_id\": \"1476082806601027674\",\n    \"components\": [\n      {\n        \"components\": [\n          {\n            \"custom_id\": \"party_play:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"🎮\"\n            },\n            \"id\": 2,\n            \"label\": \"I'll Play\",\n            \"style\": 3,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_leave:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"🚪\"\n            },\n            \"id\": 3,\n            \"label\": \"Leave\",\n            \"style\": 4,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_cancel:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"✖️\"\n            },\n            \"id\": 4,\n            \"label\": \"Cancel\",\n            \"style\": 2,\n            \"type\": 2\n          }\n        ],\n        \"id\": 1,\n        \"type\": 1\n      }\n    ],\n    \"content\": \"\",\n    \"edited_timestamp\": \"2026-03-06T22:39:59.553000+00:00\",\n    \"embeds\": [\n      {\n        \"color\": 14427686,\n        \"content_scan_version\": 0,\n        \"description\": \"<@239193203486621706> is lookin to play some <@&1479584707896414279> who's in?\",\n        \"fields\": [\n          {\n            \"inline\": false,\n            \"name\": \"—— Players (0/5) ——\",\n            \"value\": \"`1.` 🔲 *Empty*\\n`2.` 🔲 *Empty*\\n`3.` 🔲 *Empty*\\n`4.` 🔲 *Empty*\\n`5.` 🔲 *Empty*\"\n          },\n          {\n            \"inline\": false,\n            \"name\": \"—— Coach (1/1) ——\",\n            \"value\": \"✅ <@239193203486621706>\"\n          },\n          {\n            \"inline\": false,\n            \"name\": \"​\",\n            \"value\": \"⏰ Lobby closes <t:1772837249:R>\"\n          }\n        ],\n        \"footer\": {\n          \"text\": \"The Corn Field • DERBA-DOS\"\n        },\n        \"id\": \"1479609520933044448\",\n        \"title\": \"🌽 It's time for some Dota...\",\n        \"type\": \"rich\"\n      }\n    ],\n    \"flags\": 0,\n    \"id\": \"1479608899043856524\",\n    \"interaction\": {\n      \"id\": \"1479608888977526885\",\n      \"name\": \"createparty\",\n      \"type\": 2,\n      \"user\": {\n        \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n        \"avatar_decoration_data\": null,\n        \"clan\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"collectibles\": null,\n        \"discriminator\": \"0\",\n        \"display_name_styles\": null,\n        \"global_name\": \"Tate\",\n        \"id\": \"239193203486621706\",\n        \"primary_guild\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"public_flags\": 0,\n        \"username\": \"jeffwonderpouch\"\n      }\n    },\n    \"interaction_metadata\": {\n      \"authorizing_integration_owners\": {\n        \"0\": \"1475609583086075904\"\n      },\n      \"command_type\": 1,\n      \"id\": \"1479608888977526885\",\n      \"name\": \"createparty\",\n      \"type\": 2,\n      \"user\": {\n        \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n        \"avatar_decoration_data\": null,\n        \"clan\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"collectibles\": null,\n        \"discriminator\": \"0\",\n        \"display_name_styles\": null,\n        \"global_name\": \"Tate\",\n        \"id\": \"239193203486621706\",\n        \"primary_guild\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"public_flags\": 0,\n        \"username\": \"jeffwonderpouch\"\n      }\n    },\n    \"mention_everyone\": false,\n    \"mention_roles\": [],\n    \"mentions\": [],\n    \"pinned\": false,\n    \"timestamp\": \"2026-03-06T22:37:31.336000+00:00\",\n    \"tts\": false,\n    \"type\": 20,\n    \"webhook_id\": \"1479589587415470091\"\n  },\n  \"token\": \"aW50ZXJhY3Rpb246MTQ3OTYwOTUyODc4OTI0MTg3NjozajdocXp5V1d4NjBaQ0l2TlVzVUZoV0JxUzV5emZFNjZrS2gzZ1U4SmVnVlRZODg2am16b0oxS3hqVWthMkpaNW5vZHJhelpHbUp2NkpldGNpSnZvb3VraldoUDQ0UGdBYVJXcUkzaDdXcmpVUzF1NGR1aXQya28zNnhKRDRUQw\",\n  \"type\": 3,\n  \"version\": 1\n}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "3088731c-f33b-41de-bb6e-59a89313ff20",
+    "level": "info",
+    "timestamp": 1772836802111000
+  },
+  {
+    "event_message": "  Signature valid: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "d1e77a2d-5033-450e-a92a-ddff20728bd2",
+    "level": "info",
+    "timestamp": 1772836802110000
+  },
+  {
+    "event_message": "  Message to verify length: 4846\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "007c33f6-f125-48d4-8083-191639f42215",
+    "level": "info",
+    "timestamp": 1772836802109000
+  },
+  {
+    "event_message": "  Request body: {\"app_permissions\":\"9007199254740991\",\"application_id\":\"1479589587415470091\",\"attachment_size_limit\":10485760,\"authorizing_integration_owners\":{\"0\":\"1475609583086075904\"},\"channel\":{\"flags\":0,\"guild_id\":\"1475609583086075904\",\"id\":\"1476082806601027674\",\"last_message_id\":\"1479608899043856524\",\"name\":\"bot-testing\",\"nsfw\":false,\"parent_id\":\"1476088947317669929\",\"permissions\":\"9007199254740991\",\"position\":14,\"rate_limit_per_user\":0,\"topic\":null,\"type\":0},\"channel_id\":\"1476082806601027674\",\"context\":0,\"data\":{\"component_type\":2,\"custom_id\":\"party_play:mmfh61i1_ezda\",\"id\":2},\"entitlement_sku_ids\":[],\"entitlements\":[],\"guild\":{\"features\":[\"NEWS\",\"COMMUNITY\"],\"id\":\"1475609583086075904\",\"locale\":\"en-US\"},\"guild_id\":\"1475609583086075904\",\"guild_locale\":\"en-US\",\"id\":\"1479609528789241876\",\"locale\":\"en-US\",\"member\":{\"avatar\":null,\"banner\":null,\"collectibles\":null,\"communication_disabled_until\":null,\"deaf\":false,\"display_name_styles\":null,\"flags\":0,\"joined_at\":\"2026-02-23T21:45:41.201000+00:00\",\"mute\":false,\"nick\":null,\"pending\":false,\"permissions\":\"9007199254740991\",\"premium_since\":null,\"roles\":[\"1478543981272105054\"],\"unusual_dm_activity_until\":null,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"message\":{\"application_id\":\"1479589587415470091\",\"attachments\":[],\"author\":{\"avatar\":\"e9d46aed75ebfc57986403d9b7f2909d\",\"avatar_decoration_data\":null,\"bot\":true,\"clan\":null,\"collectibles\":null,\"discriminator\":\"2684\",\"display_name_styles\":null,\"global_name\":null,\"id\":\"1479589587415470091\",\"primary_guild\":null,\"public_flags\":524288,\"username\":\"The Corn Field\"},\"channel_id\":\"1476082806601027674\",\"components\":[{\"components\":[{\"custom_id\":\"party_play:mmfh61i1_ezda\",\"emoji\":{\"name\":\"🎮\"},\"id\":2,\"label\":\"I'll Play\",\"style\":3,\"type\":2},{\"custom_id\":\"party_leave:mmfh61i1_ezda\",\"emoji\":{\"name\":\"🚪\"},\"id\":3,\"label\":\"Leave\",\"style\":4,\"type\":2},{\"custom_id\":\"party_cancel:mmfh61i1_ezda\",\"emoji\":{\"name\":\"✖️\"},\"id\":4,\"label\":\"Cancel\",\"style\":2,\"type\":2}],\"id\":1,\"type\":1}],\"content\":\"\",\"edited_timestamp\":\"2026-03-06T22:39:59.553000+00:00\",\"embeds\":[{\"color\":14427686,\"content_scan_version\":0,\"description\":\"<@239193203486621706> is lookin to play some <@&1479584707896414279> who's in?\",\"fields\":[{\"inline\":false,\"name\":\"—— Players (0/5) ——\",\"value\":\"`1.` 🔲 *Empty*\\n`2.` 🔲 *Empty*\\n`3.` 🔲 *Empty*\\n`4.` 🔲 *Empty*\\n`5.` 🔲 *Empty*\"},{\"inline\":false,\"name\":\"—— Coach (1/1) ——\",\"value\":\"✅ <@239193203486621706>\"},{\"inline\":false,\"name\":\"​\",\"value\":\"⏰ Lobby closes <t:1772837249:R>\"}],\"footer\":{\"text\":\"The Corn Field • DERBA-DOS\"},\"id\":\"1479609520933044448\",\"title\":\"🌽 It's time for some Dota...\",\"type\":\"rich\"}],\"flags\":0,\"id\":\"1479608899043856524\",\"interaction\":{\"id\":\"1479608888977526885\",\"name\":\"createparty\",\"type\":2,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"interaction_metadata\":{\"authorizing_integration_owners\":{\"0\":\"1475609583086075904\"},\"command_type\":1,\"id\":\"1479608888977526885\",\"name\":\"createparty\",\"type\":2,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"mention_everyone\":false,\"mention_roles\":[],\"mentions\":[],\"pinned\":false,\"timestamp\":\"2026-03-06T22:37:31.336000+00:00\",\"tts\":false,\"type\":20,\"webhook_id\":\"1479589587415470091\"},\"token\":\"aW50ZXJhY3Rpb246MTQ3OTYwOTUyODc4OTI0MTg3NjozajdocXp5V1d4NjBaQ0l2TlVzVUZoV0JxUzV5emZFNjZrS2gzZ1U4SmVnVlRZODg2am16b0oxS3hqVWthMkpaNW5vZHJhelpHbUp2NkpldGNpSnZvb3VraldoUDQ0UGdBYVJXcUkzaDdXcmpVUzF1NGR1aXQya28zNnhKRDRUQw\",\"type\":3,\"version\":1}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "bb7536d6-0acb-4b84-9324-11502d0b9113",
+    "level": "info",
+    "timestamp": 1772836802109000
+  },
+  {
+    "event_message": "  Signature bytes length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "e7ef48e2-6096-40e1-89ec-82d8bc343fe7",
+    "level": "info",
+    "timestamp": 1772836802109000
+  },
+  {
+    "event_message": "  Public key bytes length: 32\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "12a5d51b-6db2-453b-aa61-4ab95491c2c5",
+    "level": "info",
+    "timestamp": 1772836802109000
+  },
+  {
+    "event_message": "Verifying Discord request...\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "9e7e6dcc-a49a-4475-b144-593763d686fb",
+    "level": "info",
+    "timestamp": 1772836802104000
+  },
+  {
+    "event_message": "  Public Key present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "9004be0b-cacc-4a2e-940a-ec00dc75bb86",
+    "level": "info",
+    "timestamp": 1772836802104000
+  },
+  {
+    "event_message": "  Public Key length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "7b16f0bf-3084-47ec-a991-19a61379798b",
+    "level": "info",
+    "timestamp": 1772836802104000
+  },
+  {
+    "event_message": "  Timestamp present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "08bdc173-8bd4-481e-a160-b698eee9b908",
+    "level": "info",
+    "timestamp": 1772836802104000
+  },
+  {
+    "event_message": "  Signature present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "8d3b9788-8b6f-4e53-abdb-1b0da2c15035",
+    "level": "info",
+    "timestamp": 1772836802104000
+  },
+  {
+    "event_message": "Listening on http://localhost:9999/\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "3485672e-8cff-452d-ae58-52010b4eb746",
+    "level": "info",
+    "timestamp": 1772836802082000
+  },
+  {
+    "event_message": "booted (time: 240ms)",
+    "event_type": "Boot",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "b604cf6d-df5c-4429-8689-b273149d51bd",
+    "level": "log",
+    "timestamp": 1772836802079000
+  },
+  {
+    "event_message": "Party finder: jeffwonderpouch joined lobby mmfh61i1_ezda as Coach\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "8ff7ce61-1e7d-4bd7-9568-f3872fba07fd",
+    "level": "info",
+    "timestamp": 1772836799315000
+  },
+  {
+    "event_message": "  Signature valid: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "99efa2a2-a487-497c-b578-cbb124fa2d7d",
+    "level": "info",
+    "timestamp": 1772836799160000
+  },
+  {
+    "event_message": "Discord interaction received: {\n  \"app_permissions\": \"9007199254740991\",\n  \"application_id\": \"1479589587415470091\",\n  \"attachment_size_limit\": 10485760,\n  \"authorizing_integration_owners\": {\n    \"0\": \"1475609583086075904\"\n  },\n  \"channel\": {\n    \"flags\": 0,\n    \"guild_id\": \"1475609583086075904\",\n    \"id\": \"1476082806601027674\",\n    \"last_message_id\": \"1479608899043856524\",\n    \"name\": \"bot-testing\",\n    \"nsfw\": false,\n    \"parent_id\": \"1476088947317669929\",\n    \"permissions\": \"9007199254740991\",\n    \"position\": 14,\n    \"rate_limit_per_user\": 0,\n    \"topic\": null,\n    \"type\": 0\n  },\n  \"channel_id\": \"1476082806601027674\",\n  \"context\": 0,\n  \"data\": {\n    \"component_type\": 2,\n    \"custom_id\": \"party_coach:mmfh61i1_ezda\",\n    \"id\": 3\n  },\n  \"entitlement_sku_ids\": [],\n  \"entitlements\": [],\n  \"guild\": {\n    \"features\": [\n      \"NEWS\",\n      \"COMMUNITY\"\n    ],\n    \"id\": \"1475609583086075904\",\n    \"locale\": \"en-US\"\n  },\n  \"guild_id\": \"1475609583086075904\",\n  \"guild_locale\": \"en-US\",\n  \"id\": \"1479609518420918416\",\n  \"locale\": \"en-US\",\n  \"member\": {\n    \"avatar\": null,\n    \"banner\": null,\n    \"collectibles\": null,\n    \"communication_disabled_until\": null,\n    \"deaf\": false,\n    \"display_name_styles\": null,\n    \"flags\": 0,\n    \"joined_at\": \"2026-02-23T21:45:41.201000+00:00\",\n    \"mute\": false,\n    \"nick\": null,\n    \"pending\": false,\n    \"permissions\": \"9007199254740991\",\n    \"premium_since\": null,\n    \"roles\": [\n      \"1478543981272105054\"\n    ],\n    \"unusual_dm_activity_until\": null,\n    \"user\": {\n      \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n      \"avatar_decoration_data\": null,\n      \"clan\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"collectibles\": null,\n      \"discriminator\": \"0\",\n      \"display_name_styles\": null,\n      \"global_name\": \"Tate\",\n      \"id\": \"239193203486621706\",\n      \"primary_guild\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"public_flags\": 0,\n      \"username\": \"jeffwonderpouch\"\n    }\n  },\n  \"message\": {\n    \"application_id\": \"1479589587415470091\",\n    \"attachments\": [],\n    \"author\": {\n      \"avatar\": \"e9d46aed75ebfc57986403d9b7f2909d\",\n      \"avatar_decoration_data\": null,\n      \"bot\": true,\n      \"clan\": null,\n      \"collectibles\": null,\n      \"discriminator\": \"2684\",\n      \"display_name_styles\": null,\n      \"global_name\": null,\n      \"id\": \"1479589587415470091\",\n      \"primary_guild\": null,\n      \"public_flags\": 524288,\n      \"username\": \"The Corn Field\"\n    },\n    \"channel_id\": \"1476082806601027674\",\n    \"components\": [\n      {\n        \"components\": [\n          {\n            \"custom_id\": \"party_play:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"🎮\"\n            },\n            \"id\": 2,\n            \"label\": \"I'll Play\",\n            \"style\": 3,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_coach:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"📋\"\n            },\n            \"id\": 3,\n            \"label\": \"I'll Coach\",\n            \"style\": 1,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_leave:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"🚪\"\n            },\n            \"id\": 4,\n            \"label\": \"Leave\",\n            \"style\": 4,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_cancel:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"✖️\"\n            },\n            \"id\": 5,\n            \"label\": \"Cancel\",\n            \"style\": 2,\n            \"type\": 2\n          }\n        ],\n        \"id\": 1,\n        \"type\": 1\n      }\n    ],\n    \"content\": \"\",\n    \"edited_timestamp\": \"2026-03-06T22:39:57.043000+00:00\",\n    \"embeds\": [\n      {\n        \"color\": 14427686,\n        \"content_scan_version\": 0,\n        \"description\": \"<@239193203486621706> is lookin to play some <@&1479584707896414279> who's in?\",\n        \"fields\": [\n          {\n            \"inline\": false,\n            \"name\": \"—— Players (0/5) ——\",\n            \"value\": \"`1.` 🔲 *Empty*\\n`2.` 🔲 *Empty*\\n`3.` 🔲 *Empty*\\n`4.` 🔲 *Empty*\\n`5.` 🔲 *Empty*\"\n          },\n          {\n            \"inline\": false,\n            \"name\": \"—— Coach (0/1) ——\",\n            \"value\": \"🔲 *Empty*\"\n          },\n          {\n            \"inline\": false,\n            \"name\": \"​\",\n            \"value\": \"⏰ Lobby closes <t:1772837249:R>\"\n          }\n        ],\n        \"footer\": {\n          \"text\": \"The Corn Field • DERBA-DOS\"\n        },\n        \"id\": \"1479609510518591619\",\n        \"title\": \"🌽 It's time for some Dota...\",\n        \"type\": \"rich\"\n      }\n    ],\n    \"flags\": 0,\n    \"id\": \"1479608899043856524\",\n    \"interaction\": {\n      \"id\": \"1479608888977526885\",\n      \"name\": \"createparty\",\n      \"type\": 2,\n      \"user\": {\n        \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n        \"avatar_decoration_data\": null,\n        \"clan\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"collectibles\": null,\n        \"discriminator\": \"0\",\n        \"display_name_styles\": null,\n        \"global_name\": \"Tate\",\n        \"id\": \"239193203486621706\",\n        \"primary_guild\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"public_flags\": 0,\n        \"username\": \"jeffwonderpouch\"\n      }\n    },\n    \"interaction_metadata\": {\n      \"authorizing_integration_owners\": {\n        \"0\": \"1475609583086075904\"\n      },\n      \"command_type\": 1,\n      \"id\": \"1479608888977526885\",\n      \"name\": \"createparty\",\n      \"type\": 2,\n      \"user\": {\n        \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n        \"avatar_decoration_data\": null,\n        \"clan\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"collectibles\": null,\n        \"discriminator\": \"0\",\n        \"display_name_styles\": null,\n        \"global_name\": \"Tate\",\n        \"id\": \"239193203486621706\",\n        \"primary_guild\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"public_flags\": 0,\n        \"username\": \"jeffwonderpouch\"\n      }\n    },\n    \"mention_everyone\": false,\n    \"mention_roles\": [],\n    \"mentions\": [],\n    \"pinned\": false,\n    \"timestamp\": \"2026-03-06T22:37:31.336000+00:00\",\n    \"tts\": false,\n    \"type\": 20,\n    \"webhook_id\": \"1479589587415470091\"\n  },\n  \"token\": \"aW50ZXJhY3Rpb246MTQ3OTYwOTUxODQyMDkxODQxNjpEZ3E1cXJ4UkNHUnRTZDVBT2lxNlA1T1NxUmo5amFHeG5WMGpMeFhRYlllME4xRjBrclZiWlBZWnlJVElwOU9BeHVBbFpkT0lYQ3loVjdEMUlkTk94cDg0dGhEblFQWVVUZVlhV0t2UXVqZGxPMHdVcjBlbjlzeDJHbWdiZTE0Ng\",\n  \"type\": 3,\n  \"version\": 1\n}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "09985423-0cb8-4c6c-b2e7-b6c491156f11",
+    "level": "info",
+    "timestamp": 1772836799160000
+  },
+  {
+    "event_message": "  Signature bytes length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "c54c0d76-dcaa-4a37-9051-26ebc4431f94",
+    "level": "info",
+    "timestamp": 1772836799159000
+  },
+  {
+    "event_message": "  Public key bytes length: 32\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "b9d2ef8c-5be7-4c2d-b0e7-06968480bd02",
+    "level": "info",
+    "timestamp": 1772836799159000
+  },
+  {
+    "event_message": "  Message to verify length: 4947\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "b95c3796-b370-40e0-9e34-5f8bd8a517a1",
+    "level": "info",
+    "timestamp": 1772836799159000
+  },
+  {
+    "event_message": "  Request body: {\"app_permissions\":\"9007199254740991\",\"application_id\":\"1479589587415470091\",\"attachment_size_limit\":10485760,\"authorizing_integration_owners\":{\"0\":\"1475609583086075904\"},\"channel\":{\"flags\":0,\"guild_id\":\"1475609583086075904\",\"id\":\"1476082806601027674\",\"last_message_id\":\"1479608899043856524\",\"name\":\"bot-testing\",\"nsfw\":false,\"parent_id\":\"1476088947317669929\",\"permissions\":\"9007199254740991\",\"position\":14,\"rate_limit_per_user\":0,\"topic\":null,\"type\":0},\"channel_id\":\"1476082806601027674\",\"context\":0,\"data\":{\"component_type\":2,\"custom_id\":\"party_coach:mmfh61i1_ezda\",\"id\":3},\"entitlement_sku_ids\":[],\"entitlements\":[],\"guild\":{\"features\":[\"NEWS\",\"COMMUNITY\"],\"id\":\"1475609583086075904\",\"locale\":\"en-US\"},\"guild_id\":\"1475609583086075904\",\"guild_locale\":\"en-US\",\"id\":\"1479609518420918416\",\"locale\":\"en-US\",\"member\":{\"avatar\":null,\"banner\":null,\"collectibles\":null,\"communication_disabled_until\":null,\"deaf\":false,\"display_name_styles\":null,\"flags\":0,\"joined_at\":\"2026-02-23T21:45:41.201000+00:00\",\"mute\":false,\"nick\":null,\"pending\":false,\"permissions\":\"9007199254740991\",\"premium_since\":null,\"roles\":[\"1478543981272105054\"],\"unusual_dm_activity_until\":null,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"message\":{\"application_id\":\"1479589587415470091\",\"attachments\":[],\"author\":{\"avatar\":\"e9d46aed75ebfc57986403d9b7f2909d\",\"avatar_decoration_data\":null,\"bot\":true,\"clan\":null,\"collectibles\":null,\"discriminator\":\"2684\",\"display_name_styles\":null,\"global_name\":null,\"id\":\"1479589587415470091\",\"primary_guild\":null,\"public_flags\":524288,\"username\":\"The Corn Field\"},\"channel_id\":\"1476082806601027674\",\"components\":[{\"components\":[{\"custom_id\":\"party_play:mmfh61i1_ezda\",\"emoji\":{\"name\":\"🎮\"},\"id\":2,\"label\":\"I'll Play\",\"style\":3,\"type\":2},{\"custom_id\":\"party_coach:mmfh61i1_ezda\",\"emoji\":{\"name\":\"📋\"},\"id\":3,\"label\":\"I'll Coach\",\"style\":1,\"type\":2},{\"custom_id\":\"party_leave:mmfh61i1_ezda\",\"emoji\":{\"name\":\"🚪\"},\"id\":4,\"label\":\"Leave\",\"style\":4,\"type\":2},{\"custom_id\":\"party_cancel:mmfh61i1_ezda\",\"emoji\":{\"name\":\"✖️\"},\"id\":5,\"label\":\"Cancel\",\"style\":2,\"type\":2}],\"id\":1,\"type\":1}],\"content\":\"\",\"edited_timestamp\":\"2026-03-06T22:39:57.043000+00:00\",\"embeds\":[{\"color\":14427686,\"content_scan_version\":0,\"description\":\"<@239193203486621706> is lookin to play some <@&1479584707896414279> who's in?\",\"fields\":[{\"inline\":false,\"name\":\"—— Players (0/5) ——\",\"value\":\"`1.` 🔲 *Empty*\\n`2.` 🔲 *Empty*\\n`3.` 🔲 *Empty*\\n`4.` 🔲 *Empty*\\n`5.` 🔲 *Empty*\"},{\"inline\":false,\"name\":\"—— Coach (0/1) ——\",\"value\":\"🔲 *Empty*\"},{\"inline\":false,\"name\":\"​\",\"value\":\"⏰ Lobby closes <t:1772837249:R>\"}],\"footer\":{\"text\":\"The Corn Field • DERBA-DOS\"},\"id\":\"1479609510518591619\",\"title\":\"🌽 It's time for some Dota...\",\"type\":\"rich\"}],\"flags\":0,\"id\":\"1479608899043856524\",\"interaction\":{\"id\":\"1479608888977526885\",\"name\":\"createparty\",\"type\":2,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"interaction_metadata\":{\"authorizing_integration_owners\":{\"0\":\"1475609583086075904\"},\"command_type\":1,\"id\":\"1479608888977526885\",\"name\":\"createparty\",\"type\":2,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"mention_everyone\":false,\"mention_roles\":[],\"mentions\":[],\"pinned\":false,\"timestamp\":\"2026-03-06T22:37:31.336000+00:00\",\"tts\":false,\"type\":20,\"webhook_id\":\"1479589587415470091\"},\"token\":\"aW50ZXJhY3Rpb246MTQ3OTYwOTUxODQyMDkxODQxNjpEZ3E1cXJ4UkNHUnRTZDVBT2lxNlA1T1NxUmo5amFHeG5WMGpMeFhRYlllME4xRjBrclZiWlBZWnlJVElwOU9BeHVBbFpkT0lYQ3loVjdEMUlkTk94cDg0dGhEblFQWVVUZVlhV0t2UXVqZGxPMHdVcjBlbjlzeDJHbWdiZTE0Ng\",\"type\":3,\"version\":1}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "3af4cd95-5092-4d69-a4b5-c5a2044e75a0",
+    "level": "info",
+    "timestamp": 1772836799159000
+  },
+  {
+    "event_message": "  Signature present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "62fbd47d-31a0-4e33-8a95-00da3438f5b7",
+    "level": "info",
+    "timestamp": 1772836799157000
+  },
+  {
+    "event_message": "  Public Key length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "4c423e8b-921f-45e2-8f30-60b7d6762d21",
+    "level": "info",
+    "timestamp": 1772836799157000
+  },
+  {
+    "event_message": "Verifying Discord request...\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "be86cbda-ef97-415e-b1ee-c0fa7ce37819",
+    "level": "info",
+    "timestamp": 1772836799157000
+  },
+  {
+    "event_message": "  Timestamp present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "0ce9b455-61ce-42cf-8b8f-49cf6a8f966f",
+    "level": "info",
+    "timestamp": 1772836799157000
+  },
+  {
+    "event_message": "  Public Key present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "5408ebcc-baf1-464b-a904-1dc87875b8c9",
+    "level": "info",
+    "timestamp": 1772836799157000
+  },
+  {
+    "event_message": "Listening on http://localhost:9999/\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "8b9a4731-616f-427b-aa82-e6e57f0e0dfc",
+    "level": "info",
+    "timestamp": 1772836799153000
+  },
+  {
+    "event_message": "booted (time: 39ms)",
+    "event_type": "Boot",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "6a314c11-8819-4114-8b35-1be794878fc5",
+    "level": "log",
+    "timestamp": 1772836799151000
+  },
+  {
+    "event_message": "Party finder: jeffwonderpouch left lobby mmfh61i1_ezda\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "15fc2635-68de-4ecb-bf2d-d8261586b5ea",
+    "level": "info",
+    "timestamp": 1772836796778000
+  },
+  {
+    "event_message": "Discord interaction received: {\n  \"app_permissions\": \"9007199254740991\",\n  \"application_id\": \"1479589587415470091\",\n  \"attachment_size_limit\": 10485760,\n  \"authorizing_integration_owners\": {\n    \"0\": \"1475609583086075904\"\n  },\n  \"channel\": {\n    \"flags\": 0,\n    \"guild_id\": \"1475609583086075904\",\n    \"id\": \"1476082806601027674\",\n    \"last_message_id\": \"1479608899043856524\",\n    \"name\": \"bot-testing\",\n    \"nsfw\": false,\n    \"parent_id\": \"1476088947317669929\",\n    \"permissions\": \"9007199254740991\",\n    \"position\": 14,\n    \"rate_limit_per_user\": 0,\n    \"topic\": null,\n    \"type\": 0\n  },\n  \"channel_id\": \"1476082806601027674\",\n  \"context\": 0,\n  \"data\": {\n    \"component_type\": 2,\n    \"custom_id\": \"party_leave:mmfh61i1_ezda\",\n    \"id\": 4\n  },\n  \"entitlement_sku_ids\": [],\n  \"entitlements\": [],\n  \"guild\": {\n    \"features\": [\n      \"COMMUNITY\",\n      \"NEWS\"\n    ],\n    \"id\": \"1475609583086075904\",\n    \"locale\": \"en-US\"\n  },\n  \"guild_id\": \"1475609583086075904\",\n  \"guild_locale\": \"en-US\",\n  \"id\": \"1479609507306012865\",\n  \"locale\": \"en-US\",\n  \"member\": {\n    \"avatar\": null,\n    \"banner\": null,\n    \"collectibles\": null,\n    \"communication_disabled_until\": null,\n    \"deaf\": false,\n    \"display_name_styles\": null,\n    \"flags\": 0,\n    \"joined_at\": \"2026-02-23T21:45:41.201000+00:00\",\n    \"mute\": false,\n    \"nick\": null,\n    \"pending\": false,\n    \"permissions\": \"9007199254740991\",\n    \"premium_since\": null,\n    \"roles\": [\n      \"1478543981272105054\"\n    ],\n    \"unusual_dm_activity_until\": null,\n    \"user\": {\n      \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n      \"avatar_decoration_data\": null,\n      \"clan\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"collectibles\": null,\n      \"discriminator\": \"0\",\n      \"display_name_styles\": null,\n      \"global_name\": \"Tate\",\n      \"id\": \"239193203486621706\",\n      \"primary_guild\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"public_flags\": 0,\n      \"username\": \"jeffwonderpouch\"\n    }\n  },\n  \"message\": {\n    \"application_id\": \"1479589587415470091\",\n    \"attachments\": [],\n    \"author\": {\n      \"avatar\": \"e9d46aed75ebfc57986403d9b7f2909d\",\n      \"avatar_decoration_data\": null,\n      \"bot\": true,\n      \"clan\": null,\n      \"collectibles\": null,\n      \"discriminator\": \"2684\",\n      \"display_name_styles\": null,\n      \"global_name\": null,\n      \"id\": \"1479589587415470091\",\n      \"primary_guild\": null,\n      \"public_flags\": 524288,\n      \"username\": \"The Corn Field\"\n    },\n    \"channel_id\": \"1476082806601027674\",\n    \"components\": [\n      {\n        \"components\": [\n          {\n            \"custom_id\": \"party_play:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"🎮\"\n            },\n            \"id\": 2,\n            \"label\": \"I'll Play\",\n            \"style\": 3,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_coach:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"📋\"\n            },\n            \"id\": 3,\n            \"label\": \"I'll Coach\",\n            \"style\": 1,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_leave:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"🚪\"\n            },\n            \"id\": 4,\n            \"label\": \"Leave\",\n            \"style\": 4,\n            \"type\": 2\n          },\n          {\n            \"custom_id\": \"party_cancel:mmfh61i1_ezda\",\n            \"emoji\": {\n              \"name\": \"✖️\"\n            },\n            \"id\": 5,\n            \"label\": \"Cancel\",\n            \"style\": 2,\n            \"type\": 2\n          }\n        ],\n        \"id\": 1,\n        \"type\": 1\n      }\n    ],\n    \"content\": \"\",\n    \"edited_timestamp\": null,\n    \"embeds\": [\n      {\n        \"color\": 14427686,\n        \"content_scan_version\": 0,\n        \"description\": \"<@239193203486621706> is lookin to play some <@&1479584707896414279> who's in?\",\n        \"fields\": [\n          {\n            \"inline\": false,\n            \"name\": \"—— Players (1/5) ——\",\n            \"value\": \"`1.` ✅ <@239193203486621706>\\n`2.` 🔲 *Empty*\\n`3.` 🔲 *Empty*\\n`4.` 🔲 *Empty*\\n`5.` 🔲 *Empty*\"\n          },\n          {\n            \"inline\": false,\n            \"name\": \"—— Coach (0/1) ——\",\n            \"value\": \"🔲 *Empty*\"\n          },\n          {\n            \"inline\": false,\n            \"name\": \"​\",\n            \"value\": \"⏰ Lobby closes <t:1772837249:R>\"\n          }\n        ],\n        \"footer\": {\n          \"text\": \"The Corn Field • DERBA-DOS\"\n        },\n        \"id\": \"1479608899043856525\",\n        \"title\": \"🌽 It's time for some Dota...\",\n        \"type\": \"rich\"\n      }\n    ],\n    \"flags\": 0,\n    \"id\": \"1479608899043856524\",\n    \"interaction\": {\n      \"id\": \"1479608888977526885\",\n      \"name\": \"createparty\",\n      \"type\": 2,\n      \"user\": {\n        \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n        \"avatar_decoration_data\": null,\n        \"clan\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"collectibles\": null,\n        \"discriminator\": \"0\",\n        \"display_name_styles\": null,\n        \"global_name\": \"Tate\",\n        \"id\": \"239193203486621706\",\n        \"primary_guild\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"public_flags\": 0,\n        \"username\": \"jeffwonderpouch\"\n      }\n    },\n    \"interaction_metadata\": {\n      \"authorizing_integration_owners\": {\n        \"0\": \"1475609583086075904\"\n      },\n      \"command_type\": 1,\n      \"id\": \"1479608888977526885\",\n      \"name\": \"createparty\",\n      \"type\": 2,\n      \"user\": {\n        \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n        \"avatar_decoration_data\": null,\n        \"clan\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"collectibles\": null,\n        \"discriminator\": \"0\",\n        \"display_name_styles\": null,\n        \"global_name\": \"Tate\",\n        \"id\": \"239193203486621706\",\n        \"primary_guild\": {\n          \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n          \"identity_enabled\": true,\n          \"identity_guild_id\": \"74287487459004416\",\n          \"tag\": \"DOTA\"\n        },\n        \"public_flags\": 0,\n        \"username\": \"jeffwonderpouch\"\n      }\n    },\n    \"mention_everyone\": false,\n    \"mention_roles\": [],\n    \"mentions\": [],\n    \"pinned\": false,\n    \"timestamp\": \"2026-03-06T22:37:31.336000+00:00\",\n    \"tts\": false,\n    \"type\": 20,\n    \"webhook_id\": \"1479589587415470091\"\n  },\n  \"token\": \"aW50ZXJhY3Rpb246MTQ3OTYwOTUwNzMwNjAxMjg2NTptdHJMS016QlNPdDU0VEE5U0xtZ1VaMjg4cWhMVnVDczVaaHlORkVWQWhtSEdCbzhOWkFONXBXdGU2WE14Q1YxYnZqeG5WOVNNRlY0Vmp0U2c4ekZIa2RuRHdVaHpMRlFRTkZrc2RCOVBjYklkb2ZlcGhhVEVBMlI2RHhOR2x2Mw\",\n  \"type\": 3,\n  \"version\": 1\n}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "df1ff70b-e986-49e9-9e49-946b5b7e70f1",
+    "level": "info",
+    "timestamp": 1772836796567000
+  },
+  {
+    "event_message": "  Signature valid: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "bbcfdc5f-90a0-4118-a92d-c40f11e3e8fb",
+    "level": "info",
+    "timestamp": 1772836796567000
+  },
+  {
+    "event_message": "  Signature bytes length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "5352062b-6b49-49c3-8001-fb106152278a",
+    "level": "info",
+    "timestamp": 1772836796566000
+  },
+  {
+    "event_message": "  Message to verify length: 4930\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "7056ffaf-5fb0-4b40-970c-78f88f198e71",
+    "level": "info",
+    "timestamp": 1772836796566000
+  },
+  {
+    "event_message": "  Public key bytes length: 32\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "5315a820-b01a-415c-a850-3ed43b972867",
+    "level": "info",
+    "timestamp": 1772836796566000
+  },
+  {
+    "event_message": "  Request body: {\"app_permissions\":\"9007199254740991\",\"application_id\":\"1479589587415470091\",\"attachment_size_limit\":10485760,\"authorizing_integration_owners\":{\"0\":\"1475609583086075904\"},\"channel\":{\"flags\":0,\"guild_id\":\"1475609583086075904\",\"id\":\"1476082806601027674\",\"last_message_id\":\"1479608899043856524\",\"name\":\"bot-testing\",\"nsfw\":false,\"parent_id\":\"1476088947317669929\",\"permissions\":\"9007199254740991\",\"position\":14,\"rate_limit_per_user\":0,\"topic\":null,\"type\":0},\"channel_id\":\"1476082806601027674\",\"context\":0,\"data\":{\"component_type\":2,\"custom_id\":\"party_leave:mmfh61i1_ezda\",\"id\":4},\"entitlement_sku_ids\":[],\"entitlements\":[],\"guild\":{\"features\":[\"COMMUNITY\",\"NEWS\"],\"id\":\"1475609583086075904\",\"locale\":\"en-US\"},\"guild_id\":\"1475609583086075904\",\"guild_locale\":\"en-US\",\"id\":\"1479609507306012865\",\"locale\":\"en-US\",\"member\":{\"avatar\":null,\"banner\":null,\"collectibles\":null,\"communication_disabled_until\":null,\"deaf\":false,\"display_name_styles\":null,\"flags\":0,\"joined_at\":\"2026-02-23T21:45:41.201000+00:00\",\"mute\":false,\"nick\":null,\"pending\":false,\"permissions\":\"9007199254740991\",\"premium_since\":null,\"roles\":[\"1478543981272105054\"],\"unusual_dm_activity_until\":null,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"message\":{\"application_id\":\"1479589587415470091\",\"attachments\":[],\"author\":{\"avatar\":\"e9d46aed75ebfc57986403d9b7f2909d\",\"avatar_decoration_data\":null,\"bot\":true,\"clan\":null,\"collectibles\":null,\"discriminator\":\"2684\",\"display_name_styles\":null,\"global_name\":null,\"id\":\"1479589587415470091\",\"primary_guild\":null,\"public_flags\":524288,\"username\":\"The Corn Field\"},\"channel_id\":\"1476082806601027674\",\"components\":[{\"components\":[{\"custom_id\":\"party_play:mmfh61i1_ezda\",\"emoji\":{\"name\":\"🎮\"},\"id\":2,\"label\":\"I'll Play\",\"style\":3,\"type\":2},{\"custom_id\":\"party_coach:mmfh61i1_ezda\",\"emoji\":{\"name\":\"📋\"},\"id\":3,\"label\":\"I'll Coach\",\"style\":1,\"type\":2},{\"custom_id\":\"party_leave:mmfh61i1_ezda\",\"emoji\":{\"name\":\"🚪\"},\"id\":4,\"label\":\"Leave\",\"style\":4,\"type\":2},{\"custom_id\":\"party_cancel:mmfh61i1_ezda\",\"emoji\":{\"name\":\"✖️\"},\"id\":5,\"label\":\"Cancel\",\"style\":2,\"type\":2}],\"id\":1,\"type\":1}],\"content\":\"\",\"edited_timestamp\":null,\"embeds\":[{\"color\":14427686,\"content_scan_version\":0,\"description\":\"<@239193203486621706> is lookin to play some <@&1479584707896414279> who's in?\",\"fields\":[{\"inline\":false,\"name\":\"—— Players (1/5) ——\",\"value\":\"`1.` ✅ <@239193203486621706>\\n`2.` 🔲 *Empty*\\n`3.` 🔲 *Empty*\\n`4.` 🔲 *Empty*\\n`5.` 🔲 *Empty*\"},{\"inline\":false,\"name\":\"—— Coach (0/1) ——\",\"value\":\"🔲 *Empty*\"},{\"inline\":false,\"name\":\"​\",\"value\":\"⏰ Lobby closes <t:1772837249:R>\"}],\"footer\":{\"text\":\"The Corn Field • DERBA-DOS\"},\"id\":\"1479608899043856525\",\"title\":\"🌽 It's time for some Dota...\",\"type\":\"rich\"}],\"flags\":0,\"id\":\"1479608899043856524\",\"interaction\":{\"id\":\"1479608888977526885\",\"name\":\"createparty\",\"type\":2,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"interaction_metadata\":{\"authorizing_integration_owners\":{\"0\":\"1475609583086075904\"},\"command_type\":1,\"id\":\"1479608888977526885\",\"name\":\"createparty\",\"type\":2,\"user\":{\"avatar\":\"d935fa99dea8ed54c80a6e894f536096\",\"avatar_decoration_data\":null,\"clan\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"collectibles\":null,\"discriminator\":\"0\",\"display_name_styles\":null,\"global_name\":\"Tate\",\"id\":\"239193203486621706\",\"primary_guild\":{\"badge\":\"2abd166afb302f1736cafdf970a5d18d\",\"identity_enabled\":true,\"identity_guild_id\":\"74287487459004416\",\"tag\":\"DOTA\"},\"public_flags\":0,\"username\":\"jeffwonderpouch\"}},\"mention_everyone\":false,\"mention_roles\":[],\"mentions\":[],\"pinned\":false,\"timestamp\":\"2026-03-06T22:37:31.336000+00:00\",\"tts\":false,\"type\":20,\"webhook_id\":\"1479589587415470091\"},\"token\":\"aW50ZXJhY3Rpb246MTQ3OTYwOTUwNzMwNjAxMjg2NTptdHJMS016QlNPdDU0VEE5U0xtZ1VaMjg4cWhMVnVDczVaaHlORkVWQWhtSEdCbzhOWkFONXBXdGU2WE14Q1YxYnZqeG5WOVNNRlY0Vmp0U2c4ekZIa2RuRHdVaHpMRlFRTkZrc2RCOVBjYklkb2ZlcGhhVEVBMlI2RHhOR2x2Mw\",\"type\":3,\"version\":1}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "d311dad8-e6ca-4944-afae-6a0f6e5624c0",
+    "level": "info",
+    "timestamp": 1772836796566000
+  },
+  {
+    "event_message": "Verifying Discord request...\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "17da8a8c-1037-412a-8398-ab10a44c4455",
+    "level": "info",
+    "timestamp": 1772836796564000
+  },
+  {
+    "event_message": "  Signature present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "37a42bf4-d52b-43cb-9110-0e582f282ae8",
+    "level": "info",
+    "timestamp": 1772836796564000
+  },
+  {
+    "event_message": "  Public Key present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "4b0099cb-9094-4136-9104-df3134155831",
+    "level": "info",
+    "timestamp": 1772836796564000
+  },
+  {
+    "event_message": "  Timestamp present: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "79a324d0-48dd-4619-b332-8252f01310b2",
+    "level": "info",
+    "timestamp": 1772836796564000
+  },
+  {
+    "event_message": "  Public Key length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "461dcfdf-25ff-47b9-af86-d653ea4581e8",
+    "level": "info",
+    "timestamp": 1772836796564000
+  },
+  {
+    "event_message": "Listening on http://localhost:9999/\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "e8e46a91-c3ca-473a-98bb-f6d9f2092ff6",
+    "level": "info",
+    "timestamp": 1772836796560000
+  },
+  {
+    "event_message": "booted (time: 32ms)",
+    "event_type": "Boot",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "23a2fcd3-ff05-4a1d-99a4-618830d6adaf",
+    "level": "log",
+    "timestamp": 1772836796558000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "d69a13af-2db3-4911-b9b3-f09842eedc85",
+    "level": "log",
+    "timestamp": 1772836724218000
+  },
+  {
+    "event_message": "DERBA-DOS lobby mmfh61i1_ezda message ID: 1479608899043856524\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "7f2ffacf-427c-420b-8bf5-86efde0b7fdc",
+    "level": "info",
+    "timestamp": 1772836652446000
+  },
+  {
+    "event_message": "DERBA-DOS lobby created: mmfh61i1_ezda by jeffwonderpouch (239193203486621706)\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "d16fd466-5947-4c88-9b5c-2fff03cd5f28",
+    "level": "info",
+    "timestamp": 1772836651254000
+  },
+  {
+    "event_message": "  Signature valid: true\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "24c25df5-7038-41d8-ba65-8c9ce75330f4",
+    "level": "info",
+    "timestamp": 1772836649215000
+  },
+  {
+    "event_message": "Discord interaction received: {\n  \"app_permissions\": \"9007199254740991\",\n  \"application_id\": \"1479589587415470091\",\n  \"attachment_size_limit\": 10485760,\n  \"authorizing_integration_owners\": {\n    \"0\": \"1475609583086075904\"\n  },\n  \"channel\": {\n    \"flags\": 0,\n    \"guild_id\": \"1475609583086075904\",\n    \"id\": \"1476082806601027674\",\n    \"last_message_id\": \"1479607988766638283\",\n    \"name\": \"bot-testing\",\n    \"nsfw\": false,\n    \"parent_id\": \"1476088947317669929\",\n    \"permissions\": \"9007199254740991\",\n    \"position\": 14,\n    \"rate_limit_per_user\": 0,\n    \"topic\": null,\n    \"type\": 0\n  },\n  \"channel_id\": \"1476082806601027674\",\n  \"context\": 0,\n  \"data\": {\n    \"id\": \"1479604490817638573\",\n    \"name\": \"createparty\",\n    \"options\": [\n      {\n        \"name\": \"mode\",\n        \"type\": 3,\n        \"value\": \"dos\"\n      }\n    ],\n    \"type\": 1\n  },\n  \"entitlement_sku_ids\": [],\n  \"entitlements\": [],\n  \"guild\": {\n    \"features\": [\n      \"COMMUNITY\",\n      \"NEWS\"\n    ],\n    \"id\": \"1475609583086075904\",\n    \"locale\": \"en-US\"\n  },\n  \"guild_id\": \"1475609583086075904\",\n  \"guild_locale\": \"en-US\",\n  \"id\": \"1479608888977526885\",\n  \"locale\": \"en-US\",\n  \"member\": {\n    \"avatar\": null,\n    \"banner\": null,\n    \"collectibles\": null,\n    \"communication_disabled_until\": null,\n    \"deaf\": false,\n    \"display_name_styles\": null,\n    \"flags\": 0,\n    \"joined_at\": \"2026-02-23T21:45:41.201000+00:00\",\n    \"mute\": false,\n    \"nick\": null,\n    \"pending\": false,\n    \"permissions\": \"9007199254740991\",\n    \"premium_since\": null,\n    \"roles\": [\n      \"1478543981272105054\"\n    ],\n    \"unusual_dm_activity_until\": null,\n    \"user\": {\n      \"avatar\": \"d935fa99dea8ed54c80a6e894f536096\",\n      \"avatar_decoration_data\": null,\n      \"clan\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"collectibles\": null,\n      \"discriminator\": \"0\",\n      \"display_name_styles\": null,\n      \"global_name\": \"Tate\",\n      \"id\": \"239193203486621706\",\n      \"primary_guild\": {\n        \"badge\": \"2abd166afb302f1736cafdf970a5d18d\",\n        \"identity_enabled\": true,\n        \"identity_guild_id\": \"74287487459004416\",\n        \"tag\": \"DOTA\"\n      },\n      \"public_flags\": 0,\n      \"username\": \"jeffwonderpouch\"\n    }\n  },\n  \"token\": \"aW50ZXJhY3Rpb246MTQ3OTYwODg4ODk3NzUyNjg4NTpQbUVBUEF4S2NKclpJRHBhQlZuRFNVUUdsVTNBU1Y5a2xJZFJ1anU3dGhXaTFVWmlseExrcHowQ0xJVzJrd2lzRDJ0WE5XeHd1UzY3TnFQZm5rTE9DaXdFdjRYeEU4R0JrdGhJMXVPMk1kVjhjbkxyeDI4QWFGRnhDQVUwWkxqUQ\",\n  \"type\": 2,\n  \"version\": 1\n}\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "38abe90d-2dd2-4e23-8bb2-c86cd18c86a6",
+    "level": "info",
+    "timestamp": 1772836649215000
+  },
+  {
+    "event_message": "  Public key bytes length: 32\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "122ecc2d-ab6e-4190-8a17-9b5547f77a0e",
+    "level": "info",
+    "timestamp": 1772836649214000
+  },
+  {
+    "event_message": "  Signature bytes length: 64\n",
+    "event_type": "Log",
+    "function_id": "8478dfd2-5338-4f48-bbc6-5b576dbd775b",
+    "id": "37859740-d57e-4d96-8cd8-c9babde9c2bf",
+    "level": "info",
+    "timestamp": 1772836649214000
+  }
+]

@@ -1,0 +1,802 @@
+[
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 601ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0c51b3a7-cc4b-4e73-9d32-7aeb83f2be83",
+    "level": "info",
+    "timestamp": 1772317556856000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fde022f3-a41f-4d91-9a31-d21e4bb644cd",
+    "level": "info",
+    "timestamp": 1772317556255000
+  },
+  {
+    "event_message": "booted (time: 59ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7560e857-8336-4d8e-b2a4-4ac39ba21071",
+    "level": "log",
+    "timestamp": 1772317556156000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 301ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f01b1101-ea4c-4f29-b1ac-c0224e940d82",
+    "level": "info",
+    "timestamp": 1772317555896000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "838e7782-ea93-4dab-971a-d7232b91f447",
+    "level": "info",
+    "timestamp": 1772317555595000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0761c105-b0bb-4ac4-a0c4-93767366949a",
+    "level": "log",
+    "timestamp": 1772317552201000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4c159ad6-5728-40cc-a1ef-a2afd33bbcb1",
+    "level": "log",
+    "timestamp": 1772317550667000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e2508170-7da4-40e9-9b77-3064f7ab608a",
+    "level": "log",
+    "timestamp": 1772317549903000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fcdfc2ed-10d3-4d7f-8a3e-3628ac1e0070",
+    "level": "log",
+    "timestamp": 1772317548800000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "37e55660-bcf7-4d6b-80de-6204655f8d3b",
+    "level": "log",
+    "timestamp": 1772317548288000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "24a8b9f1-3ec9-437c-a26a-8af4f708c8b4",
+    "level": "log",
+    "timestamp": 1772317548141000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a911ba00-4d06-4d2e-b54f-d6cfddf770e3",
+    "level": "log",
+    "timestamp": 1772317547879000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fc3d4292-7004-4a0a-a0f5-1bb59189c1f0",
+    "level": "log",
+    "timestamp": 1772317547550000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1e48c9db-e401-48ef-8e8d-24845ca03942",
+    "level": "log",
+    "timestamp": 1772317547507000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "604312ad-e476-49fc-82c2-95ebedd070aa",
+    "level": "log",
+    "timestamp": 1772317547438000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9add52dd-608e-42b9-a0ee-befc293b2f70",
+    "level": "log",
+    "timestamp": 1772317547357000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "11b86dbc-e809-461d-a01a-0415afc34b58",
+    "level": "log",
+    "timestamp": 1772317547254000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d0f245d2-4ea8-401d-aaa5-801eecfc03d5",
+    "level": "log",
+    "timestamp": 1772317546980000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "503d9dba-26ec-46f0-8d1c-82bf0f7ce5ee",
+    "level": "log",
+    "timestamp": 1772317546703000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a31cb72f-e8ef-4e23-abc9-60988dc14d4f",
+    "level": "log",
+    "timestamp": 1772317546587000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5c676df8-017f-4211-ad88-dec7763b5648",
+    "level": "log",
+    "timestamp": 1772317546579000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2b4910b7-4b37-4c18-a95b-cc18d9a75a21",
+    "level": "log",
+    "timestamp": 1772317546574000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0b0c1ad1-a437-4c10-b598-78dfc85ad332",
+    "level": "log",
+    "timestamp": 1772317546557000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "364fcb4f-047a-457c-b989-db06340d8e05",
+    "level": "log",
+    "timestamp": 1772317546371000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1295a08b-5108-4e74-9b10-4d15ddcd4bd8",
+    "level": "log",
+    "timestamp": 1772317546229000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b17eda2e-86eb-4d7c-9bc0-2ac37aa01372",
+    "level": "log",
+    "timestamp": 1772317546085000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c4b7d432-9791-4618-959f-8d8487da6f9c",
+    "level": "log",
+    "timestamp": 1772317545921000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "23390ad0-6a13-4ada-9cde-65de12e26893",
+    "level": "log",
+    "timestamp": 1772317545900000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "55edc628-6f55-40f1-8c0f-99f9a24ead15",
+    "level": "log",
+    "timestamp": 1772317545770000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0bdf8a96-e624-44b8-bfd3-ee70747f7aed",
+    "level": "log",
+    "timestamp": 1772317545322000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b7365095-5176-4f3c-bd33-5e60eccb8318",
+    "level": "log",
+    "timestamp": 1772317545295000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4a2305bd-fd80-4c0d-be00-7a31bebb18df",
+    "level": "log",
+    "timestamp": 1772317545126000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d7df365e-4ff2-4326-a96a-1930208b605e",
+    "level": "log",
+    "timestamp": 1772317545119000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "88ca9ef8-8346-4da2-83e5-e79a1c4b06a2",
+    "level": "log",
+    "timestamp": 1772317545087000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "56dda6a4-78d0-46a8-a26c-5f5e3fc9b33f",
+    "level": "log",
+    "timestamp": 1772317545086000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "80079b99-516e-4ad8-b6aa-130f9407b8ff",
+    "level": "log",
+    "timestamp": 1772317545061000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9027cde9-8bf8-471c-898a-dba1f21404a8",
+    "level": "log",
+    "timestamp": 1772317544403000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3c0cc0bb-5142-4059-9dda-b2783d5fdcaa",
+    "level": "log",
+    "timestamp": 1772317543728000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8702c4f7-d40e-4533-8ddf-36dea1a75afa",
+    "level": "log",
+    "timestamp": 1772317543463000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7bcc6e68-6ecd-47cc-a379-0688beea598f",
+    "level": "log",
+    "timestamp": 1772317543239000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b956e891-b57f-4602-8ca3-2e913f003b76",
+    "level": "log",
+    "timestamp": 1772317543116000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 619ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ca30203f-6cec-44d5-8be7-2a9ae7eac0a8",
+    "level": "info",
+    "timestamp": 1772317542227000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f4f0ad88-53e2-4c66-9bdd-498f37bf4761",
+    "level": "log",
+    "timestamp": 1772317542054000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6691f0cb-0769-4314-8f5a-0e676fd8ff35",
+    "level": "log",
+    "timestamp": 1772317541717000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a09c8a56-e76f-4213-8f1f-60925b0bc2c1",
+    "level": "info",
+    "timestamp": 1772317541608000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ab971cf4-451a-48b0-af88-66e86ecf1bea",
+    "level": "log",
+    "timestamp": 1772317541427000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ac342213-acd1-484d-8e7f-ad0790839160",
+    "level": "log",
+    "timestamp": 1772317541424000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f368da23-8014-4a0c-bc5a-8f4c253d536f",
+    "level": "log",
+    "timestamp": 1772317541418000
+  },
+  {
+    "event_message": "booted (time: 66ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f768d13e-2f59-433d-bbcd-756420355633",
+    "level": "log",
+    "timestamp": 1772317541392000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f8bf875b-924d-4306-9873-301424a27feb",
+    "level": "log",
+    "timestamp": 1772317541347000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 313ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "99d741a9-3e95-46f1-af7e-bf1be51957a4",
+    "level": "info",
+    "timestamp": 1772317541120000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4ac72429-73c6-467a-8740-6b2c82afbe67",
+    "level": "log",
+    "timestamp": 1772317541036000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "aabb79c9-3388-42c5-9c27-135b3a8f836b",
+    "level": "log",
+    "timestamp": 1772317541033000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0619a3ba-f8f2-4d2b-b227-53418a69d33f",
+    "level": "info",
+    "timestamp": 1772317540806000
+  },
+  {
+    "event_message": "booted (time: 58ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "18cebf54-3037-4c98-af0f-d7e0c963d17f",
+    "level": "log",
+    "timestamp": 1772317540702000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bd75f4f7-edce-481e-bbcf-9d9fdceddda5",
+    "level": "log",
+    "timestamp": 1772317540646000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8d4fd032-b8d0-4161-87f0-f2eaa944e2fa",
+    "level": "log",
+    "timestamp": 1772317539985000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "60968ae1-8c30-43ea-b060-d4437680671f",
+    "level": "log",
+    "timestamp": 1772317539881000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7b60578a-b93e-4739-98ae-a2ced02daed4",
+    "level": "log",
+    "timestamp": 1772317539854000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6e32fb06-e281-4cca-8438-e080b13ca344",
+    "level": "log",
+    "timestamp": 1772317537399000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/kkup/hall-of-fame/players 200 650ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7a95d2c9-be26-4376-87d5-4432bc1e0905",
+    "level": "info",
+    "timestamp": 1772317528664000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/kkup/tournaments 200 379ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0a2bc1a7-d19e-4e18-a86c-b46a8696b742",
+    "level": "info",
+    "timestamp": 1772317528637000
+  },
+  {
+    "event_message": "Hall of Fame players: 52 players in 553ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "872e2f81-a4b1-486f-aa84-a36bb62f166b",
+    "level": "info",
+    "timestamp": 1772317528567000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/tournaments 200 199ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2af52251-57c3-4e6a-a14f-ec0421635b6b",
+    "level": "info",
+    "timestamp": 1772317528527000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/tournaments\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "89a477ea-9342-4748-834c-780eb97ada31",
+    "level": "info",
+    "timestamp": 1772317528327000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/kkup/tournaments\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d07e37e9-142e-4f5e-88a7-b10a04dd63db",
+    "level": "info",
+    "timestamp": 1772317528258000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/tournaments 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c17f0353-43ad-435a-9a59-e75aea950406",
+    "level": "info",
+    "timestamp": 1772317528126000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/tournaments\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "35cc0cee-2cb3-4989-81a9-ec4148ddfcd5",
+    "level": "info",
+    "timestamp": 1772317528124000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/kkup/hall-of-fame/players\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "25ade97c-82e2-4f8b-937b-81ab5b092d2d",
+    "level": "info",
+    "timestamp": 1772317528014000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/kkup/tournaments 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6a1b4ecc-6ddd-4c49-b982-5e7bffe6e147",
+    "level": "info",
+    "timestamp": 1772317528000000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/kkup/tournaments\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2d5cf640-e9f0-4afa-a50a-6e84cfeb03d1",
+    "level": "info",
+    "timestamp": 1772317527998000
+  },
+  {
+    "event_message": "booted (time: 109ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "eb9d6575-46b3-4a06-90c8-d6b5046796f4",
+    "level": "log",
+    "timestamp": 1772317527930000
+  },
+  {
+    "event_message": "booted (time: 80ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "97f1bbd3-9b11-426e-a8a2-3c877e8ec8ec",
+    "level": "log",
+    "timestamp": 1772317527882000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/kkup/hall-of-fame/players 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4295d09d-3d6f-4268-8795-c72892f8e01d",
+    "level": "info",
+    "timestamp": 1772317527797000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/kkup/hall-of-fame/players\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1f5817ae-10d7-4dc5-87c5-91069cc596d1",
+    "level": "info",
+    "timestamp": 1772317527796000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 605ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "07b47821-664f-418e-966f-9a131af39e50",
+    "level": "info",
+    "timestamp": 1772317526878000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ddcb0a6d-90ba-45a2-a20e-139e9fd6f1d6",
+    "level": "log",
+    "timestamp": 1772317526347000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "703acf28-1a6e-4172-a2a4-50e71e666eb6",
+    "level": "info",
+    "timestamp": 1772317526273000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/workshop-stats 200 121ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "594bc228-886c-4ad6-91a3-d7de7236d9e2",
+    "level": "info",
+    "timestamp": 1772317526223000
+  },
+  {
+    "event_message": "booted (time: 54ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "25726cd2-1004-4daf-b7fa-313a4bad7ebd",
+    "level": "log",
+    "timestamp": 1772317526173000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 323ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fb3eccfc-26a8-4c5b-9650-60f1bad568d3",
+    "level": "info",
+    "timestamp": 1772317526103000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/workshop-stats\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bc6d9c47-8ffe-4399-b57c-039755a64dc3",
+    "level": "info",
+    "timestamp": 1772317526102000
+  },
+  {
+    "event_message": "booted (time: 52ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e22584c9-348b-4d43-92cd-bd9e8cd8340a",
+    "level": "log",
+    "timestamp": 1772317526004000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/rank-actions/d531472d-e798-4593-9cd6-c6617cc89f0b 500 93ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3613d621-6f9c-47d1-a874-dbbafd569d4b",
+    "level": "info",
+    "timestamp": 1772317525992000
+  },
+  {
+    "event_message": "Get rank actions error: ReferenceError: kv is not defined\n    at file:///var/tmp/sb-compile-edge-runtime/source/routes-user-profile.ts:297:26\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.3/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.3/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.3/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.3/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.3/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.3/dist/hono-base.js:301:25\n    at async mapped (ext:runtime/http.js:231:18)\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "56f0da61-fccd-4cde-8295-96d013286e06",
+    "level": "error",
+    "timestamp": 1772317525991000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 312ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cdeb42cc-e750-4df8-8e90-b5cd9e4a992c",
+    "level": "info",
+    "timestamp": 1772317525932000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/rank-actions/d531472d-e798-4593-9cd6-c6617cc89f0b\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e124ff32-7cf8-4220-b743-3aab9199af23",
+    "level": "info",
+    "timestamp": 1772317525899000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b01f5090-1907-45e6-aa9a-45e2e7900daa",
+    "level": "info",
+    "timestamp": 1772317525779000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/workshop-stats 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a23bc48e-5b6a-42e2-91a2-68c6c57dd635",
+    "level": "info",
+    "timestamp": 1772317525735000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/workshop-stats\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8b893655-a631-4035-94a4-090f7638a92f",
+    "level": "info",
+    "timestamp": 1772317525733000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b8c4b46b-5988-4015-bb75-9e5f843f672f",
+    "level": "log",
+    "timestamp": 1772317525713000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/rank-actions/d531472d-e798-4593-9cd6-c6617cc89f0b 204 0ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "228294c5-cefb-4ee2-b284-00434a1efd51",
+    "level": "info",
+    "timestamp": 1772317525695000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/rank-actions/d531472d-e798-4593-9cd6-c6617cc89f0b\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "952fefa8-6887-44e3-b296-0d9ccbdda3d0",
+    "level": "info",
+    "timestamp": 1772317525694000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f384e30e-6e3a-4b38-b19d-17c724f022be",
+    "level": "info",
+    "timestamp": 1772317525620000
+  },
+  {
+    "event_message": "booted (time: 62ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "21110918-1c65-420d-b9fb-94304006ca89",
+    "level": "log",
+    "timestamp": 1772317525619000
+  },
+  {
+    "event_message": "booted (time: 51ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "07ae9389-7821-4ba7-a94e-4e3e97ed8833",
+    "level": "log",
+    "timestamp": 1772317525594000
+  },
+  {
+    "event_message": "booted (time: 48ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c194c867-b400-4e9e-aa19-43f7dd28aab6",
+    "level": "log",
+    "timestamp": 1772317525586000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 539ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d0827618-3f86-41eb-b309-af769da573bf",
+    "level": "info",
+    "timestamp": 1772317512977000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4e2be81f-0cbc-4747-8f85-66fcaf8ae0cc",
+    "level": "info",
+    "timestamp": 1772317512438000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/kkup/tournaments/e8ab0ad8-99c1-4ae0-8d65-dd112dab31e9/teams/098dda87-3808-4d30-849e-9809a4dc7677/invites?status=pending 200 499ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "642183a8-a8f2-4fe1-a506-ad64796515ad",
+    "level": "info",
+    "timestamp": 1772317512339000
+  }
+]

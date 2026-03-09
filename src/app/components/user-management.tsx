@@ -1,13 +1,12 @@
+import { isOfficer, isMember, getRoleBadgeTag, getRoleBadgeStyle, getRoleDisplayName, getRoleOptions, getRoleFilterOptions } from '@/lib/roles';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
-import { Users, Shield, Crown, UserX, Loader2, ChevronDown, ChevronUp, Star, Link, Unlink, ChevronsUp, ChevronsDown, RotateCcw, SquareCheck, Square, Search } from 'lucide-react';
+import { Users, Shield, Crown, UserX, Loader2, ChevronDown, ChevronUp, Star, Link, ChevronsUp, ChevronsDown, RotateCcw, SquareCheck, Square, Search } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { ConfirmModal } from '@/app/components/confirm-modal';
 import { SuccessModal } from '@/app/components/success-modal';
-import { LinkKKupProfileModal } from '@/app/components/link-kkup-profile-modal';
-
-type ActionType = 'rank_up' | 'rank_down' | 'prestige' | 'rank_to_max' | 'rank_to_min' | 'reset_prestige' | 'link_kkup' | 'unlink_kkup';
+type ActionType = 'rank_up' | 'rank_down' | 'prestige' | 'rank_to_max' | 'rank_to_min' | 'reset_prestige';
 
 const ACTION_CONFIG: Record<ActionType, { label: string; shortLabel: string; color: string; hoverColor: string; icon: any; description: string; destructive?: boolean }> = {
   rank_up: {
@@ -34,18 +33,10 @@ const ACTION_CONFIG: Record<ActionType, { label: string; shortLabel: string; col
     icon: Star,
     description: 'Prestige up (resets rank to 1)',
   },
-  link_kkup: {
-    label: 'Link KKUP',
-    shortLabel: 'Link',
-    color: 'bg-[#6366f1]',
-    hoverColor: 'hover:bg-[#4f46e5]',
-    icon: Link,
-    description: 'Link to KKUP player profile',
-  },
   rank_to_max: {
     label: 'Max Rank',
     shortLabel: 'Max',
-    color: 'bg-gradient-to-r from-[#f59e0b] to-[#f97316]',
+    color: 'bg-gradient-to-r from-[#f59e0b] to-harvest',
     hoverColor: 'hover:brightness-110',
     icon: ChevronsUp,
     description: 'Set to max rank for current prestige',
@@ -68,15 +59,6 @@ const ACTION_CONFIG: Record<ActionType, { label: string; shortLabel: string; col
     description: 'Reset prestige to 0 and rank to 1',
     destructive: true,
   },
-  unlink_kkup: {
-    label: 'Unlink KKUP',
-    shortLabel: 'Unlink',
-    color: 'bg-[#dc2626]',
-    hoverColor: 'hover:bg-[#b91c1c]',
-    icon: Unlink,
-    description: 'Remove KKUP profile link',
-    destructive: true,
-  },
 };
 
 export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> }) {
@@ -87,7 +69,6 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUserIds, setSelectedUserIds] = useState<Set<string>>(new Set());
   const [actionLoading, setActionLoading] = useState(false);
-  const [linkingUser, setLinkingUser] = useState<any | null>(null);
   const [confirmAction, setConfirmAction] = useState<{
     type: 'role_change' | ActionType;
     userIds: string[];
@@ -152,12 +133,7 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
     
     if (selectedUsers.length === 0) return;
 
-    // Link KKUP only works for single selection
-    if (action === 'link_kkup') {
-      if (selectedUsers.length !== 1) return;
-      setLinkingUser(selectedUsers[0]);
-      return;
-    }
+
 
     setConfirmAction({
       type: action,
@@ -203,18 +179,6 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ role: newRole }),
-              }
-            );
-          } else if (type === 'unlink_kkup') {
-            response = await fetch(
-              `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/unlink-user-kkup-profile`,
-              {
-                method: 'POST',
-                headers: {
-                  'Authorization': `Bearer ${session.access_token}`,
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ user_id: userId }),
               }
             );
           } else {
@@ -292,26 +256,6 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
     }
   };
 
-  const getRoleIcon = (role: string) => {
-    switch (role) {
-      case 'owner': return <Crown className="w-3.5 h-3.5 text-[#f59e0b]" />;
-      case 'queen_of_hog': return <span className="text-xs">🐗</span>;
-      case 'admin': return <Shield className="w-3.5 h-3.5 text-[#3b82f6]" />;
-      case 'member': return <Users className="w-3.5 h-3.5 text-[#10b981]" />;
-      default: return <UserX className="w-3.5 h-3.5 text-[#6b7280]" />;
-    }
-  };
-
-  const getRoleBadgeColor = (role: string) => {
-    switch (role) {
-      case 'owner': return 'bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/30';
-      case 'queen_of_hog': return 'bg-[#ec4899]/10 text-[#ec4899] border-[#ec4899]/30';
-      case 'admin': return 'bg-[#3b82f6]/10 text-[#3b82f6] border-[#3b82f6]/30';
-      case 'member': return 'bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30';
-      default: return 'bg-[#6b7280]/10 text-[#6b7280] border-[#6b7280]/30';
-    }
-  };
-
   const toggleSelectUser = (userId: string) => {
     setSelectedUserIds(prev => {
       const next = new Set(prev);
@@ -343,9 +287,9 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-8 border-2 border-[#0f172a]/10 text-center">
-        <Loader2 className="w-10 h-10 animate-spin text-[#f97316] mx-auto mb-2" />
-        <p className="text-sm text-[#0f172a]/70">Loading users...</p>
+      <div className="bg-card rounded-2xl shadow-sm p-8 border-2 border-border text-center">
+        <Loader2 className="w-10 h-10 animate-spin text-harvest mx-auto mb-2" />
+        <p className="text-sm text-muted-foreground">Loading users...</p>
       </div>
     );
   }
@@ -371,17 +315,17 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border-2 border-[#0f172a]/10 overflow-hidden">
+    <div className="bg-card rounded-2xl shadow-sm border-2 border-border overflow-hidden">
       {/* Header */}
-      <div className="p-4 sm:p-6 border-b border-[#0f172a]/10">
+      <div className="p-4 sm:p-6 border-b border-border">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#f97316]/10 flex items-center justify-center">
-              <Users className="w-5 h-5 text-[#f97316]" />
+            <div className="w-10 h-10 rounded-full bg-harvest/10 flex items-center justify-center">
+              <Users className="w-5 h-5 text-harvest" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-[#0f172a]">User Management</h3>
-              <p className="text-sm text-[#0f172a]/60">{users.length} total users</p>
+              <h3 className="text-lg font-bold text-foreground">User Manager</h3>
+              <p className="text-sm text-muted-foreground">{users.length} total users</p>
             </div>
           </div>
         </div>
@@ -389,38 +333,35 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
         {/* Search + Filter */}
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0f172a]/40" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search users..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-lg border-2 border-[#0f172a]/10 bg-white text-sm text-[#0f172a] focus:outline-none focus:border-[#f97316]/40 transition-colors"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border-2 border-border bg-input-background text-sm text-foreground focus:outline-none focus:border-harvest/40 transition-colors"
             />
           </div>
           <select
             value={filterRole}
             onChange={(e) => setFilterRole(e.target.value)}
-            className="px-3 py-2 rounded-lg border-2 border-[#0f172a]/10 bg-white text-sm text-[#0f172a] cursor-pointer hover:border-[#f97316]/30 transition-colors"
+            className="px-3 py-2 rounded-lg border-2 border-border bg-input-background text-sm text-foreground cursor-pointer hover:border-harvest/30 transition-colors"
           >
-            <option value="all">All Roles</option>
-            <option value="owner">Owner</option>
-            <option value="queen_of_hog">Queen Of Hog</option>
-            <option value="admin">Admin</option>
-            <option value="member">Member</option>
-            <option value="guest">Guest</option>
+            {getRoleFilterOptions().map(option => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
           </select>
         </div>
 
         {/* Select All + Selection Count */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#0f172a]/5">
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
           <button
             type="button"
             onClick={toggleSelectAll}
-            className="flex items-center gap-2 text-sm text-[#0f172a]/70 hover:text-[#0f172a] transition-colors"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             {allSelected ? (
-              <SquareCheck className="w-4 h-4 text-[#f97316]" />
+              <SquareCheck className="w-4 h-4 text-harvest" />
             ) : (
               <Square className="w-4 h-4" />
             )}
@@ -429,7 +370,7 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
             </span>
           </button>
           {someSelected && (
-            <span className="text-xs font-semibold text-[#f97316] bg-[#f97316]/10 px-2.5 py-1 rounded-full">
+            <span className="text-xs font-semibold text-harvest bg-harvest/10 px-2.5 py-1 rounded-full">
               {selectedUserIds.size} selected
             </span>
           )}
@@ -438,7 +379,7 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
 
       {/* Action Bar — shown when users are selected */}
       {someSelected && (
-        <div className="bg-gradient-to-r from-[#0f172a] to-[#1e293b] px-4 sm:px-6 py-4 border-b border-[#0f172a]/10">
+        <div className="bg-gradient-to-r from-soil to-[#1e293b] px-4 sm:px-6 py-4 border-b border-border">
           <p className="text-xs text-white/60 font-medium mb-3">
             Actions for {selectedUserIds.size} selected user{selectedUserIds.size > 1 ? 's' : ''}:
           </p>
@@ -446,9 +387,7 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
             {(Object.keys(ACTION_CONFIG) as ActionType[]).map((action) => {
               const config = ACTION_CONFIG[action];
               const Icon = config.icon;
-              const disabled = actionLoading || 
-                (action === 'link_kkup' && selectedUserIds.size !== 1) ||
-                (action !== 'link_kkup' && action !== 'unlink_kkup' && selectedNonGuests.length === 0);
+              const disabled = actionLoading || selectedNonGuests.length === 0;
 
               return (
                 <button
@@ -470,9 +409,9 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
       )}
 
       {/* User List */}
-      <div className="divide-y divide-[#0f172a]/5 max-h-[500px] overflow-y-auto">
+      <div className="divide-y divide-border max-h-[520px] overflow-y-auto scrollbar-visible">
         {filteredUsers.length === 0 ? (
-          <p className="text-center text-[#0f172a]/60 py-8">No users found.</p>
+          <p className="text-center text-muted-foreground py-8">No users found.</p>
         ) : (
           filteredUsers.map((user) => {
             const isSelected = selectedUserIds.has(user.id);
@@ -481,17 +420,17 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
                 key={user.id}
                 className={`flex items-center gap-3 px-4 sm:px-6 py-3 transition-colors cursor-pointer ${
                   isSelected 
-                    ? 'bg-[#f97316]/5' 
-                    : 'hover:bg-[#fdf5e9]/50'
+                    ? 'bg-harvest/5' 
+                    : 'hover:bg-muted/50'
                 }`}
                 onClick={() => toggleSelectUser(user.id)}
               >
                 {/* Checkbox */}
                 <div className="flex-shrink-0">
                   {isSelected ? (
-                    <SquareCheck className="w-5 h-5 text-[#f97316]" />
+                    <SquareCheck className="w-5 h-5 text-harvest" />
                   ) : (
-                    <Square className="w-5 h-5 text-[#0f172a]/20" />
+                    <Square className="w-5 h-5 text-muted-foreground/40" />
                   )}
                 </div>
 
@@ -500,11 +439,13 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
                   <img
                     src={user.discord_avatar}
                     alt={user.discord_username}
-                    className="w-9 h-9 rounded-full border-2 border-[#0f172a]/10 flex-shrink-0"
+                    className="w-9 h-9 rounded-full border-2 border-border flex-shrink-0"
+                    width={36}
+                    height={36}
                   />
                 ) : (
-                  <div className="w-9 h-9 rounded-full bg-[#f97316]/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[#f97316] font-bold text-sm">
+                  <div className="w-9 h-9 rounded-full bg-harvest/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-harvest font-bold text-sm">
                       {user.discord_username?.[0]?.toUpperCase() || '?'}
                     </span>
                   </div>
@@ -513,21 +454,20 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
                 {/* User Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="font-semibold text-sm text-[#0f172a] truncate">{user.discord_username}</p>
-                    {(user.role === 'owner' || user.role === 'queen_of_hog' || user.role === 'admin') && (
-                      <div className={`px-1.5 py-0.5 rounded-full text-[9px] font-semibold border flex items-center gap-0.5 ${getRoleBadgeColor(user.role)}`}>
-                        {getRoleIcon(user.role)}
-                        {user.role === 'owner' ? 'OWNER' : user.role === 'queen_of_hog' ? 'QOH' : 'ADMIN'}
+                    <p className="font-semibold text-sm text-foreground truncate">{user.discord_username}</p>
+                    {user.role !== 'guest' && (
+                      <div className={`px-1.5 py-0.5 rounded-full text-[9px] font-semibold border flex items-center gap-0.5 ${getRoleBadgeStyle(user.role).badge}`}>
+                        {getRoleBadgeTag(user.role)}
                       </div>
                     )}
-                    {user.kkup_player_profile_id && (
+                    {user.steam_id && (
                       <div className="px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-[#6366f1]/10 text-[#6366f1] border border-[#6366f1]/30 flex items-center gap-0.5">
                         <Link className="w-2.5 h-2.5" />
                         KKUP
                       </div>
                     )}
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-[#0f172a]/50">
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <span>{user.ranks?.name || 'No Rank'}</span>
                     <span>-</span>
                     <span>P{user.prestige_level || 0}</span>
@@ -537,21 +477,19 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
                 {/* Role Dropdown */}
                 <div className="flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                   {user.role === 'owner' ? (
-                    <div className="text-[10px] text-[#0f172a]/30 italic">Protected</div>
+                    <div className="text-[10px] text-muted-foreground italic">Protected</div>
                   ) : updatingUserId === user.id ? (
-                    <Loader2 className="w-4 h-4 animate-spin text-[#f97316]" />
+                    <Loader2 className="w-4 h-4 animate-spin text-harvest" />
                   ) : (
                     <select
                       value={user.role}
                       onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                      className="px-2 py-1 rounded-lg border border-[#0f172a]/10 bg-white text-xs text-[#0f172a] cursor-pointer hover:border-[#f97316]/30 transition-colors"
+                      className="px-2 py-1 rounded-lg border border-border bg-input-background text-xs text-foreground cursor-pointer hover:border-harvest/30 transition-colors"
                       disabled={updatingUserId !== null}
                     >
-                      <option value="guest">Guest</option>
-                      <option value="member">Member</option>
-                      <option value="admin">Admin</option>
-                      <option value="queen_of_hog">Queen Of Hog</option>
-                      <option value="owner">Owner</option>
+                      {getRoleOptions().map(option => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                      ))}
                     </select>
                   )}
                 </div>
@@ -564,25 +502,14 @@ export function UserManagement({ onRefresh }: { onRefresh?: () => Promise<void> 
       {/* Loading overlay */}
       {actionLoading && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-6 shadow-xl flex items-center gap-3">
-            <Loader2 className="w-6 h-6 animate-spin text-[#f97316]" />
-            <p className="text-sm font-semibold text-[#0f172a]">Applying action...</p>
+          <div className="bg-card rounded-2xl p-6 shadow-xl flex items-center gap-3">
+            <Loader2 className="w-6 h-6 animate-spin text-harvest" />
+            <p className="text-sm font-semibold text-foreground">Applying action...</p>
           </div>
         </div>
       )}
 
-      {/* Link KKUP Profile Modal */}
-      {linkingUser && (
-        <LinkKKupProfileModal
-          user={linkingUser}
-          onClose={() => setLinkingUser(null)}
-          onLinked={() => {
-            fetchUsers();
-            setSelectedUserIds(new Set());
-            if (onRefresh) onRefresh();
-          }}
-        />
-      )}
+
 
       {/* Confirm Modal */}
       {confirmAction && (

@@ -1,0 +1,802 @@
+[
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 506ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2b501c5d-0292-4c25-a759-2a72712dffea",
+    "level": "info",
+    "timestamp": 1772673985165000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "03373022-d71b-4137-90a9-dfd3fc603528",
+    "level": "info",
+    "timestamp": 1772673984658000
+  },
+  {
+    "event_message": "booted (time: 59ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7e128c9a-e177-46c9-a5ff-d11bfb3b2777",
+    "level": "log",
+    "timestamp": 1772673984571000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 336ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9a6bb246-853f-4c31-82e8-42f0fb8bd288",
+    "level": "info",
+    "timestamp": 1772673984249000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "252c98bc-a67b-4cd5-9f95-10de687b8e49",
+    "level": "info",
+    "timestamp": 1772673983913000
+  },
+  {
+    "event_message": "booted (time: 91ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8c1273b5-bc77-4955-a3ac-21b2a2752496",
+    "level": "log",
+    "timestamp": 1772673983752000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/practice/19116/live 200 232ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f494d467-0c44-4592-b829-6d7391a2b40e",
+    "level": "info",
+    "timestamp": 1772673976337000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/practice/19116/live\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "83b208c8-fdd0-485b-8040-e775fa7b201d",
+    "level": "info",
+    "timestamp": 1772673976105000
+  },
+  {
+    "event_message": "booted (time: 82ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "63ae3c50-ed34-4e80-9d65-d3328c85a72a",
+    "level": "log",
+    "timestamp": 1772673975994000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/practice/19116/live 200 275ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "10840e5d-c2af-4a81-a52d-5e9f5b407a98",
+    "level": "info",
+    "timestamp": 1772673972211000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/practice/19116/live\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c168e332-331d-4d96-b1cb-56cbbf4b132a",
+    "level": "info",
+    "timestamp": 1772673971936000
+  },
+  {
+    "event_message": "booted (time: 73ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5bd1137a-037c-4fa7-b8ca-4f4930c1dc93",
+    "level": "log",
+    "timestamp": 1772673971822000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 518ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "43a6f320-0b9a-4280-80e9-79a71923f708",
+    "level": "info",
+    "timestamp": 1772673970169000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "aafca235-a215-4523-be1d-e72b5bb27453",
+    "level": "info",
+    "timestamp": 1772673969650000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/practice/19116 200 179ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7ee28d1f-46db-409c-8696-31abfaf2a6cc",
+    "level": "info",
+    "timestamp": 1772673969564000
+  },
+  {
+    "event_message": "booted (time: 68ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4adfcf1a-7ccd-41ed-85ae-6b02a64f0a2a",
+    "level": "log",
+    "timestamp": 1772673969527000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/practice/19116\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c04b5203-6712-4898-8372-f746bda51ae6",
+    "level": "info",
+    "timestamp": 1772673969384000
+  },
+  {
+    "event_message": "booted (time: 82ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bcced1ba-7368-47b3-8ed8-0d35c94e8977",
+    "level": "log",
+    "timestamp": 1772673969241000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 352ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5dbb1177-6fd8-410b-8fc2-96be6d021277",
+    "level": "info",
+    "timestamp": 1772673969165000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/practice/19116/refresh 200 2s\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ca5e3fa0-cbcd-433e-99c5-775c268871e1",
+    "level": "info",
+    "timestamp": 1772673968874000
+  },
+  {
+    "event_message": "Refreshed: +0 new matches, 0 teams\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "86b61449-9c99-45da-a3fb-e5d6b4b078be",
+    "level": "info",
+    "timestamp": 1772673968873000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5d4127d9-b560-4df0-b257-b22b0c394334",
+    "level": "info",
+    "timestamp": 1772673968813000
+  },
+  {
+    "event_message": "booted (time: 76ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2608cfdf-6a6a-44a1-9c82-1f8558da2c70",
+    "level": "log",
+    "timestamp": 1772673968674000
+  },
+  {
+    "event_message": "Failed to refresh match 8701026226: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4e74f63b-a8a2-459c-a8b5-6214f24e1ab9",
+    "level": "error",
+    "timestamp": 1772673968555000
+  },
+  {
+    "event_message": "Failed to refresh match 8701027795: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cf157382-ac5d-416a-8e5f-4a50b3620cc7",
+    "level": "error",
+    "timestamp": 1772673968488000
+  },
+  {
+    "event_message": "Failed to refresh match 8701052532: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f67e0e5f-0d26-45fa-9d23-0ac64bd24f17",
+    "level": "error",
+    "timestamp": 1772673968414000
+  },
+  {
+    "event_message": "Failed to refresh match 8701060098: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2f10db75-76bf-49f8-a7e2-7f54419bb586",
+    "level": "error",
+    "timestamp": 1772673968312000
+  },
+  {
+    "event_message": "Failed to refresh match 8701061793: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "668aa21f-d678-453b-a41e-a14c8d6670e7",
+    "level": "error",
+    "timestamp": 1772673968145000
+  },
+  {
+    "event_message": "Failed to refresh match 8710867288: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0a6114de-e22a-44f7-b7f0-7f77cd754498",
+    "level": "error",
+    "timestamp": 1772673968075000
+  },
+  {
+    "event_message": "Failed to refresh match 8710867776: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "15f03eb2-ebaa-4391-b784-4231e370b86f",
+    "level": "error",
+    "timestamp": 1772673968004000
+  },
+  {
+    "event_message": "Failed to refresh match 8710868667: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4b1c856b-f5e8-4e40-944b-9a63b526bb60",
+    "level": "error",
+    "timestamp": 1772673967945000
+  },
+  {
+    "event_message": "Failed to refresh match 8710869128: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "68eb775a-5e16-4b0f-a1c2-d7c0e7dda0eb",
+    "level": "error",
+    "timestamp": 1772673967885000
+  },
+  {
+    "event_message": "Failed to refresh match 8710870417: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "93d24c38-0be0-45ad-8852-96ef204ed353",
+    "level": "error",
+    "timestamp": 1772673967825000
+  },
+  {
+    "event_message": "Failed to refresh match 8710903036: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "77a281f3-d041-42d7-9652-2639b97fadb3",
+    "level": "error",
+    "timestamp": 1772673967753000
+  },
+  {
+    "event_message": "Failed to refresh match 8710907214: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8e1bda99-fe54-4e2d-a6c3-7e588c0a575b",
+    "level": "error",
+    "timestamp": 1772673967654000
+  },
+  {
+    "event_message": "Failed to refresh match 8710866473: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ae105d53-124c-4299-9f40-8171305161a8",
+    "level": "error",
+    "timestamp": 1772673967575000
+  },
+  {
+    "event_message": "Failed to refresh match 8710909850: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6f969dcf-74ed-4e4b-8f75-f7aa4740db8f",
+    "level": "error",
+    "timestamp": 1772673967506000
+  },
+  {
+    "event_message": "Failed to refresh match 8710912474: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b56b30bd-1a2a-40e0-a7a3-98819570f093",
+    "level": "error",
+    "timestamp": 1772673967449000
+  },
+  {
+    "event_message": "Failed to refresh match 8710868704: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0b49fbe2-aaed-400b-aee8-aba1883e8d1f",
+    "level": "error",
+    "timestamp": 1772673967379000
+  },
+  {
+    "event_message": "Failed to refresh match 8710918402: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9e38d876-3a18-4a27-89c4-372152e4e56f",
+    "level": "error",
+    "timestamp": 1772673967292000
+  },
+  {
+    "event_message": "Failed to refresh match 8710920179: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5bff939c-961a-4046-8f41-b13eda5b93a2",
+    "level": "error",
+    "timestamp": 1772673967233000
+  },
+  {
+    "event_message": "Failed to refresh match 8710922166: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f6a2478d-c688-4cf3-bef0-469df37d1e6e",
+    "level": "error",
+    "timestamp": 1772673967177000
+  },
+  {
+    "event_message": "Failed to refresh match 8710960536: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f81db47c-d088-4dbd-b301-d5d379640831",
+    "level": "error",
+    "timestamp": 1772673967119000
+  },
+  {
+    "event_message": "Refreshing practice tournament 19116...\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "61608b4e-7a11-4704-9b85-d7ea568e2544",
+    "level": "info",
+    "timestamp": 1772673966708000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/practice/19116/refresh\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "03c6784b-ca30-4e71-bbba-fa3997b33ec5",
+    "level": "info",
+    "timestamp": 1772673966396000
+  },
+  {
+    "event_message": "booted (time: 87ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "de2cdecc-84dc-4806-9778-c151bc546825",
+    "level": "log",
+    "timestamp": 1772673966283000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/practice/19116/refresh 204 2ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "baf1dec3-3a19-4f53-bc9b-e433fcbe26bd",
+    "level": "info",
+    "timestamp": 1772673965934000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/practice/19116/refresh\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a34d00ae-e74a-4202-a5f5-2d13f2378d0e",
+    "level": "info",
+    "timestamp": 1772673965933000
+  },
+  {
+    "event_message": "booted (time: 77ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "12aed0e0-53ae-4582-9dd5-688f6d808835",
+    "level": "log",
+    "timestamp": 1772673965815000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 594ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "28cf8c98-087c-46c5-b2da-bad635e084c5",
+    "level": "info",
+    "timestamp": 1772673955166000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "04153f2a-a072-4b83-a039-50d97f2f5606",
+    "level": "info",
+    "timestamp": 1772673954572000
+  },
+  {
+    "event_message": "booted (time: 72ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "380fe322-af52-4315-b266-cfdc74a167ed",
+    "level": "log",
+    "timestamp": 1772673954453000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 339ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b580a808-55ae-46ea-bc8f-d8485e55a7a8",
+    "level": "info",
+    "timestamp": 1772673954080000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7b5d1ccc-5a3f-45f5-961d-bb15a21782fb",
+    "level": "info",
+    "timestamp": 1772673953741000
+  },
+  {
+    "event_message": "booted (time: 68ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6fc94154-810b-4419-83b9-ae2b2753ccd6",
+    "level": "log",
+    "timestamp": 1772673953635000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/practice/19116/live 200 201ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "96af05ab-cc1f-41f8-8eb1-7e7c5d21bda9",
+    "level": "info",
+    "timestamp": 1772673951916000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/practice/19116 200 146ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9c7bc4d0-b682-4ad9-945a-a46b3151cb3d",
+    "level": "info",
+    "timestamp": 1772673951839000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/practice/19116/live\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d2456fe9-939f-4e75-9c19-ec1d8edd6cba",
+    "level": "info",
+    "timestamp": 1772673951715000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/practice/19116\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8480f9df-9072-4a1c-b794-48312c0f5617",
+    "level": "info",
+    "timestamp": 1772673951693000
+  },
+  {
+    "event_message": "booted (time: 69ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ff0862ae-5e15-4fae-afef-52e15e4a6a79",
+    "level": "log",
+    "timestamp": 1772673951589000
+  },
+  {
+    "event_message": "booted (time: 77ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "47d044fd-c247-45e4-afdf-a24460e7ff28",
+    "level": "log",
+    "timestamp": 1772673951588000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/practice/19116/live 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fb34e375-439e-42cf-adc2-4cec389c1f9b",
+    "level": "info",
+    "timestamp": 1772673951244000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/practice/19116/live\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "741a8fd6-89b3-46b5-8fa7-cf627099ae1d",
+    "level": "info",
+    "timestamp": 1772673951243000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/practice/19116 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6ffea109-9688-4d1d-befe-aa9a018c2370",
+    "level": "info",
+    "timestamp": 1772673951226000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/practice/19116\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6daa2656-5b54-4f68-8e8d-15392115d668",
+    "level": "info",
+    "timestamp": 1772673951225000
+  },
+  {
+    "event_message": "booted (time: 60ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d9c5c25f-b45d-46c0-a725-5b6b89f08ec1",
+    "level": "log",
+    "timestamp": 1772673951158000
+  },
+  {
+    "event_message": "booted (time: 58ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bbce5593-f38f-45e9-9325-301fa3fbb3c4",
+    "level": "log",
+    "timestamp": 1772673951144000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/practice/list 200 181ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "54eb5337-fafc-4182-a625-a36d9955736c",
+    "level": "info",
+    "timestamp": 1772673947180000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/practice/list\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f976000e-7233-4155-b2b8-6a4d10583e32",
+    "level": "info",
+    "timestamp": 1772673946998000
+  },
+  {
+    "event_message": "booted (time: 61ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "54155fcb-400d-4fa8-bc13-962feda03dd4",
+    "level": "log",
+    "timestamp": 1772673946875000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/practice/create 200 4s\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "abf1a002-26de-4c33-88c3-8ff8253cb861",
+    "level": "info",
+    "timestamp": 1772673946556000
+  },
+  {
+    "event_message": "Practice tournament created: League 19116 (19116) — 0 matches, 0 teams\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "29f64ed7-fc16-4542-96d1-62421f88c7cd",
+    "level": "info",
+    "timestamp": 1772673946554000
+  },
+  {
+    "event_message": "Failed to get details for match 8701026226: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4dc1b271-8f0f-4966-b430-5373e647b721",
+    "level": "error",
+    "timestamp": 1772673945016000
+  },
+  {
+    "event_message": "Failed to get details for match 8701027795: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f9a31b3e-b162-4580-b45b-e2abd5514642",
+    "level": "error",
+    "timestamp": 1772673944831000
+  },
+  {
+    "event_message": "Failed to get details for match 8701052532: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "93c9051c-13c0-486c-a76d-36ddfe34d92e",
+    "level": "error",
+    "timestamp": 1772673944738000
+  },
+  {
+    "event_message": "Failed to get details for match 8701060098: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fd06bb89-2cfa-4c99-9668-6ffd535ced66",
+    "level": "error",
+    "timestamp": 1772673944671000
+  },
+  {
+    "event_message": "Failed to get details for match 8701061793: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "266587c2-bca9-425c-8b9e-d3d09e823ab6",
+    "level": "error",
+    "timestamp": 1772673944472000
+  },
+  {
+    "event_message": "Failed to get details for match 8710867288: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c9259efd-c38f-4373-805a-ffddd7f87679",
+    "level": "error",
+    "timestamp": 1772673944399000
+  },
+  {
+    "event_message": "Failed to get details for match 8710867776: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0bb28733-b360-4934-960b-70b25856c684",
+    "level": "error",
+    "timestamp": 1772673944343000
+  },
+  {
+    "event_message": "Failed to get details for match 8710868667: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c9f88903-214a-4c96-b2c5-be31ec764690",
+    "level": "error",
+    "timestamp": 1772673944271000
+  },
+  {
+    "event_message": "Failed to get details for match 8710869128: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9a6779c9-011c-4c87-8976-a123191f3446",
+    "level": "error",
+    "timestamp": 1772673944176000
+  },
+  {
+    "event_message": "Failed to get details for match 8710870417: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7937133b-02ea-4355-9bd7-bf2fa2438a47",
+    "level": "error",
+    "timestamp": 1772673944111000
+  },
+  {
+    "event_message": "Failed to get details for match 8710903036: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5d6a3f1e-53ab-45ff-b37d-4bc2da638475",
+    "level": "error",
+    "timestamp": 1772673944028000
+  },
+  {
+    "event_message": "Failed to get details for match 8710907214: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a10e432e-64b5-4238-b3b0-1885886a2e59",
+    "level": "error",
+    "timestamp": 1772673943756000
+  },
+  {
+    "event_message": "Failed to get details for match 8710866473: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f69611b0-1853-4aeb-a17f-4c2bb5074d0f",
+    "level": "error",
+    "timestamp": 1772673943700000
+  },
+  {
+    "event_message": "Failed to get details for match 8710909850: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3db8bcd4-0640-4ec6-a5a3-586e9b5327ad",
+    "level": "error",
+    "timestamp": 1772673943556000
+  },
+  {
+    "event_message": "Failed to get details for match 8710912474: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f44bd25e-c83a-41b6-b469-196454408c8f",
+    "level": "error",
+    "timestamp": 1772673943470000
+  },
+  {
+    "event_message": "Failed to get details for match 8710868704: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0b2ef206-ac22-46fd-9797-584b4123fd06",
+    "level": "error",
+    "timestamp": 1772673943402000
+  },
+  {
+    "event_message": "Failed to get details for match 8710918402: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "194430a0-ff83-48fa-a28e-b9ad00c15779",
+    "level": "error",
+    "timestamp": 1772673943335000
+  },
+  {
+    "event_message": "Failed to get details for match 8710920179: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c07fa084-e66f-4036-b532-b5ef9299d1af",
+    "level": "error",
+    "timestamp": 1772673943280000
+  },
+  {
+    "event_message": "Failed to get details for match 8710922166: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b8e2b08b-4a45-4d02-a05d-d81106d66a88",
+    "level": "error",
+    "timestamp": 1772673943223000
+  },
+  {
+    "event_message": "Failed to get details for match 8710960536: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/\n    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)\n    at eventLoopTick (ext:core/01_core.js:175:7)\n    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)\n    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)\n    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)\n    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5d35cfd9-c423-4861-87bf-cb39e75b2f35",
+    "level": "error",
+    "timestamp": 1772673943116000
+  },
+  {
+    "event_message": "Found 119 matches for league 19116\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9e362ac9-b373-4525-991d-d0a33d8f80eb",
+    "level": "info",
+    "timestamp": 1772673943002000
+  },
+  {
+    "event_message": "GetLeagueListing unavailable (deprecated by Valve), falling back to league_id as name: Error: Steam API 404: /IDOTA2Match_570/GetLeagueListing/v1/\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "80e0c3ca-09c8-4aa0-a514-4270a953f73a",
+    "level": "info",
+    "timestamp": 1772673942720000
+  },
+  {
+    "event_message": "Creating practice tournament for league 19116...\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d0c6c0ae-c29f-4b29-b629-d8abd820c163",
+    "level": "info",
+    "timestamp": 1772673942483000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/practice/create\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "065483f8-63fe-4ea1-ad35-4be7cc6b86c0",
+    "level": "info",
+    "timestamp": 1772673942157000
+  },
+  {
+    "event_message": "booted (time: 62ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "70d89ba3-053f-4212-bd5d-60158a552976",
+    "level": "log",
+    "timestamp": 1772673942068000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 546ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0f44ff49-64ce-42ad-92c4-4733ec37d9b3",
+    "level": "info",
+    "timestamp": 1772673941380000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "10b919f9-229f-48a9-8b83-c92d426b0a43",
+    "level": "info",
+    "timestamp": 1772673940834000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 652ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5131c57e-2f29-4afd-81ff-36abec8ae715",
+    "level": "info",
+    "timestamp": 1772673940684000
+  }
+]

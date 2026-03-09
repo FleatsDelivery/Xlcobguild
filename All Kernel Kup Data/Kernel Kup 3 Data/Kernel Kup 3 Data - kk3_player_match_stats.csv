@@ -1,0 +1,77 @@
+match_id,team_id,team_name,player_id,player_name,hero,kills,deaths,assists,net_worth,last_hits,denies,gpm,xpm
+991,9239524,Staff Infection,32846586,Dr Clayton,Viper,3,10,12,null,null,null,null,null
+991,9239524,Staff Infection,176598507,Stainless,Gyrocopter,7,5,13,null,null,null,null,null
+991,9239524,Staff Infection,57751419,RAMPAGE,Chaos Knight,8,11,7,null,null,null,null,null
+991,9239524,Staff Infection,162920467,EsKetIt!!,Jakiro,3,6,15,null,null,null,null,null
+991,9239524,Staff Infection,208895278,businessCasual,Ember Spirit,5,3,9,null,null,null,null,null
+991,9239539,Eat A Frosted Donut,66953342,A_dam,Lich,5,6,20,null,null,null,null,null
+991,9239539,Eat A Frosted Donut,20720988,W.Stallion,Grimstroke,3,7,23,null,null,null,null,null
+991,9239539,Eat A Frosted Donut,102620357,C Squad,Wraith King,11,1,18,null,null,null,null,null
+991,9239539,Eat A Frosted Donut,10240989,partylobster,Weaver,10,4,15,null,null,null,null,null
+991,9239539,Eat A Frosted Donut,56950757,Life_Insurance,Kunkka,4,9,22,null,null,null,null,null
+,,,,,,,,,,,,,
+7468071241,9239524,Staff Infection,32846586,Dr Clayton,Skywrath Mage,2,12,9,9344,32,2,235,407
+7468071241,9239524,Staff Infection,176598507,Stainless,Razor,14,4,5,20324,311,7,601,695
+7468071241,9239524,Staff Infection,57751419,RAMPAGE,Spirit Breaker,3,10,16,13700,194,7,415,487
+7468071241,9239524,Staff Infection,162920467,EsKetIt!!,Oracle,6,6,12,12667,70,2,324,522
+7468071241,9239524,Staff Infection,208895278,businessCasual,Pangolier,2,5,12,17580,252,12,462,575
+7468071241,9239539,Eat A Frosted Donut,66953342,A_dam,Venomancer,3,8,16,13722,69,10,354,547
+7468071241,9239539,Eat A Frosted Donut,20720988,W.Stallion,Pugna,3,4,23,13479,66,3,417,580
+7468071241,9239539,Eat A Frosted Donut,102620357,C Squad,Sven,13,4,9,29554,433,5,776,858
+7468071241,9239539,Eat A Frosted Donut,10240989,partylobster,Slardar,3,3,9,18045,203,20,459,612
+7468071241,9239539,Eat A Frosted Donut,56950757,Life_Insurance,Nature's Prophet,14,8,17,27074,354,8,745,843
+,,,,,,,,,,,,,
+7468018330,9400971,Mutha Shuckas,83172949,Cloud Kicker,Wraith King,5,4,7,10343,null,null,null,null
+7468018330,9400971,Mutha Shuckas,192347173,Ms Anthrope,Crystal Maiden,1,6,8,4150,null,null,null,null
+7468018330,9400971,Mutha Shuckas,52899534,Roctopus,Phoenix,3,6,7,7740,null,null,null,null
+7468018330,9400971,Mutha Shuckas,145749278,Replayz,Kunkka,4,7,7,10421,null,null,null,null
+7468018330,9400971,Mutha Shuckas,83741745,7,Phantom Lancer,1,7,7,10838,null,null,null,null
+7468018330,null,CA$HFLOW,70081477,Board Man Gets Paid,Treant Protector,4,3,18,8485,null,null,null,null
+7468018330,null,CA$HFLOW,121916760,Kiragos,Venomancer,3,6,8,10871,null,null,null,null
+7468018330,null,CA$HFLOW,59311372,Holiday,Centaur Warrunner,6,1,17,16719,null,null,null,null
+7468018330,null,CA$HFLOW,12096575,Bojangles,Weaver,5,4,13,18431,null,null,null,null
+7468018330,null,CA$HFLOW,83605406,Drink water and stretch,Queen Of Pain,12,1,7,18073,null,null,null,null
+,,,,,,,,,,,,,
+7468067716,9400971,Mutha Shuckas,83172949,Cloud Kicker,Sand King,6,11,25,21507,null,null,null,null
+7468067716,9400971,Mutha Shuckas,192347173,Ms Anthrope,Jakiro,4,8,29,25280,null,null,null,null
+7468067716,9400971,Mutha Shuckas,52899534,Roctopus,Rubick,4,7,34,17374,null,null,null,null
+7468067716,9400971,Mutha Shuckas,145749278,Replayz,Spectre,16,5,16,25280,null,null,null,null
+7468067716,9400971,Mutha Shuckas,83741745,7,Storm Spirit,15,6,19,24696,null,null,null,null
+7468067716,null,CA$HFLOW,70081477,Board Man Gets Paid,Treant Protector,4,8,26,13245,null,null,null,null
+7468067716,null,CA$HFLOW,121916760,Kiragos,Vengeful Spirit,4,12,17,14105,null,null,null,null
+7468067716,null,CA$HFLOW,71794697,Z.T. Pastamancer,Dawnbreaker,12,6,13,20652,null,null,null,null
+7468067716,null,CA$HFLOW,12096575,Bojangles,Muerta,11,12,9,28197,null,null,null,null
+7468067716,null,CA$HFLOW,83605406,Drink water and stretch,Zeus,5,7,20,18250,null,null,null,null
+,,,,,,,,,,,,,
+7468131300,null,CA$HFLOW,70081477,Board Man Gets Paid,Clockwerk,2,14,23,14956,null,null,null,null
+7468131300,null,CA$HFLOW,121916760,Kiragos,Shadow Shaman,1,12,22,15923,null,null,null,null
+7468131300,null,CA$HFLOW,59311372,Holiday,Primal Beast,7,13,17,25318,null,null,null,null
+7468131300,null,CA$HFLOW,12096575,Bojangles,Bloodseeker,15,11,12,32801,null,null,null,null
+7468131300,null,CA$HFLOW,83605406,Drink water and stretch,Queen Of Pain,15,9,17,24412,null,null,null,null
+7468131300,9400971,Mutha Shuckas,83172949,Cloud Kicker,Spirit Breaker,15,12,26,39839,null,null,null,null
+7468131300,9400971,Mutha Shuckas,192347173,Ms Anthrope,Jakiro,4,8,27,17053,null,null,null,null
+7468131300,9400971,Mutha Shuckas,52899534,Roctopus,Grimstroke,6,9,35,21713,null,null,null,null
+7468131300,9400971,Mutha Shuckas,145749278,Replayz,Lifestealer,14,9,24,29162,null,null,null,null
+7468131300,9400971,Mutha Shuckas,83741745,7,Invoker,18,4,30,38463,null,null,null,null
+,,,,,,,,,,,,,
+7468219577,null,CA$HFLOW,70081477,Board Man Gets Paid,Treant Protector,4,9,14,8998,44,1,303,389
+7468219577,null,CA$HFLOW,121916760,Kiragos,Vengeful Spirit,4,13,8,6757,37,0,210,347
+7468219577,null,CA$HFLOW,59311372,Holiday,Night Stalker,1,11,9,13278,166,22,365,495
+7468219577,null,CA$HFLOW,12096575,Bojangles,Zeus,9,7,8,16608,248,1,465,540
+7468219577,null,CA$HFLOW,83605406,Drink water and stretch,Drow Ranger,5,1,12,24671,469,19,631,682
+7468219577,9239524,Staff Infection,32846586,Dr Clayton,Phantom Lancer,20,4,10,28821,312,5,714,849
+7468219577,9239524,Staff Infection,176598507,Stainless,Wraith King,9,2,24,26322,294,4,657,876
+7468219577,9239524,Staff Infection,57751419,RAMPAGE,Sand King,7,7,23,23131,233,3,561,691
+7468219577,9239524,Staff Infection,162920467,EsKetIt!!,Techies,2,3,25,15202,131,2,402,520
+7468219577,9239524,Staff Infection,31649623,Moumpt,Oracle,2,10,21,10843,25,3,301,452
+,,,,,,,,,,,,,
+7468219880,9400971,Mutha Shuckas,83172949,Cloud Kicker,Dawnbreaker,8,11,16,13678,175,5,447,552
+7468219880,9400971,Mutha Shuckas,192347173,Ms Anthrope,Jakiro,3,10,14,6698,23,1,246,445
+7468219880,9400971,Mutha Shuckas,52899534,Roctopus,Rubick,8,9,21,10995,88,0,359,539
+7468219880,9400971,Mutha Shuckas,145749278,Replayz,Razor,15,6,14,20502,261,14,578,682
+7468219880,9400971,Mutha Shuckas,83741745,7,Storm Spirit,9,9,16,13644,137,11,396,531
+7468219880,9239539,Eat A Frosted Donut,66953342,A_dam,Venomancer,3,11,24,13518,45,3,324,532
+7468219880,9239539,Eat A Frosted Donut,20720988,W.Stallion,Witch Doctor,0,14,21,8703,51,3,301,414
+7468219880,9239539,Eat A Frosted Donut,102620357,C Squad,Phantom Assassin,22,7,12,26107,239,6,700,929
+7468219880,9239539,Eat A Frosted Donut,10240989,partylobster,Night Stalker,7,9,16,18323,165,15,478,659
+7468219880,9239539,Eat A Frosted Donut,56950757,Life_Insurance,Bristleback,11,2,20,23589,210,4,609,874

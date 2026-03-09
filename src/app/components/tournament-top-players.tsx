@@ -106,10 +106,10 @@ export function TournamentTopPlayers({ playerStats, onPlayerClick }: TournamentT
   };
 
   return (
-    <div className="bg-white rounded-2xl border-2 border-[#0f172a]/10 p-6">
+    <div className="bg-card rounded-2xl border-2 border-border p-6">
       <div className="flex items-center gap-3 mb-6">
-        <Medal className="w-6 h-6 text-[#f97316]" />
-        <h2 className="text-2xl font-bold text-[#0f172a]">Top Performers</h2>
+        <Medal className="w-6 h-6 text-harvest" />
+        <h2 className="text-2xl font-bold text-foreground">Top Performers</h2>
       </div>
       <div className="space-y-3">
         {topPlayers.map((player, index) => {
@@ -121,14 +121,14 @@ export function TournamentTopPlayers({ playerStats, onPlayerClick }: TournamentT
               key={player.playerName}
               className={`w-full flex items-center gap-4 rounded-xl border-2 transition-all cursor-pointer ${
                 index === 0
-                  ? 'bg-gradient-to-r from-[#f97316]/10 to-[#ea580c]/10 border-[#f97316] hover:shadow-[0_0_30px_rgba(249,115,22,0.3)] p-6'
-                  : 'bg-[#fdf5e9] border-[#0f172a]/10 hover:border-[#f97316] hover:bg-[#f97316]/5 p-4'
+                  ? 'bg-gradient-to-r from-harvest/10 to-amber/10 border-harvest hover:shadow-[0_0_30px_rgba(241,198,15,0.3)] p-6'
+                  : 'bg-background border-border hover:border-harvest hover:bg-harvest/5 p-4'
               }`}
               onClick={() => onPlayerClick?.(player.playerName)}
             >
               <span
                 className={`font-black min-w-[40px] text-center ${
-                  index === 0 ? 'text-3xl text-[#f97316]' : 'text-2xl text-[#0f172a]/40'
+                  index === 0 ? 'text-3xl text-harvest' : 'text-2xl text-muted-foreground'
                 }`}
               >
                 #{index + 1}
@@ -137,34 +137,34 @@ export function TournamentTopPlayers({ playerStats, onPlayerClick }: TournamentT
                 <img 
                   src={player.avatarUrl} 
                   alt={player.playerName}
-                  className={index === 0 ? "w-16 h-16 rounded-full border-2 border-[#f97316]" : "w-12 h-12 rounded-full border-2 border-[#f97316]"}
+                  className={index === 0 ? "w-16 h-16 rounded-full border-2 border-harvest" : "w-12 h-12 rounded-full border-2 border-harvest"}
                 />
               ) : (
-                <div className={`rounded-full bg-gradient-to-br from-[#f97316] to-[#ea580c] flex items-center justify-center border-2 border-[#f97316] ${
+                <div className={`rounded-full bg-gradient-to-br from-harvest to-amber flex items-center justify-center border-2 border-harvest ${
                   index === 0 ? 'w-16 h-16' : 'w-12 h-12'
                 }`}>
                   <span className={`text-white font-bold ${index === 0 ? 'text-2xl' : 'text-lg'}`}>{player.playerName[0]?.toUpperCase()}</span>
                 </div>
               )}
               <div className="flex-1 text-left">
-                <h3 className={`font-bold text-[#0f172a] ${index === 0 ? 'text-xl' : 'text-base'}`}>{player.playerName}</h3>
-                <p className={`text-[#0f172a]/60 ${index === 0 ? 'text-base' : 'text-sm'}`}>
+                <h3 className={`font-bold text-foreground ${index === 0 ? 'text-xl' : 'text-base'}`}>{player.playerName}</h3>
+                <p className={`text-muted-foreground ${index === 0 ? 'text-base' : 'text-sm'}`}>
                   {player.matches} match{player.matches !== 1 ? 'es' : ''}{player.teamName ? ` • ${player.teamName}` : ''}
                 </p>
               </div>
               <div className="text-center">
-                <p className={`font-bold text-[#0f172a] ${index === 0 ? 'text-base' : 'text-sm'}`}>
+                <p className={`font-bold text-foreground ${index === 0 ? 'text-base' : 'text-sm'}`}>
                   {player.totalKills}/{player.totalDeaths}/{player.totalAssists}
                 </p>
-                <p className={index === 0 ? 'text-sm text-[#0f172a]/60' : 'text-xs text-[#0f172a]/60'}>K/D/A</p>
+                <p className={index === 0 ? 'text-sm text-muted-foreground' : 'text-xs text-muted-foreground'}>K/D/A</p>
               </div>
               <div className="text-center">
-                <p className={`font-black text-[#f97316] ${index === 0 ? 'text-2xl' : 'text-xl'}`}>{kda}</p>
-                <p className={index === 0 ? 'text-sm text-[#0f172a]/60' : 'text-xs text-[#0f172a]/60'}>KDA</p>
+                <p className={`font-black text-harvest ${index === 0 ? 'text-2xl' : 'text-xl'}`}>{kda}</p>
+                <p className={index === 0 ? 'text-sm text-muted-foreground' : 'text-xs text-muted-foreground'}>KDA</p>
               </div>
               <div className="text-center">
                 <p className={`font-bold text-[#10b981] ${index === 0 ? 'text-base' : 'text-sm'}`}>{winRate}%</p>
-                <p className={index === 0 ? 'text-sm text-[#0f172a]/60' : 'text-xs text-[#0f172a]/60'}>Win Rate</p>
+                <p className={index === 0 ? 'text-sm text-muted-foreground' : 'text-xs text-muted-foreground'}>Win Rate</p>
               </div>
             </button>
           );

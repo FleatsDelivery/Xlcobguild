@@ -1,0 +1,44 @@
+match_id,team_id,team_name,player_id,player_name,hero,kills,deaths,assists,net_worth,last_hits,denies,gpm,xpm
+7566639664,8970463,Pizzadog Academy,31649623,Moumpt,Ancient Apparition,2,9,11,8191,20,1,219,377
+7566639664,8970463,Pizzadog Academy,192347173,Ms Anthrope,Jakiro,6,6,9,6651,27,3,275,313
+7566639664,8970463,Pizzadog Academy,104775701,Sparkling Animated Storytelling,Death Prophet,4,10,9,11990,167,5,431,443
+7566639664,8970463,Pizzadog Academy,83172949,Cloud Kicker,Huskar,1,10,2,10344,150,19,343,436
+7566639664,8970463,Pizzadog Academy,1036468280,The Real Is Back,Slardar,5,6,10,15107,214,11,484,636
+7566639664,9239539,Eat A Frosted Donut,32846586,Dr Clayton,Skywrath Mage,6,3,24,13340,32,7,369,610
+7566639664,9239539,Eat A Frosted Donut,162920467,EsKetIt!!,Vengeful Spirit,7,2,19,11094,34,6,358,532
+7566639664,9239539,Eat A Frosted Donut,12096575,Bojangles,Drow Ranger,12,3,12,22368,278,6,698,757
+7566639664,9239539,Eat A Frosted Donut,208895278,businessCasual,Pudge,10,8,14,14189,108,3,446,492
+7566639664,9239539,Eat A Frosted Donut,176598507,Stainless,Dragon Knight,5,3,18,16590,139,2,508,631
+,,,,,,,,,,,,,
+7566675474,8970463,Pizzadog Academy,31649623,Moumpt,Phoenix,3,9,29,19171,75,3,353,607
+7566675474,8970463,Pizzadog Academy,192347173,Ms Anthrope,Lion,5,8,26,13518,12,1,294,604
+7566675474,8970463,Pizzadog Academy,104775701,Sparkling Animated Storytelling,Magnus,3,8,27,28196,409,8,558,804
+7566675474,8970463,Pizzadog Academy,83172949,Cloud Kicker,Zeus,18,2,24,38249,430,6,707,929
+7566675474,8970463,Pizzadog Academy,1036468280,The Real Is Back,Faceless Void,13,7,17,35575,458,3,648,898
+7566675474,9239539,Eat A Frosted Donut,32846586,Dr Clayton,Skywrath Mage,5,8,19,16643,132,10,357,541
+7566675474,9239539,Eat A Frosted Donut,162920467,EsKetIt!!,Grimstroke,4,9,17,18235,160,3,389,635
+7566675474,9239539,Eat A Frosted Donut,12096575,Bojangles,Windranger,13,8,12,29099,440,2,638,859
+7566675474,9239539,Eat A Frosted Donut,208895278,businessCasual,Pudge,4,11,15,17624,193,10,379,468
+7566675474,9239539,Eat A Frosted Donut,176598507,Stainless,Dragon Knight,8,7,13,27326,350,6,531,641
+,,,,,,,,,,,,,
+7566734828,8970463,Pizzadog Academy,31649623,Moumpt,Invoker,2,9,13,9411,50,2,283,483
+7566734828,8970463,Pizzadog Academy,192347173,Ms Anthrope,Lion,4,14,11,5780,21,5,226,428
+7566734828,8970463,Pizzadog Academy,104775701,Sparkling Animated Storytelling,Doom,6,7,13,18890,251,6,589,577
+7566734828,8970463,Pizzadog Academy,83172949,Cloud Kicker,Zeus,3,4,20,17278,265,9,492,639
+7566734828,8970463,Pizzadog Academy,1036468280,The Real Is Back,Faceless Void,12,6,5,18767,293,8,559,801
+7566734828,9239539,Eat A Frosted Donut,32846586,Dr Clayton,Venomancer,7,8,23,17044,104,4,453,580
+7566734828,9239539,Eat A Frosted Donut,162920467,EsKetIt!!,Witch Doctor,3,6,11,12932,119,1,176,501
+7566734828,9239539,Eat A Frosted Donut,12096575,Bojangles,Spectre,9,7,23,22889,289,5,619,930
+7566734828,9239539,Eat A Frosted Donut,208895278,businessCasual,Hoodwink,14,2,19,25801,268,16,670,943
+7566734828,9239539,Eat A Frosted Donut,176598507,Stainless,Spirit Breaker,6,4,20,23215,202,4,589,934
+,,,,,,,,,,,,,
+7566784088,8970463,Pizzadog Academy,31649623,Moumpt,Disruptor,0,7,25,12777,50,1,265,457
+7566784088,8970463,Pizzadog Academy,192347173,Ms Anthrope,Lion,4,13,9,8796,35,2,271,362
+7566784088,8970463,Pizzadog Academy,104775701,Sparkling Animated Storytelling,Tidehunter,4,14,24,17549,383,4,461,720
+7566784088,8970463,Pizzadog Academy,83172949,Cloud Kicker,Shadow Fiend,9,4,13,28843,592,14,676,826
+7566784088,8970463,Pizzadog Academy,1036468280,The Real Is Back,Juggernaut,17,4,11,37237,614,11,754,1008
+7566784088,9239539,Eat A Frosted Donut,32846586,Dr Clayton,Gyrocopter,4,10,21,16873,83,5,361,599
+7566784088,9239539,Eat A Frosted Donut,162920467,EsKetIt!!,Witch Doctor,12,7,22,20452,109,5,452,734
+7566784088,9239539,Eat A Frosted Donut,12096575,Bojangles,Drow Ranger,16,7,16,32615,369,7,398,734
+7566784088,9239539,Eat A Frosted Donut,208895278,businessCasual,Ember Spirit,6,6,20,30807,389,11,619,884
+7566784088,9239539,Eat A Frosted Donut,176598507,Stainless,Wraith King,4,4,22,29707,309,2,591,917

@@ -1,0 +1,252 @@
+[
+  {
+    "group_key (lowercase)": "cornhub",
+    "display_name (from newest)": "CornHub",
+    "display_tag": "CHUB",
+    "tournament_appearances": 3,
+    "captain_from_newest": "e622f54f-2eb1-4bb8-a063-6118cc443648",
+    "valve_team_id": "9658546",
+    "newest_tournament": "Kernel Kup 10",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "eat a frosted donut",
+    "display_name (from newest)": "Eat A Frosted Donut",
+    "display_tag": "EAFD",
+    "tournament_appearances": 3,
+    "captain_from_newest": "724103ff-493b-4896-91d1-e20e5ea5d82d",
+    "valve_team_id": "9239539",
+    "newest_tournament": "Kernel Kup 4",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "mutha shuckas",
+    "display_name (from newest)": "Mutha Shuckas",
+    "display_tag": "SHUCK",
+    "tournament_appearances": 3,
+    "captain_from_newest": "b99bd80f-ef56-4362-80f2-86f50630a2f9",
+    "valve_team_id": "9400971",
+    "newest_tournament": "Kernel Kup 6",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "pizzadog academy",
+    "display_name (from newest)": "Pizzadog Academy",
+    "display_tag": "PizzadogA",
+    "tournament_appearances": 2,
+    "captain_from_newest": "96e5778c-c85e-4d27-a3ca-756e5e9aca1a",
+    "valve_team_id": "8970463",
+    "newest_tournament": "Kernel Kup 5",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "staff infection",
+    "display_name (from newest)": "Staff Infection",
+    "display_tag": "S.I.",
+    "tournament_appearances": 2,
+    "captain_from_newest": "c5d6f4df-adfb-49b2-b7cb-1bde84daf0bf",
+    "valve_team_id": "9239524",
+    "newest_tournament": "Kernel Kup 3",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "anti-mage enjoyers",
+    "display_name (from newest)": "Anti-Mage Enjoyers",
+    "display_tag": "FPAM",
+    "tournament_appearances": 1,
+    "captain_from_newest": "c5d6f4df-adfb-49b2-b7cb-1bde84daf0bf",
+    "valve_team_id": "9397114",
+    "newest_tournament": "Kernel Kup 6",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "big dick lanm",
+    "display_name (from newest)": "Big Dick LaNm",
+    "display_tag": "BDLN",
+    "tournament_appearances": 1,
+    "captain_from_newest": "8c668c4d-b548-45ba-87dc-f7aa92cd41a2",
+    "valve_team_id": "3212656",
+    "newest_tournament": "Kernel Kup 1",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "ca$hflow",
+    "display_name (from newest)": "CA$HFLOW",
+    "display_tag": "CA$H",
+    "tournament_appearances": 1,
+    "captain_from_newest": "92272cdf-5a30-45af-9147-b055d4372297",
+    "valve_team_id": null,
+    "newest_tournament": "Kernel Kup 3",
+    "has_logo": "❌"
+  },
+  {
+    "group_key (lowercase)": "caramellroshan",
+    "display_name (from newest)": "CaramellRoshan",
+    "display_tag": "CaraRosh",
+    "tournament_appearances": 1,
+    "captain_from_newest": "6b472f86-37b6-4cf4-87c4-bb4dd719478b",
+    "valve_team_id": "8476119",
+    "newest_tournament": "Kernel Kup 1",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "corn dawgs",
+    "display_name (from newest)": "CORN DAWGS",
+    "display_tag": "CDAWGS",
+    "tournament_appearances": 1,
+    "captain_from_newest": "b99bd80f-ef56-4362-80f2-86f50630a2f9",
+    "valve_team_id": "9358342",
+    "newest_tournament": "Kernel Kup 5",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "eat booty o's",
+    "display_name (from newest)": "Eat Booty O's",
+    "display_tag": "Vriggchan",
+    "tournament_appearances": 1,
+    "captain_from_newest": "cfae0cf8-41d5-4496-9b13-c7528bc3b43d",
+    "valve_team_id": null,
+    "newest_tournament": "Kernel Kup 9",
+    "has_logo": "❌"
+  },
+  {
+    "group_key (lowercase)": "elliott jewelers",
+    "display_name (from newest)": "Elliott Jewelers",
+    "display_tag": "EJew",
+    "tournament_appearances": 1,
+    "captain_from_newest": "92272cdf-5a30-45af-9147-b055d4372297",
+    "valve_team_id": null,
+    "newest_tournament": "Kernel Kup 2",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "elliott jewelers",
+    "display_name (from newest)": "Elliott Jewelers",
+    "display_tag": "Bojangles",
+    "tournament_appearances": 1,
+    "captain_from_newest": "794048e0-eaa4-48f0-93b6-373518f30a23",
+    "valve_team_id": null,
+    "newest_tournament": "Kernel Kup 9",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "fear the hog",
+    "display_name (from newest)": "Fear The Hog",
+    "display_tag": "Dr Clayton",
+    "tournament_appearances": 1,
+    "captain_from_newest": "c5d6f4df-adfb-49b2-b7cb-1bde84daf0bf",
+    "valve_team_id": "9073373",
+    "newest_tournament": "Kernel Kup 9",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "fear the hog",
+    "display_name (from newest)": "Fear The Hog",
+    "display_tag": "FTHOG",
+    "tournament_appearances": 1,
+    "captain_from_newest": "c5d6f4df-adfb-49b2-b7cb-1bde84daf0bf",
+    "valve_team_id": "9073373",
+    "newest_tournament": "Kernel Kup 5",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "foop city",
+    "display_name (from newest)": "Foop City",
+    "display_tag": "FOOP",
+    "tournament_appearances": 1,
+    "captain_from_newest": "163b2c8e-ea2f-4f48-a2fb-985a0d32905e",
+    "valve_team_id": "9359693",
+    "newest_tournament": "Kernel Kup 5",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "isiah from the news",
+    "display_name (from newest)": "Isiah From The News",
+    "display_tag": "Z.T. Pastamancer",
+    "tournament_appearances": 1,
+    "captain_from_newest": "8e5dbc2e-605e-449b-89ae-47dcb0611596",
+    "valve_team_id": "9432594",
+    "newest_tournament": "Kernel Kup 9",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "korn in my poop",
+    "display_name (from newest)": "Korn in my Poop",
+    "display_tag": "KIMP",
+    "tournament_appearances": 1,
+    "captain_from_newest": "915a3cbc-9f58-4e7c-a64e-ccd6e8e4a65b",
+    "valve_team_id": "6521153",
+    "newest_tournament": "Kernel Kup 5",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "malibu dilfs",
+    "display_name (from newest)": "Malibu DILFs",
+    "display_tag": "MDILFS",
+    "tournament_appearances": 1,
+    "captain_from_newest": "ec39161b-676c-462b-bad9-12418c7e4c76",
+    "valve_team_id": "9352752",
+    "newest_tournament": "Kernel Kup 5",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "nebraska cornhuskers",
+    "display_name (from newest)": "Nebraska Cornhuskers",
+    "display_tag": "Iowa-Sucks",
+    "tournament_appearances": 1,
+    "captain_from_newest": "8e5dbc2e-605e-449b-89ae-47dcb0611596",
+    "valve_team_id": "9658549",
+    "newest_tournament": "Kernel Kup 7",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "nebraska cornhuskers",
+    "display_name (from newest)": "Nebraska Cornhuskers",
+    "display_tag": "businessCasual",
+    "tournament_appearances": 1,
+    "captain_from_newest": "ed64b2b3-8e68-4daa-896f-f79b002df357",
+    "valve_team_id": "9658549",
+    "newest_tournament": "Kernel Kup 9",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "team mavi",
+    "display_name (from newest)": "Team Mavi",
+    "display_tag": "Mavi",
+    "tournament_appearances": 1,
+    "captain_from_newest": "e622f54f-2eb1-4bb8-a063-6118cc443648",
+    "valve_team_id": "9824963",
+    "newest_tournament": "Kernel Kup 9",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "team pr1de",
+    "display_name (from newest)": "Team Pr1de",
+    "display_tag": "Pr1de",
+    "tournament_appearances": 1,
+    "captain_from_newest": "d6a5d466-2ac5-46a8-990f-b9847f2e6594",
+    "valve_team_id": null,
+    "newest_tournament": "Kernel Kup 9",
+    "has_logo": "❌"
+  },
+  {
+    "group_key (lowercase)": "tiny corn energy",
+    "display_name (from newest)": "Tiny Corn Energy",
+    "display_tag": ".4leks...",
+    "tournament_appearances": 1,
+    "captain_from_newest": "8b58d1cc-1206-4db2-a0bf-aa57d1467a2d",
+    "valve_team_id": null,
+    "newest_tournament": "Kernel Kup 9",
+    "has_logo": "✅"
+  },
+  {
+    "group_key (lowercase)": "tiny corn energy",
+    "display_name (from newest)": "Tiny Corn Energy",
+    "display_tag": "TCE",
+    "tournament_appearances": 1,
+    "captain_from_newest": "8b58d1cc-1206-4db2-a0bf-aa57d1467a2d",
+    "valve_team_id": null,
+    "newest_tournament": "Kernel Kup 8",
+    "has_logo": "✅"
+  }
+]

@@ -238,19 +238,19 @@ export function LogoManagementPage() {
 
   if (!isOwner) {
     return (
-      <div className="pt-16 sm:pt-20 pb-20 sm:pb-24 px-4 min-h-screen bg-[#fdf5e9]">
+      <div className="px-4 py-4 min-h-screen bg-silk">
         <div className="max-w-4xl mx-auto text-center py-20">
-          <div className="bg-white rounded-2xl border-2 border-[#0f172a]/10 p-12">
-            <AlertCircle className="w-16 h-16 mx-auto mb-4 text-[#f97316]" />
-            <h1 className="text-2xl font-bold text-[#0f172a] mb-4">
+          <div className="bg-white rounded-2xl border-2 border-field-dark/10 p-12">
+            <AlertCircle className="w-16 h-16 mx-auto mb-4 text-harvest" />
+            <h1 className="text-2xl font-bold text-field-dark mb-4">
               Access Denied
             </h1>
-            <p className="text-[#0f172a]/60 mb-6">
+            <p className="text-field-dark/60 mb-6">
               Only owners can access the logo management tool.
             </p>
             <Button
               onClick={() => (window.location.hash = "#kernel-kup")}
-              className="bg-[#f97316] hover:bg-[#ea580c] text-white"
+              className="bg-harvest hover:bg-amber text-white"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Kernel Kup
@@ -263,9 +263,9 @@ export function LogoManagementPage() {
 
   if (loading) {
     return (
-      <div className="pt-16 sm:pt-20 pb-20 sm:pb-24 px-4 min-h-screen bg-[#fdf5e9]">
+      <div className="px-4 py-4 min-h-screen bg-silk">
         <div className="max-w-7xl mx-auto flex items-center justify-center py-20">
-          <Loader2 className="w-12 h-12 text-[#f97316] animate-spin" />
+          <Loader2 className="w-12 h-12 text-harvest animate-spin" />
         </div>
       </div>
     );
@@ -274,19 +274,19 @@ export function LogoManagementPage() {
   const hasUnsavedChanges = Object.keys(mappings).length > 0;
 
   return (
-    <div className="pt-16 sm:pt-20 pb-20 sm:pb-24 px-4 min-h-screen bg-[#fdf5e9]">
+    <div className="px-4 py-4 min-h-screen bg-silk">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="space-y-4">
           <Button
             onClick={() => (window.location.hash = "#kernel-kup")}
-            className="bg-white hover:bg-[#0f172a]/5 text-[#0f172a] border-2 border-[#0f172a]/10"
+            className="bg-white hover:bg-field-dark/5 text-field-dark border-2 border-field-dark/10"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Kernel Kup
           </Button>
 
-          <div className="bg-gradient-to-br from-[#f97316] to-[#ea580c] rounded-3xl p-8 sm:p-12">
+          <div className="bg-gradient-to-br from-harvest to-amber rounded-3xl p-8 sm:p-12">
             <div className="flex items-center gap-4 mb-4">
               <ImageIcon className="w-10 h-10 text-white" />
               <h1 className="text-4xl sm:text-5xl font-black text-white">
@@ -343,15 +343,15 @@ export function LogoManagementPage() {
         )}
 
         {/* Search Bar */}
-        <div className="bg-white rounded-xl border-2 border-[#0f172a]/10 p-4">
+        <div className="bg-white rounded-xl border-2 border-field-dark/10 p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#0f172a]/40" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-field-dark/40" />
             <input
               type="text"
               placeholder="Search teams or files..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+              className="w-full pl-12 pr-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
             />
           </div>
         </div>
@@ -359,11 +359,11 @@ export function LogoManagementPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Storage Browser */}
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl border-2 border-[#0f172a]/10 p-6">
+            <div className="bg-white rounded-2xl border-2 border-field-dark/10 p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <FolderOpen className="w-6 h-6 text-[#f97316]" />
-                  <h2 className="text-2xl font-bold text-[#0f172a]">
+                  <FolderOpen className="w-6 h-6 text-harvest" />
+                  <h2 className="text-2xl font-bold text-field-dark">
                     Storage Browser
                   </h2>
                 </div>
@@ -371,7 +371,7 @@ export function LogoManagementPage() {
                   <Button
                     size="sm"
                     onClick={navigateUp}
-                    className="bg-[#0f172a]/5 hover:bg-[#0f172a]/10 text-[#0f172a] border-2 border-[#0f172a]/10"
+                    className="bg-field-dark/5 hover:bg-field-dark/10 text-field-dark border-2 border-field-dark/10"
                   >
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Up
@@ -380,11 +380,11 @@ export function LogoManagementPage() {
               </div>
 
               {/* Current Path */}
-              <div className="mb-4 p-3 bg-[#fdf5e9] rounded-lg border-2 border-[#0f172a]/10">
-                <p className="text-sm font-semibold text-[#0f172a]/60">
+              <div className="mb-4 p-3 bg-silk rounded-lg border-2 border-field-dark/10">
+                <p className="text-sm font-semibold text-field-dark/60">
                   Current Path:
                 </p>
-                <p className="text-[#0f172a] font-mono">
+                <p className="text-field-dark font-mono">
                   /{currentPath || "root"}
                 </p>
               </div>
@@ -392,12 +392,12 @@ export function LogoManagementPage() {
               {/* Files List */}
               {loadingFiles ? (
                 <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-8 h-8 text-[#f97316] animate-spin" />
+                  <Loader2 className="w-8 h-8 text-harvest animate-spin" />
                 </div>
               ) : filteredFiles.length === 0 ? (
                 <div className="text-center py-12">
-                  <FolderOpen className="w-12 h-12 mx-auto mb-3 text-[#0f172a]/20" />
-                  <p className="text-[#0f172a]/60">
+                  <FolderOpen className="w-12 h-12 mx-auto mb-3 text-field-dark/20" />
+                  <p className="text-field-dark/60">
                     {searchTerm ? "No files match your search" : "No files in this folder"}
                   </p>
                 </div>
@@ -408,31 +408,31 @@ export function LogoManagementPage() {
                       <button
                         key={file.path}
                         onClick={() => navigateToFolder(file.name)}
-                        className="w-full flex items-center gap-3 p-3 bg-[#fdf5e9] rounded-lg border-2 border-[#0f172a]/10 hover:border-[#f97316]/30 transition-all text-left"
+                        className="w-full flex items-center gap-3 p-3 bg-silk rounded-lg border-2 border-field-dark/10 hover:border-harvest/30 transition-all text-left"
                       >
-                        <FolderOpen className="w-5 h-5 text-[#f97316]" />
-                        <span className="font-semibold text-[#0f172a]">
+                        <FolderOpen className="w-5 h-5 text-harvest" />
+                        <span className="font-semibold text-field-dark">
                           {file.name}
                         </span>
                       </button>
                     ) : (
                       <div
                         key={file.path}
-                        className="flex items-center gap-3 p-3 bg-[#fdf5e9] rounded-lg border-2 border-[#0f172a]/10"
+                        className="flex items-center gap-3 p-3 bg-silk rounded-lg border-2 border-field-dark/10"
                       >
                         <img
                           src={file.url}
                           alt={file.name}
-                          className="w-12 h-12 rounded border-2 border-[#0f172a]/10 object-cover"
+                          className="w-12 h-12 rounded border-2 border-field-dark/10 object-cover"
                           onError={(e) => {
                             e.currentTarget.style.display = "none";
                           }}
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-[#0f172a] text-sm truncate">
+                          <p className="font-semibold text-field-dark text-sm truncate">
                             {file.name}
                           </p>
-                          <p className="text-xs text-[#0f172a]/40 truncate">
+                          <p className="text-xs text-field-dark/40 truncate">
                             {file.path}
                           </p>
                         </div>
@@ -446,18 +446,18 @@ export function LogoManagementPage() {
 
           {/* Teams List */}
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl border-2 border-[#0f172a]/10 p-6">
+            <div className="bg-white rounded-2xl border-2 border-field-dark/10 p-6">
               <div className="flex items-center gap-3 mb-6">
-                <ImageIcon className="w-6 h-6 text-[#f97316]" />
-                <h2 className="text-2xl font-bold text-[#0f172a]">
+                <ImageIcon className="w-6 h-6 text-harvest" />
+                <h2 className="text-2xl font-bold text-field-dark">
                   Teams ({teams.length})
                 </h2>
               </div>
 
               {Object.keys(filteredTeamsByTournament).length === 0 ? (
                 <div className="text-center py-12">
-                  <AlertCircle className="w-12 h-12 mx-auto mb-3 text-[#0f172a]/20" />
-                  <p className="text-[#0f172a]/60">
+                  <AlertCircle className="w-12 h-12 mx-auto mb-3 text-field-dark/20" />
+                  <p className="text-field-dark/60">
                     {searchTerm ? "No teams match your search" : "No teams found"}
                   </p>
                 </div>
@@ -466,7 +466,7 @@ export function LogoManagementPage() {
                   {Object.entries(filteredTeamsByTournament).map(
                     ([tournamentName, tournamentTeams]) => (
                       <div key={tournamentName}>
-                        <h3 className="text-lg font-bold text-[#0f172a] mb-3 sticky top-0 bg-white py-2">
+                        <h3 className="text-lg font-bold text-field-dark mb-3 sticky top-0 bg-white py-2">
                           {tournamentName}
                         </h3>
                         <div className="space-y-2">
@@ -478,7 +478,7 @@ export function LogoManagementPage() {
                             return (
                               <div
                                 key={team.id}
-                                className="p-4 bg-[#fdf5e9] rounded-lg border-2 border-[#0f172a]/10"
+                                className="p-4 bg-silk rounded-lg border-2 border-field-dark/10"
                               >
                                 <div className="flex items-start gap-3 mb-3">
                                   <TeamLogo
@@ -487,11 +487,11 @@ export function LogoManagementPage() {
                                     size="md"
                                   />
                                   <div className="flex-1">
-                                    <p className="font-bold text-[#0f172a]">
+                                    <p className="font-bold text-field-dark">
                                       {team.name}
                                     </p>
                                     {team.tag && (
-                                      <p className="text-sm text-[#0f172a]/60">
+                                      <p className="text-sm text-field-dark/60">
                                         {team.tag}
                                       </p>
                                     )}
@@ -508,7 +508,7 @@ export function LogoManagementPage() {
 
                                 {/* File Selector */}
                                 <div className="space-y-2">
-                                  <label className="block text-xs font-semibold text-[#0f172a]/60">
+                                  <label className="block text-xs font-semibold text-field-dark/60">
                                     Assign Logo:
                                   </label>
                                   <select
@@ -521,7 +521,7 @@ export function LogoManagementPage() {
                                       }
                                     }}
                                     value={pendingMapping?.logo_path || ""}
-                                    className="w-full px-3 py-2 text-sm border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+                                    className="w-full px-3 py-2 text-sm border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
                                   >
                                     <option value="">
                                       Select from current folder...
@@ -539,7 +539,7 @@ export function LogoManagementPage() {
                                     <Button
                                       size="sm"
                                       onClick={() => removeLogoMapping(team.id)}
-                                      className="w-full bg-white hover:bg-[#0f172a]/5 text-[#0f172a] border-2 border-[#0f172a]/10"
+                                      className="w-full bg-white hover:bg-field-dark/5 text-field-dark border-2 border-field-dark/10"
                                     >
                                       Cancel Change
                                     </Button>
@@ -563,14 +563,14 @@ export function LogoManagementPage() {
           <div className="flex items-start gap-3">
             <AlertCircle className="w-6 h-6 text-[#3b82f6] flex-shrink-0 mt-1" />
             <div className="space-y-2">
-              <p className="font-bold text-[#0f172a]">💡 How to use:</p>
-              <ol className="text-sm text-[#0f172a]/80 space-y-1 list-decimal list-inside">
+              <p className="font-bold text-field-dark">💡 How to use:</p>
+              <ol className="text-sm text-field-dark/80 space-y-1 list-decimal list-inside">
                 <li>Navigate through folders in the Storage Browser to find your logos</li>
                 <li>Use the dropdown on each team card to select a logo from the current folder</li>
                 <li>You'll see a green checkmark when a new logo is assigned</li>
                 <li>Click "Save Changes" at the top to update all teams at once</li>
               </ol>
-              <p className="text-xs text-[#0f172a]/60 mt-3">
+              <p className="text-xs text-field-dark/60 mt-3">
                 Tip: Upload your files in the Supabase Storage dashboard organized by tournament (e.g., kkup4/, kkup5/)
               </p>
             </div>

@@ -1,0 +1,18 @@
+series_id,match_id,game_mode,radiant_player_id,radiant_player_name,radiant_team_id,radiant_team_name,radiant_team_score,dire_player_id,dire_player_name,dire_team_id,dire_team_name,dire_team_score,match_length,match_time,match_date,winning_team_id,winning_team_name
+991,991,1v1 Mid,32846586,Dr Clayton,9073373,Fear The Hog,2,74713349,Vriggchan,null,Eat Booty O's,0,663,null,07/03/2025,9073373,Fear The Hog
+,,,,,,,,,,,,,,,,,
+992,992,1v1 Mid,20413194,.4leks...,null,Tiny Corn Energy,2,71794697,Z.T. Pastamancer,9432594,Isiah From The News,0,406,null,07/03/2025,null,Tiny Corn Energy
+,,,,,,,,,,,,,,,,,
+993,993,1v1 Mid,42336030,Pr1de,null,Team Pr1de,1,208895278,businessCasual,9658549,Nebraska Cornhuskers,2,356,null,07/03/2025,9658549,Nebraska Cornhuskers
+,,,,,,,,,,,,,,,,,
+994,994,1v1 Mid,12096575,Bojangles,null,Elliott Jewelers,2,71794697,Z.T. Pastamancer,9432594,Isiah From The News,1,399,null,07/03/2025,null,Elliott Jewelers
+,,,,,,,,,,,,,,,,,
+995,995,1v1 Mid,237313649,Mavi,9824963,Team Mavi,2,32846586,Dr Clayton,9073373,Fear The Hog,0,166,null,07/03/2025,9824963,Team Mavi
+,,,,,,,,,,,,,,,,,
+996,996,1v1 Mid,237313649,Mavi,9824963,Team Mavi,2,20413194,.4leks...,null,Tiny Corn Energy,0,418,null,07/03/2025,9824963,Team Mavi
+,,,,,,,,,,,,,,,,,
+997,997,1v1 Mid,12096575,Bojangles,null,Elliott Jewelers,2,208895278,businessCasual,9658549,Nebraska Cornhuskers,0,423,null,07/03/2025,null,Elliott Jewelers
+,,,,,,,,,,,,,,,,,
+998,998,1v1 Mid,12096575,Bojangles,null,Elliott Jewelers,1,237313649,Mavi,9824963,Team Mavi,2,216,null,07/03/2025,9824963,Team Mavi
+998,999,1v1 Mid,237313649,Mavi,9824963,Team Mavi,0,12096575,Bojangles,null,Elliott Jewelers,2,222,null,07/03/2025,null,Elliott Jewelers
+998,910,1v1 Mid,12096575,Bojangles,null,Elliott Jewelers,2,237313649,Mavi,9824963,Team Mavi,1,268,null,07/03/2025,null,Elliott Jewelers

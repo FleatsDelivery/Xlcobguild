@@ -1,0 +1,4 @@
+series_id,match_id,game_mode,radiant_team_id,radiant_team_name,radiant_team_score,dire_team_id,dire_team_name,dire_team_score,match_length,match_time,match_date,winning_team_id,winning_team_name
+991,8325737430,captains_mode,9658546,CornHub,11,null,Tiny Corn Energy,43,1719,6:08 PM,06/07/2025,null,Tiny Corn Energy
+991,8325766174,captains_mode,9658546,CornHub,53,null,Tiny Corn Energy,47,3618,6:59 PM,06/07/2025,9658546,CornHub
+991,8325821924,captains_mode,9658546,CornHub,14,null,Tiny Corn Energy,38,2788,8:26 PM,06/07/2025,null,Tiny Corn Energy

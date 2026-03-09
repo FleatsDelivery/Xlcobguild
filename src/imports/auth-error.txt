@@ -1,0 +1,44 @@
+sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:127 [Hydrated]
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:30695 <link rel=preload> uses an unsupported `as` value
+m_ @ 0c95f50c7745a7521616e11e7bf30d951aefb016.js:30695
+(anonymous) @ 0c95f50c7745a7521616e11e7bf30d951aefb016.js:40756
+fp @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:8
+Ja @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:8
+(anonymous) @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:8
+yy @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:1
+dy @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:1
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40756 🌽 Navigation restore — URL hash: "" | initialHash: "" | localStorage: "#tournament-hub/ec82a83a-c94e-4758-a7d1-aa0172fa5b2a" | effective: "#tournament-hub/ec82a83a-c94e-4758-a7d1-aa0172fa5b2a"
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40765 🌽 Restoring hash to URL: #tournament-hub/ec82a83a-c94e-4758-a7d1-aa0172fa5b2a
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 Discord user identities: (2) [{…}, {…}]
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40816 🔍 /auth/me response status: 200 
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40818 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 Discord user identities: (2) [{…}, {…}]
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 Discord user identities: (2) [{…}, {…}]
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40816 🔍 /auth/me response status: 200 
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40818 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40816 🔍 /auth/me response status: 200 
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40818 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:26297  DELETE https://zizrvkkuqzwzxgwpuvxb.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments/ec82a83a-c94e-4758-a7d1-aa0172fa5b2a 401 (Unauthorized)
+Q @ 0c95f50c7745a7521616e11e7bf30d951aefb016.js:26297
+SD @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:5
+TD @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:5
+bD @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:5
+lE @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:5
+_C @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:5
+(anonymous) @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:5
+gS @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:8
+oC @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:5
+Py @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:5
+Uv @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:5
+VD @ sites-runtime.ed340f7bffa7e99869e4202e80427255dbdc8bff3e9b8cbc6cc79c5d908c29e6.js:5
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 Discord user identities: (2) [{…}, {…}]
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40795 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40816 🔍 /auth/me response status: 200 
+0c95f50c7745a7521616e11e7bf30d951aefb016.js:40818 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}

@@ -56,26 +56,26 @@ export function SuccessModal({
             onClick={onClose}
             className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center transition-all hover:scale-110"
           >
-            <X className="w-5 h-5 text-[#0f172a]" />
+            <X className="w-5 h-5 text-field-dark" />
           </button>
 
           <div className="flex flex-col items-center text-center">
             <div className={`w-16 h-16 rounded-full ${iconBg} flex items-center justify-center mb-4`}>
               <Icon className={`w-8 h-8 ${iconColor}`} />
             </div>
-            <h3 className="text-2xl font-bold text-[#0f172a]">{title}</h3>
+            <h3 className="text-2xl font-bold text-field-dark">{title}</h3>
           </div>
         </div>
 
         {/* Content */}
         <div className="p-6 text-center">
-          <p className="text-[#0f172a]/70 leading-relaxed mb-4">{message}</p>
+          <p className="text-field-dark/70 leading-relaxed mb-4">{message}</p>
           
           {helpText && (
             <div className={`bg-gradient-to-br ${bgColor} rounded-2xl p-4 border-2 ${borderColor}`}>
               <div className="flex items-start gap-2">
                 <ArrowRight className={`w-5 h-5 ${iconColor} flex-shrink-0 mt-0.5`} />
-                <p className="text-sm text-[#0f172a]/70 text-left">{helpText}</p>
+                <p className="text-sm text-field-dark/70 text-left">{helpText}</p>
               </div>
             </div>
           )}

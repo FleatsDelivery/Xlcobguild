@@ -1,0 +1,31 @@
+sites-runtime.d36dd62773e53f48cc362a4e0d19176e79491c80818bd0ff43b431924fbf1601.js:127 [Hydrated]
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:31610 <link rel=preload> uses an unsupported `as` value
+n3 @ 3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:31610
+(anonymous) @ 3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48345
+ap @ sites-runtime.d36dd62773e53f48cc362a4e0d19176e79491c80818bd0ff43b431924fbf1601.js:8
+Ya @ sites-runtime.d36dd62773e53f48cc362a4e0d19176e79491c80818bd0ff43b431924fbf1601.js:8
+(anonymous) @ sites-runtime.d36dd62773e53f48cc362a4e0d19176e79491c80818bd0ff43b431924fbf1601.js:8
+dy @ sites-runtime.d36dd62773e53f48cc362a4e0d19176e79491c80818bd0ff43b431924fbf1601.js:1
+ay @ sites-runtime.d36dd62773e53f48cc362a4e0d19176e79491c80818bd0ff43b431924fbf1601.js:1
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48345 🌽 Navigation restore — URL hash: "" | initialHash: "" | localStorage: "#practice" | effective: "#practice"
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48354 🌽 Restoring hash to URL: #practice
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 Discord user identities: (2) [{…}, {…}]
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48405 🔍 /auth/me response status: 200 
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48407 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 Discord user identities: (2) [{…}, {…}]
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 Discord user identities: (2) [{…}, {…}]
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48405 🔍 /auth/me response status: 200 
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48407 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48405 🔍 /auth/me response status: 200 
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48407 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 Discord user identities: (2) [{…}, {…}]
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48384 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48405 🔍 /auth/me response status: 200 
+3b580c16a7d0776f6e1e5f4137f6b022b0a318e4.js:48407 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}

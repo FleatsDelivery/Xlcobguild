@@ -1,0 +1,55 @@
+match_id,team_id,team_name,player_id,player_name,hero,kills,deaths,assists,net_worth,last_hits,denies,gpm,xpm
+7416576834,null,Elliott Jewelers,12096575,Bojangles,Lifestealer,6,6,4,9905,138,16,443,510
+7416576834,null,Elliott Jewelers,71794697,Z.T. Pastamancer,Leshrac,5,10,3,10187,106,13,388,424
+7416576834,null,Elliott Jewelers,83605406,Drink water and stretch,Treant Protector,1,13,10,5009,22,0,223,273
+7416576834,null,Elliott Jewelers,63826936,Sarah,Centaur Warrunner,2,5,8,9366,97,9,347,429
+7416576834,null,Elliott Jewelers,121916760,Kiragos,Witch Doctor,1,10,5,5890,30,3,235,287
+7416576834,9239524,Staff Infection,83741745,7,Slark,14,5,13,15800,115,1,565,517
+7416576834,9239524,Staff Infection,83172949,Cloud Kicker,Dawnbreaker,7,5,20,14449,149,9,532,530
+7416576834,9239524,Staff Infection,237313649,Mavi,Bounty Hunter,8,4,25,12084,28,1,495,459
+7416576834,9239524,Staff Infection,176598507,Stainless,Death Prophet,9,1,14,16724,195,5,603,663
+7416576834,9239524,Staff Infection,208895278,businessCasual,Snapfire,6,1,21,12576,53,15,415,524
+,,,,,,,,,,,,,
+7416624207,9239539,Eat A Frosted Donut,162920467,EsKetIt!!,Wraith King,1,5,1,8294,111,8,323,335
+7416624207,9239539,Eat A Frosted Donut,31649623,Moumpt,Jakiro,0,8,3,5307,51,1,234,316
+7416624207,9239539,Eat A Frosted Donut,14932319,Gabagool,Spectre,0,4,2,8046,117,2,309,354
+7416624207,9239539,Eat A Frosted Donut,32846586,Dr Clayton,Disruptor,1,6,0,4976,13,0,150,203
+7416624207,9239539,Eat A Frosted Donut,20720988,W.Stallion,Dark Willow,3,3,1,6770,69,20,284,337
+7416624207,null,Elliott Jewelers,71794697,Z.T. Pastamancer,Dawnbreaker,4,0,9,13486,149,15,506,599
+7416624207,null,Elliott Jewelers,83605406,Drink water and stretch,Nature's Prophet,4,0,15,11243,95,6,198,484
+7416624207,null,Elliott Jewelers,12096575,Bojangles,Alchemist,8,2,5,22172,271,2,862,724
+7416624207,null,Elliott Jewelers,121916760,Kiragos,Crystal Maiden,3,2,10,7421,27,0,279,430
+7416624207,null,Elliott Jewelers,63826936,Sarah,Razor,6,1,4,13641,181,18,513,488
+,,,,,,,,,,,,,
+7416675184,9239539,Eat A Frosted Donut,162920467,EsKetIt!!,Dazzle,1,2,0,6841,98,7,404,463
+7416675184,9239539,Eat A Frosted Donut,31649623,Moumpt,Abaddon,0,4,1,2702,13,1,162,258
+7416675184,9239539,Eat A Frosted Donut,14932319,Gabagool,Clockwerk,0,4,1,2690,11,7,148,192
+7416675184,9239539,Eat A Frosted Donut,32846586,Dr Clayton,Clinkz,0,2,1,3827,49,5,213,277
+7416675184,9239539,Eat A Frosted Donut,20720988,W.Stallion,Axe,0,6,1,4001,50,3,230,220
+7416675184,null,Elliott Jewelers,71794697,Z.T. Pastamancer,Spirit Breaker,4,0,5,8683,98,6,489,549
+7416675184,null,Elliott Jewelers,83605406,Drink water and stretch,Mirana,0,0,9,4739,33,2,267,367
+7416675184,null,Elliott Jewelers,12096575,Bojangles,Monkey King,4,1,1,8625,109,27,469,408
+7416675184,null,Elliott Jewelers,121916760,Kiragos,Venomancer,1,0,2,4204,28,2,221,305
+7416675184,null,Elliott Jewelers,63826936,Sarah,Slardar,8,0,2,8277,74,12,454,456
+,,,,,,,,,,,,,
+994,9239524,Staff Infection,27284686,Bone Nut,Lifestealer,6,5,5,null,null,null,null,null
+994,9239524,Staff Infection,83172949,Cloud Kicker,Dragon Knight,9,8,11,null,null,null,null,null
+994,9239524,Staff Infection,237313649,Mavi,Jakiro,3,12,15,null,null,null,null,null
+994,9239524,Staff Infection,176598507,Stainless,Razor,9,3,7,null,null,null,null,null
+994,9239524,Staff Infection,208895278,businessCasual,Bane,1,7,10,null,null,null,null,null
+994,null,Elliott Jewelers,71794697,Z.T. Pastamancer,Dawnbreaker,12,3,18,null,null,null,null,null
+994,null,Elliott Jewelers,83605406,Drink water and stretch,Mirana,4,10,21,null,null,null,null,null
+994,null,Elliott Jewelers,12096575,Bojangles,Weaver,14,3,15,null,null,null,null,null
+994,null,Elliott Jewelers,121916760,Kiragos,Vengeful Spirit,1,10,18,null,null,null,null,null
+994,null,Elliott Jewelers,63826936,Sarah,Tidehunter,2,2,21,null,null,null,null,null
+,,,,,,,,,,,,,
+7416817826,9239524,Staff Infection,27284686,Bone Nut,Naga Siren,12,3,8,30490,379,7,735,832
+7416817826,9239524,Staff Infection,83172949,Cloud Kicker,Sand King,9,5,23,20799,235,4,565,553
+7416817826,9239524,Staff Infection,237313649,Mavi,Elder Titan,7,9,24,13221,53,1,365,546
+7416817826,9239524,Staff Infection,176598507,Stainless,Death Prophet,8,2,17,23098,268,3,579,818
+7416817826,9239524,Staff Infection,208895278,businessCasual,Lich,4,4,20,13740,76,4,365,532
+7416817826,null,Elliott Jewelers,71794697,Z.T. Pastamancer,Lina,7,6,11,20723,289,12,565,799
+7416817826,null,Elliott Jewelers,83605406,Drink water and stretch,Nature's Prophet,7,8,13,15813,168,4,431,680
+7416817826,null,Elliott Jewelers,12096575,Bojangles,Luna,3,10,11,23355,448,5,615,736
+7416817826,null,Elliott Jewelers,121916760,Kiragos,Vengeful Spirit,2,11,9,8424,31,1,226,406
+7416817826,null,Elliott Jewelers,63826936,Sarah,Slardar,3,7,9,14327,166,11,341,429

@@ -150,10 +150,10 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-[#0f172a]">Edit Match</h2>
+          <h2 className="text-2xl font-bold text-field-dark">Edit Match</h2>
           <button
             onClick={onClose}
-            className="text-[#0f172a]/60 hover:text-[#0f172a]"
+            className="text-field-dark/60 hover:text-field-dark"
           >
             <X className="w-6 h-6" />
           </button>
@@ -161,25 +161,25 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
 
         <div className="space-y-6">
           {/* Match Preview */}
-          <div className="p-4 bg-[#fdf5e9] rounded-xl border-2 border-[#0f172a]/10">
+          <div className="p-4 bg-silk rounded-xl border-2 border-field-dark/10">
             <div className="flex items-center justify-between mb-3">
               {selectedTeam1 && (
                 <div className="flex items-center gap-2">
                   <TeamLogo logoUrl={selectedTeam1.logo_url} teamName={selectedTeam1.name} size="md" />
-                  <span className="font-bold text-[#0f172a]">{selectedTeam1.name}</span>
+                  <span className="font-bold text-field-dark">{selectedTeam1.name}</span>
                 </div>
               )}
-              <span className="text-2xl font-black text-[#0f172a]">
+              <span className="text-2xl font-black text-field-dark">
                 {formData.team1_score} - {formData.team2_score}
               </span>
               {selectedTeam2 && (
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-[#0f172a]">{selectedTeam2.name}</span>
+                  <span className="font-bold text-field-dark">{selectedTeam2.name}</span>
                   <TeamLogo logoUrl={selectedTeam2.logo_url} teamName={selectedTeam2.name} size="md" />
                 </div>
               )}
             </div>
-            <p className="text-xs text-center text-[#0f172a]/60">
+            <p className="text-xs text-center text-field-dark/60">
               {formData.stage.replace('_', ' ').toUpperCase()} • {formData.status.toUpperCase()}
             </p>
           </div>
@@ -187,13 +187,13 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
           {/* Teams Selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+              <label className="block text-sm font-semibold text-field-dark mb-2">
                 Team 1 *
               </label>
               <select
                 value={formData.team1_id}
                 onChange={(e) => setFormData({ ...formData, team1_id: e.target.value })}
-                className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+                className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
               >
                 <option value="">Select Team 1</option>
                 {availableTeams.map((team) => (
@@ -203,13 +203,13 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+              <label className="block text-sm font-semibold text-field-dark mb-2">
                 Team 2 *
               </label>
               <select
                 value={formData.team2_id}
                 onChange={(e) => setFormData({ ...formData, team2_id: e.target.value })}
-                className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+                className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
               >
                 <option value="">Select Team 2</option>
                 {availableTeams.map((team) => (
@@ -222,41 +222,41 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
           {/* Scores */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-[#0f172a] mb-2">
-                Team 1 Score
+              <label className="block text-sm font-semibold text-field-dark mb-2">
+                Team 1 Score *
               </label>
               <input
                 type="number"
                 value={formData.team1_score}
                 onChange={(e) => setFormData({ ...formData, team1_score: e.target.value })}
                 min="0"
-                className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+                className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#0f172a] mb-2">
-                Team 2 Score
+              <label className="block text-sm font-semibold text-field-dark mb-2">
+                Team 2 Score *
               </label>
               <input
                 type="number"
                 value={formData.team2_score}
                 onChange={(e) => setFormData({ ...formData, team2_score: e.target.value })}
                 min="0"
-                className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+                className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
               />
             </div>
           </div>
 
           {/* Winner */}
           <div>
-            <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+            <label className="block text-sm font-semibold text-field-dark mb-2">
               Winner
             </label>
             <select
               value={formData.winner_team_id}
               onChange={(e) => setFormData({ ...formData, winner_team_id: e.target.value })}
-              className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+              className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
             >
               <option value="">No winner yet</option>
               {formData.team1_id && selectedTeam1 && (
@@ -271,13 +271,13 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
           {/* Stage & Status */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+              <label className="block text-sm font-semibold text-field-dark mb-2">
                 Stage
               </label>
               <select
                 value={formData.stage}
                 onChange={(e) => setFormData({ ...formData, stage: e.target.value })}
-                className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+                className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
               >
                 <option value="group_stage">Group Stage</option>
                 <option value="playoffs">Playoffs</option>
@@ -288,13 +288,13 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+              <label className="block text-sm font-semibold text-field-dark mb-2">
                 Status
               </label>
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+                className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
               >
                 <option value="scheduled">Scheduled</option>
                 <option value="live">Live</option>
@@ -305,20 +305,20 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
 
           {/* Scheduled Time */}
           <div>
-            <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+            <label className="block text-sm font-semibold text-field-dark mb-2">
               Scheduled Time
             </label>
             <input
               type="datetime-local"
               value={formData.scheduled_time}
               onChange={(e) => setFormData({ ...formData, scheduled_time: e.target.value })}
-              className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+              className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
             />
           </div>
 
           {/* VOD URLs */}
           <div>
-            <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+            <label className="block text-sm font-semibold text-field-dark mb-2">
               Twitch VOD URL
             </label>
             <input
@@ -326,12 +326,12 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
               value={formData.twitch_vod_url}
               onChange={(e) => setFormData({ ...formData, twitch_vod_url: e.target.value })}
               placeholder="https://twitch.tv/videos/..."
-              className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+              className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-[#0f172a] mb-2">
+            <label className="block text-sm font-semibold text-field-dark mb-2">
               YouTube VOD URL
             </label>
             <input
@@ -339,14 +339,14 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
               value={formData.youtube_vod_url}
               onChange={(e) => setFormData({ ...formData, youtube_vod_url: e.target.value })}
               placeholder="https://youtube.com/watch?v=..."
-              className="w-full px-4 py-3 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-[#0f172a]"
+              className="w-full px-4 py-3 border-2 border-field-dark/10 rounded-lg focus:outline-none focus:border-harvest text-field-dark"
             />
           </div>
 
           {/* Dotabuff Link (Read-only) */}
           {match.dotabuff_url && (
             <div className="p-4 bg-[#3b82f6]/10 rounded-xl border-2 border-[#3b82f6]/20">
-              <p className="text-sm font-semibold text-[#0f172a] mb-2">Match Data</p>
+              <p className="text-sm font-semibold text-field-dark mb-2">Match Data</p>
               <a
                 href={match.dotabuff_url}
                 target="_blank"
@@ -363,7 +363,7 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
           <div className="flex gap-3">
             <Button
               onClick={onClose}
-              className="flex-1 bg-white hover:bg-[#0f172a]/5 text-[#0f172a] border-2 border-[#0f172a]/10"
+              className="flex-1 bg-white hover:bg-field-dark/5 text-field-dark border-2 border-field-dark/10"
             >
               Cancel
             </Button>
@@ -387,7 +387,7 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
             <Button
               onClick={handleSave}
               disabled={saving || deleting}
-              className="flex-1 bg-[#f97316] hover:bg-[#ea580c] text-white"
+              className="flex-1 bg-harvest hover:bg-amber text-white"
             >
               {saving ? (
                 <>

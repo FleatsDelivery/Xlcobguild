@@ -1,0 +1,33 @@
+match_id,team_id,team_name,player_id,player_name,hero,kills,deaths,assists,net_worth,last_hits,denies,gpm,xpm
+8325737430,9658546,CornHub,165923715,The Concept Of Wasp,Templar Assassin,0,6,3,7612,145,9,316,399
+8325737430,9658546,CornHub,452702024,CGarty,Ember Spirit,2,6,5,12508,167,6,440,532
+8325737430,9658546,CornHub,32846586,Dr Clayton,Axe,4,6,4,10848,145,1,405,507
+8325737430,9658546,CornHub,237313649,Mavi,Pudge,3,13,2,5431,30,2,236,263
+8325737430,9658546,CornHub,31649623,Moumpt,Oracle,0,12,9,3942,10,1,175,209
+8325737430,null,Tiny Corn Energy,20413194,.4leks...,Ursa,10,1,8,17140,189,21,607,591
+8325737430,null,Tiny Corn Energy,1516523759,alexithymia,Phoenix,16,2,17,15923,149,11,579,656
+8325737430,null,Tiny Corn Energy,71794697,Z.T. Pastamancer,Wraith King,10,0,12,18427,205,10,626,624
+8325737430,null,Tiny Corn Energy,208895278,businessCasual,Vengeful Spirit,3,4,22,8846,41,6,342,435
+8325737430,null,Tiny Corn Energy,42336030,Pr1de,Warlock,3,4,18,8517,40,6,327,463
+,,,,,,,,,,,,,
+8325766174,9658546,CornHub,165923715,The Concept Of Wasp,Razor,20,11,23,32292,243,15,569,917
+8325766174,9658546,CornHub,452702024,CGarty,Phantom Assassin,24,7,13,38518,596,23,827,1078
+8325766174,9658546,CornHub,32846586,Dr Clayton,Medusa,1,11,24,22986,231,7,401,707
+8325766174,9658546,CornHub,237313649,Mavi,Disruptor,3,13,25,16550,187,3,370,583
+8325766174,9658546,CornHub,31649623,Moumpt,Abaddon,4,5,35,21495,61,2,387,765
+8325766174,null,Tiny Corn Energy,20413194,.4leks...,Anti-Mage,19,7,14,33360,470,30,725,1077
+8325766174,null,Tiny Corn Energy,1516523759,alexithymia,Windranger,7,14,23,18101,276,28,457,526
+8325766174,null,Tiny Corn Energy,71794697,Z.T. Pastamancer,Centaur Warrunner,11,8,21,23571,298,12,486,711
+8325766174,null,Tiny Corn Energy,208895278,businessCasual,Pudge,2,17,23,15034,102,8,327,624
+8325766174,null,Tiny Corn Energy,42336030,Pr1de,Ancient Apparition,8,7,24,13831,43,5,298,494
+,,,,,,,,,,,,,
+8325821924,9658546,CornHub,165923715,The Concept Of Wasp,Death Prophet,3,8,5,14514,236,12,370,501
+8325821924,9658546,CornHub,452702024,CGarty,Luna,5,5,6,28917,713,7,747,698
+8325821924,9658546,CornHub,32846586,Dr Clayton,Underlord,2,9,6,15797,261,16,365,498
+8325821924,9658546,CornHub,237313649,Mavi,Disruptor,1,9,13,7746,86,0,245,384
+8325821924,9658546,CornHub,31649623,Moumpt,Abaddon,3,7,8,10743,42,1,260,395
+8325821924,null,Tiny Corn Energy,20413194,.4leks...,Lifestealer,15,1,15,36432,496,31,796,1069
+8325821924,null,Tiny Corn Energy,1516523759,alexithymia,Snapfire,11,1,17,30417,412,31,691,990
+8325821924,null,Tiny Corn Energy,71794697,Z.T. Pastamancer,Wraith King,3,1,21,25791,358,8,563,856
+8325821924,null,Tiny Corn Energy,208895278,businessCasual,Hoodwink,4,7,17,15388,114,11,364,531
+8325821924,null,Tiny Corn Energy,42336030,Pr1de,Warlock,5,4,24,12712,33,2,305,503

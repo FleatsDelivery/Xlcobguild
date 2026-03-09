@@ -1,0 +1,802 @@
+[
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 630ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e729df3d-6376-4527-98af-9e0a19d41612",
+    "level": "info",
+    "timestamp": 1772645072143000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "76f17d43-aa60-4518-a9ca-d8d1779c5892",
+    "level": "info",
+    "timestamp": 1772645071512000
+  },
+  {
+    "event_message": "booted (time: 105ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "16b87e35-c4bf-4aa0-9665-dd8e0598992a",
+    "level": "log",
+    "timestamp": 1772645071371000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 346ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4591989e-b9a8-45e5-8f58-f4b1dd416dff",
+    "level": "info",
+    "timestamp": 1772645070975000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "575f34e4-291c-4474-8e60-d44dba077921",
+    "level": "info",
+    "timestamp": 1772645070628000
+  },
+  {
+    "event_message": "booted (time: 75ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b5372628-5ddb-4f51-b6ba-c7150623c619",
+    "level": "log",
+    "timestamp": 1772645070511000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 627ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c74f401a-2e87-4493-844d-3dc48e7395b9",
+    "level": "info",
+    "timestamp": 1772645057113000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7a5ac13a-bff0-447f-8fce-4b3f5d9e8984",
+    "level": "info",
+    "timestamp": 1772645056485000
+  },
+  {
+    "event_message": "booted (time: 94ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "90332017-c319-417d-a272-819bd195961b",
+    "level": "log",
+    "timestamp": 1772645056355000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 335ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "42cf767f-b5ac-4cf5-bb42-5aa8e6183619",
+    "level": "info",
+    "timestamp": 1772645055926000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a00252e6-7b40-4d10-97f8-d77308023c2d",
+    "level": "info",
+    "timestamp": 1772645055590000
+  },
+  {
+    "event_message": "booted (time: 76ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d7e707b1-6958-46b4-b68a-111fd3123b66",
+    "level": "log",
+    "timestamp": 1772645055463000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "422b53e4-285e-4dd0-83fa-73b2fa2ba02a",
+    "level": "log",
+    "timestamp": 1772645053025000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "45af72f6-b584-46ce-8552-931a6acdd98b",
+    "level": "log",
+    "timestamp": 1772645052054000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 638ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1961d02c-63a9-402e-94e7-ad9f167c9349",
+    "level": "info",
+    "timestamp": 1772645044311000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2f387ff2-497f-4b5c-8d1e-89daebbb1d07",
+    "level": "info",
+    "timestamp": 1772645043673000
+  },
+  {
+    "event_message": "booted (time: 153ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2e3e7ba8-3d9e-42a5-8510-ccb539c9da90",
+    "level": "log",
+    "timestamp": 1772645043516000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 612ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5393ecf0-afe1-41a9-a991-16eaca635c1c",
+    "level": "info",
+    "timestamp": 1772645043043000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "58a9d185-1d6c-42ab-bdf8-fae9f71e9bc1",
+    "level": "info",
+    "timestamp": 1772645042431000
+  },
+  {
+    "event_message": "booted (time: 99ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "054763f1-6235-4739-974a-1cda24009c0a",
+    "level": "log",
+    "timestamp": 1772645042316000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 368ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "857b689a-eff7-4537-b8ef-ca881fb74c4e",
+    "level": "info",
+    "timestamp": 1772645042315000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 650ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "13da44f1-542e-4af7-a36c-2b5f8f84c4d2",
+    "level": "info",
+    "timestamp": 1772645041953000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bac31975-6d78-465d-a21c-a179f51ffccf",
+    "level": "info",
+    "timestamp": 1772645041946000
+  },
+  {
+    "event_message": "booted (time: 85ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e1e42212-8036-423c-a24d-d71fcf93f952",
+    "level": "log",
+    "timestamp": 1772645041833000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 352ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "473cb4af-0ffa-4c64-9bcb-da725911d311",
+    "level": "info",
+    "timestamp": 1772645041444000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "29436be2-a41c-401d-818a-b6d288272348",
+    "level": "info",
+    "timestamp": 1772645041303000
+  },
+  {
+    "event_message": "booted (time: 208ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b89b45a5-5af8-4a8a-a6bd-14796c21c8f1",
+    "level": "log",
+    "timestamp": 1772645041108000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3b7fc17c-d2c1-4950-ab42-e5bf63ab3cff",
+    "level": "info",
+    "timestamp": 1772645041091000
+  },
+  {
+    "event_message": "booted (time: 228ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e8ca8426-07fb-4b01-97c5-ec3d1f54de55",
+    "level": "log",
+    "timestamp": 1772645040701000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 646ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4c6bf47c-eeb9-404c-b02c-a57904a2d8e3",
+    "level": "info",
+    "timestamp": 1772645040481000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 451ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1386e155-336e-46ff-a744-023beda0c6af",
+    "level": "info",
+    "timestamp": 1772645040106000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 339ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "86ecd0df-71f1-4b74-9461-484ec0c8cf70",
+    "level": "info",
+    "timestamp": 1772645040053000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "eab5a80b-9ac2-4e4b-9e4a-be00418f0d22",
+    "level": "info",
+    "timestamp": 1772645039834000
+  },
+  {
+    "event_message": "booted (time: 82ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "89739860-4a49-4689-b006-9fae9e51912d",
+    "level": "log",
+    "timestamp": 1772645039725000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b0a60e51-7918-46aa-9e1c-8449e094172e",
+    "level": "info",
+    "timestamp": 1772645039713000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "439268f9-c925-421c-8a44-405d6ef4460d",
+    "level": "info",
+    "timestamp": 1772645039655000
+  },
+  {
+    "event_message": "booted (time: 66ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d4ac034e-9884-4ab4-92bf-4e01764c3e8b",
+    "level": "log",
+    "timestamp": 1772645039610000
+  },
+  {
+    "event_message": "booted (time: 68ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f6825a3b-823c-4408-9e93-603a21a12acd",
+    "level": "log",
+    "timestamp": 1772645039532000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 647ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6543783f-2bba-4c7a-b81f-8e1965f5c21a",
+    "level": "info",
+    "timestamp": 1772645039332000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 325ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "195bf9a2-0d11-467b-a3b7-74ef02cd53b6",
+    "level": "info",
+    "timestamp": 1772645039288000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 233ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "00f4bdf0-e52a-425c-8e56-31451789844c",
+    "level": "info",
+    "timestamp": 1772645039187000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 334ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0cebe026-0dcb-4523-b5ae-57e2e4b51f0c",
+    "level": "info",
+    "timestamp": 1772645039151000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/stripe/subscription-status 200 547ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8a250a65-bccf-47c2-a29d-ea0f88183075",
+    "level": "info",
+    "timestamp": 1772645039142000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/printful/products 200 352ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ed2f344e-f04e-4b04-b662-4c35a963f425",
+    "level": "info",
+    "timestamp": 1772645039053000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "618b1525-5648-4353-ae0d-ca703f006f46",
+    "level": "info",
+    "timestamp": 1772645038962000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bc3f610f-2422-407e-b67f-93e4962d8cb8",
+    "level": "info",
+    "timestamp": 1772645038953000
+  },
+  {
+    "event_message": "Resolved Printful store_id: 17806995 (Personal orders)\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3a9739e0-d257-447e-abf4-71b8c388ec15",
+    "level": "info",
+    "timestamp": 1772645038908000
+  },
+  {
+    "event_message": "booted (time: 55ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "091b34f7-a11b-45cd-9c92-95fe65307afb",
+    "level": "log",
+    "timestamp": 1772645038880000
+  },
+  {
+    "event_message": "booted (time: 82ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "212d92e7-fa0d-448d-b5d6-4f3d1d0b0489",
+    "level": "log",
+    "timestamp": 1772645038830000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4992ef76-3376-4250-aa49-a12f4aaaad4f",
+    "level": "info",
+    "timestamp": 1772645038816000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/kkup/tournaments/next-upcoming 200 139ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2a27fbc9-b756-4771-a66b-37a32d12edab",
+    "level": "info",
+    "timestamp": 1772645038771000
+  },
+  {
+    "event_message": "booted (time: 84ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "76036b4f-5680-4fe8-818e-dba97fe6d576",
+    "level": "log",
+    "timestamp": 1772645038706000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/printful/products\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1aed7787-c33d-4b6a-87a0-0205ab9433f3",
+    "level": "info",
+    "timestamp": 1772645038701000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "30c8c8a3-a1cd-493a-a405-6049af024007",
+    "level": "info",
+    "timestamp": 1772645038685000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/kkup/tournaments/next-upcoming\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "227e59f5-0b2d-4146-9441-f0c051bb61bb",
+    "level": "info",
+    "timestamp": 1772645038632000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 289ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d87fca3e-8b2d-49da-a2f2-56fbcc082a43",
+    "level": "info",
+    "timestamp": 1772645038603000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a3cce0bc-26bb-46e7-9759-c6493a665241",
+    "level": "info",
+    "timestamp": 1772645038602000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/stripe/subscription-status\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3bba47c7-eced-401f-ae8b-e84a13960e69",
+    "level": "info",
+    "timestamp": 1772645038595000
+  },
+  {
+    "event_message": "booted (time: 65ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "65de1bad-910d-4d76-83ad-30f3ca2b33b4",
+    "level": "log",
+    "timestamp": 1772645038579000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 329ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d138a6ba-392f-4808-8a10-a9e7cf48b4d1",
+    "level": "info",
+    "timestamp": 1772645038576000
+  },
+  {
+    "event_message": "booted (time: 81ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0781c242-b849-42e3-9389-30c61a602554",
+    "level": "log",
+    "timestamp": 1772645038510000
+  },
+  {
+    "event_message": "Twitch identity found: the_corn_field ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8776fb4d-d75f-4f9e-b57d-e120d248b149",
+    "level": "info",
+    "timestamp": 1772645038496000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 227ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5aa30eef-2996-4405-b23d-b85bb6b21134",
+    "level": "info",
+    "timestamp": 1772645038490000
+  },
+  {
+    "event_message": "booted (time: 52ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1560c658-af25-4c4d-8295-1fe1b3012b4e",
+    "level": "log",
+    "timestamp": 1772645038484000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "608784ce-ce81-430a-be06-7639aeda034d",
+    "level": "info",
+    "timestamp": 1772645038339000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 203ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b82f942a-8f92-46d2-88dd-46dbd87b09a6",
+    "level": "info",
+    "timestamp": 1772645038339000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "53033eef-512c-442d-82b3-b30475b22206",
+    "level": "info",
+    "timestamp": 1772645038314000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cc143111-8616-4479-b0af-2c539ccafbc3",
+    "level": "info",
+    "timestamp": 1772645038313000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9ffe3f61-3727-4100-ba6d-1d259fb73522",
+    "level": "info",
+    "timestamp": 1772645038263000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/printful/products 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "904313f0-d906-4b09-97be-85f6939c29cb",
+    "level": "info",
+    "timestamp": 1772645038260000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/printful/products\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "64753c47-1653-46bb-83e1-72676dbf01b7",
+    "level": "info",
+    "timestamp": 1772645038258000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bca5296f-202c-4201-934f-0183e74c0b35",
+    "level": "info",
+    "timestamp": 1772645038247000
+  },
+  {
+    "event_message": "Twitch identity found: the_corn_field ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7caa6648-4ac2-426c-b9e4-2485445cfc6d",
+    "level": "info",
+    "timestamp": 1772645038240000
+  },
+  {
+    "event_message": "booted (time: 66ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "48f7b17c-e5ec-4b9d-952c-eabb695e3669",
+    "level": "log",
+    "timestamp": 1772645038234000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/stripe/subscription-status 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0760703e-c56e-4c60-8d8f-ca34d4a7e6b7",
+    "level": "info",
+    "timestamp": 1772645038213000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/stripe/subscription-status\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "54a717a0-e31f-4392-a6da-0f2760c96fdb",
+    "level": "info",
+    "timestamp": 1772645038212000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/kkup/tournaments/next-upcoming 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8b26c227-8a54-4c32-8cf6-00fb88c72660",
+    "level": "info",
+    "timestamp": 1772645038184000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/kkup/tournaments/next-upcoming\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0909634a-a3ec-47a4-82fb-6e017c3f1ab4",
+    "level": "info",
+    "timestamp": 1772645038182000
+  },
+  {
+    "event_message": "booted (time: 94ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8f7a264f-a40b-4c06-a3ee-ad92eafe2aae",
+    "level": "log",
+    "timestamp": 1772645038151000
+  },
+  {
+    "event_message": "booted (time: 66ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5d6d5e77-dc78-4e07-a416-99896ea39a31",
+    "level": "log",
+    "timestamp": 1772645038151000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ec17cb62-e945-492d-b666-3d7f09103e05",
+    "level": "info",
+    "timestamp": 1772645038137000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bc6c99d8-5728-43a5-8cdc-034aa0c14b7c",
+    "level": "info",
+    "timestamp": 1772645038136000
+  },
+  {
+    "event_message": "booted (time: 60ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7b26f8f4-870a-4f04-99a8-129f328849e4",
+    "level": "log",
+    "timestamp": 1772645038133000
+  },
+  {
+    "event_message": "booted (time: 68ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "343249d4-6b25-4af0-bbe3-0ef18aca854c",
+    "level": "log",
+    "timestamp": 1772645038127000
+  },
+  {
+    "event_message": "booted (time: 61ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "987f7d06-558c-499f-b69f-ecba99768e5c",
+    "level": "log",
+    "timestamp": 1772645038093000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 354ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "28d8ac29-d750-4a0b-ac74-1cbb159b9e52",
+    "level": "info",
+    "timestamp": 1772645037751000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4c74c5d3-7a50-4e89-809e-5ff8a20f4d0b",
+    "level": "info",
+    "timestamp": 1772645037398000
+  },
+  {
+    "event_message": "booted (time: 57ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d2331635-288e-433d-ab7f-43d284956f09",
+    "level": "log",
+    "timestamp": 1772645037300000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 254ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ce3dba94-c36d-4d29-9aff-f43401a9538c",
+    "level": "info",
+    "timestamp": 1772645037000000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 237ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "55eb93b5-6e2f-4eb4-b546-1f080188ca15",
+    "level": "info",
+    "timestamp": 1772645036988000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "af311fe1-224e-4099-83a4-3eefb1b8703e",
+    "level": "info",
+    "timestamp": 1772645036987000
+  },
+  {
+    "event_message": "Twitch identity found: the_corn_field ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "20a028c4-d498-44b5-9e8b-ab24dd0ea59f",
+    "level": "info",
+    "timestamp": 1772645036875000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a04088de-0f7f-429c-8a36-e3015d10edd1",
+    "level": "info",
+    "timestamp": 1772645036753000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d5c138d1-a771-4d2d-b2fb-772ff853054b",
+    "level": "info",
+    "timestamp": 1772645036751000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "34963f9d-7456-429a-a0d3-c2e38a3248f5",
+    "level": "info",
+    "timestamp": 1772645036746000
+  },
+  {
+    "event_message": "booted (time: 54ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c7f4ecaa-ef1a-43bd-b2e9-ce0e2bdbc5d9",
+    "level": "log",
+    "timestamp": 1772645036669000
+  },
+  {
+    "event_message": "booted (time: 65ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0043d34e-6470-4f3e-b01d-f3c4ff7a97b0",
+    "level": "log",
+    "timestamp": 1772645036611000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 479ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cf2d6490-01de-496f-a351-a2d2c33f3d72",
+    "level": "info",
+    "timestamp": 1772645035840000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 664ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ee518b52-aab7-4c92-860b-ec1901b50dad",
+    "level": "info",
+    "timestamp": 1772645035780000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 348ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8e08a555-99f8-43e2-ac88-0759732a1b9a",
+    "level": "info",
+    "timestamp": 1772645035468000
+  }
+]

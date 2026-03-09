@@ -1,0 +1,802 @@
+[
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 768ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c00c3ad1-b383-48d1-8cd8-8f607d017d6a",
+    "level": "info",
+    "timestamp": 1772470975497000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0b161a92-2eea-45a4-a1ba-3b14984ad25a",
+    "level": "info",
+    "timestamp": 1772470974729000
+  },
+  {
+    "event_message": "booted (time: 176ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d1ffd714-8c2d-4d63-98f2-e849e9d3f95d",
+    "level": "log",
+    "timestamp": 1772470974530000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 675ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "624e5e8f-f8dd-432a-bc5d-ad48c811d293",
+    "level": "info",
+    "timestamp": 1772470974082000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "490acdce-4a47-4e91-adcc-13d701b00b0f",
+    "level": "info",
+    "timestamp": 1772470973407000
+  },
+  {
+    "event_message": "booted (time: 70ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6f6a2d24-a4c5-4244-b369-f902b3c520e4",
+    "level": "log",
+    "timestamp": 1772470973261000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "40228e98-f3d2-4f2f-9a26-1312c88be79e",
+    "level": "info",
+    "timestamp": 1772470972204000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 355ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fffeabae-967f-4ab9-8007-799c7e95e403",
+    "level": "info",
+    "timestamp": 1772470972045000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7581cc6f-b0e3-4935-b1bc-eab45ac4818b",
+    "level": "info",
+    "timestamp": 1772470971690000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 635ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6d368e52-a25c-4b00-8c5c-39deec9b9ae4",
+    "level": "info",
+    "timestamp": 1772470971670000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 338ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bae78a66-1624-4c50-bdbc-f6b3dfb2224e",
+    "level": "info",
+    "timestamp": 1772470971598000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 449ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "eeebf0bd-c3cd-41b9-a259-21dc7fe1e546",
+    "level": "info",
+    "timestamp": 1772470971542000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5d197755-236f-4e16-b567-736719bf1517",
+    "level": "info",
+    "timestamp": 1772470971260000
+  },
+  {
+    "event_message": "booted (time: 106ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5ecbe5a0-fd2a-4c94-ba86-20b3e3d4cf2f",
+    "level": "log",
+    "timestamp": 1772470971134000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d123d043-1f99-4bed-b925-579b1816e08b",
+    "level": "info",
+    "timestamp": 1772470971094000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4c6f238b-3ef0-4326-b3f6-91efa4e013f0",
+    "level": "info",
+    "timestamp": 1772470971035000
+  },
+  {
+    "event_message": "booted (time: 109ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "dcdef848-d1b3-42cc-b311-9e59adc7cdd6",
+    "level": "log",
+    "timestamp": 1772470970906000
+  },
+  {
+    "event_message": "booted (time: 56ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "323b3f78-3d6e-4fdb-8fe0-16864fdd1731",
+    "level": "log",
+    "timestamp": 1772470970873000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 459ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "394aa8f2-c57b-46c0-b1e9-6df7e4bd3e60",
+    "level": "info",
+    "timestamp": 1772470970771000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 683ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cff7884f-0574-454a-aba4-2799b6237371",
+    "level": "info",
+    "timestamp": 1772470970532000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f193213a-d5f9-4a9c-9fb8-09f640ff081c",
+    "level": "info",
+    "timestamp": 1772470970312000
+  },
+  {
+    "event_message": "booted (time: 109ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e123eaf6-ae91-47b7-81ab-0d1126c0c73d",
+    "level": "log",
+    "timestamp": 1772470970013000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "59b256d7-8451-4c2f-a956-17b2ddea68f5",
+    "level": "info",
+    "timestamp": 1772470969848000
+  },
+  {
+    "event_message": "booted (time: 183ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2f90f46f-62b5-4081-bd62-602666375b70",
+    "level": "log",
+    "timestamp": 1772470969810000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 418ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "31f6cb33-9250-44d1-81d7-0d49135f3dd1",
+    "level": "info",
+    "timestamp": 1772470969653000
+  },
+  {
+    "event_message": "booted (time: 148ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "42177063-dfc6-4a89-9680-d14693910397",
+    "level": "log",
+    "timestamp": 1772470969451000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 235ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2a109a75-5acb-4a5f-851a-41b6b27017eb",
+    "level": "info",
+    "timestamp": 1772470969439000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/officer/pending-count 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "38f2b40e-ca39-4e74-a331-2926348e90ae",
+    "level": "info",
+    "timestamp": 1772470969385000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b473938a-0347-481b-a242-7c2303925f8e",
+    "level": "info",
+    "timestamp": 1772470969384000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a65d3fe8-8596-46c3-8927-84f29cf36446",
+    "level": "info",
+    "timestamp": 1772470969235000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "dcbd09d3-e5b8-426b-ab45-ecdea2a09607",
+    "level": "info",
+    "timestamp": 1772470969203000
+  },
+  {
+    "event_message": "booted (time: 134ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ed2057f1-829c-43e4-9c63-61464f3e1ea5",
+    "level": "log",
+    "timestamp": 1772470969130000
+  },
+  {
+    "event_message": "booted (time: 86ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c7c7c241-e3a7-4f02-b248-b064f1f202e7",
+    "level": "log",
+    "timestamp": 1772470969077000
+  },
+  {
+    "event_message": "booted (time: 52ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b339d6b7-d80b-4964-b6ca-d38f27fc2a91",
+    "level": "log",
+    "timestamp": 1772470969040000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 387ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bf4669b0-bd7f-4c1e-bbf3-94bdd38e9b2f",
+    "level": "info",
+    "timestamp": 1772470968877000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "18862ba7-0ee7-4bfa-9a3b-ed9b7ae21ee0",
+    "level": "info",
+    "timestamp": 1772470968875000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/printify/products 200 553ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "29689a66-0362-4a0b-ba9f-6472409bc245",
+    "level": "info",
+    "timestamp": 1772470968818000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 364ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "47798259-526b-4d08-97ab-e69fb50245d7",
+    "level": "info",
+    "timestamp": 1772470968769000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "686e6814-0ac9-4082-b004-ddff361f3dba",
+    "level": "info",
+    "timestamp": 1772470968768000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 422ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "dc6635a8-af49-4af6-9c6a-0f14f4cabf53",
+    "level": "info",
+    "timestamp": 1772470968746000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 369ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d3f59e7f-9c76-45f5-89f6-3d1712f3c71e",
+    "level": "info",
+    "timestamp": 1772470968720000
+  },
+  {
+    "event_message": "Twitch identity found: the_corn_field ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c2786266-6f57-4756-9e11-a345987c5969",
+    "level": "info",
+    "timestamp": 1772470968636000
+  },
+  {
+    "event_message": "Twitch identity found: the_corn_field ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4506c706-0cbd-450e-a435-14dc3964e2fd",
+    "level": "info",
+    "timestamp": 1772470968524000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c01d9a68-f715-41d9-9bf2-11d87afc1333",
+    "level": "info",
+    "timestamp": 1772470968490000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3f3309de-cb15-48bf-a73b-19677d2293a5",
+    "level": "info",
+    "timestamp": 1772470968489000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9a5bb93e-209f-4e50-b21d-5eda22b3a33d",
+    "level": "info",
+    "timestamp": 1772470968406000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "64faed0f-8d53-4553-808e-d35e00206adb",
+    "level": "info",
+    "timestamp": 1772470968405000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/notifications/unread-count 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6ecac23e-ae65-4d61-80c0-dbfb323b760e",
+    "level": "info",
+    "timestamp": 1772470968398000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ba75d26d-04f4-4144-83b5-e41ff7eb0d3d",
+    "level": "info",
+    "timestamp": 1772470968397000
+  },
+  {
+    "event_message": "booted (time: 51ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4121e766-1af8-4f01-9921-ec74c5532f0e",
+    "level": "log",
+    "timestamp": 1772470968366000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ff534e28-c314-4f7f-bc49-ccae7e82a5c7",
+    "level": "info",
+    "timestamp": 1772470968351000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/notifications/unread-count 204 2ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "855cefeb-2929-490a-877a-9ceef7babffa",
+    "level": "info",
+    "timestamp": 1772470968342000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6483a2fb-a795-45d6-b8cf-f455eba4c5a4",
+    "level": "info",
+    "timestamp": 1772470968340000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "586340b4-c993-42a1-b4f7-0d03dc407d12",
+    "level": "info",
+    "timestamp": 1772470968324000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/printify/products\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "aab7f575-a765-41aa-9e23-4646a44ab262",
+    "level": "info",
+    "timestamp": 1772470968265000
+  },
+  {
+    "event_message": "booted (time: 68ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "dea1aef2-2a68-4d59-86cd-ebe9e2435fd8",
+    "level": "log",
+    "timestamp": 1772470968258000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/notifications/unread-count 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bae76436-2b4c-499f-8346-d57292ccfad6",
+    "level": "info",
+    "timestamp": 1772470968256000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0965ac82-7f91-4832-93fc-f4c2bf8457fa",
+    "level": "info",
+    "timestamp": 1772470968255000
+  },
+  {
+    "event_message": "booted (time: 79ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1b6da318-b977-4c9a-844f-a6274ff8be70",
+    "level": "log",
+    "timestamp": 1772470968196000
+  },
+  {
+    "event_message": "booted (time: 103ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "78cfabd6-bb7a-4528-bafa-2341519a9372",
+    "level": "log",
+    "timestamp": 1772470968195000
+  },
+  {
+    "event_message": "booted (time: 80ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cf75a651-7bff-4e2f-9090-bb103c5ccf12",
+    "level": "log",
+    "timestamp": 1772470968187000
+  },
+  {
+    "event_message": "booted (time: 105ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "960e5b28-5662-43d0-bac2-fb1d93db3ff1",
+    "level": "log",
+    "timestamp": 1772470968139000
+  },
+  {
+    "event_message": "booted (time: 90ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3244ff64-c559-49d1-be1f-14d8482812bb",
+    "level": "log",
+    "timestamp": 1772470968133000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 900ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b7a7c19d-fcf3-4ee5-867e-4fc1e55fc709",
+    "level": "info",
+    "timestamp": 1772470967729000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9ff5ee3a-8448-4580-b094-d80f0f658df5",
+    "level": "info",
+    "timestamp": 1772470966828000
+  },
+  {
+    "event_message": "booted (time: 113ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "dc98a2ec-0a3f-4955-84e6-1bc2bbd61b0b",
+    "level": "log",
+    "timestamp": 1772470966645000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 900ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5faa513e-62d2-42d9-81b2-6b9d86d9e1af",
+    "level": "info",
+    "timestamp": 1772470966268000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "121ad667-d8ba-430c-b373-577a65ccfd37",
+    "level": "info",
+    "timestamp": 1772470966268000
+  },
+  {
+    "event_message": "Twitch identity found: the_corn_field ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e52ac70d-18a1-420e-8f52-21933c06cd34",
+    "level": "info",
+    "timestamp": 1772470966093000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a9247ec5-58f2-4390-8052-79204572471b",
+    "level": "info",
+    "timestamp": 1772470965370000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "eb3701f3-d290-4543-ab3a-8b13ae52dab1",
+    "level": "info",
+    "timestamp": 1772470965368000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 736ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "74121ee1-b5f4-40b2-bdf7-e5a3ba19fa4d",
+    "level": "info",
+    "timestamp": 1772470960210000
+  },
+  {
+    "event_message": "booted (time: 290ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ddcc227e-038d-4a83-b944-acd36b861ec8",
+    "level": "log",
+    "timestamp": 1772470959900000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "072b8246-9c37-46e2-80db-8c12c39e59bb",
+    "level": "info",
+    "timestamp": 1772470959473000
+  },
+  {
+    "event_message": "booted (time: 135ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cae4e9d9-e20a-4be4-8564-060f282871f6",
+    "level": "log",
+    "timestamp": 1772470959346000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/stripe/webhook 400 5ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c893ac15-40db-47ba-86bc-65d45d6163c0",
+    "level": "info",
+    "timestamp": 1772470948503000
+  },
+  {
+    "event_message": "Webhook signature verification failed: SubtleCryptoProvider cannot be used in a synchronous context.\nUse `await constructEventAsync(...)` instead of `constructEvent(...)`\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a7f0a13a-692f-402d-9482-4ea2a5084836",
+    "level": "error",
+    "timestamp": 1772470948501000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/stripe/webhook\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ec078eef-4064-4514-960e-1a1314d39e88",
+    "level": "info",
+    "timestamp": 1772470948497000
+  },
+  {
+    "event_message": "booted (time: 84ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "333a08cc-8321-4958-8ed7-d57bde57e68d",
+    "level": "log",
+    "timestamp": 1772470948379000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/stripe/webhook 400 5ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "18198041-1c10-4cb5-88bd-2054764ed53e",
+    "level": "info",
+    "timestamp": 1772470948171000
+  },
+  {
+    "event_message": "Webhook signature verification failed: SubtleCryptoProvider cannot be used in a synchronous context.\nUse `await constructEventAsync(...)` instead of `constructEvent(...)`\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "34b7a1a4-6f41-4e44-8cce-69f2302d4cd4",
+    "level": "error",
+    "timestamp": 1772470948169000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/stripe/webhook\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7510273d-cc7a-46cf-a7f1-fbc02e43f3f9",
+    "level": "info",
+    "timestamp": 1772470948165000
+  },
+  {
+    "event_message": "booted (time: 70ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7bd3a1e6-284f-404a-9ecd-b9297dd6b3c9",
+    "level": "log",
+    "timestamp": 1772470948053000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/stripe/webhook 400 6ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "71cb2925-0bc6-46f0-b9ab-3acc3e4bcd3a",
+    "level": "info",
+    "timestamp": 1772470948018000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/stripe/webhook 400 6ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ea12481c-d053-4957-9651-5bb19d801aed",
+    "level": "info",
+    "timestamp": 1772470948017000
+  },
+  {
+    "event_message": "Webhook signature verification failed: SubtleCryptoProvider cannot be used in a synchronous context.\nUse `await constructEventAsync(...)` instead of `constructEvent(...)`\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b19636d8-b1fb-4e0d-b626-840e4bd3d424",
+    "level": "error",
+    "timestamp": 1772470948016000
+  },
+  {
+    "event_message": "Webhook signature verification failed: SubtleCryptoProvider cannot be used in a synchronous context.\nUse `await constructEventAsync(...)` instead of `constructEvent(...)`\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "035c82fa-0215-4c5b-9bc2-94cb99a67251",
+    "level": "error",
+    "timestamp": 1772470948016000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/stripe/webhook\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4d9ee8cd-2a06-4d0f-ac70-b57c466f65ac",
+    "level": "info",
+    "timestamp": 1772470948011000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/stripe/webhook\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b6f10c0e-98c7-4448-9da0-a912f87e876d",
+    "level": "info",
+    "timestamp": 1772470948011000
+  },
+  {
+    "event_message": "booted (time: 77ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f7fece3c-145e-44b6-890f-9f05de54eed6",
+    "level": "log",
+    "timestamp": 1772470947894000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/stripe/webhook 400 5ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e39acdf9-2d7b-4d70-a752-b084f0dbb801",
+    "level": "info",
+    "timestamp": 1772470947783000
+  },
+  {
+    "event_message": "Webhook signature verification failed: SubtleCryptoProvider cannot be used in a synchronous context.\nUse `await constructEventAsync(...)` instead of `constructEvent(...)`\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "aef50b7d-e902-4cd4-9e3c-7f9192e886c6",
+    "level": "error",
+    "timestamp": 1772470947781000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/stripe/webhook\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "04d95552-95ff-4700-877e-3bf84a17c974",
+    "level": "info",
+    "timestamp": 1772470947777000
+  },
+  {
+    "event_message": "booted (time: 83ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8a1876f2-c753-4033-8a39-09729aa6abde",
+    "level": "log",
+    "timestamp": 1772470947594000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3a01b703-2212-44b6-aa7c-f5fea012e4e6",
+    "level": "log",
+    "timestamp": 1772470901700000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f8fd9e41-5c36-43dc-bbaa-491b471d01c1",
+    "level": "log",
+    "timestamp": 1772470899951000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a4ab6205-8d45-4b92-aa7f-005f437cceee",
+    "level": "log",
+    "timestamp": 1772470898888000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a41b931b-67ff-4298-8203-d8d473218286",
+    "level": "log",
+    "timestamp": 1772470898193000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "824c46ce-627e-4be5-ad9c-fd8b06011943",
+    "level": "log",
+    "timestamp": 1772470897769000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0d585609-8013-4de6-b026-0ffe33d1bbbd",
+    "level": "log",
+    "timestamp": 1772470886723000
+  }
+]

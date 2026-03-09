@@ -15,16 +15,10 @@ interface PlayerStat {
   denies: number;
   gpm: number;
   xpm: number;
-  hero_damage: number;
-  tower_damage: number;
-  hero_healing: number;
   net_worth?: number;
-  gold?: number;
-  observer_uses?: number;
-  sentry_uses?: number;
-  level?: number;
   is_winner: boolean;
   account_id: number;
+  person_id?: string;
   player: {
     account_id: number;
     steam_id: string;
@@ -58,11 +52,10 @@ interface AggregatedPlayer {
   kda: number;
   avg_gpm: number;
   avg_xpm: number;
-  total_hero_damage: number;
-  total_tower_damage: number;
-  total_hero_healing: number;
   avg_last_hits: number;
   avg_denies: number;
+  total_last_hits: number;
+  total_denies: number;
   most_played_hero: string;
   most_played_hero_id: number;
   most_played_hero_games: number;
@@ -82,11 +75,13 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
     const playerMap = new Map<string, AggregatedPlayer>();
 
     stats.forEach((stat) => {
+      // Use person_id as primary key (guaranteed unique UUID), fall back to steam_id
+      const key = stat.person_id || stat.player?.steam_id || stat.steam_id;
       const steamId = stat.player?.steam_id || stat.steam_id;
       const playerName = stat.player?.name || stat.player_name;
 
-      if (!playerMap.has(steamId)) {
-        playerMap.set(steamId, {
+      if (!playerMap.has(key)) {
+        playerMap.set(key, {
           steam_id: steamId,
           player_name: playerName,
           avatar_url: stat.player?.avatar_url || null,
@@ -105,11 +100,10 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
           kda: 0,
           avg_gpm: 0,
           avg_xpm: 0,
-          total_hero_damage: 0,
-          total_tower_damage: 0,
-          total_hero_healing: 0,
           avg_last_hits: 0,
           avg_denies: 0,
+          total_last_hits: 0,
+          total_denies: 0,
           most_played_hero: '',
           most_played_hero_id: 0,
           most_played_hero_games: 0,
@@ -118,7 +112,7 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
         });
       }
 
-      const player = playerMap.get(steamId)!;
+      const player = playerMap.get(key)!;
       player.games_played++;
       if (stat.is_winner) {
         player.wins++;
@@ -130,9 +124,8 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
       player.total_assists += stat.assists || 0;
       player.avg_gpm += stat.gpm || 0;
       player.avg_xpm += stat.xpm || 0;
-      player.total_hero_damage += stat.hero_damage || 0;
-      player.total_tower_damage += stat.tower_damage || 0;
-      player.total_hero_healing += stat.hero_healing || 0;
+      player.total_last_hits += stat.last_hits || 0;
+      player.total_denies += stat.denies || 0;
       player.avg_last_hits += stat.last_hits || 0;
       player.avg_denies += stat.denies || 0;
       player.total_net_worth += stat.net_worth || 0;
@@ -155,7 +148,12 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
       // Find most played hero (with hero_id)
       const heroCount = new Map<string, { hero_id: number; count: number }>();
       stats
-        .filter((s) => (s.player?.steam_id || s.steam_id) === player.steam_id)
+        .filter((s) => (s.person_id || s.player?.steam_id || s.steam_id) === (stats.find(st => (st.player?.steam_id || st.steam_id) === player.steam_id)?.person_id || player.steam_id))
+        .filter((s) => {
+          const sKey = s.person_id || s.player?.steam_id || s.steam_id;
+          const pKey = stats.find(st => (st.player?.steam_id || st.steam_id) === player.steam_id)?.person_id || player.steam_id;
+          return sKey === pKey;
+        })
         .forEach((s) => {
           const heroName = s.hero_name;
           const existing = heroCount.get(heroName) || { hero_id: s.hero_id, count: 0 };
@@ -231,9 +229,9 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
     sticky?: boolean;
   }) => (
     <th
-      className={`py-4 px-6 text-xs font-bold text-[#0f172a]/70 cursor-pointer hover:text-[#f97316] transition-colors uppercase tracking-wide ${
+      className={`py-4 px-6 text-xs font-bold text-muted-foreground cursor-pointer hover:text-harvest transition-colors uppercase tracking-wide ${
         align === 'center' ? 'text-center' : 'text-left'
-      } ${sticky ? 'sticky left-0 z-10 bg-[#fdf5e9]' : ''}`}
+      } ${sticky ? 'sticky left-0 z-10 bg-muted' : ''}`}
       onClick={() => handleSort(field)}
     >
       <div className="whitespace-nowrap">
@@ -244,31 +242,31 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
   );
 
   return (
-    <div className="bg-white rounded-2xl border-2 border-[#0f172a]/10 overflow-hidden">
+    <div className="bg-card rounded-2xl border-2 border-border overflow-hidden">
       {/* Header with search */}
-      <div className="p-6 border-b-2 border-[#0f172a]/10">
+      <div className="p-4 sm:p-6 border-b-2 border-border">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-[#0f172a] flex items-center gap-2">
-              <Trophy className="w-6 h-6 text-[#f97316]" />
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground flex items-center gap-2">
+              <Trophy className="w-6 h-6 text-harvest" />
               Player Stats
             </h2>
-            <p className="text-sm text-[#0f172a]/60 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               Aggregated stats across all matches in this Kernel Kup
             </p>
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#0f172a]/40" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search player..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border-2 border-[#0f172a]/10 rounded-lg focus:outline-none focus:border-[#f97316] text-sm w-full md:w-64"
+              className="pl-10 pr-4 py-2 border-2 border-border rounded-lg focus:outline-none focus:border-harvest text-sm w-full md:w-64 bg-input-background text-foreground"
             />
           </div>
         </div>
-        <div className="mt-4 flex items-center gap-2 text-sm text-[#0f172a]/60">
+        <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
           <Users className="w-4 h-4" />
           <span>
             Showing {sortedAndFilteredPlayers.length} player{sortedAndFilteredPlayers.length !== 1 ? 's' : ''} • Click column headers to sort
@@ -279,30 +277,29 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
       {/* Horizontal Scrollable Table */}
       <div className="overflow-x-auto">
         <table className="w-full min-w-max">
-          <thead className="bg-[#fdf5e9] border-b-2 border-[#0f172a]/10">
+          <thead className="bg-muted border-b-2 border-border">
             <tr>
               <SortableHeader field="player_name" label="Player" align="left" sticky />
-              <SortableHeader field="games_played" label="Games Played" />
-              <SortableHeader field="wins" label="Wins" />
-              <SortableHeader field="losses" label="Losses" />
-              <SortableHeader field="win_rate" label="Win Rate" />
-              <SortableHeader field="total_kills" label="Total Kills" />
-              <SortableHeader field="total_deaths" label="Total Deaths" />
-              <SortableHeader field="total_assists" label="Total Assists" />
+              <SortableHeader field="most_played_hero_games" label="Top Hero" />
+              <SortableHeader field="games_played" label="GP" />
+              <SortableHeader field="wins" label="W" />
+              <SortableHeader field="losses" label="L" />
+              <SortableHeader field="win_rate" label="Win %" />
+              <SortableHeader field="total_kills" label="Kills" />
+              <SortableHeader field="total_deaths" label="Deaths" />
+              <SortableHeader field="total_assists" label="Assists" />
               <SortableHeader field="kda" label="KDA" />
-              <SortableHeader field="avg_kills" label="AVG Kills" />
-              <SortableHeader field="avg_deaths" label="AVG Deaths" />
-              <SortableHeader field="avg_assists" label="AVG Assists" />
-              <SortableHeader field="total_net_worth" label="Total Net Worth" />
-              <SortableHeader field="avg_net_worth" label="AVG Net Worth" />
-              <SortableHeader field="avg_gpm" label="AVG GPM" />
-              <SortableHeader field="avg_xpm" label="AVG XPM" />
-              <SortableHeader field="avg_last_hits" label="AVG Last Hits" />
-              <SortableHeader field="avg_denies" label="AVG Denies" />
-              <SortableHeader field="total_hero_damage" label="Total Hero Damage" />
-              <SortableHeader field="total_tower_damage" label="Total Tower Damage" />
-              <SortableHeader field="total_hero_healing" label="Total Hero Healing" />
-              <SortableHeader field="most_played_hero" label="Top Hero" align="left" />
+              <SortableHeader field="avg_kills" label="Avg K" />
+              <SortableHeader field="avg_deaths" label="Avg D" />
+              <SortableHeader field="avg_assists" label="Avg A" />
+              <SortableHeader field="total_net_worth" label="Total NW" />
+              <SortableHeader field="avg_net_worth" label="Avg NW" />
+              <SortableHeader field="avg_gpm" label="Avg GPM" />
+              <SortableHeader field="avg_xpm" label="Avg XPM" />
+              <SortableHeader field="total_last_hits" label="Total LH" />
+              <SortableHeader field="total_denies" label="Total DN" />
+              <SortableHeader field="avg_last_hits" label="Avg LH" />
+              <SortableHeader field="avg_denies" label="Avg DN" />
             </tr>
           </thead>
           <tbody>
@@ -312,22 +309,22 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
 
               return (
                 <tr
-                  key={player.steam_id}
-                  className={`border-b border-[#0f172a]/10 ${
-                    index % 2 === 0 ? 'bg-white' : 'bg-[#fdf5e9]/50'
-                  } hover:bg-[#f97316]/5 transition-colors`}
+                  key={player.steam_id || index}
+                  className={`border-b border-border ${
+                    index % 2 === 0 ? 'bg-card' : 'bg-muted/50'
+                  } hover:bg-harvest/5 transition-colors`}
                 >
                   {/* Player - STICKY */}
-                  <td className={`py-5 px-6 sticky left-0 z-10 ${index % 2 === 0 ? 'bg-white' : 'bg-[#fdf5e9]/50'}`}>
+                  <td className={`py-5 px-6 sticky left-0 z-10 ${index % 2 === 0 ? 'bg-card' : 'bg-muted/50'}`}>
                     <div className="flex items-center gap-3 min-w-[200px]">
                       {player.avatar_url ? (
                         <img
                           src={player.avatar_url}
                           alt={player.player_name}
-                          className="w-10 h-10 rounded-full border-2 border-[#0f172a]/10"
+                          className="w-10 h-10 rounded-full border-2 border-border"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#f97316] to-[#ea580c] flex items-center justify-center text-sm font-bold text-white">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-harvest to-amber flex items-center justify-center text-sm font-bold text-white">
                           {player.player_name[0]?.toUpperCase()}
                         </div>
                       )}
@@ -342,7 +339,7 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
                             {player.player_name}
                           </a>
                         ) : (
-                          <span className="text-[#0f172a] font-bold text-sm">
+                          <span className="text-foreground font-bold text-sm">
                             {player.player_name}
                           </span>
                         )}
@@ -352,7 +349,7 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
                               href={player.opendota_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs text-[#f97316] hover:underline"
+                              className="text-xs text-harvest hover:underline"
                             >
                               OpenDota
                             </a>
@@ -362,8 +359,31 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
                     </div>
                   </td>
 
+                  {/* Top Hero */}
+                  <td className="py-5 px-6">
+                    {player.most_played_hero && (
+                      <div className="flex items-center gap-2 min-w-[140px]">
+                        {heroImageUrl && (
+                          <img
+                            src={heroImageUrl}
+                            alt={player.most_played_hero}
+                            className="w-10 h-10 rounded border-2 border-border"
+                          />
+                        )}
+                        <div>
+                          <p className="text-foreground text-sm font-semibold whitespace-nowrap">
+                            {player.most_played_hero}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            x{player.most_played_hero_games}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </td>
+
                   {/* Games Played */}
-                  <td className="py-5 px-6 text-center text-[#0f172a] font-bold">
+                  <td className="py-5 px-6 text-center text-foreground font-bold">
                     {player.games_played}
                   </td>
 
@@ -384,7 +404,7 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
                         player.win_rate >= 60
                           ? 'bg-[#10b981]/10 text-[#10b981]'
                           : player.win_rate >= 50
-                          ? 'bg-[#f97316]/10 text-[#f97316]'
+                          ? 'bg-harvest/10 text-harvest'
                           : 'bg-[#ef4444]/10 text-[#ef4444]'
                       }`}
                     >
@@ -408,32 +428,32 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
                   </td>
 
                   {/* KDA */}
-                  <td className="py-5 px-6 text-center text-[#0f172a] font-black text-base">
+                  <td className="py-5 px-6 text-center text-foreground font-black text-base">
                     {player.kda.toFixed(2)}
                   </td>
 
                   {/* Avg Kills */}
-                  <td className="py-5 px-6 text-center text-[#0f172a]/70">
+                  <td className="py-5 px-6 text-center text-[#10b981]/70 font-semibold">
                     {player.avg_kills.toFixed(1)}
                   </td>
 
                   {/* Avg Deaths */}
-                  <td className="py-5 px-6 text-center text-[#0f172a]/70">
+                  <td className="py-5 px-6 text-center text-[#ef4444]/70 font-semibold">
                     {player.avg_deaths.toFixed(1)}
                   </td>
 
                   {/* Avg Assists */}
-                  <td className="py-5 px-6 text-center text-[#0f172a]/70">
+                  <td className="py-5 px-6 text-center text-[#3b82f6]/70 font-semibold">
                     {player.avg_assists.toFixed(1)}
                   </td>
 
                   {/* Total Net Worth */}
-                  <td className="py-5 px-6 text-center text-[#f97316] font-bold">
+                  <td className="py-5 px-6 text-center text-harvest font-bold">
                     {player.total_net_worth.toLocaleString()}
                   </td>
 
                   {/* AVG Net Worth */}
-                  <td className="py-5 px-6 text-center text-[#f97316] font-semibold">
+                  <td className="py-5 px-6 text-center text-harvest font-semibold">
                     {Math.round(player.avg_net_worth).toLocaleString()}
                   </td>
 
@@ -447,52 +467,24 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
                     {Math.round(player.avg_xpm)}
                   </td>
 
+                  {/* Total Last Hits */}
+                  <td className="py-5 px-6 text-center text-muted-foreground">
+                    {player.total_last_hits.toLocaleString()}
+                  </td>
+
+                  {/* Total Denies */}
+                  <td className="py-5 px-6 text-center text-muted-foreground">
+                    {player.total_denies.toLocaleString()}
+                  </td>
+
                   {/* Avg Last Hits */}
-                  <td className="py-5 px-6 text-center text-[#0f172a]/70">
+                  <td className="py-5 px-6 text-center text-muted-foreground">
                     {Math.round(player.avg_last_hits)}
                   </td>
 
                   {/* Avg Denies */}
-                  <td className="py-5 px-6 text-center text-[#0f172a]/70">
+                  <td className="py-5 px-6 text-center text-muted-foreground">
                     {Math.round(player.avg_denies)}
-                  </td>
-
-                  {/* Total Hero Damage */}
-                  <td className="py-5 px-6 text-center text-[#ef4444]/80 font-semibold">
-                    {(player.total_hero_damage / 1000).toFixed(1)}k
-                  </td>
-
-                  {/* Total Tower Damage */}
-                  <td className="py-5 px-6 text-center text-[#f97316]/80 font-semibold">
-                    {(player.total_tower_damage / 1000).toFixed(1)}k
-                  </td>
-
-                  {/* Total Hero Healing */}
-                  <td className="py-5 px-6 text-center text-[#10b981]/80 font-semibold">
-                    {(player.total_hero_healing / 1000).toFixed(1)}k
-                  </td>
-
-                  {/* Most Played Hero */}
-                  <td className="py-5 px-6">
-                    {player.most_played_hero && (
-                      <div className="flex items-center gap-3 min-w-[160px]">
-                        {heroImageUrl && (
-                          <img
-                            src={heroImageUrl}
-                            alt={player.most_played_hero}
-                            className="w-10 h-10 rounded border-2 border-[#0f172a]/10"
-                          />
-                        )}
-                        <div>
-                          <p className="text-[#0f172a] text-sm font-semibold whitespace-nowrap">
-                            {player.most_played_hero}
-                          </p>
-                          <p className="text-xs text-[#0f172a]/60">
-                            {player.most_played_hero_games} game{player.most_played_hero_games !== 1 ? 's' : ''}
-                          </p>
-                        </div>
-                      </div>
-                    )}
                   </td>
                 </tr>
               );
@@ -503,8 +495,8 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
 
       {sortedAndFilteredPlayers.length === 0 && (
         <div className="p-12 text-center">
-          <Target className="w-16 h-16 mx-auto mb-4 text-[#0f172a]/20" />
-          <p className="text-[#0f172a]/60">
+          <Target className="w-16 h-16 mx-auto mb-4 text-muted-foreground/30" />
+          <p className="text-muted-foreground">
             {searchTerm ? `No players found matching "${searchTerm}"` : 'No player data available yet'}
           </p>
         </div>

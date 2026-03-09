@@ -1,0 +1,9 @@
+series_id,match_id,game_mode,radiant_team_id,radiant_team_name,radiant_team_score,dire_team_id,dire_team_name,dire_team_score,match_length,match_time,match_date,winning_team_id,winning_team_name
+991,7416576834,captains_mode,null,Elliott Jewelers,16,9239524,Staff Infection,44,1702,6:08 PM,11/03/2023,9239524,Staff Infection
+,,,,,,,,,,,,,
+992,7416624207,captains_mode,9239539,Eat A Frosted Donut,5,null,Elliott Jewelers,26,1544,7:05 PM,11/03/2023,null,Elliott Jewelers
+,,,,,,,,,,,,,
+992,7416675184,captains_mode,9239539,Eat A Frosted Donut,1,null,Elliott Jewelers,18,1026,8:00 PM,11/03/2023,null,Elliott Jewelers
+,,,,,,,,,,,,,
+993,994,captains_mode,9239524,Staff Infection,28,null,Elliott Jewelers,34,2523,null,11/03/2023,null,Elliott Jewelers
+993,7416817826,captains_mode,9239524,Staff Infection,41,null,Elliott Jewelers,23,2534,9:59 PM,11/03/2023,9239524,Staff Infection

@@ -2,6 +2,7 @@ import { getHeroName, getHeroImage } from '@/utils/dota-constants';
 import { TeamLogo } from '@/app/components/team-logo';
 import { ExternalLink, Youtube, Pencil, Trophy, Swords, Skull } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
+import { formatDateWithTime } from '@/lib/date-utils';
 
 interface PlayerProfile {
   id: string;
@@ -65,16 +66,8 @@ interface MatchCardWithHeroesProps {
 }
 
 export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team2Roster, isOwner, onEdit }: MatchCardWithHeroesProps) {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit'
-    });
-  };
+  // formatDate replaced by formatDateWithTime imported from @/lib/date-utils
+  const formatDate = formatDateWithTime;
 
   // Separate player stats by team
   const team1Stats = playerStats.filter(s => s.team_id === match.team1_id);
@@ -89,12 +82,12 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
   const team2Score = match.team2_score; // This is total kills for team 2
 
   return (
-    <div className="bg-white rounded-2xl border-2 border-[#0f172a]/10 overflow-hidden">
+    <div className="bg-card rounded-2xl border-2 border-border overflow-hidden">
       {/* Match Header */}
-      <div className="bg-gradient-to-r from-[#0f172a] to-[#1e293b] p-4 border-b-2 border-[#0f172a]/10">
+      <div className="bg-gradient-to-r from-soil to-[#1e293b] p-4 border-b-2 border-border">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#f97316] text-white">
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-harvest text-white">
               {match.stage.replace('_', ' ').toUpperCase()}
             </span>
             <span className="text-sm text-white/80 font-semibold">
@@ -151,24 +144,24 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
       </div>
 
       {/* VERSUS Layout - Desktop: Side by Side, Mobile: Stacked */}
-      <div className="p-6">
+      <div className="p-3 sm:p-6">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-6 lg:gap-3">
           {/* Team 1 Section */}
           <div className={`space-y-4 ${team1Won ? 'order-1 lg:order-1' : 'order-3 lg:order-1'}`}>
             {/* Combined Team + Score Card */}
-            <div className={`flex items-center justify-between p-6 rounded-xl border-2 ${
+            <div className={`flex items-center justify-between p-3 sm:p-6 rounded-xl border-2 ${
               team1Won 
                 ? 'bg-[#10b981]/5 border-[#10b981]/30' 
                 : 'bg-[#ef4444]/5 border-[#ef4444]/30'
             }`}>
               {/* Left: Team Info */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4 min-w-0">
                 <TeamLogo logoUrl={match.team1.logo_url} teamName={match.team1.name} size="lg" />
-                <div>
-                  <h3 className={`text-2xl font-black ${team1Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                <div className="min-w-0">
+                  <h3 className={`text-lg sm:text-2xl font-black truncate ${team1Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                     {match.team1.name}
                   </h3>
-                  <p className="text-sm text-[#0f172a]/60 font-semibold">
+                  <p className="text-sm text-muted-foreground font-semibold">
                     {match.team1.tag && <span>{match.team1.tag} - </span>}
                     <span>Radiant</span>
                   </p>
@@ -176,18 +169,18 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
               </div>
 
               {/* Right: Score */}
-              <div className="text-right">
-                <p className={`text-6xl font-black ${team1Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+              <div className="text-right flex-shrink-0">
+                <p className={`text-3xl sm:text-6xl font-black ${team1Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                   {team1Score}
                 </p>
-                <p className="text-xs text-[#0f172a]/60 font-bold uppercase tracking-wide mt-1">Score</p>
+                <p className="text-xs text-muted-foreground font-bold uppercase tracking-wide mt-1">Score</p>
               </div>
             </div>
 
             {/* Player Roster with Heroes OR Team Roster */}
             {team1Stats.length > 0 ? (
               <div className="space-y-2">
-                <h4 className="text-xs font-bold text-[#0f172a]/60 uppercase tracking-wide">Radiant Roster & Heroes</h4>
+                <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Radiant Roster & Heroes</h4>
                 {team1Stats.map((stat) => {
                   const heroName = getHeroName(stat.hero_id);
                   return (
@@ -196,7 +189,7 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                       className={`flex items-center gap-3 p-2.5 rounded-lg border-2 transition-all ${
                         team1Won 
                           ? 'bg-[#10b981]/5 border-[#10b981]/20 hover:border-[#10b981]/40' 
-                          : 'bg-[#fdf5e9] border-[#0f172a]/10 hover:border-[#f97316]/30'
+                          : 'bg-background border-border hover:border-harvest/30'
                       }`}
                     >
                       {/* Player Avatar */}
@@ -205,10 +198,10 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                           <img
                             src={stat.player.avatar_url}
                             alt={stat.player_name}
-                            className="w-12 h-12 rounded-full border-2 border-[#0f172a]/20 group-hover:border-[#f97316] transition-all"
+                            className="w-12 h-12 rounded-full border-2 border-border group-hover:border-harvest transition-all"
                           />
                         ) : (
-                          <div className="w-12 h-12 rounded-full bg-[#f97316]/20 flex items-center justify-center text-[#f97316] font-bold border-2 border-[#0f172a]/20">
+                          <div className="w-12 h-12 rounded-full bg-harvest/20 flex items-center justify-center text-harvest font-bold border-2 border-border">
                             {stat.player_name ? stat.player_name.charAt(0).toUpperCase() : '?'}
                           </div>
                         )}
@@ -216,31 +209,31 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                       
                       {/* Player Info */}
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-[#0f172a] text-sm truncate">{stat.player_name}</p>
-                        <p className="text-xs text-[#0f172a]/60 truncate">{heroName}</p>
+                        <p className="font-bold text-foreground text-sm truncate">{stat.player_name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{heroName}</p>
                       </div>
 
                       {/* Net Worth */}
                       {stat.net_worth != null && (
                         <div className="text-right">
                           {/* Desktop: Full number */}
-                          <p className="hidden sm:block text-xs font-bold text-[#f97316]">
+                          <p className="hidden sm:block text-xs font-bold text-harvest">
                             {stat.net_worth.toLocaleString()}
                           </p>
                           {/* Mobile: Truncated */}
-                          <p className="sm:hidden text-xs font-bold text-[#f97316]">
+                          <p className="sm:hidden text-xs font-bold text-harvest">
                             {(stat.net_worth / 1000).toFixed(1)}k
                           </p>
-                          <p className="text-[10px] text-[#0f172a]/40 font-bold uppercase tracking-wide">Gold</p>
+                          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wide">Gold</p>
                         </div>
                       )}
 
                       {/* KDA */}
                       <div className="text-right">
-                        <p className="text-sm font-black text-[#0f172a]">
+                        <p className="text-sm font-black text-foreground">
                           {stat.kills}/{stat.deaths}/{stat.assists}
                         </p>
-                        <p className="text-[10px] text-[#0f172a]/40 font-bold uppercase tracking-wide">KDA</p>
+                        <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wide">KDA</p>
                       </div>
                     </div>
                   );
@@ -248,36 +241,36 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
               </div>
             ) : team1Roster && team1Roster.length > 0 ? (
               <div className="space-y-2">
-                <h4 className="text-xs font-bold text-[#0f172a]/60 uppercase tracking-wide">Team Roster ({team1Roster.length})</h4>
+                <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Team Roster ({team1Roster.length})</h4>
                 {team1Roster.map((rosterEntry) => (
                   <div
                     key={rosterEntry.id}
-                    className="flex items-center gap-3 p-2.5 rounded-lg border-2 bg-[#fdf5e9] border-[#0f172a]/10 hover:border-[#f97316]/30 transition-all"
+                    className="flex items-center gap-3 p-2.5 rounded-lg border-2 bg-background border-border hover:border-harvest/30 transition-all"
                   >
                     {/* Player Avatar */}
                     {rosterEntry.player.avatar_url ? (
                       <img
                         src={rosterEntry.player.avatar_url}
                         alt={rosterEntry.player.player_name}
-                        className="w-10 h-10 rounded-full border-2 border-[#f97316]/20"
+                        className="w-10 h-10 rounded-full border-2 border-harvest/20"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-[#f97316]/20 flex items-center justify-center text-[#f97316] font-bold">
+                      <div className="w-10 h-10 rounded-full bg-harvest/20 flex items-center justify-center text-harvest font-bold">
                         {rosterEntry.player.player_name ? rosterEntry.player.player_name.charAt(0).toUpperCase() : '?'}
                       </div>
                     )}
                     
                     {/* Player Info */}
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-[#0f172a] text-sm truncate">{rosterEntry.player.player_name}</p>
-                      <p className="text-xs text-[#0f172a]/40">Registered Player</p>
+                      <p className="font-bold text-foreground text-sm truncate">{rosterEntry.player.player_name}</p>
+                      <p className="text-xs text-muted-foreground">Registered Player</p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-6 bg-[#fdf5e9] rounded-xl border-2 border-dashed border-[#0f172a]/10">
-                <p className="text-sm text-[#0f172a]/40">No roster data available</p>
+              <div className="text-center py-6 bg-background rounded-xl border-2 border-dashed border-border">
+                <p className="text-sm text-muted-foreground">No roster data available</p>
               </div>
             )}
           </div>
@@ -285,11 +278,11 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
           {/* VS Divider - Desktop Only */}
           <div className="hidden lg:flex flex-col items-center justify-center lg:order-2">
             <div className="flex flex-col items-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#f97316] to-[#ea580c] flex items-center justify-center shadow-lg">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-harvest to-amber flex items-center justify-center shadow-lg">
                 <Swords className="w-8 h-8 text-white" />
               </div>
               <div className="text-center">
-                <p className="text-2xl font-black text-[#0f172a]">VS</p>
+                <p className="text-2xl font-black text-foreground">VS</p>
               </div>
             </div>
           </div>
@@ -297,31 +290,31 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
           {/* Mobile VS Divider */}
           <div className="lg:hidden flex items-center justify-center py-4 order-2">
             <div className="flex items-center gap-3">
-              <div className="h-px flex-1 bg-[#0f172a]/10" />
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#f97316] to-[#ea580c] text-white">
+              <div className="h-px flex-1 bg-border" />
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-harvest to-amber text-white">
                 <Swords className="w-4 h-4" />
                 <span className="text-sm font-black">VS</span>
               </div>
-              <div className="h-px flex-1 bg-[#0f172a]/10" />
+              <div className="h-px flex-1 bg-border" />
             </div>
           </div>
 
           {/* Team 2 Section */}
           <div className={`space-y-4 ${team2Won ? 'order-1 lg:order-3' : 'order-3 lg:order-3'}`}>
             {/* Combined Team + Score Card */}
-            <div className={`flex items-center justify-between p-6 rounded-xl border-2 ${
+            <div className={`flex items-center justify-between p-3 sm:p-6 rounded-xl border-2 ${
               team2Won 
                 ? 'bg-[#10b981]/5 border-[#10b981]/30' 
                 : 'bg-[#ef4444]/5 border-[#ef4444]/30'
             }`}>
               {/* Left: Team Info */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4 min-w-0">
                 <TeamLogo logoUrl={match.team2.logo_url} teamName={match.team2.name} size="lg" />
-                <div>
-                  <h3 className={`text-2xl font-black ${team2Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                <div className="min-w-0">
+                  <h3 className={`text-lg sm:text-2xl font-black truncate ${team2Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                     {match.team2.name}
                   </h3>
-                  <p className="text-sm text-[#0f172a]/60 font-semibold">
+                  <p className="text-sm text-muted-foreground font-semibold">
                     {match.team2.tag && <span>{match.team2.tag} - </span>}
                     <span>Dire</span>
                   </p>
@@ -329,18 +322,18 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
               </div>
 
               {/* Right: Score */}
-              <div className="text-right">
-                <p className={`text-6xl font-black ${team2Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+              <div className="text-right flex-shrink-0">
+                <p className={`text-3xl sm:text-6xl font-black ${team2Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                   {team2Score}
                 </p>
-                <p className="text-xs text-[#0f172a]/60 font-bold uppercase tracking-wide mt-1">Score</p>
+                <p className="text-xs text-muted-foreground font-bold uppercase tracking-wide mt-1">Score</p>
               </div>
             </div>
 
             {/* Player Roster with Heroes OR Team Roster */}
             {team2Stats.length > 0 ? (
               <div className="space-y-2">
-                <h4 className="text-xs font-bold text-[#0f172a]/60 uppercase tracking-wide">Dire Roster & Heroes</h4>
+                <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Dire Roster & Heroes</h4>
                 {team2Stats.map((stat) => {
                   const heroName = getHeroName(stat.hero_id);
                   return (
@@ -349,7 +342,7 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                       className={`flex items-center gap-3 p-2.5 rounded-lg border-2 transition-all ${
                         team2Won 
                           ? 'bg-[#10b981]/5 border-[#10b981]/20 hover:border-[#10b981]/40' 
-                          : 'bg-[#fdf5e9] border-[#0f172a]/10 hover:border-[#f97316]/30'
+                          : 'bg-background border-border hover:border-harvest/30'
                       }`}
                     >
                       {/* Player Avatar */}
@@ -358,10 +351,10 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                           <img
                             src={stat.player.avatar_url}
                             alt={stat.player_name}
-                            className="w-12 h-12 rounded-full border-2 border-[#0f172a]/20 group-hover:border-[#f97316] transition-all"
+                            className="w-12 h-12 rounded-full border-2 border-border group-hover:border-harvest transition-all"
                           />
                         ) : (
-                          <div className="w-12 h-12 rounded-full bg-[#f97316]/20 flex items-center justify-center text-[#f97316] font-bold border-2 border-[#0f172a]/20">
+                          <div className="w-12 h-12 rounded-full bg-harvest/20 flex items-center justify-center text-harvest font-bold border-2 border-border">
                             {stat.player_name ? stat.player_name.charAt(0).toUpperCase() : '?'}
                           </div>
                         )}
@@ -369,31 +362,31 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                       
                       {/* Player Info */}
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-[#0f172a] text-sm truncate">{stat.player_name}</p>
-                        <p className="text-xs text-[#0f172a]/60 truncate">{heroName}</p>
+                        <p className="font-bold text-foreground text-sm truncate">{stat.player_name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{heroName}</p>
                       </div>
 
                       {/* Net Worth */}
                       {stat.net_worth != null && (
                         <div className="text-right">
                           {/* Desktop: Full number */}
-                          <p className="hidden sm:block text-xs font-bold text-[#f97316]">
+                          <p className="hidden sm:block text-xs font-bold text-harvest">
                             {stat.net_worth.toLocaleString()}
                           </p>
                           {/* Mobile: Truncated */}
-                          <p className="sm:hidden text-xs font-bold text-[#f97316]">
+                          <p className="sm:hidden text-xs font-bold text-harvest">
                             {(stat.net_worth / 1000).toFixed(1)}k
                           </p>
-                          <p className="text-[10px] text-[#0f172a]/40 font-bold uppercase tracking-wide">Gold</p>
+                          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wide">Gold</p>
                         </div>
                       )}
 
                       {/* KDA */}
                       <div className="text-right">
-                        <p className="text-sm font-black text-[#0f172a]">
+                        <p className="text-sm font-black text-foreground">
                           {stat.kills}/{stat.deaths}/{stat.assists}
                         </p>
-                        <p className="text-[10px] text-[#0f172a]/40 font-bold uppercase tracking-wide">KDA</p>
+                        <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wide">KDA</p>
                       </div>
                     </div>
                   );
@@ -401,36 +394,36 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
               </div>
             ) : team2Roster && team2Roster.length > 0 ? (
               <div className="space-y-2">
-                <h4 className="text-xs font-bold text-[#0f172a]/60 uppercase tracking-wide">Team Roster ({team2Roster.length})</h4>
+                <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Team Roster ({team2Roster.length})</h4>
                 {team2Roster.map((rosterEntry) => (
                   <div
                     key={rosterEntry.id}
-                    className="flex items-center gap-3 p-2.5 rounded-lg border-2 bg-[#fdf5e9] border-[#0f172a]/10 hover:border-[#f97316]/30 transition-all"
+                    className="flex items-center gap-3 p-2.5 rounded-lg border-2 bg-background border-border hover:border-harvest/30 transition-all"
                   >
                     {/* Player Avatar */}
                     {rosterEntry.player.avatar_url ? (
                       <img
                         src={rosterEntry.player.avatar_url}
                         alt={rosterEntry.player.player_name}
-                        className="w-10 h-10 rounded-full border-2 border-[#f97316]/20"
+                        className="w-10 h-10 rounded-full border-2 border-harvest/20"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-[#f97316]/20 flex items-center justify-center text-[#f97316] font-bold">
+                      <div className="w-10 h-10 rounded-full bg-harvest/20 flex items-center justify-center text-harvest font-bold">
                         {rosterEntry.player.player_name.charAt(0).toUpperCase()}
                       </div>
                     )}
                     
                     {/* Player Info */}
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-[#0f172a] text-sm truncate">{rosterEntry.player.player_name}</p>
-                      <p className="text-xs text-[#0f172a]/40">Registered Player</p>
+                      <p className="font-bold text-foreground text-sm truncate">{rosterEntry.player.player_name}</p>
+                      <p className="text-xs text-muted-foreground">Registered Player</p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-6 bg-[#fdf5e9] rounded-xl border-2 border-dashed border-[#0f172a]/10">
-                <p className="text-sm text-[#0f172a]/40">No roster data available</p>
+              <div className="text-center py-6 bg-background rounded-xl border-2 border-dashed border-border">
+                <p className="text-sm text-muted-foreground">No roster data available</p>
               </div>
             )}
           </div>

@@ -1,0 +1,440 @@
+❌ [Supabase] Failed to get details for match 8710960536: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710922166: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710920179: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710918402: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710868704: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710912474: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710909850: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710866473: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710907214: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710903036: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710870417: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710869128: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710868667: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710867776: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8710867288: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8701061793: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8701060098: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8701052532: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8701027795: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to get details for match 8701026226: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:349:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710960536: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710922166: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710920179: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710918402: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710868704: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710912474: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710909850: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710866473: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710907214: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710903036: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710870417: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710869128: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710868667: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710867776: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8710867288: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8701061793: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8701060098: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8701052532: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8701027795: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25
+❌ [Supabase] Failed to refresh match 8701026226: Error: Steam API 500: /IDOTA2Match_570/GetMatchDetails/v1/
+    at steamFetch (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:34:22)
+    at eventLoopTick (ext:core/01_core.js:175:7)
+    at async getMatchDetails (file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:68:16)
+    at async file:///var/tmp/sb-compile-edge-runtime/source/routes-practice-tourney.ts:607:27
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async cors2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/cors/index.js:79:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async logger2 (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/middleware/logger/index.js:38:5)
+    at async dispatch (file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/compose.js:22:17)
+    at async file:///var/tmp/sb-compile-edge-runtime/node_modules/localhost/hono/4.12.5/dist/hono-base.js:301:25

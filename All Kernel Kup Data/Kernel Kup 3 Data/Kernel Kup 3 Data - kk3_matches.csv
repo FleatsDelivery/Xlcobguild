@@ -1,0 +1,11 @@
+series_id,match_id,game_mode,radiant_team_id,radiant_team_name,radiant_team_score,dire_team_id,dire_team_name,dire_team_score,match_length,match_time,match_date,winning_team_id,winning_team_name
+991,991,captains_mode,9239524,Staff Infection,27,9239539,Eat A Frosted Donut,34,2710,null,12/01/2023,9239539,Eat A Frosted Donut
+991,7468071241,captains_mode,9239524,Staff Infection,27,9239539,Eat A Frosted Donut,36,2462,7:51 PM,12/01/2023,9239539,Eat A Frosted Donut
+,,,,,,,,,,,,,
+992,7468018330,captains_mode,9400971,Mutha Shuckas,15,null,CA$HFLOW,30,1903,5:39 PM,12/01/2023,null,CA$HFLOW
+992,7468067716,captains_mode,9400971,Mutha Shuckas,45,null,CA$HFLOW,37,2739,6:46 PM,12/01/2023,9400971,Mutha Shuckas
+992,7468131300,captains_mode,null,CA$HFLOW,41,9400971,Mutha Shuckas,58,3729,8:05 PM,12/01/2023,9400971,Mutha Shuckas
+,,,,,,,,,,,,,
+993,7468219577,captains_mode,null,CA$HFLOW,26,9239524,Staff Infection,41,2466,9:42 PM,12/01/2023,9239524,Staff Infection
+,,,,,,,,,,,,,
+994,7468219880,captains_mode,9400971,Mutha Shuckas,43,9239539,Eat A Frosted Donut,45,2376,12:42 AM,12/02/2023,9239539,Eat A Frosted Donut

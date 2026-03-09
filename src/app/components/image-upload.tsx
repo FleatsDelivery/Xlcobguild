@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/app/components/ui/button';
 import { Upload, Loader2, X, Check } from 'lucide-react';
 import { toast } from 'sonner';
@@ -9,16 +9,29 @@ interface ImageUploadProps {
   onUploadComplete: (url: string) => void;
   label?: string;
   accept?: string;
+  folder?: string;
+  filename?: string;
+  previewClass?: string;
 }
 
 export function ImageUpload({ 
   currentUrl, 
   onUploadComplete, 
   label = "Upload Image",
-  accept = "image/*"
+  accept = "image/*",
+  folder,
+  filename: customFilename,
+  previewClass,
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentUrl || null);
+
+  // Sync previewUrl when currentUrl prop changes (e.g. after async image existence check)
+  useEffect(() => {
+    if (currentUrl && !previewUrl) {
+      setPreviewUrl(currentUrl);
+    }
+  }, [currentUrl]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -51,6 +64,8 @@ export function ImageUpload({
 
       const formData = new FormData();
       formData.append('file', file);
+      if (folder) formData.append('folder', folder);
+      if (customFilename) formData.append('filename', customFilename);
 
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/upload`,
@@ -87,7 +102,7 @@ export function ImageUpload({
 
   return (
     <div className="space-y-3">
-      <label className="block text-sm font-semibold text-[#0f172a]">
+      <label className="block text-sm font-semibold text-field-dark">
         {label}
       </label>
 
@@ -96,7 +111,7 @@ export function ImageUpload({
           <img
             src={previewUrl}
             alt="Preview"
-            className="w-full h-32 object-cover rounded-lg border-2 border-[#0f172a]/10"
+            className={previewClass || "w-full h-32 object-cover rounded-lg border-2 border-field-dark/10"}
           />
           <div className="absolute top-2 right-2 flex gap-2">
             <label className="cursor-pointer">
@@ -107,13 +122,13 @@ export function ImageUpload({
                 disabled={uploading}
                 className="hidden"
               />
-              <div className="bg-white rounded-lg p-2 shadow-lg border-2 border-[#0f172a]/10 hover:bg-[#0f172a]/5">
-                <Upload className="w-4 h-4 text-[#f97316]" />
+              <div className="bg-white rounded-lg p-2 shadow-lg border-2 border-field-dark/10 hover:bg-field-dark/5">
+                <Upload className="w-4 h-4 text-harvest" />
               </div>
             </label>
             <button
               onClick={handleRemove}
-              className="bg-white rounded-lg p-2 shadow-lg border-2 border-[#0f172a]/10 hover:bg-[#0f172a]/5"
+              className="bg-white rounded-lg p-2 shadow-lg border-2 border-field-dark/10 hover:bg-field-dark/5"
             >
               <X className="w-4 h-4 text-[#ef4444]" />
             </button>
@@ -133,16 +148,16 @@ export function ImageUpload({
             disabled={uploading}
             className="hidden"
           />
-          <div className="border-2 border-dashed border-[#0f172a]/20 rounded-lg p-8 text-center hover:border-[#f97316] hover:bg-[#f97316]/5 transition-all">
+          <div className="border-2 border-dashed border-field-dark/20 rounded-lg p-8 text-center hover:border-harvest hover:bg-harvest/5 transition-all">
             {uploading ? (
-              <Loader2 className="w-8 h-8 mx-auto mb-2 text-[#f97316] animate-spin" />
+              <Loader2 className="w-8 h-8 mx-auto mb-2 text-harvest animate-spin" />
             ) : (
-              <Upload className="w-8 h-8 mx-auto mb-2 text-[#0f172a]/40" />
+              <Upload className="w-8 h-8 mx-auto mb-2 text-field-dark/40" />
             )}
-            <p className="text-sm font-semibold text-[#0f172a]">
+            <p className="text-sm font-semibold text-field-dark">
               {uploading ? 'Uploading...' : 'Click to upload'}
             </p>
-            <p className="text-xs text-[#0f172a]/60 mt-1">
+            <p className="text-xs text-field-dark/60 mt-1">
               PNG, JPG, GIF, WebP up to 5MB
             </p>
           </div>

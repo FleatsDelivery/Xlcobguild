@@ -1,5 +1,6 @@
+import { isOfficer } from '@/lib/roles';
 import { Footer } from '@/app/components/footer';
-import { Clock, CheckCircle, XCircle, Loader2, ExternalLink, Image as ImageIcon, UserPlus, Shield, User, Trash2, ChevronUp, ChevronDown, Star, ArrowRight, RefreshCw, Eye, EyeOff } from 'lucide-react';
+import { Clock, CheckCircle, XCircle, Loader2, ExternalLink, Image as ImageIcon, Shield, User, Trash2, ChevronUp, ChevronDown, Star, ArrowRight, RefreshCw, Eye, EyeOff } from 'lucide-react';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
@@ -52,28 +53,7 @@ interface RankUpRequest {
   };
 }
 
-interface MembershipRequest {
-  id: string;
-  user_id: string;
-  status: 'pending' | 'approved' | 'denied';
-  created_at: string;
-  updated_at: string;
-  reviewed_by?: string;
-  reviewed_at?: string;
-  users?: {
-    id: string;
-    discord_username: string;
-    discord_avatar: string | null;
-    email: string | null;
-  };
-  reviewed_by_user?: {
-    id: string;
-    discord_username: string;
-    discord_avatar: string | null;
-  };
-}
-
-type AnyRequest = (RankUpRequest | MembershipRequest) & { request_type: 'mvp' | 'membership' };
+type AnyRequest = RankUpRequest & { request_type: 'mvp' };
 
 const RANK_NAMES = [
   '', // 0 index unused
@@ -94,20 +74,23 @@ const RANK_NAMES = [
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes for non-admin
 const HISTORY_PAGE_SIZE = 10;
 
-export function RequestsPage({ user }: { user: any }) {
-  const isGuest = user?.role === 'guest';
-  const isAdmin = user?.role === 'admin' || user?.role === 'owner' || user?.role === 'queen_of_hog';
+export function RequestsPage({ user, onBadgeRefresh }: { user: any; onBadgeRefresh?: () => void }) {
+  const isAdmin = isOfficer(user?.role);
   const isOwner = user?.role === 'owner';
-  const isMember = !isGuest && !isAdmin;
   
   // Tab state for admins
-  const [activeTab, setActiveTab] = useState<'all' | 'my'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'my' | 'kkup'>('all');
   
   const [pendingRequests, setPendingRequests] = useState<AnyRequest[]>([]);
   const [historyRequests, setHistoryRequests] = useState<AnyRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [historyOffset, setHistoryOffset] = useState(0);
+
+  // KKup requests
+  const [kkupRequests, setKkupRequests] = useState<any[]>([]);
+  const [myKkupRequests, setMyKkupRequests] = useState<any[]>([]);
+  const [kkupLoading, setKkupLoading] = useState(false);
 
   // Lazy image loading - track which request screenshots are expanded
   const [expandedImages, setExpandedImages] = useState<Set<string>>(new Set());
@@ -185,27 +168,6 @@ export function RequestsPage({ user }: { user: any }) {
         allRequests = [...allRequests, ...mvpRequests];
       }
 
-      // Fetch membership requests (only for admins)
-      if (isAdmin) {
-        const membershipResponse = await fetch(
-          `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/membership-requests`,
-          {
-            headers: {
-              'Authorization': `Bearer ${session.access_token}`,
-            },
-          }
-        );
-
-        if (membershipResponse.ok) {
-          const membershipData = await membershipResponse.json();
-          const membershipRequests = (membershipData.requests || []).map((r: MembershipRequest) => ({
-            ...r,
-            request_type: 'membership' as const,
-          }));
-          allRequests = [...allRequests, ...membershipRequests];
-        }
-      }
-
       // Sort by created_at (newest first)
       allRequests.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
@@ -219,15 +181,51 @@ export function RequestsPage({ user }: { user: any }) {
     }
   }, [isAdmin]);
 
+  const fetchKkupRequests = useCallback(async () => {
+    setKkupLoading(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const res = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/requests`,
+        { headers: { 'Authorization': `Bearer ${session.access_token}` } }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setKkupRequests(data.requests || []);
+        setMyKkupRequests(data.my_requests || []);
+      }
+    } catch (err) {
+      console.error('Error fetching KKup requests:', err);
+    } finally {
+      setKkupLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchRequests(true); // Always fresh on mount
+    fetchKkupRequests();
   }, [isAdmin]);
+
+  // Auto-refresh when tab regains focus (keeps requests page feeling live)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchRequests(true);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [fetchRequests]);
 
   // Invalidate cache and refetch after any mutation
   const invalidateAndRefetch = useCallback(() => {
     cacheTimestamp.current = 0;
     fetchRequests(true);
-  }, [fetchRequests]);
+    if (onBadgeRefresh) {
+      onBadgeRefresh();
+    }
+  }, [fetchRequests, onBadgeRefresh]);
 
   const handleApproveMVP = async (request: RankUpRequest & { request_type: 'mvp' }) => {
     const action = request.action || 'rank_up';
@@ -286,57 +284,6 @@ export function RequestsPage({ user }: { user: any }) {
         } catch (error) {
           console.error('Error approving request:', error);
           alert('Failed to approve request. Please try again.');
-        } finally {
-          setActionLoading(null);
-        }
-      }
-    });
-  };
-
-  const handleApproveMembership = async (requestId: string) => {
-    setConfirmModal({
-      title: 'Approve Membership Request',
-      message: 'Approve this membership request and grant member access?',
-      confirmText: 'Approve',
-      confirmVariant: 'success',
-      onConfirm: async () => {
-        setActionLoading(requestId);
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          
-          if (!session) {
-            alert('Please sign in first');
-            setActionLoading(null);
-            return;
-          }
-
-          const response = await fetch(
-            `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/membership-requests/${requestId}/approve`,
-            {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${session.access_token}`,
-              },
-            }
-          );
-
-          if (!response.ok) {
-            const error = await response.json();
-            alert(error.error || 'Failed to approve membership request');
-            setActionLoading(null);
-            return;
-          }
-
-          setSuccessModal({
-            type: 'success',
-            title: 'Membership Approved',
-            message: 'User is now a member!',
-            helpText: 'You can view the updated status in the history section.'
-          });
-          invalidateAndRefetch();
-        } catch (error) {
-          console.error('Error approving membership request:', error);
-          alert('Failed to approve membership request. Please try again.');
         } finally {
           setActionLoading(null);
         }
@@ -444,106 +391,6 @@ export function RequestsPage({ user }: { user: any }) {
     });
   };
 
-  const handleDenyMembership = async (requestId: string) => {
-    setConfirmModal({
-      title: 'Deny Membership Request',
-      message: 'Deny this membership request? The request will be marked as denied and stay in history.',
-      confirmText: 'Deny',
-      confirmVariant: 'danger',
-      onConfirm: async () => {
-        setActionLoading(requestId);
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          
-          if (!session) {
-            alert('Please sign in first');
-            setActionLoading(null);
-            return;
-          }
-
-          const response = await fetch(
-            `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/membership-requests/${requestId}/deny`,
-            {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${session.access_token}`,
-              },
-            }
-          );
-
-          if (!response.ok) {
-            const error = await response.json();
-            alert(error.error || 'Failed to deny membership request');
-            setActionLoading(null);
-            return;
-          }
-
-          setSuccessModal({
-            type: 'info',
-            title: 'Membership Denied',
-            message: 'The membership request has been denied.',
-          });
-          invalidateAndRefetch();
-        } catch (error) {
-          console.error('Error denying membership request:', error);
-          alert('Failed to deny membership request. Please try again.');
-        } finally {
-          setActionLoading(null);
-        }
-      }
-    });
-  };
-
-  const handleDismissMembership = async (requestId: string) => {
-    setConfirmModal({
-      title: 'Dismiss Membership Request',
-      message: 'Dismiss this request? This will PERMANENTLY delete the membership request. This cannot be undone.',
-      confirmText: 'Dismiss Forever',
-      confirmVariant: 'danger',
-      onConfirm: async () => {
-        setActionLoading(requestId);
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          
-          if (!session) {
-            alert('Please sign in first');
-            setActionLoading(null);
-            return;
-          }
-
-          const response = await fetch(
-            `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/membership-requests/${requestId}`,
-            {
-              method: 'DELETE',
-              headers: {
-                'Authorization': `Bearer ${session.access_token}`,
-              },
-            }
-          );
-
-          if (!response.ok) {
-            const error = await response.json();
-            alert(error.error || 'Failed to dismiss membership request');
-            setActionLoading(null);
-            return;
-          }
-
-          setSuccessModal({
-            type: 'success',
-            title: 'Request Dismissed',
-            message: 'Membership request has been permanently deleted.',
-          });
-          invalidateAndRefetch();
-        } catch (error) {
-          console.error('Error dismissing membership request:', error);
-          alert('Failed to dismiss membership request. Please try again.');
-        } finally {
-          setActionLoading(null);
-        }
-      }
-    });
-  };
-
   const handleCancel = async (requestId: string) => {
     setConfirmModal({
       title: 'Cancel MVP Request',
@@ -591,6 +438,92 @@ export function RequestsPage({ user }: { user: any }) {
           setActionLoading(null);
         }
       }
+    });
+  };
+
+  // ═══════════════════════════════════════════════════════
+  // KKUP ACTION HANDLERS
+  // ═══════════════════════════════════════════════════════
+
+  const handleKkupTeamAction = (req: any, action: 'approved' | 'denied') => {
+    const verb = action === 'approved' ? 'Approve' : 'Deny';
+    setConfirmModal({
+      title: `${verb} Team "${req.data?.team_name}"?`,
+      message: action === 'denied'
+        ? 'Denying this team will prevent them from participating. This can be reversed later from the tournament hub.'
+        : `Approving this team allows them to send invites and build their roster.`,
+      confirmText: verb,
+      confirmVariant: action === 'approved' ? 'success' : 'danger',
+      onConfirm: async () => {
+        setActionLoading(req.id);
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (!session) { setActionLoading(null); return; }
+
+          const teamId = req.data?.id || req.raw_id;
+          const res = await fetch(
+            `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments/${req.tournament_id}/teams/${teamId}/approval`,
+            {
+              method: 'PATCH',
+              headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ approval_status: action }),
+            }
+          );
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || `Failed to ${verb.toLowerCase()} team`);
+
+          setSuccessModal({
+            type: action === 'approved' ? 'success' : 'info',
+            title: `Team ${action === 'approved' ? 'Approved' : 'Denied'}`,
+            message: data.message || `Team "${req.data?.team_name}" has been ${action}.`,
+          });
+          fetchKkupRequests();
+        } catch (err: any) {
+          setSuccessModal({ type: 'error', title: 'Action Failed', message: err.message });
+        } finally {
+          setActionLoading(null);
+        }
+      },
+    });
+  };
+
+  const handleKkupStaffAction = (req: any, action: 'approved' | 'denied') => {
+    const verb = action === 'approved' ? 'Approve' : 'Deny';
+    setConfirmModal({
+      title: `${verb} Staff Application`,
+      message: `${verb} ${req.data?.discord_username}'s application as ${req.data?.role_preference}?`,
+      confirmText: verb,
+      confirmVariant: action === 'approved' ? 'success' : 'danger',
+      onConfirm: async () => {
+        setActionLoading(req.id);
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (!session) { setActionLoading(null); return; }
+
+          const userId = req.data?.user_id;
+          const res = await fetch(
+            `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments/${req.tournament_id}/staff/${userId}`,
+            {
+              method: 'PATCH',
+              headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ status: action }),
+            }
+          );
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || `Failed to ${verb.toLowerCase()} application`);
+
+          setSuccessModal({
+            type: action === 'approved' ? 'success' : 'info',
+            title: `Application ${action === 'approved' ? 'Approved' : 'Denied'}`,
+            message: data.message || `${req.data?.discord_username}'s application has been ${action}.`,
+          });
+          fetchKkupRequests();
+        } catch (err: any) {
+          setSuccessModal({ type: 'error', title: 'Action Failed', message: err.message });
+        } finally {
+          setActionLoading(null);
+        }
+      },
     });
   };
 
@@ -657,7 +590,7 @@ export function RequestsPage({ user }: { user: any }) {
 
     // Fallback corn avatar component
     const CornAvatar = () => (
-      <div className="w-10 h-10 rounded-full bg-[#f97316] flex items-center justify-center">
+      <div className="w-10 h-10 rounded-full bg-harvest flex items-center justify-center">
         <span className="text-2xl">🌽</span>
       </div>
     );
@@ -676,11 +609,11 @@ export function RequestsPage({ user }: { user: any }) {
 
     return (
       <div key={request.id} className={`bg-white rounded-xl shadow-sm border-2 overflow-hidden ${
-        isPending ? 'border-[#f59e0b]/30' : isApproved ? 'border-[#10b981]/20' : 'border-[#0f172a]/10'
+        isPending ? 'border-[#f59e0b]/30' : isApproved ? 'border-[#10b981]/20' : 'border-field-dark/10'
       }`}>
         {/* Header Bar */}
         <div className={`flex items-center justify-between px-4 sm:px-6 py-2.5 border-b ${
-          isPending ? 'bg-[#f59e0b]/5 border-[#f59e0b]/20' : isApproved ? 'bg-[#10b981]/5 border-[#10b981]/15' : 'bg-[#0f172a]/5 border-[#0f172a]/10'
+          isPending ? 'bg-[#f59e0b]/5 border-[#f59e0b]/20' : isApproved ? 'bg-[#10b981]/5 border-[#10b981]/15' : 'bg-field-dark/5 border-field-dark/10'
         }`}>
           <div className="flex items-center gap-2 min-w-0">
             {fromDiscord ? (
@@ -690,11 +623,11 @@ export function RequestsPage({ user }: { user: any }) {
                 </svg>
               </span>
             ) : (
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#f97316] text-white flex-shrink-0">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-harvest text-white flex-shrink-0">
                 Web
               </span>
             )}
-            <span className="text-xs text-[#0f172a]/60 flex-shrink-0">
+            <span className="text-xs text-field-dark/60 flex-shrink-0">
               {new Date(request.created_at).toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
@@ -703,7 +636,7 @@ export function RequestsPage({ user }: { user: any }) {
               })}
             </span>
             {/* Request ID — desktop only */}
-            <span className="hidden md:inline text-[10px] text-[#0f172a]/30 font-mono truncate" title={request.id}>
+            <span className="hidden md:inline text-[10px] text-field-dark/30 font-mono truncate" title={request.id}>
               {request.id}
             </span>
           </div>
@@ -739,9 +672,9 @@ export function RequestsPage({ user }: { user: any }) {
                 <CornAvatar />
               )}
               <div>
-                <p className="text-sm font-semibold text-[#0f172a]">{submitterUsername}</p>
+                <p className="text-sm font-semibold text-field-dark">{submitterUsername}</p>
                 {submitterUser && submitterRankId > 0 ? (
-                  <p className="text-[11px] text-[#0f172a]/50">
+                  <p className="text-[11px] text-field-dark/50">
                     {submitterRankName}{submitterPrestige > 0 ? ` · P${submitterPrestige}` : ''}
                   </p>
                 ) : !submitterUser ? (
@@ -751,7 +684,7 @@ export function RequestsPage({ user }: { user: any }) {
             </div>
 
             {/* Action Arrow */}
-            <ArrowRight className="w-4 h-4 text-[#0f172a]/30 flex-shrink-0 mt-3" />
+            <ArrowRight className="w-4 h-4 text-field-dark/30 flex-shrink-0 mt-3" />
 
             {/* Action Badge */}
             <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${actionInfo.bg} border ${actionInfo.borderColor} mt-1.5`}>
@@ -760,7 +693,7 @@ export function RequestsPage({ user }: { user: any }) {
             </div>
 
             {/* Arrow */}
-            <ArrowRight className="w-4 h-4 text-[#0f172a]/30 flex-shrink-0 mt-3" />
+            <ArrowRight className="w-4 h-4 text-field-dark/30 flex-shrink-0 mt-3" />
 
             {/* Target */}
             <div className="flex items-center gap-2">
@@ -774,9 +707,9 @@ export function RequestsPage({ user }: { user: any }) {
                 <CornAvatar />
               )}
               <div>
-                <p className="text-sm font-semibold text-[#0f172a]">{targetUsername}</p>
+                <p className="text-sm font-semibold text-field-dark">{targetUsername}</p>
                 {currentRankId > 0 ? (
-                  <p className="text-[11px] text-[#0f172a]/50 flex items-center gap-1">
+                  <p className="text-[11px] text-field-dark/50 flex items-center gap-1">
                     <span>{currentRankName}{currentPrestige > 0 ? ` P${currentPrestige}` : ''}</span>
                     <ArrowRight className={`w-3 h-3 ${actionInfo.color} inline`} />
                     <span className={`font-semibold ${actionInfo.color}`}>{newRankName}{newPrestige > 0 ? ` P${newPrestige}` : ''}</span>
@@ -795,7 +728,7 @@ export function RequestsPage({ user }: { user: any }) {
                 href={`https://www.opendota.com/matches/${request.match_id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-[#f97316] hover:text-[#f97316]/80 flex items-center gap-1.5 font-semibold"
+                className="text-sm text-harvest hover:text-harvest/80 flex items-center gap-1.5 font-semibold"
               >
                 <ExternalLink className="w-4 h-4" />
                 Match {request.match_id}
@@ -808,7 +741,7 @@ export function RequestsPage({ user }: { user: any }) {
             <button
               type="button"
               onClick={handleToggleImage}
-              className="flex items-center gap-2 text-sm text-[#0f172a]/60 hover:text-[#0f172a] transition-colors"
+              className="flex items-center gap-2 text-sm text-field-dark/60 hover:text-field-dark transition-colors"
             >
               {isImageExpanded ? (
                 <>
@@ -834,7 +767,7 @@ export function RequestsPage({ user }: { user: any }) {
                   <img 
                     src={request.screenshot_url} 
                     alt="MVP Screenshot" 
-                    className="w-full max-h-96 object-contain rounded-lg border-2 border-[#0f172a]/10 group-hover:border-[#f97316]/50 transition-all bg-[#0f172a]/5"
+                    className="w-full max-h-96 object-contain rounded-lg border-2 border-field-dark/10 group-hover:border-harvest/50 transition-all bg-field-dark/5"
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.src = 'https://placehold.co/1280x720/f97316/ffffff?text=Screenshot+Unavailable';
@@ -887,7 +820,7 @@ export function RequestsPage({ user }: { user: any }) {
                       onClick={() => handleDismissMVP(request.id)}
                       disabled={actionLoading === request.id}
                       variant="outline"
-                      className="flex-shrink-0 border-[#0f172a]/20 text-[#0f172a]/50 hover:bg-[#0f172a]/5 hover:text-[#ef4444]"
+                      className="flex-shrink-0 border-field-dark/20 text-field-dark/50 hover:bg-field-dark/5 hover:text-[#ef4444]"
                     >
                       {actionLoading === request.id ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -968,279 +901,365 @@ export function RequestsPage({ user }: { user: any }) {
     );
   };
 
-  const renderMembershipCard = (request: MembershipRequest & { request_type: 'membership' }) => {
-    const isPending = request.status === 'pending';
-    const isApproved = request.status === 'approved';
-    const isDenied = request.status === 'denied';
-    const requestUser = request.users;
-
-    return (
-      <div key={request.id} className="bg-white rounded-xl shadow-sm p-6 border-2 border-[#f97316]/20">
-        {/* Header with User Info */}
-        {requestUser && (
-          <div className="flex items-center gap-3 mb-4">
-            {requestUser.discord_avatar ? (
-              <img 
-                src={requestUser.discord_avatar} 
-                alt={requestUser.discord_username}
-                className="w-12 h-12 rounded-full"
-              />
-            ) : (
-              <div className="w-12 h-12 rounded-full bg-[#f97316]/10 flex items-center justify-center">
-                <span className="text-[#f97316] font-bold">
-                  {requestUser.discord_username[0].toUpperCase()}
-                </span>
-              </div>
-            )}
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <UserPlus className="w-4 h-4 text-[#f97316]" />
-                <p className="font-semibold text-[#0f172a]">Membership Request</p>
-              </div>
-              <p className="text-sm text-[#0f172a]">{requestUser.discord_username}</p>
-              {requestUser.email && (
-                <p className="text-xs text-[#0f172a]/60">{requestUser.email}</p>
-              )}
-            </div>
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-              isPending ? 'bg-[#f59e0b]/10 text-[#f59e0b]' :
-              isApproved ? 'bg-[#10b981]/10 text-[#10b981]' :
-              'bg-[#ef4444]/10 text-[#ef4444]'
-            }`}>
-              {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
-              {request.reviewed_by_user?.discord_username && ` by ${request.reviewed_by_user.discord_username}`}
-            </span>
-          </div>
-        )}
-
-        {/* Submission Date */}
-        <p className="text-xs text-[#0f172a]/60 mb-4">
-          Submitted {new Date(request.created_at).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          })}
-        </p>
-
-        {/* Action Buttons */}
-        {isPending && isAdmin && (
-          <div className="flex gap-2">
-            <Button
-              onClick={() => handleApproveMembership(request.id)}
-              disabled={actionLoading === request.id}
-              className="flex-1 bg-[#10b981] hover:bg-[#10b981]/90"
-            >
-              {actionLoading === request.id ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  <CheckCircle className="w-4 h-4 mr-2" />
-                  Approve
-                </>
-              )}
-            </Button>
-            <Button
-              onClick={() => handleDenyMembership(request.id)}
-              disabled={actionLoading === request.id}
-              variant="outline"
-              className="flex-1 border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444]/10"
-            >
-              {actionLoading === request.id ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  <XCircle className="w-4 h-4 mr-2" />
-                  Deny
-                </>
-              )}
-            </Button>
-            <Button
-              onClick={() => handleDismissMembership(request.id)}
-              disabled={actionLoading === request.id}
-              variant="outline"
-              className="flex-shrink-0 border-[#0f172a]/20 text-[#0f172a]/50 hover:bg-[#0f172a]/5 hover:text-[#ef4444]"
-            >
-              {actionLoading === request.id ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Trash2 className="w-4 h-4" />
-              )}
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  };
-
   return (
     <div className="p-4 sm:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header Card */}
-        <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-2 border-[#0f172a]/10 mb-4 sm:mb-6">
+        <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 border-2 border-field-dark/10 mb-4 sm:mb-6">
           <div className="flex items-center justify-between gap-2 mb-2">
-            <h2 className="text-xl sm:text-2xl font-bold text-[#0f172a]">
+            <h2 className="text-xl sm:text-2xl font-bold text-field-dark">
               {isAdmin ? '📋 Admin Requests Panel' : '📄 My Requests'}
             </h2>
             <Button
               onClick={() => {
                 setLoading(true);
                 fetchRequests(true);
+                fetchKkupRequests();
               }}
-              disabled={loading}
+              disabled={loading || kkupLoading}
               variant="outline"
               size="sm"
               className="flex items-center gap-1.5 h-9"
             >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${(loading || kkupLoading) ? 'animate-spin' : ''}`} />
               <span className="hidden sm:inline">Refresh</span>
             </Button>
           </div>
-          <p className="text-[#0f172a]/70 text-xs sm:text-sm mb-4">
+          <p className="text-field-dark/70 text-xs sm:text-sm mb-4">
             {isAdmin 
-              ? 'Review and approve membership applications and rank-up requests from all guild members.' 
+              ? 'Review and approve rank-up requests from all guild members.' 
               : 'Track your rank-up requests and view your submission history.'}
           </p>
 
           {/* Cache indicator for non-admins */}
           {!isAdmin && cacheTimestamp.current > 0 && !loading && (
-            <p className="text-[10px] text-[#0f172a]/40">
+            <p className="text-[10px] text-field-dark/40">
               Last updated: {new Date(cacheTimestamp.current).toLocaleTimeString()}
             </p>
           )}
 
-          {/* Tabs for Admin/Owner */}
-          {isAdmin && (
-            <div className="flex items-center gap-3 pt-4 border-t border-[#0f172a]/10">
+          {/* Tabs — All users get tabs now */}
+          <div className="flex items-center gap-2 sm:gap-3 pt-4 border-t border-field-dark/10">
+            {isAdmin && (
               <button
                 type="button"
                 onClick={() => setActiveTab('all')}
-                className={`flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${
+                className={`flex-1 py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
                   activeTab === 'all'
-                    ? 'bg-[#f97316] text-white'
-                    : 'bg-[#0f172a]/5 text-[#0f172a]/70 hover:bg-[#0f172a]/10'
+                    ? 'bg-harvest text-white'
+                    : 'bg-field-dark/5 text-field-dark/70 hover:bg-field-dark/10'
                 }`}
               >
-                <Shield className="w-4 h-4 inline mr-1.5" />
-                All Requests
+                <Shield className="w-4 h-4 inline mr-1" />
+                All
               </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('my')}
-                className={`flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${
-                  activeTab === 'my'
-                    ? 'bg-[#f97316] text-white'
-                    : 'bg-[#0f172a]/5 text-[#0f172a]/70 hover:bg-[#0f172a]/10'
-                }`}
-              >
-                <User className="w-4 h-4 inline mr-1.5" />
-                My Requests
-              </button>
-            </div>
-          )}
+            )}
+            <button
+              type="button"
+              onClick={() => setActiveTab(isAdmin ? 'my' : 'all')}
+              className={`flex-1 py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+                (isAdmin ? activeTab === 'my' : activeTab === 'all')
+                  ? 'bg-harvest text-white'
+                  : 'bg-field-dark/5 text-field-dark/70 hover:bg-field-dark/10'
+              }`}
+            >
+              <User className="w-4 h-4 inline mr-1" />
+              My Requests
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('kkup')}
+              className={`flex-1 py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+                activeTab === 'kkup'
+                  ? 'bg-[#8b5cf6] text-white'
+                  : 'bg-field-dark/5 text-field-dark/70 hover:bg-field-dark/10'
+              }`}
+            >
+              🌽 {isAdmin ? 'KKup' : 'My KKup'}
+              {(isAdmin ? kkupRequests : myKkupRequests).filter(r => r.status === 'pending').length > 0 && (
+                <span className="ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-white/20">
+                  {(isAdmin ? kkupRequests : myKkupRequests).filter(r => r.status === 'pending').length}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
 
-        {/* Guest View */}
-        {isGuest && (
-          <div className="bg-white rounded-xl shadow-md p-8 border-2 border-[#0f172a]/10 text-center">
-            <p className="text-[#0f172a]/70">
-              You must be a member to submit MVP requests for rank-ups.
-            </p>
-          </div>
+        {/* Member/Admin View — MVP requests */}
+        {activeTab !== 'kkup' && (
+        <>
+          {loading ? (
+            <div className="bg-white rounded-2xl shadow-sm p-6 border-2 border-field-dark/10 text-center">
+              <Loader2 className="w-10 h-10 animate-spin text-field-dark/50 mx-auto" />
+              <p className="text-sm text-field-dark/70 mt-2">Loading requests...</p>
+            </div>
+          ) : (
+            <>
+              {(() => {
+                // Filter requests based on active tab
+                const filteredPending = isAdmin && activeTab === 'my'
+                  ? pendingRequests.filter(r => r.user_id === user.id)
+                  : pendingRequests;
+                
+                const filteredHistory = isAdmin && activeTab === 'my'
+                  ? historyRequests.filter(r => r.user_id === user.id)
+                  : historyRequests;
+
+                return (
+                  <>
+                    {/* Pending Requests Section */}
+                    <div className="mb-8">
+                      <h3 className="text-xl font-bold text-field-dark mb-4 flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-[#f59e0b]" />
+                        Pending Requests
+                        <span className="text-sm font-normal text-field-dark/60">({filteredPending.length})</span>
+                      </h3>
+                      
+                      {filteredPending.length === 0 ? (
+                        <div className="bg-white rounded-xl shadow-sm p-6 border-2 border-field-dark/10 text-center">
+                          <p className="text-sm text-field-dark/70">No pending requests.</p>
+                        </div>
+                      ) : (
+                        <div className="grid gap-4">
+                          {filteredPending.map(request => (
+                              request.request_type === 'mvp' ? (
+                                renderMVPCard(request as RankUpRequest & { request_type: 'mvp' }, true)
+                              ) : null
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* History Section */}
+                    <div>
+                      <h3 className="text-xl font-bold text-field-dark mb-4 flex items-center gap-2">
+                        <CheckCircle className="w-5 h-5 text-[#10b981]" />
+                        History
+                        <span className="text-sm font-normal text-field-dark/60">({filteredHistory.length})</span>
+                      </h3>
+                      
+                      {filteredHistory.length === 0 ? (
+                        <div className="bg-white rounded-xl shadow-sm p-6 border-2 border-field-dark/10 text-center">
+                          <p className="text-sm text-field-dark/70">No request history yet.</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="grid gap-4">
+                            {filteredHistory.slice(0, historyOffset + HISTORY_PAGE_SIZE).map(request => (
+                              request.request_type === 'mvp' ? (
+                                renderMVPCard(request as RankUpRequest & { request_type: 'mvp' })
+                              ) : null
+                            ))}
+                          </div>
+
+                          {/* Load More Button */}
+                          {filteredHistory.length > historyOffset + HISTORY_PAGE_SIZE && (
+                            <div className="mt-6 text-center">
+                              <Button
+                                onClick={() => setHistoryOffset(historyOffset + HISTORY_PAGE_SIZE)}
+                                className="bg-harvest hover:bg-amber text-white px-8 h-12 rounded-xl font-semibold"
+                              >
+                                {`Load More (${Math.min(HISTORY_PAGE_SIZE, filteredHistory.length - (historyOffset + HISTORY_PAGE_SIZE))} more)`}
+                              </Button>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </>
+                );
+              })()}
+            </>
+          )}
+        </>
         )}
 
-        {/* Member/Admin View */}
-        {!isGuest && (
-          <>
-            {loading ? (
-              <div className="bg-white rounded-2xl shadow-sm p-6 border-2 border-[#0f172a]/10 text-center">
-                <Loader2 className="w-10 h-10 animate-spin text-[#0f172a]/50 mx-auto" />
-                <p className="text-sm text-[#0f172a]/70 mt-2">Loading requests...</p>
+        {/* KKup Requests Tab */}
+        {activeTab === 'kkup' && (
+          <div className="space-y-6">
+            {kkupLoading ? (
+              <div className="bg-white rounded-2xl shadow-sm p-6 border-2 border-field-dark/10 text-center">
+                <Loader2 className="w-10 h-10 animate-spin text-[#8b5cf6] mx-auto" />
+                <p className="text-sm text-field-dark/70 mt-2">Loading Kernel Kup requests...</p>
+              </div>
+            ) : (isAdmin ? kkupRequests : myKkupRequests).length === 0 ? (
+              <div className="bg-white rounded-2xl shadow-sm p-8 border-2 border-field-dark/10 text-center">
+                <span className="text-4xl mb-3 block">🌽</span>
+                <p className="text-field-dark/50 font-semibold">{isAdmin ? 'No Kernel Kup requests' : 'No Kernel Kup activity yet'}</p>
+                <p className="text-field-dark/30 text-sm mt-1">{isAdmin ? 'Team approvals and staff applications will appear here.' : 'Your team invites, registrations, and staff applications will show up here.'}</p>
               </div>
             ) : (
               <>
-                {(() => {
-                  // Filter requests based on active tab
-                  const filteredPending = isAdmin && activeTab === 'my'
-                    ? pendingRequests.filter(r => r.user_id === user.id)
-                    : pendingRequests;
-                  
-                  const filteredHistory = isAdmin && activeTab === 'my'
-                    ? historyRequests.filter(r => r.user_id === user.id)
-                    : historyRequests;
-
-                  return (
-                    <>
-                      {/* Pending Requests Section */}
-                      <div className="mb-8">
-                        <h3 className="text-xl font-bold text-[#0f172a] mb-4 flex items-center gap-2">
-                          <Clock className="w-5 h-5 text-[#f59e0b]" />
-                          Pending Requests
-                          <span className="text-sm font-normal text-[#0f172a]/60">({filteredPending.length})</span>
-                        </h3>
-                        
-                        {filteredPending.length === 0 ? (
-                          <div className="bg-white rounded-xl shadow-sm p-6 border-2 border-[#0f172a]/10 text-center">
-                            <p className="text-sm text-[#0f172a]/70">No pending requests.</p>
-                          </div>
-                        ) : (
-                          <div className="grid gap-4">
-                            {filteredPending.map(request => (
-                                request.request_type === 'mvp' ? (
-                                  renderMVPCard(request as RankUpRequest & { request_type: 'mvp' }, true)
+                {/* Pending KKup */}
+                {kkupRequests.filter(r => r.status === 'pending').length > 0 && (
+                  <div>
+                    <h3 className="text-xl font-bold text-field-dark mb-4 flex items-center gap-2">
+                      <Clock className="w-5 h-5 text-[#f59e0b]" />
+                      Pending
+                      <span className="text-sm font-normal text-field-dark/60">({kkupRequests.filter(r => r.status === 'pending').length})</span>
+                    </h3>
+                    <div className="grid gap-3">
+                      {kkupRequests.filter(r => r.status === 'pending').map((req: any) => (
+                        <div key={req.id} className={`bg-white rounded-xl border-2 p-4 ${
+                          req.request_type === 'kkup_team_approval' ? 'border-[#8b5cf6]/20' : 'border-[#f59e0b]/20'
+                        }`}>
+                          <div className="flex items-center justify-between flex-wrap gap-3">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                                req.request_type === 'kkup_team_approval' ? 'bg-[#8b5cf6]/10' : 'bg-[#f59e0b]/10'
+                              }`}>
+                                {req.request_type === 'kkup_team_approval' ? (
+                                  <Shield className="w-5 h-5 text-[#8b5cf6]" />
                                 ) : (
-                                  renderMembershipCard(request as MembershipRequest & { request_type: 'membership' })
-                                )
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* History Section */}
-                      <div>
-                        <h3 className="text-xl font-bold text-[#0f172a] mb-4 flex items-center gap-2">
-                          <CheckCircle className="w-5 h-5 text-[#10b981]" />
-                          History
-                          <span className="text-sm font-normal text-[#0f172a]/60">({filteredHistory.length})</span>
-                        </h3>
-                        
-                        {filteredHistory.length === 0 ? (
-                          <div className="bg-white rounded-xl shadow-sm p-6 border-2 border-[#0f172a]/10 text-center">
-                            <p className="text-sm text-[#0f172a]/70">No request history yet.</p>
-                          </div>
-                        ) : (
-                          <>
-                            <div className="grid gap-4">
-                              {filteredHistory.slice(0, historyOffset + HISTORY_PAGE_SIZE).map(request => (
-                                request.request_type === 'mvp' ? (
-                                  renderMVPCard(request as RankUpRequest & { request_type: 'mvp' })
-                                ) : (
-                                  renderMembershipCard(request as MembershipRequest & { request_type: 'membership' })
-                                )
-                              ))}
-                            </div>
-
-                            {/* Load More Button */}
-                            {filteredHistory.length > historyOffset + HISTORY_PAGE_SIZE && (
-                              <div className="mt-6 text-center">
-                                <Button
-                                  onClick={() => setHistoryOffset(historyOffset + HISTORY_PAGE_SIZE)}
-                                  className="bg-[#f97316] hover:bg-[#ea580c] text-white px-8 h-12 rounded-xl font-semibold"
-                                >
-                                  {`Load More (${Math.min(HISTORY_PAGE_SIZE, filteredHistory.length - (historyOffset + HISTORY_PAGE_SIZE))} more)`}
-                                </Button>
+                                  <User className="w-5 h-5 text-[#f59e0b]" />
+                                )}
                               </div>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    </>
-                  );
-                })()}
+                              <div>
+                                <p className="font-bold text-field-dark text-sm">
+                                  {req.request_type === 'kkup_team_approval'
+                                    ? `Team "${req.data?.team_name}" — approval needed`
+                                    : `Staff: ${req.data?.discord_username} (${req.data?.role_preference})`}
+                                </p>
+                                <div className="flex items-center gap-2 text-xs text-field-dark/50">
+                                  <span className={`font-semibold ${req.request_type === 'kkup_team_approval' ? 'text-[#8b5cf6]' : 'text-[#f59e0b]'}`}>
+                                    {req.request_type === 'kkup_team_approval' ? 'Team Approval' : 'Staff Application'}
+                                  </span>
+                                  <span>·</span>
+                                  <span>{req.tournament_name}</span>
+                                  <span>·</span>
+                                  <span>{new Date(req.created_at).toLocaleDateString()}</span>
+                                </div>
+                                {req.data?.message && (
+                                  <p className="text-xs text-field-dark/60 mt-1 italic">"{req.data.message}"</p>
+                                )}
+                                {req.request_type === 'kkup_team_approval' && req.data?.captain?.display_name && (
+                                  <p className="text-xs text-field-dark/50 mt-0.5">Captain: {req.data.captain.display_name}</p>
+                                )}
+                              </div>
+                            </div>
+                            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#f59e0b]/10 text-[#f59e0b]">
+                              Pending
+                            </span>
+                          </div>
+                          {/* Admin action buttons */}
+                          {isAdmin && (
+                            <div className="flex gap-2 mt-3 pt-3 border-t border-field-dark/10">
+                              <Button
+                                onClick={() => req.request_type === 'kkup_team_approval'
+                                  ? handleKkupTeamAction(req, 'approved')
+                                  : handleKkupStaffAction(req, 'approved')}
+                                disabled={actionLoading === req.id}
+                                className="flex-1 bg-[#10b981] hover:bg-[#10b981]/90 text-white h-9 rounded-lg text-sm font-bold"
+                              >
+                                {actionLoading === req.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <><CheckCircle className="w-4 h-4 mr-1.5" />Approve</>}
+                              </Button>
+                              <Button
+                                onClick={() => req.request_type === 'kkup_team_approval'
+                                  ? handleKkupTeamAction(req, 'denied')
+                                  : handleKkupStaffAction(req, 'denied')}
+                                disabled={actionLoading === req.id}
+                                variant="outline"
+                                className="flex-1 border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444]/10 h-9 rounded-lg text-sm font-bold"
+                              >
+                                {actionLoading === req.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <><XCircle className="w-4 h-4 mr-1.5" />Deny</>}
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Resolved KKup */}
+                {kkupRequests.filter(r => r.status !== 'pending').length > 0 && (
+                  <div>
+                    <h3 className="text-xl font-bold text-field-dark mb-4 flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-[#10b981]" />
+                      Resolved
+                      <span className="text-sm font-normal text-field-dark/60">({kkupRequests.filter(r => r.status !== 'pending').length})</span>
+                    </h3>
+                    <div className="grid gap-3">
+                      {kkupRequests.filter(r => r.status !== 'pending').slice(0, historyOffset + HISTORY_PAGE_SIZE).map((req: any) => (
+                        <div key={req.id} className="bg-white rounded-xl border-2 border-field-dark/10 p-4 opacity-70">
+                          <div className="flex items-center justify-between flex-wrap gap-3">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-xl bg-field-dark/5 flex items-center justify-center">
+                                {req.request_type === 'kkup_team_approval' ? (
+                                  <Shield className="w-5 h-5 text-field-dark/30" />
+                                ) : (
+                                  <User className="w-5 h-5 text-field-dark/30" />
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-semibold text-field-dark text-sm">
+                                  {req.request_type === 'kkup_team_approval'
+                                    ? `Team "${req.data?.team_name}"`
+                                    : `Staff: ${req.data?.discord_username}`}
+                                </p>
+                                <p className="text-xs text-field-dark/40">{req.tournament_name}</p>
+                              </div>
+                            </div>
+                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              req.status === 'approved' ? 'bg-[#10b981]/10 text-[#10b981]' : 'bg-[#ef4444]/10 text-[#ef4444]'
+                            }`}>
+                              {req.status === 'approved' ? '✓ Approved' : '✗ Denied'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </>
             )}
-          </>
+
+            {/* My KKup — for non-admin users */}
+            {!isAdmin && myKkupRequests.length > 0 && (
+              <div className="space-y-4">
+                {myKkupRequests.map((req: any) => {
+                  const typeConfig: Record<string, { icon: string; label: string; color: string }> = {
+                    kkup_my_team: { icon: '🛡️', label: 'Team Created', color: 'border-[#8b5cf6]/20' },
+                    kkup_my_registration: { icon: '✅', label: 'Registered', color: 'border-[#3b82f6]/20' },
+                    kkup_my_invite: { icon: '📩', label: 'Team Invite', color: 'border-[#f59e0b]/20' },
+                    kkup_my_staff: { icon: '📋', label: 'Staff Application', color: 'border-[#10b981]/20' },
+                  };
+                  const cfg = typeConfig[req.request_type] || { icon: '🌽', label: 'KKup', color: 'border-field-dark/10' };
+                  const statusColor = req.status === 'pending' || req.status === 'pending_approval'
+                    ? 'bg-[#f59e0b]/10 text-[#f59e0b]'
+                    : req.status === 'approved' || req.status === 'registered' || req.status === 'accepted'
+                      ? 'bg-[#10b981]/10 text-[#10b981]'
+                      : 'bg-[#ef4444]/10 text-[#ef4444]';
+                  const statusLabel = req.status === 'pending_approval' ? 'Pending Approval'
+                    : req.status?.charAt(0).toUpperCase() + req.status?.slice(1);
+
+                  let subtitle = '';
+                  if (req.request_type === 'kkup_my_team') subtitle = `Team "${req.data?.team_name}"`;
+                  else if (req.request_type === 'kkup_my_invite') subtitle = `From "${req.data?.team?.team_name || 'a team'}"`;
+                  else if (req.request_type === 'kkup_my_staff') subtitle = `Role: ${req.data?.role_preference}`;
+                  else if (req.request_type === 'kkup_my_registration') subtitle = 'Player registration';
+
+                  return (
+                    <div key={req.id} className={`bg-white rounded-xl border-2 p-4 ${cfg.color}`}>
+                      <div className="flex items-center justify-between flex-wrap gap-3">
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{cfg.icon}</span>
+                          <div>
+                            <p className="font-bold text-field-dark text-sm">{cfg.label}</p>
+                            <p className="text-xs text-field-dark/50">{subtitle}</p>
+                            <p className="text-[10px] text-field-dark/40 mt-0.5">{req.tournament_name} · {new Date(req.created_at).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColor}`}>
+                          {statusLabel}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         )}
       </div>
 

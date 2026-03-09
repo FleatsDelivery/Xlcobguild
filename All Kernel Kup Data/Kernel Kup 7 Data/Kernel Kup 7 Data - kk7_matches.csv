@@ -1,0 +1,4 @@
+series_id,match_id,game_mode,radiant_team_id,radiant_team_name,radiant_team_score,dire_team_id,dire_team_name,dire_team_score,match_length,match_time,match_date,winning_team_id,winning_team_name
+2631131,8133845732,captains_mode,9658546,Cornhub,27,9658549,Nebraska Cornhuskers,40,2344,6:08 PM,01/17/2025,9658549,Nebraska Cornhuskers
+2631131,8133883434,captains_mode,9658549,Nebraska Cornhuskers,31,9658546,Cornhub,39,2329,7:08 PM,01/17/2025,9658546,Cornhub
+2631131,8133925596,captains_mode,9658546,Cornhub,20,9658549,Nebraska Cornhuskers,54,3096,8:08 PM,01/17/2025,9658549,Nebraska Cornhuskers
