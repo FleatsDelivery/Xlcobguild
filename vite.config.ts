@@ -16,4 +16,16 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Isolate recharts and its D3 dependencies to prevent ESM/CJS circular
+          // dependency initialization races that cause TDZ errors in production
+          'recharts': ['recharts'],
+          'd3-vendor': ['d3-scale', 'd3-shape', 'd3-color'],
+        },
+      },
+    },
+  },
 })

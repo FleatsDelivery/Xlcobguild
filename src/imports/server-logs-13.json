@@ -1,0 +1,802 @@
+[
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e9157742-16b0-4682-bf48-67d63149ff2e",
+    "level": "log",
+    "timestamp": 1773070858125000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "74d0928a-e55f-4334-bc3e-15ece6ea513f",
+    "level": "log",
+    "timestamp": 1773070857070000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a78c4012-ab90-4f74-82ef-5c6bcfe053cd",
+    "level": "log",
+    "timestamp": 1773070856219000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e9004462-3c50-4090-be41-c0e1d17d7612",
+    "level": "log",
+    "timestamp": 1773070855513000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d8274f36-a509-43d8-83b6-af07f6099839",
+    "level": "log",
+    "timestamp": 1773070855452000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "803bd4fb-d709-46f9-b9c2-3396c7fc08a1",
+    "level": "log",
+    "timestamp": 1773070851592000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a4e79d1b-061e-4123-aa15-cc77e94e4494",
+    "level": "log",
+    "timestamp": 1773070850793000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "22f9abbd-7f4a-4e8c-bcec-353377f1854a",
+    "level": "log",
+    "timestamp": 1773070849654000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0781f0eb-2feb-40b8-891b-d7937dc0454f",
+    "level": "log",
+    "timestamp": 1773070848446000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5510f8ae-3f7c-4a4a-b283-c2b0d8816a4c",
+    "level": "log",
+    "timestamp": 1773070848330000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ac04e665-3902-469f-949b-495718d36de2",
+    "level": "log",
+    "timestamp": 1773070818430000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 600ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b18bc21d-e204-4fcf-b54d-838cd1326768",
+    "level": "info",
+    "timestamp": 1773070786316000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f1888639-d12d-45bd-89e2-3c589902ad3c",
+    "level": "info",
+    "timestamp": 1773070785715000
+  },
+  {
+    "event_message": "booted (time: 240ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b75581f6-3b0b-4560-a253-ea3eb2285050",
+    "level": "log",
+    "timestamp": 1773070783102000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 234ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1d4d9d48-dd56-4ae0-906c-c5a87e11420d",
+    "level": "info",
+    "timestamp": 1773070782516000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "725c73a5-9ef5-4cce-b428-27001a2511f5",
+    "level": "info",
+    "timestamp": 1773070782515000
+  },
+  {
+    "event_message": "Twitch identity found: kernelkup_tv4 ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "84b95a7f-fa09-4218-9a64-5aa96612c927",
+    "level": "info",
+    "timestamp": 1773070782421000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 202ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "93b194f3-618a-4924-97a7-6c4544a67b39",
+    "level": "info",
+    "timestamp": 1773070782358000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "034fbd0c-9fbe-4bf9-aec9-3fb411a1a3f2",
+    "level": "info",
+    "timestamp": 1773070782283000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6e0b4d6e-8039-47c8-80d0-dfecc4af4a09",
+    "level": "info",
+    "timestamp": 1773070782282000
+  },
+  {
+    "event_message": "booted (time: 91ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "85782876-d40e-4d03-8474-6b0c3676f802",
+    "level": "log",
+    "timestamp": 1773070782168000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "221d8a85-2d9a-42b9-bbb9-69fb49088624",
+    "level": "info",
+    "timestamp": 1773070782155000
+  },
+  {
+    "event_message": "booted (time: 69ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6a4295a7-9358-4934-a7d8-b007ba341e4d",
+    "level": "log",
+    "timestamp": 1773070782036000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 387ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d64fbc29-4408-4cf9-9fb4-73cfaca23055",
+    "level": "info",
+    "timestamp": 1773070781690000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "55309975-8ded-4aae-a3bd-3e76a0d9b877",
+    "level": "info",
+    "timestamp": 1773070781303000
+  },
+  {
+    "event_message": "booted (time: 71ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f974cd9c-fd69-451f-9be8-0a8cc41dbbb0",
+    "level": "log",
+    "timestamp": 1773070781194000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 263ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f68da37b-390c-4b8a-ad24-6d096770ecc4",
+    "level": "info",
+    "timestamp": 1773070780865000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "56a347fe-f3ca-41c0-8098-90f05f5bae16",
+    "level": "info",
+    "timestamp": 1773070780864000
+  },
+  {
+    "event_message": "Twitch identity found: kernelkup_tv4 ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b147b7ce-0411-4f69-ad8b-280ffe8cbbd3",
+    "level": "info",
+    "timestamp": 1773070780762000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 197ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4b23a6e5-3f9f-4c45-bc33-9dedd83da496",
+    "level": "info",
+    "timestamp": 1773070780715000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "eda429dc-cb14-41b3-a525-da01afa674a2",
+    "level": "info",
+    "timestamp": 1773070780603000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9ccbb01a-e0fe-49de-aa07-4195dc406703",
+    "level": "info",
+    "timestamp": 1773070780602000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "dbe3cc35-df07-438f-b6be-821565bf4b3e",
+    "level": "info",
+    "timestamp": 1773070780518000
+  },
+  {
+    "event_message": "booted (time: 69ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "76d48593-730f-4e4a-9c50-e3766f5cb4b5",
+    "level": "log",
+    "timestamp": 1773070780488000
+  },
+  {
+    "event_message": "booted (time: 88ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5b4809b2-8f0f-4047-8558-bbfcf2568d00",
+    "level": "log",
+    "timestamp": 1773070780408000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 403ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "77ac2e49-cd21-49f2-92db-c5d3a0dbcb53",
+    "level": "info",
+    "timestamp": 1773070777052000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bf086d19-2ad3-4651-b0d7-7d2920e458eb",
+    "level": "info",
+    "timestamp": 1773070776649000
+  },
+  {
+    "event_message": "booted (time: 56ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "92a97e08-7880-47b1-8c87-6329b6c9521f",
+    "level": "log",
+    "timestamp": 1773070776558000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 305ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "99e86821-3c0e-4312-9ac1-04f17e21f274",
+    "level": "info",
+    "timestamp": 1773070776270000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bd1c2d11-8233-48d2-84ab-7d3f493a3577",
+    "level": "info",
+    "timestamp": 1773070776269000
+  },
+  {
+    "event_message": "Twitch identity found: kernelkup_tv4 ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2179d90f-ec73-400d-8d4a-decbcaab88ac",
+    "level": "info",
+    "timestamp": 1773070776135000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 273ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "62746735-04c2-4625-a5d5-ad322430b390",
+    "level": "info",
+    "timestamp": 1773070776121000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2fd72dd3-4ada-4da8-a683-876d7c97a56d",
+    "level": "info",
+    "timestamp": 1773070775966000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a3a65596-e3d8-4d7b-a55e-7fe8303805f8",
+    "level": "info",
+    "timestamp": 1773070775965000
+  },
+  {
+    "event_message": "booted (time: 58ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "01e0bac0-58c6-42ba-8b55-13ff1ac06d2f",
+    "level": "log",
+    "timestamp": 1773070775879000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a921b6bd-c542-456d-929a-a541332dd3eb",
+    "level": "info",
+    "timestamp": 1773070775848000
+  },
+  {
+    "event_message": "booted (time: 80ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7d22b96d-caf8-4e0c-ac30-cd5743c93441",
+    "level": "log",
+    "timestamp": 1773070775772000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/auth/me 200 653ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "00a948ff-cc14-41dc-a413-3f13ff3fd73d",
+    "level": "info",
+    "timestamp": 1773070775405000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/auth/me\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "79dfcef7-a183-4ddd-ac63-0547695bc147",
+    "level": "info",
+    "timestamp": 1773070774752000
+  },
+  {
+    "event_message": "booted (time: 108ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "95738fc1-113c-4bc1-8ad7-4581c9426a92",
+    "level": "log",
+    "timestamp": 1773070774608000
+  },
+  {
+    "event_message": "--> POST /make-server-4789f4af/auth/discord-callback 200 629ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9e012cd2-4ae3-4640-bdfb-5f532198fa7c",
+    "level": "info",
+    "timestamp": 1773070774175000
+  },
+  {
+    "event_message": "Updated existing user\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8be7cba2-e573-4e09-8507-78edd3ea2b75",
+    "level": "info",
+    "timestamp": 1773070774173000
+  },
+  {
+    "event_message": "Twitch identity found: kernelkup_tv4 ID: 1020141623\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7bd79fbe-287c-483e-b93e-f8e4f1098914",
+    "level": "info",
+    "timestamp": 1773070774004000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/roles 200 589ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "020ad528-0e6e-4f93-ac0d-ac108d3c74bb",
+    "level": "info",
+    "timestamp": 1773070774003000
+  },
+  {
+    "event_message": "Discord callback - Discord ID: 239193203486621706 Supabase ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b Username: Tate Email: tmull_23@hotmail.com\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "91781eaf-35e9-46d0-94cf-64b428337909",
+    "level": "info",
+    "timestamp": 1773070773546000
+  },
+  {
+    "event_message": "<-- POST /make-server-4789f4af/auth/discord-callback\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "21ecd103-58f0-475c-b424-a120703c9e75",
+    "level": "info",
+    "timestamp": 1773070773545000
+  },
+  {
+    "event_message": "booted (time: 78ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5bf0bc50-6d72-44ce-ac48-e8e1da73675c",
+    "level": "log",
+    "timestamp": 1773070773420000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/roles\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b84e7ba3-5e9f-48a7-939c-fb91f58b6053",
+    "level": "info",
+    "timestamp": 1773070773414000
+  },
+  {
+    "event_message": "booted (time: 74ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c1214d29-e742-47a6-97f8-5e993e16c4c5",
+    "level": "log",
+    "timestamp": 1773070773301000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1ee27c9d-8916-44fc-a543-ad2697056e0a",
+    "level": "log",
+    "timestamp": 1773070748747000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a2bf2322-e462-420e-8d0b-e548467f214c",
+    "level": "log",
+    "timestamp": 1773070748590000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d78e12eb-0f07-4616-a26a-173d78a18421",
+    "level": "log",
+    "timestamp": 1773070748237000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "490181ac-c128-42ee-b9c6-ac811462f0fd",
+    "level": "log",
+    "timestamp": 1773070748178000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c1d4271b-d156-482c-89c0-e422e95ae44a",
+    "level": "log",
+    "timestamp": 1773070748177000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b5c2a2df-5aed-410f-8091-6c38eab78eed",
+    "level": "log",
+    "timestamp": 1773070742598000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b0d3d591-fd75-4808-942b-07d879d4d898",
+    "level": "log",
+    "timestamp": 1773070742586000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "18431b5b-f3fb-4672-b911-f6ce14dce8b4",
+    "level": "log",
+    "timestamp": 1773070742177000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "203048fd-12ff-4b65-beed-40d165bf28cc",
+    "level": "log",
+    "timestamp": 1773070742140000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "080d628d-63c1-43bd-bdb2-becc52ab937c",
+    "level": "log",
+    "timestamp": 1773070742023000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "368324db-6a52-45db-b925-d56229fa95f1",
+    "level": "log",
+    "timestamp": 1773070741197000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "eb025fe4-61b2-46a7-9907-4f60a19e868b",
+    "level": "log",
+    "timestamp": 1773070740452000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "84d2a025-e649-4d50-bc8f-782e8ea417ef",
+    "level": "log",
+    "timestamp": 1773070740435000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "68c505b9-c049-46a1-a14c-2938bd510750",
+    "level": "log",
+    "timestamp": 1773070739901000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e57c7e27-6de3-4a11-99be-21e844a441cd",
+    "level": "log",
+    "timestamp": 1773070739754000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "22fce8f3-480d-42ee-af04-5488f938a7e8",
+    "level": "log",
+    "timestamp": 1773070739594000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6e1f4f85-13bc-4156-8953-9394d05faeea",
+    "level": "log",
+    "timestamp": 1773070739013000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3a066ed9-f023-4392-a3e6-71b163b67fc5",
+    "level": "log",
+    "timestamp": 1773070738824000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "23d306cb-611e-4d3b-bb01-83e50195927d",
+    "level": "log",
+    "timestamp": 1773070738795000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cd6d5c4f-4921-4242-a474-36417baa30ed",
+    "level": "log",
+    "timestamp": 1773070738792000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "85265269-10ce-4129-a9c9-6d9a063281b8",
+    "level": "log",
+    "timestamp": 1773070737780000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9d4cdf76-31d9-489a-ae12-465fd20b2de0",
+    "level": "log",
+    "timestamp": 1773070737091000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6dde9bdf-cd8b-41f2-b25e-46d847ff2bf2",
+    "level": "log",
+    "timestamp": 1773070731746000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cf1ae9f6-4127-459a-abd1-d98442d945e8",
+    "level": "log",
+    "timestamp": 1773070728155000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "61b2452c-eee0-4045-a13b-83bf9d3ff122",
+    "level": "log",
+    "timestamp": 1773070727923000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f6c4e3b6-a27b-4b12-b0d6-561521131433",
+    "level": "log",
+    "timestamp": 1773070727705000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7446e3d0-8376-49af-b97b-6255252d55cc",
+    "level": "log",
+    "timestamp": 1773070727659000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fc79de83-3a6d-480e-8af2-1d101c426367",
+    "level": "log",
+    "timestamp": 1773070727400000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "af873197-3a49-45ed-9e26-31bd553f582c",
+    "level": "log",
+    "timestamp": 1773070727253000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "74dfc7f2-077c-4371-b451-ae5084913ddb",
+    "level": "log",
+    "timestamp": 1773070727217000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4eaf476e-6918-4749-a7ff-8ef57671d2f5",
+    "level": "log",
+    "timestamp": 1773070725508000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "dc33bf7a-077e-45bb-820a-71a857593aa7",
+    "level": "log",
+    "timestamp": 1773070724627000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4f22b2cb-77e9-41ee-9ba0-8dfc20736c28",
+    "level": "log",
+    "timestamp": 1773070722748000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ae115951-33ca-4969-b288-1dcfa82c6706",
+    "level": "log",
+    "timestamp": 1773070722706000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "da6f6e90-ae15-4125-bc1d-efdf6aae7b3e",
+    "level": "log",
+    "timestamp": 1773070722300000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9cf5ca4a-d874-462a-bd44-8699e9bb6c3e",
+    "level": "log",
+    "timestamp": 1773070722287000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "86f30892-f60b-46bc-aa8c-1210b50f5df9",
+    "level": "log",
+    "timestamp": 1773070710076000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8f703485-bc24-4574-99d9-20b67983dd11",
+    "level": "log",
+    "timestamp": 1773070709637000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "30dbddfc-e519-493d-ab40-d6d22b8f21ec",
+    "level": "log",
+    "timestamp": 1773070709622000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9cbc2871-f6d6-4233-a7df-95e78454dc46",
+    "level": "log",
+    "timestamp": 1773070709562000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ff4e1489-58c0-41ed-a1f2-b8dde907dc25",
+    "level": "log",
+    "timestamp": 1773070706763000
+  }
+]
