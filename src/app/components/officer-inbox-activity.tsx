@@ -5,12 +5,12 @@
  * Receives all data via props from the orchestrator (officer-inbox-page.tsx).
  */
 import { useMemo } from 'react';
-import { motion } from 'motion/react';
 import {
-  Activity, CheckCircle, XCircle, Star, Shield, ShieldAlert, Gift, Trophy, Users,
-  UserPlus, UserMinus, Settings, TrendingUp, Wrench, Upload, Loader2, Trash2, Lock, Crown,
-  Package, DollarSign, Banknote, Ticket, CalendarClock, Clock, ChefHat,
-  MessageSquare, AlertTriangle, Lightbulb, Bug, GitBranch,
+  Shield, AlertTriangle, CheckCircle, XCircle, UserCog, Crown, Trophy,
+  Gift, FileText, LogIn, Users, DollarSign, Sparkles, Filter, Trash2,
+  UserMinus, Lock, Star, ShieldAlert, Settings, TrendingUp, Upload, Wrench,
+  Ticket, CalendarClock, Package, Banknote, ChefHat, Lightbulb, Bug,
+  MessageSquare, GitBranch, Activity, Clock, Loader2, ArrowRight, UserPlus,
 } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { timeAgo } from '@/lib/date-utils';
@@ -218,14 +218,9 @@ export function OfficerActivityTab({
       ) : (
         <div className="space-y-2">
           {filtered.map((entry, index) => (
-            <motion.div
-              key={entry.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.15, delay: Math.min(index * 0.03, 0.3) }}
-            >
+            <div key={entry.id} className="animate-fade-in" style={{ animationDelay: `${Math.min(index * 30, 300)}ms` }}>
               <AdminActivityCard entry={entry} />
-            </motion.div>
+            </div>
           ))}
 
           {/* Load more */}

@@ -1,16 +1,15 @@
 /**
- * Inbox Tab — Pending notifications requiring user attention
+ * Inbox Tab Component
  *
- * Receives all data via props from the orchestrator (inbox-page.tsx).
- * Uses Motion for smooth card exit/layout animations.
+ * Displays user notifications that require action (approve/deny/dismiss).
+ * Notifications persist until user takes action OR dismisses.
+ * Uses CSS transitions for smooth card animations.
  */
 import { useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
   Inbox, Bell, Loader2, CheckCircle, XCircle, Filter,
   UserPlus, Star, Gift, Trophy, Shield, ExternalLink,
-  Archive, Eye, Trash2, ArrowRight, ShieldAlert, Activity,
-  GraduationCap, AlertTriangle, DollarSign, Banknote,
+  AlertTriangle, Eye, Trash2, ArrowRight, DollarSign,
 } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { timeAgo } from '@/lib/date-utils';
@@ -45,8 +44,7 @@ export interface ActionResult {
 
 const ICON_MAP: Record<string, React.ElementType> = {
   UserPlus, CheckCircle, XCircle, Star, Gift, Trophy, Shield, Bell,
-  Activity, Inbox, Archive, Eye, Filter, ExternalLink, ShieldAlert,
-  GraduationCap, DollarSign, Banknote,
+  Filter, Inbox, ExternalLink,
 };
 
 function getIcon(iconName: string): React.ElementType {
@@ -165,12 +163,7 @@ export function InboxTab({
 
       {/* Content */}
       {pendingNotifs.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="flex flex-col items-center justify-center py-20 text-muted-foreground"
-        >
+        <div className="flex flex-col items-center justify-center py-20 text-muted-foreground animate-fade-in">
           {typeFilter ? (
             <>
               <Filter className="w-10 h-10 mb-3 opacity-30" />
@@ -188,52 +181,24 @@ export function InboxTab({
               </p>
             </>
           )}
-        </motion.div>
+        </div>
       ) : (
         <div className="flex flex-col gap-2">
-          <AnimatePresence initial={false}>
-            {pendingNotifs.map(notif => (
-              <motion.div
-                key={notif.id}
-                layout
-                initial={{ opacity: 0, y: -8, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{
-                  opacity: 0,
-                  x: -30,
-                  scale: 0.95,
-                  height: 0,
-                  marginBottom: 0,
-                  transition: {
-                    opacity: { duration: 0.2 },
-                    x: { duration: 0.25, ease: 'easeIn' },
-                    scale: { duration: 0.25 },
-                    height: { duration: 0.3, delay: 0.05, ease: [0.32, 0, 0.67, 0] },
-                    marginBottom: { duration: 0.3, delay: 0.05 },
-                  },
-                }}
-                transition={{
-                  layout: { type: 'spring', stiffness: 500, damping: 35 },
-                  opacity: { duration: 0.2 },
-                  y: { duration: 0.25 },
-                  scale: { duration: 0.2 },
-                }}
-                style={{ overflow: 'hidden' }}
-              >
-                <NotificationCard
-                  notification={notif}
-                  config={getNotificationConfig(notif.type)}
-                  onMarkRead={onMarkRead}
-                  onDismiss={onDismiss}
-                  onAction={onAction}
-                  onInviteAction={onInviteAction}
-                  onPrizeAction={onPrizeAction}
-                  actioningId={actioningId}
-                  actionResult={actionResults.get(notif.id)}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
+          {pendingNotifs.map(notif => (
+            <div key={notif.id} className="transition-all duration-200">
+              <NotificationCard
+                notification={notif}
+                config={getNotificationConfig(notif.type)}
+                onMarkRead={onMarkRead}
+                onDismiss={onDismiss}
+                onAction={onAction}
+                onInviteAction={onInviteAction}
+                onPrizeAction={onPrizeAction}
+                actioningId={actioningId}
+                actionResult={actionResults.get(notif.id)}
+              />
+            </div>
+          ))}
 
           {hasMore && (
             <div className="pt-4 text-center">
@@ -292,45 +257,31 @@ function NotificationCard({
 
   return (
     <div className="relative">
-      {/* ── Result overlay (cross-fades in over the card) ── */}
-      <AnimatePresence>
-        {hasResult && resultCfg && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="absolute inset-0 z-10 rounded-2xl border-2 flex items-center"
-            style={{
-              backgroundColor: resultCfg.bg,
-              borderColor: resultCfg.border,
-            }}
-          >
-            <div className="p-4 flex items-center gap-3 w-full">
-              <motion.div
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 15, delay: 0.05 }}
-                className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: `${resultCfg.color}20` }}
-              >
-                <resultCfg.icon className="w-5 h-5" style={{ color: resultCfg.color }} />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: 8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.25, delay: 0.08 }}
-                className="flex-1 min-w-0"
-              >
-                <p className="text-sm font-bold text-foreground truncate">{actionResult!.message}</p>
-                {actionResult!.status !== 'error' && (
-                  <p className="text-xs text-muted-foreground mt-0.5">Moved to Activity</p>
-                )}
-              </motion.div>
+      {/* ── Result overlay (fades in over the card) ── */}
+      {hasResult && resultCfg && (
+        <div
+          className="absolute inset-0 z-10 rounded-2xl border-2 flex items-center transition-opacity duration-250"
+          style={{
+            backgroundColor: resultCfg.bg,
+            borderColor: resultCfg.border,
+          }}
+        >
+          <div className="p-4 flex items-center gap-3 w-full">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ backgroundColor: `${resultCfg.color}20` }}
+            >
+              <resultCfg.icon className="w-5 h-5" style={{ color: resultCfg.color }} />
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-foreground truncate">{actionResult!.message}</p>
+              {actionResult!.status !== 'error' && (
+                <p className="text-xs text-muted-foreground mt-0.5">Moved to Activity</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Normal card content ── */}
       <div

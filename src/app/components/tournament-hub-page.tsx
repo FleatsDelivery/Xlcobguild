@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { 
   Crown, Calendar, ArrowLeft, Loader2, AlertCircle,
   UserPlus, Edit, Youtube, ChevronLeft, ChevronRight
@@ -14,25 +14,28 @@ import { toast } from 'sonner';
 import { getPhaseConfig, isRegistrationOpen as isRegOpenFn, isLive as isLiveFn, isFinished as isFinishedFn, isMutable as isMutableFn, ALL_PHASES } from './tournament-state-config';
 import { formatDateShort } from '@/lib/date-utils';
 import { TwitchIcon } from '@/lib/icons';
-import { TournamentHubOverview } from './tournament-hub-overview';
-import { TournamentHubPlayers } from './tournament-hub-players';
-import { TournamentHubTeams } from './tournament-hub-teams';
 import { UserProfileModal } from './user-profile-modal';
-import { PlayerInfoModal } from './tournament-hub-player-info-modal';
-import { StaffModal } from './tournament-hub-staff-modal';
-import { RankModal } from './tournament-hub-rank-modal';
-import { TournamentHubCreateTeamModal } from './tournament-hub-create-team-modal';
-import { AddExistingTeamModal } from './add-existing-team-modal';
-import { TournamentHubStaff } from './tournament-hub-staff';
-import { TournamentHubHistory } from './tournament-hub-history';
 import type { FinishedTab } from './tournament-hub-history';
-import { KKupDetailPrizes } from './kkup-detail-prizes';
-import { TournamentHubBracket } from './tournament-hub-bracket';
 import type { PrizeAward } from '@/lib/connect-api';
 import { getTournamentAwards } from '@/lib/connect-api';
 import { fireRoleConfetti, fireLockInConfetti } from '@/lib/confetti';
 import { isOfficer as isOfficerFn } from '@/lib/roles';
 import { OfficerRankOverrideModal } from './officer-rank-override-modal';
+
+// Lazy-load heavy tab components to avoid TDZ errors with lucide-react
+const TournamentHubOverview = lazy(() => import('./tournament-hub-overview').then(m => ({ default: m.TournamentHubOverview })));
+const TournamentHubPlayers = lazy(() => import('./tournament-hub-players').then(m => ({ default: m.TournamentHubPlayers })));
+const TournamentHubTeams = lazy(() => import('./tournament-hub-teams').then(m => ({ default: m.TournamentHubTeams })));
+const PlayerInfoModal = lazy(() => import('./tournament-hub-player-info-modal').then(m => ({ default: m.PlayerInfoModal })));
+const StaffModal = lazy(() => import('./tournament-hub-staff-modal').then(m => ({ default: m.StaffModal })));
+const RankModal = lazy(() => import('./tournament-hub-rank-modal').then(m => ({ default: m.RankModal })));
+const TournamentHubCreateTeamModal = lazy(() => import('./tournament-hub-create-team-modal').then(m => ({ default: m.TournamentHubCreateTeamModal })));
+const AddExistingTeamModal = lazy(() => import('./add-existing-team-modal').then(m => ({ default: m.AddExistingTeamModal })));
+const TournamentHubStaff = lazy(() => import('./tournament-hub-staff').then(m => ({ default: m.TournamentHubStaff })));
+const TournamentHubHistory = lazy(() => import('./tournament-hub-history').then(m => ({ default: m.TournamentHubHistory })));
+// TEMPORARILY COMMENTED OUT for debugging TDZ errors
+// const KKupDetailPrizes = lazy(() => import('./kkup-detail-prizes').then(m => ({ default: m.KKupDetailPrizes })));
+// const TournamentHubBracket = lazy(() => import('./tournament-hub-bracket').then(m => ({ default: m.TournamentHubBracket })));
 
 // ═══════════════════════════════════════════════════════
 // TYPES & CONSTANTS
@@ -95,16 +98,18 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
   const [showEditTournament, setShowEditTournament] = useState(false);
 
   // Tabs
-  const [activeTab, setActiveTab] = useState<'overview' | 'players' | 'teams' | 'bracket' | 'matches' | 'staff' | 'gallery' | 'prizes'>('overview');
+  // TEMPORARILY REMOVED 'prizes' and 'bracket' for debugging
+  const [activeTab, setActiveTab] = useState<'overview' | 'players' | 'teams' | 'matches' | 'staff' | 'gallery'>('overview');
   // Players sub-tab
   const [playersSubTab, setPlayersSubTab] = useState<'all' | 'free_agents' | 'coaches'>('all');
   // Player info modal
   const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
 
   // Prize awards (lazy-loaded when prizes tab is active on non-finished tournaments)
-  const [prizeAwards, setPrizeAwards] = useState<PrizeAward[]>([]);
-  const [awardsLoading, setAwardsLoading] = useState(false);
-  const [awardsLoaded, setAwardsLoaded] = useState(false);
+  // TEMPORARILY COMMENTED OUT for debugging
+  // const [prizeAwards, setPrizeAwards] = useState<PrizeAward[]>([]);
+  // const [awardsLoading, setAwardsLoading] = useState(false);
+  // const [awardsLoaded, setAwardsLoaded] = useState(false);
 
   // Staff application
   const [showStaffModal, setShowStaffModal] = useState(false);
@@ -154,11 +159,12 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
   };
 
   // Bracket state
-  const [bracketData, setBracketData] = useState<any>(null);
-  const [bracketLoading, setBracketLoading] = useState(false);
-  const [bracketError, setBracketError] = useState<string | null>(null);
-  const [bracketGenerating, setBracketGenerating] = useState(false);
-  const [bracketDeleting, setBracketDeleting] = useState(false);
+  // TEMPORARILY COMMENTED OUT for debugging
+  // const [bracketData, setBracketData] = useState<any>(null);
+  // const [bracketLoading, setBracketLoading] = useState(false);
+  // const [bracketError, setBracketError] = useState<string | null>(null);
+  // const [bracketGenerating, setBracketGenerating] = useState(false);
+  // const [bracketDeleting, setBracketDeleting] = useState(false);
 
   const apiBase = `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af`;
   const authHeaders = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` };
@@ -277,26 +283,27 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
     }
   }, [tournamentId, accessToken]);
 
-  const fetchBracket = useCallback(async () => {
-    setBracketLoading(true);
-    setBracketError(null);
-    try {
-      const res = await fetch(`${apiBase}/kkup/tournaments/${tournamentId}/bracket`, {
-        headers: { 'Authorization': `Bearer ${accessToken}` },
-      });
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || 'Failed to load bracket');
-      }
-      const data = await res.json();
-      setBracketData(data.bracket || null);
-    } catch (err: any) {
-      console.error('Fetch bracket error:', err);
-      setBracketError(err.message);
-    } finally {
-      setBracketLoading(false);
-    }
-  }, [tournamentId, accessToken]);
+  // TEMPORARILY COMMENTED OUT for debugging
+  // const fetchBracket = useCallback(async () => {
+  //   setBracketLoading(true);
+  //   setBracketError(null);
+  //   try {
+  //     const res = await fetch(`${apiBase}/kkup/tournaments/${tournamentId}/bracket`, {
+  //       headers: { 'Authorization': `Bearer ${accessToken}` },
+  //     });
+  //     if (!res.ok) {
+  //       const errData = await res.json().catch(() => ({}));
+  //       throw new Error(errData.error || 'Failed to load bracket');
+  //     }
+  //     const data = await res.json();
+  //     setBracketData(data.bracket || null);
+  //   } catch (err: any) {
+  //     console.error('Fetch bracket error:', err);
+  //     setBracketError(err.message);
+  //   } finally {
+  //     setBracketLoading(false);
+  //   }
+  // }, [tournamentId, accessToken]);
 
   useEffect(() => {
     // Clear fetch tracking refs when tournament changes
@@ -307,26 +314,27 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
     fetchTeams();
     fetchMyInvites();
     fetchStaffApps();
-    fetchBracket();
-  }, [fetchTournament, fetchTeams, fetchMyInvites, fetchStaffApps, fetchBracket]);
+    // fetchBracket(); // TEMPORARILY COMMENTED OUT for debugging
+  }, [fetchTournament, fetchTeams, fetchMyInvites, fetchStaffApps]);
 
   // Lazy-fetch prize awards when prizes tab is active (non-finished tournaments)
-  useEffect(() => {
-    if (activeTab !== 'prizes' || awardsLoaded || isFinished || !tournamentId) return;
-    const fetchAwards = async () => {
-      setAwardsLoading(true);
-      try {
-        const data = await getTournamentAwards(tournamentId);
-        setPrizeAwards(data.awards || []);
-      } catch (err) {
-        console.error('Awards fetch error:', err);
-      } finally {
-        setAwardsLoading(false);
-        setAwardsLoaded(true);
-      }
-    };
-    fetchAwards();
-  }, [activeTab, tournamentId, awardsLoaded, isFinished]);
+  // TEMPORARILY COMMENTED OUT for debugging
+  // useEffect(() => {
+  //   if (activeTab !== 'prizes' || awardsLoaded || isFinished || !tournamentId) return;
+  //   const fetchAwards = async () => {
+  //     setAwardsLoading(true);
+  //     try {
+  //       const data = await getTournamentAwards(tournamentId);
+  //       setPrizeAwards(data.awards || []);
+  //     } catch (err) {
+  //       console.error('Awards fetch error:', err);
+  //     } finally {
+  //       setAwardsLoading(false);
+  //       setAwardsLoaded(true);
+  //     }
+  //   };
+  //   fetchAwards();
+  // }, [activeTab, tournamentId, awardsLoaded, isFinished]);
 
   // Pre-fetch all rosters when teams load (needed for team rank display on always-expanded cards)
   // Also fetch pending invites for teams the user captains
@@ -360,53 +368,53 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
   // ═══════════════════════════════════════════════════════
   // BRACKET ACTIONS (owner/officer)
   // ═══════════════════════════════════════════════════════
+  // TEMPORARILY COMMENTED OUT for debugging
+  // const handleGenerateBracket = async () => {
+  //   setBracketGenerating(true);
+  //   try {
+  //     const res = await fetch(`${apiBase}/kkup/tournaments/${tournamentId}/bracket/generate`, {
+  //       method: 'POST', headers: authHeaders,
+  //     });
+  //     const data = await res.json();
+  //     if (!res.ok) {
+  //       console.error('Bracket generation failed:', res.status, data);
+  //       toast.error(data.error || 'Failed to generate bracket');
+  //       if (data.unrankedPlayers) {
+  //         console.error('Unranked players:', data.unrankedPlayers);
+  //       }
+  //       return;
+  //     }
+  //     toast.success(data.message || 'Bracket generated!');
+  //     await fetchBracket();
+  //   } catch (err: any) {
+  //     console.error('Generate bracket error:', err);
+  //     toast.error('Failed to generate bracket');
+  //   } finally {
+  //     setBracketGenerating(false);
+  //   }
+  // };
 
-  const handleGenerateBracket = async () => {
-    setBracketGenerating(true);
-    try {
-      const res = await fetch(`${apiBase}/kkup/tournaments/${tournamentId}/bracket/generate`, {
-        method: 'POST', headers: authHeaders,
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        console.error('Bracket generation failed:', res.status, data);
-        toast.error(data.error || 'Failed to generate bracket');
-        if (data.unrankedPlayers) {
-          console.error('Unranked players:', data.unrankedPlayers);
-        }
-        return;
-      }
-      toast.success(data.message || 'Bracket generated!');
-      await fetchBracket();
-    } catch (err: any) {
-      console.error('Generate bracket error:', err);
-      toast.error('Failed to generate bracket');
-    } finally {
-      setBracketGenerating(false);
-    }
-  };
-
-  const handleDeleteBracket = async () => {
-    if (!confirm('Delete the bracket? This will remove all series and matches. You can re-generate afterward.')) return;
-    setBracketDeleting(true);
-    try {
-      const res = await fetch(`${apiBase}/kkup/tournaments/${tournamentId}/bracket`, {
-        method: 'DELETE', headers: authHeaders,
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        toast.error(data.error || 'Failed to delete bracket');
-        return;
-      }
-      toast.success(data.message || 'Bracket deleted');
-      setBracketData(null);
-    } catch (err: any) {
-      console.error('Delete bracket error:', err);
-      toast.error('Failed to delete bracket');
-    } finally {
-      setBracketDeleting(false);
-    }
-  };
+  // const handleDeleteBracket = async () => {
+  //   if (!confirm('Delete the bracket? This will remove all series and matches. You can re-generate afterward.')) return;
+  //   setBracketDeleting(true);
+  //   try {
+  //     const res = await fetch(`${apiBase}/kkup/tournaments/${tournamentId}/bracket`, {
+  //       method: 'DELETE', headers: authHeaders,
+  //     });
+  //     const data = await res.json();
+  //     if (!res.ok) {
+  //       toast.error(data.error || 'Failed to delete bracket');
+  //       return;
+  //     }
+  //     toast.success(data.message || 'Bracket deleted');
+  //     setBracketData(null);
+  //   } catch (err: any) {
+  //     console.error('Delete bracket error:', err);
+  //     toast.error('Failed to delete bracket');
+  //   } finally {
+  //     setBracketDeleting(false);
+  //   }
+  // };
 
   const handleResetVoiceChannels = async () => {
     try {
@@ -1143,16 +1151,18 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
   // Phase-aware tabs: finished tournaments get results-focused tabs,
   // pre-tournament phases get lifecycle/management tabs
   // Show bracket tab once it exists or tournament is in roster_lock+ phase
-  const showBracketTab = !!bracketData || ['roster_lock', 'live', 'completed', 'archived'].includes(tournament?.status);
+  // TEMPORARILY COMMENTED OUT for debugging
+  // const showBracketTab = !!bracketData || ['roster_lock', 'live', 'completed', 'archived'].includes(tournament?.status);
 
   const tabs: { key: typeof activeTab; label: string; color: string }[] = isFinished
     ? [
         { key: 'overview', label: 'Overview', color: 'harvest' },
-        ...(showBracketTab ? [{ key: 'bracket' as const, label: 'Bracket', color: '[#d6a615]' }] : []),
+        // ...(showBracketTab ? [{ key: 'bracket' as const, label: 'Bracket', color: '[#d6a615]' }] : []),
         { key: 'teams', label: 'Teams', color: '[#8b5cf6]' },
         { key: 'players', label: 'Players', color: '[#3b82f6]' },
         { key: 'matches', label: 'Matches', color: '[#ef4444]' },
-        { key: 'prizes', label: 'Prizes', color: '[#f59e0b]' },
+        // TEMPORARILY COMMENTED OUT for debugging
+        // { key: 'prizes', label: 'Prizes', color: '[#f59e0b]' },
         { key: 'staff', label: 'Staff', color: '[#6366f1]' },
         { key: 'gallery', label: 'Gallery', color: '[#10b981]' },
       ]
@@ -1160,8 +1170,9 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
         { key: 'overview', label: 'Overview', color: 'harvest' },
         { key: 'players', label: 'Players', color: '[#3b82f6]' },
         { key: 'teams', label: 'Teams', color: '[#8b5cf6]' },
-        ...(showBracketTab ? [{ key: 'bracket' as const, label: 'Bracket', color: '[#d6a615]' }] : []),
-        { key: 'prizes', label: 'Prizes', color: '[#f59e0b]' },
+        // ...(showBracketTab ? [{ key: 'bracket' as const, label: 'Bracket', color: '[#d6a615]' }] : []),
+        // TEMPORARILY COMMENTED OUT for debugging
+        // { key: 'prizes', label: 'Prizes', color: '[#f59e0b]' },
         { key: 'staff', label: 'Staff', color: '[#6366f1]' },
       ];
 
@@ -1359,8 +1370,8 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
                       : tab.key === 'staff' ? 'bg-[#6366f1] text-white'
                       : tab.key === 'matches' ? 'bg-[#ef4444] text-white'
                       : tab.key === 'gallery' ? 'bg-[#10b981] text-white'
-                      : tab.key === 'bracket' ? 'bg-[#d6a615] text-white'
-                      : tab.key === 'prizes' ? 'bg-[#f59e0b] text-white'
+                      // : tab.key === 'bracket' ? 'bg-[#d6a615] text-white'
+                      // : tab.key === 'prizes' ? 'bg-[#f59e0b] text-white'
                       : 'bg-harvest text-white'
                     : 'bg-transparent text-muted-foreground hover:bg-muted'
                 }`}
@@ -1374,31 +1385,36 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
         {/* Tab Content — bracket tab is handled directly in both branches,
             finished tournaments delegate remaining tabs to TournamentHubHistory,
             pre-tournament phases use lifecycle components */}
-        {activeTab === 'bracket' ? (
-          <TournamentHubBracket
-            bracket={bracketData}
-            loading={bracketLoading}
-            error={bracketError}
-            isOwner={isOwner}
-            tournamentStatus={tournament?.status || ''}
-            onGenerateBracket={handleGenerateBracket}
-            onDeleteBracket={handleDeleteBracket}
-            onResetChannels={handleResetVoiceChannels}
-            onRecordSeriesResult={handleRecordSeriesResult}
-            generating={bracketGenerating}
-            deleting={bracketDeleting}
-          />
-        ) : isFinished ? (
-          <TournamentHubHistory
-            tournamentId={tournamentId}
-            tournament={tournament}
-            isOwner={isOwner}
-            accessToken={accessToken}
-            activeTab={activeTab as FinishedTab}
-            setActiveTab={setActiveTab}
-          />
+        {/* TEMPORARILY COMMENTED OUT bracket tab for debugging */}
+        {/* {activeTab === 'bracket' ? (
+          <Suspense fallback={<div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 animate-spin text-harvest" /></div>}>
+            <TournamentHubBracket
+              bracket={bracketData}
+              loading={bracketLoading}
+              error={bracketError}
+              isOwner={isOwner}
+              tournamentStatus={tournament?.status || ''}
+              onGenerateBracket={handleGenerateBracket}
+              onDeleteBracket={handleDeleteBracket}
+              onResetChannels={handleResetVoiceChannels}
+              onRecordSeriesResult={handleRecordSeriesResult}
+              generating={bracketGenerating}
+              deleting={bracketDeleting}
+            />
+          </Suspense>
+        ) : */ isFinished ? (
+          <Suspense fallback={<div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 animate-spin text-harvest" /></div>}>
+            <TournamentHubHistory
+              tournamentId={tournamentId}
+              tournament={tournament}
+              isOwner={isOwner}
+              accessToken={accessToken}
+              activeTab={activeTab as FinishedTab}
+              setActiveTab={setActiveTab}
+            />
+          </Suspense>
         ) : (
-          <>
+          <Suspense fallback={<div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 animate-spin text-harvest" /></div>}>
             {activeTab === 'overview' && (
               <TournamentHubOverview
                 tournament={tournament} statusStyle={statusStyle} registrations={registrations}
@@ -1462,7 +1478,8 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
 
               </>
             )}
-            {activeTab === 'prizes' && (
+            {/* TEMPORARILY COMMENTED OUT for debugging */}
+            {/* {activeTab === 'prizes' && (
               <KKupDetailPrizes
                 tournament={{
                   ...tournament,
@@ -1476,7 +1493,7 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
                 isOfficer={isOfficerUser}
                 accessToken={accessToken}
               />
-            )}
+            )} */}
             {activeTab === 'staff' && (
               <TournamentHubStaff
                 tournament={tournament}
@@ -1492,7 +1509,7 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
                 setShowStaffModal={setShowStaffModal}
               />
             )}
-          </>
+          </Suspense>
         )}
       </div>
 
@@ -1504,59 +1521,67 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
 
       {/* Staff Application Modal */}
       {showStaffModal && (
-        <StaffModal
-          tournamentId={tournamentId}
-          tournamentName={tournament.name}
-          accessToken={accessToken}
-          onClose={() => setShowStaffModal(false)}
-          onApplied={async () => {
-            setShowStaffModal(false);
-            await handleStaffRegistration();
-            fetchStaffApps();
-          }}
-          setResultModal={setResultModal}
-        />
+        <Suspense fallback={null}>
+          <StaffModal
+            tournamentId={tournamentId}
+            tournamentName={tournament.name}
+            accessToken={accessToken}
+            onClose={() => setShowStaffModal(false)}
+            onApplied={async () => {
+              setShowStaffModal(false);
+              await handleStaffRegistration();
+              fetchStaffApps();
+            }}
+            setResultModal={setResultModal}
+          />
+        </Suspense>
       )}
 
       {/* Rank Self-Report Modal */}
       {showRankModal && (
-        <RankModal
-          loading={registering}
-          onClose={() => { setShowRankModal(false); setRegistering(false); }}
-          onSubmit={(rank) => handleRegisterWithRole('player', rank)}
-          submitLabel="Register"
-          submitIcon={<UserPlus className="w-5 h-5 mr-2" />}
-        />
+        <Suspense fallback={null}>
+          <RankModal
+            loading={registering}
+            onClose={() => { setShowRankModal(false); setRegistering(false); }}
+            onSubmit={(rank) => handleRegisterWithRole('player', rank)}
+            submitLabel="Register"
+            submitIcon={<UserPlus className="w-5 h-5 mr-2" />}
+          />
+        </Suspense>
       )}
 
       {/* Create Team Modal */}
       {showCreateTeam && (
-        <TournamentHubCreateTeamModal
-          tournamentId={tournamentId}
-          tournamentName={tournament.name}
-          tournamentType={tournament.tournament_type || 'kernel_kup'}
-          accessToken={accessToken}
-          user={user}
-          isOwner={isOwner}
-          creatorRole={myRegistration?.role === 'coach' ? 'coaching_captain' : 'playing_captain'}
-          onClose={() => setShowCreateTeam(false)}
-          onCreated={() => { setShowCreateTeam(false); fetchTeams(); }}
-          setResultModal={setResultModal}
-        />
+        <Suspense fallback={null}>
+          <TournamentHubCreateTeamModal
+            tournamentId={tournamentId}
+            tournamentName={tournament.name}
+            tournamentType={tournament.tournament_type || 'kernel_kup'}
+            accessToken={accessToken}
+            user={user}
+            isOwner={isOwner}
+            creatorRole={myRegistration?.role === 'coach' ? 'coaching_captain' : 'playing_captain'}
+            onClose={() => setShowCreateTeam(false)}
+            onCreated={() => { setShowCreateTeam(false); fetchTeams(); }}
+            setResultModal={setResultModal}
+          />
+        </Suspense>
       )}
 
       {/* Add Existing Team Modal */}
       {showExistingTeam && (
-        <AddExistingTeamModal
-          tournamentId={tournamentId}
-          tournamentName={tournament.name}
-          accessToken={accessToken}
-          isOwner={isOwner}
-          creatorRole={myRegistration?.role === 'coach' ? 'coaching_captain' : 'playing_captain'}
-          onClose={() => setShowExistingTeam(false)}
-          onCreated={() => { setShowExistingTeam(false); fetchTeams(); }}
-          setResultModal={setResultModal}
-        />
+        <Suspense fallback={null}>
+          <AddExistingTeamModal
+            tournamentId={tournamentId}
+            tournamentName={tournament.name}
+            accessToken={accessToken}
+            isOwner={isOwner}
+            creatorRole={myRegistration?.role === 'coach' ? 'coaching_captain' : 'playing_captain'}
+            onClose={() => setShowExistingTeam(false)}
+            onCreated={() => { setShowExistingTeam(false); fetchTeams(); }}
+            setResultModal={setResultModal}
+          />
+        </Suspense>
       )}
 
       {/* Edit Tournament Modal */}
@@ -1595,19 +1620,21 @@ export function TournamentHubPage({ tournamentId, user, accessToken, onBack }: T
           />
         )}
       {selectedPlayer && !selectedPlayer.linked_user?.id && (
-        <PlayerInfoModal
-            registration={selectedPlayer}
-            team={findPlayerTeam(selectedPlayer)}
-            onClose={() => setSelectedPlayer(null)}
-            canInvite={!!(myTeam && myTeam.approval_status === 'approved' && isMutable && selectedPlayer.status !== 'on_team')}
-            inviteTeamId={myTeam?.id}
-            inviteTeamName={myTeam?.team_name}
-            sendingInvite={sendingInvite === selectedPlayer.person?.id}
-            onInvite={(teamId, personId, personName) => {
-              handleSendInvite(teamId, personId, personName);
-              setSelectedPlayer(null);
-            }}
-          />
+        <Suspense fallback={null}>
+          <PlayerInfoModal
+              registration={selectedPlayer}
+              team={findPlayerTeam(selectedPlayer)}
+              onClose={() => setSelectedPlayer(null)}
+              canInvite={!!(myTeam && myTeam.approval_status === 'approved' && isMutable && selectedPlayer.status !== 'on_team')}
+              inviteTeamId={myTeam?.id}
+              inviteTeamName={myTeam?.team_name}
+              sendingInvite={sendingInvite === selectedPlayer.person?.id}
+              onInvite={(teamId, personId, personName) => {
+                handleSendInvite(teamId, personId, personName);
+                setSelectedPlayer(null);
+              }}
+            />
+        </Suspense>
         )}
 
       {/* Confirm Modal */}

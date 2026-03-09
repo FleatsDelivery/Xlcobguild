@@ -9,12 +9,10 @@
  * Receives all data via props from the orchestrator (officer-inbox-page.tsx).
  */
 import { useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
-  Inbox, Loader2, CheckCircle, XCircle,
-  Users, Shield, Star, Clock, Trash2,
-  ChevronDown, ChevronUp, TrendingUp, TrendingDown, Sparkles,
-  Image as ImageIcon, ArrowRight,
+  Users, Shield, CheckCircle, XCircle, Star, Loader2, Filter,
+  Eye, Ban, UserPlus, Clock, Trash2, Calendar,
+  ImageIcon, ChevronUp, ChevronDown, ArrowRight,
 } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { timeAgo } from '@/lib/date-utils';
@@ -44,9 +42,9 @@ const REQUEST_TYPE_CONFIG: Record<string, { label: string; icon: React.ElementTy
 // ── Action label for MVP requests ────────────────────────────────────
 
 const MVP_ACTION_CONFIG: Record<string, { label: string; icon: React.ElementType; color: string }> = {
-  rank_up:   { label: 'Rank Up',   icon: TrendingUp,   color: '#10b981' },
-  rank_down: { label: 'Rank Down', icon: TrendingDown,  color: '#ef4444' },
-  prestige:  { label: 'Prestige',  icon: Sparkles,      color: '#8b5cf6' },
+  rank_up:   { label: 'Rank Up',   icon: UserPlus,   color: '#10b981' },
+  rank_down: { label: 'Rank Down', icon: Ban,  color: '#ef4444' },
+  prestige:  { label: 'Prestige',  icon: Star,      color: '#8b5cf6' },
 };
 
 // ── Props ────────────────────────────────────────────────────────────
@@ -179,32 +177,22 @@ export function OfficerRequestsTab({
         </div>
       ) : (
         <div className="space-y-3">
-          <AnimatePresence mode="popLayout">
-            {filtered.map(req => (
-              <motion.div
-                key={req.id}
-                layout
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, x: -60, transition: { duration: 0.25 } }}
-                transition={{ duration: 0.2 }}
-              >
-                <RequestCard
-                  request={req}
-                  onApproveTeam={onApproveTeam}
-                  onDenyTeam={onDenyTeam}
-                  onDismissTeam={onDismissTeam}
-                  onReviewStaff={onReviewStaff}
-                  onDismissStaff={onDismissStaff}
-                  onApproveMVP={onApproveMVP}
-                  onDenyMVP={onDenyMVP}
-                  onDismissMVP={onDismissMVP}
-                  actioningId={actioningId}
-                  resolvedCards={resolvedCards}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
+          {filtered.map(req => (
+            <RequestCard
+              key={req.id}
+              request={req}
+              onApproveTeam={onApproveTeam}
+              onDenyTeam={onDenyTeam}
+              onDismissTeam={onDismissTeam}
+              onReviewStaff={onReviewStaff}
+              onDismissStaff={onDismissStaff}
+              onApproveMVP={onApproveMVP}
+              onDenyMVP={onDenyMVP}
+              onDismissMVP={onDismissMVP}
+              actioningId={actioningId}
+              resolvedCards={resolvedCards}
+            />
+          ))}
         </div>
       )}
     </div>
@@ -239,7 +227,7 @@ function RequestCard({
   actioningId: string | null;
   resolvedCards: Record<string, 'approved' | 'denied' | 'dismissed' | 'error'>;
 }) {
-  const config = REQUEST_TYPE_CONFIG[request.request_type] || { label: 'Request', icon: Inbox, color: '#6b7280' };
+  const config = REQUEST_TYPE_CONFIG[request.request_type] || { label: 'Request', icon: Users, color: '#6b7280' };
   const Icon = config.icon;
 
   // Compute the action key that matches how the orchestrator sets actioningId/resolvedCards

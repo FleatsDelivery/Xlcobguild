@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Swords, Medal, Crown, Search, Eye, Star, Popcorn, Trophy, TrendingUp } from 'lucide-react';
-import { AnimatePresence } from 'motion/react';
 
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
@@ -803,29 +802,25 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
       </div>
 
       {/* User Profile Modal */}
-      <AnimatePresence>
-        {selectedUser && (
-          <UserProfileModal
-            key="profile-modal"
-            user={selectedUser}
-            currentUser={user}
-            onClose={() => setSelectedUser(null)}
-            onUpdate={fetchLeaderboard}
-          />
-        )}
-      </AnimatePresence>
+      {selectedUser && (
+        <UserProfileModal
+          key="profile-modal"
+          user={selectedUser}
+          currentUser={user}
+          onClose={() => setSelectedUser(null)}
+          onUpdate={fetchLeaderboard}
+        />
+      )}
 
       {/* MVP Submission Modal */}
-      <AnimatePresence>
-        {showMvpModal && (
-          <MvpSubmissionModal
-            key="mvp-modal"
-            user={user}
-            onClose={() => setShowMvpModal(false)}
-            onRefresh={onRefresh ? async () => { onRefresh(); } : undefined}
-          />
-        )}
-      </AnimatePresence>
+      {showMvpModal && (
+        <MvpSubmissionModal
+          key="mvp-modal"
+          user={user}
+          onClose={() => setShowMvpModal(false)}
+          onRefresh={onRefresh ? async () => { onRefresh(); } : undefined}
+        />
+      )}
 
       <Footer />
     </div>
