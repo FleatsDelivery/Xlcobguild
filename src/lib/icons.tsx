@@ -28,6 +28,9 @@ export {
   ArrowUp,
   ArrowDown,
   Menu,
+  Home,
+  BookOpen,
+  FileText,
   
   // Status & Feedback
   Loader2,
@@ -68,6 +71,7 @@ export {
   Play,
   
   // User & Social
+  User,
   UserPlus,
   UserMinus,
   Users,
@@ -76,11 +80,14 @@ export {
   ThumbsUp,
   ThumbsDown,
   Star,
+  Medal,
+  Inbox,
   
   // Game & Tournament
   Crown,
   Trophy,
   Shield,
+  ShieldAlert,
   Swords,
   Target,
   Skull,
@@ -122,6 +129,8 @@ export {
   Flame,
   MailX,
   Ticket,
+  ShoppingBag,
+  ChefHat,
 } from 'lucide-react';
 
 // ═══════════════════════════════════════════════════════

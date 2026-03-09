@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Home, BookOpen, User, LogOut, Menu, X, Crown, Gift, Swords, Inbox, Trophy, ShieldAlert, ShoppingBag, FileText, Shield, ChefHat } from 'lucide-react';
+import { Home, BookOpen, User, LogOut, Menu, X, Crown, Gift, Swords, Inbox, Trophy, ShieldAlert, ShoppingBag, FileText, Shield, ChefHat } from '@/lib/icons';
 import { supabase } from '@/lib/supabase';
 import { getRoleDisplayName, isOfficer } from '@/lib/roles';
 import { ConfirmModal } from '@/app/components/confirm-modal';

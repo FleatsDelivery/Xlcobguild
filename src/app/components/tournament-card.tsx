@@ -8,7 +8,7 @@
  * tournament-state-config system.
  */
 
-import { Crown, Calendar, Users, Trophy, UserPlus, Swords, Clock } from 'lucide-react';
+import { Crown, Calendar, Users, Trophy, UserPlus, Swords, Clock } from '@/lib/icons';
 import { getPhaseConfig, isRegistrationOpen, isLive, isFinished } from './tournament-state-config';
 import { projectId } from '/utils/supabase/info';
 import { slugifyTournamentName } from '@/lib/slugify';

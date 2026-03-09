@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { getHeroImage } from '@/utils/dota-constants';
-import { Medal } from 'lucide-react';
+import { Medal } from '@/lib/icons';
 
 interface PlayerStat {
   player_name: string;

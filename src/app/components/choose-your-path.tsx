@@ -10,8 +10,7 @@ import { useState } from 'react';
 import {
   Swords, GraduationCap, Headphones,
   Loader2, ArrowRight, Sparkles, Crown,
-} from 'lucide-react';
-import { motion } from 'motion/react';
+} from '@/lib/icons';
 import { TcfPlusBadge } from './tcf-plus-badge';
 
 interface ChooseYourPathProps {
@@ -85,10 +84,7 @@ export function ChooseYourPath({
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
+    <div
       className="relative overflow-hidden rounded-2xl border-2 border-harvest/30 bg-card"
       style={{ boxShadow: '0 0 32px rgba(214,166,21,0.08)' }}
     >
@@ -99,10 +95,7 @@ export function ChooseYourPath({
           : 'bg-gradient-to-r from-harvest/10 via-harvest/5 to-transparent'
       }`}>
         <div className="flex items-center gap-3">
-          <motion.div
-            initial={{ rotate: -20, scale: 0 }}
-            animate={{ rotate: 0, scale: 1 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 15, delay: 0.1 }}
+          <div
             className={`w-11 h-11 rounded-xl flex items-center justify-center ${
               isEarlyAccess
                 ? 'bg-gradient-to-br from-harvest to-kernel-gold shadow-lg'
@@ -113,7 +106,7 @@ export function ChooseYourPath({
               ? <Crown className="w-6 h-6 text-white" />
               : <Sparkles className="w-6 h-6 text-harvest" />
             }
-          </motion.div>
+          </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-lg font-black text-foreground">
@@ -139,11 +132,8 @@ export function ChooseYourPath({
             const isChoosing = choosingRole === path.role && registering;
 
             return (
-              <motion.button
+              <button
                 key={path.role}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.15 + i * 0.08 }}
                 onClick={() => !isDisabled && !isLoading && handleChoose(path.role)}
                 disabled={isDisabled || isLoading}
                 className={`
@@ -189,7 +179,7 @@ export function ChooseYourPath({
                     <ArrowRight className="w-4 h-4" />
                   </div>
                 )}
-              </motion.button>
+              </button>
             );
           })}
         </div>
@@ -202,6 +192,6 @@ export function ChooseYourPath({
           }
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 }

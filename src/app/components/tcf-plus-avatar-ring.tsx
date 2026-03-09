@@ -14,7 +14,7 @@
  * When `active` is false/null, renders children without decoration.
  */
 
-import { Crown } from 'lucide-react';
+import { Crown } from '@/lib/icons';
 import { useEffect } from 'react';
 
 type RingSize = 'xs' | 'sm' | 'md' | 'lg';
