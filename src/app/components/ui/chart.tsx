@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import * as RechartsPrimitive from "recharts";
+// DISABLED: recharts removed from project to fix TDZ crashes
+// import * as RechartsPrimitive from "recharts";
 
 import { cn } from "./utils";
 
