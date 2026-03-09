@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { Home, BookOpen, User, LogOut, Menu, X, Crown, Gift, Swords, Inbox, Trophy, ShieldAlert, ShoppingBag, FileText, Shield, ChefHat } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
 import { supabase } from '@/lib/supabase';
 import { getRoleDisplayName, isOfficer } from '@/lib/roles';
 import { ConfirmModal } from '@/app/components/confirm-modal';
@@ -155,34 +154,16 @@ export function Navigation({ currentPage, onNavigate, onHallOfFameNavigate, user
               className="p-1.5 rounded-lg text-silk/80 hover:text-silk hover:bg-white/10 transition-colors"
               aria-label="Toggle menu"
             >
-              <motion.div
-                animate={{ rotate: menuOpen ? 90 : 0 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              <div
+                className="transition-transform duration-300 ease-out"
+                style={{ transform: menuOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}
               >
-                <AnimatePresence mode="wait" initial={false}>
-                  {menuOpen ? (
-                    <motion.div
-                      key="x"
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.5 }}
-                      transition={{ duration: 0.15 }}
-                    >
-                      <X className="w-5 h-5" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="menu"
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.5 }}
-                      transition={{ duration: 0.15 }}
-                    >
-                      <Menu className="w-5 h-5" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+                {menuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
+              </div>
             </button>
             <button
               onClick={() => handleNavigate('home')}
@@ -297,163 +278,150 @@ export function Navigation({ currentPage, onNavigate, onHallOfFameNavigate, user
       </div>
 
       {/* ── Slide-Out Side Menu ── */}
-      <AnimatePresence>
-        {menuOpen && (
-          <div className="fixed inset-0 z-40 top-12 sm:top-14">
-            {/* Backdrop */}
-            <motion.div
-              className="absolute inset-0 bg-black"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={closeMenu}
-            />
+      {menuOpen && (
+        <div className="fixed inset-0 z-40 top-12 sm:top-14">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black transition-opacity duration-200"
+            style={{ opacity: 0.5 }}
+            onClick={closeMenu}
+          />
 
-            {/* Panel — springs from left */}
-            <motion.div
-              ref={panelRef}
-              className="absolute top-0 left-0 bottom-0 sm:bottom-16 w-72 bg-soil border-r border-harvest/20 shadow-2xl flex flex-col"
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{
-                type: 'spring',
-                stiffness: 400,
-                damping: 28,
-                mass: 0.8,
-              }}
-            >
-              {/* User Info */}
-              <div className="flex items-center gap-3 px-5 py-4 border-b border-white/10">
-                <button
-                  onClick={() => handleMenuNavigate('profile')}
-                  className="flex items-center gap-3 min-w-0 hover:opacity-80 transition-opacity"
-                >
-                  <TcfPlusAvatarRing active={user?.tcf_plus_active} size="sm">
-                  {avatarUrl ? (
-                    <img
-                      src={avatarUrl}
-                      alt=""
-                      className="w-10 h-10 rounded-full border-2 border-harvest/40 flex-shrink-0"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-harvest/20 flex items-center justify-center flex-shrink-0">
-                      <User className="w-5 h-5 text-silk/60" />
-                    </div>
-                  )}
-                  </TcfPlusAvatarRing>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-silk truncate text-left">
-                      {user?.discord_username || 'Guest'}
-                    </p>
-                    <p className="text-[10px] text-harvest font-semibold uppercase tracking-wide text-left">
-                      {getRoleDisplayName(user?.role || 'guest')}
-                    </p>
+          {/* Panel — slides from left */}
+          <div
+            ref={panelRef}
+            className="absolute top-0 left-0 bottom-0 sm:bottom-16 w-72 bg-soil border-r border-harvest/20 shadow-2xl flex flex-col transition-transform duration-300 ease-out"
+            style={{ transform: 'translateX(0)' }}
+          >
+            {/* User Info */}
+            <div className="flex items-center gap-3 px-5 py-4 border-b border-white/10">
+              <button
+                onClick={() => handleMenuNavigate('profile')}
+                className="flex items-center gap-3 min-w-0 hover:opacity-80 transition-opacity"
+              >
+                <TcfPlusAvatarRing active={user?.tcf_plus_active} size="sm">
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt=""
+                    className="w-10 h-10 rounded-full border-2 border-harvest/40 flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-harvest/20 flex items-center justify-center flex-shrink-0">
+                    <User className="w-5 h-5 text-silk/60" />
                   </div>
-                </button>
-              </div>
-
-              {/* Nav Items */}
-              <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-1">
-                {navItems.map(({ page, icon: Icon, label, badge }) => {
-                  const activePage = getNavParent(currentPage);
-                  const isActive = activePage === page;
-
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => handleMenuNavigate(page)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                        isActive
-                          ? 'bg-harvest/20 text-harvest'
-                          : 'text-silk/70 hover:bg-white/5 hover:text-silk'
-                      }`}
-                    >
-                      <div className="relative">
-                        <Icon className="w-5 h-5" />
-                        {!!badge && badge > 0 && (
-                          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-harvest rounded-full ring-2 ring-soil" />
-                        )}
-                      </div>
-                      <span className="text-sm font-semibold">{label}</span>
-                    </button>
-                  );
-                })}
-
-                {/* Officer Panel — Special styled, officers only */}
-                {showOfficerPanel && (
-                  <>
-                    <div className="my-2 mx-2 border-t border-white/10" />
-                    <button
-                      onClick={() => handleMenuNavigate('officer')}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${
-                        getNavParent(currentPage) === 'officer'
-                          ? 'bg-amber-500/20 border-amber-500/40 text-amber-400'
-                          : 'border-amber-500/20 text-amber-400/70 hover:bg-amber-500/10 hover:border-amber-500/30 hover:text-amber-400'
-                      }`}
-                    >
-                      <ShieldAlert className="w-5 h-5" />
-                      <span className="text-sm font-bold tracking-wide">Officer Panel</span>
-                      <span className="ml-auto text-[9px] font-bold uppercase tracking-wider opacity-60 bg-amber-500/15 px-1.5 py-0.5 rounded">Staff</span>
-                    </button>
-                    <button
-                      onClick={() => handleMenuNavigate('officer-inbox')}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${
-                        getNavParent(currentPage) === 'officer-inbox'
-                          ? 'bg-amber-500/20 border-amber-500/40 text-amber-400'
-                          : 'border-amber-500/20 text-amber-400/70 hover:bg-amber-500/10 hover:border-amber-500/30 hover:text-amber-400'
-                      }`}
-                    >
-                      <div className="relative">
-                        <Inbox className="w-5 h-5" />
-                        {officerPendingCount > 0 && (
-                          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-amber-500 rounded-full ring-2 ring-soil" />
-                        )}
-                      </div>
-                      <span className="text-sm font-bold tracking-wide">Officer Inbox</span>
-                      <span className="ml-auto text-[9px] font-bold uppercase tracking-wider opacity-60 bg-amber-500/15 px-1.5 py-0.5 rounded">Staff</span>
-                    </button>
-                  </>
                 )}
-              </nav>
+                </TcfPlusAvatarRing>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-silk truncate text-left">
+                    {user?.discord_username || 'Guest'}
+                  </p>
+                  <p className="text-[10px] text-harvest font-semibold uppercase tracking-wide text-left">
+                    {getRoleDisplayName(user?.role || 'guest')}
+                  </p>
+                </div>
+              </button>
+            </div>
 
-              {/* Sign Out at bottom */}
-              <div className="border-t border-white/10 p-3">
+            {/* Nav Items */}
+            <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-1">
+              {navItems.map(({ page, icon: Icon, label, badge }) => {
+                const activePage = getNavParent(currentPage);
+                const isActive = activePage === page;
+
+                return (
+                  <button
+                    key={page}
+                    onClick={() => handleMenuNavigate(page)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                      isActive
+                        ? 'bg-harvest/20 text-harvest'
+                        : 'text-silk/70 hover:bg-white/5 hover:text-silk'
+                    }`}
+                  >
+                    <div className="relative">
+                      <Icon className="w-5 h-5" />
+                      {!!badge && badge > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-harvest rounded-full ring-2 ring-soil" />
+                      )}
+                    </div>
+                    <span className="text-sm font-semibold">{label}</span>
+                  </button>
+                );
+              })}
+
+              {/* Officer Panel — Special styled, officers only */}
+              {showOfficerPanel && (
+                <>
+                  <div className="my-2 mx-2 border-t border-white/10" />
+                  <button
+                    onClick={() => handleMenuNavigate('officer')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${
+                      getNavParent(currentPage) === 'officer'
+                        ? 'bg-amber-500/20 border-amber-500/40 text-amber-400'
+                        : 'border-amber-500/20 text-amber-400/70 hover:bg-amber-500/10 hover:border-amber-500/30 hover:text-amber-400'
+                    }`}
+                  >
+                    <ShieldAlert className="w-5 h-5" />
+                    <span className="text-sm font-bold tracking-wide">Officer Panel</span>
+                    <span className="ml-auto text-[9px] font-bold uppercase tracking-wider opacity-60 bg-amber-500/15 px-1.5 py-0.5 rounded">Staff</span>
+                  </button>
+                  <button
+                    onClick={() => handleMenuNavigate('officer-inbox')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all ${
+                      getNavParent(currentPage) === 'officer-inbox'
+                        ? 'bg-amber-500/20 border-amber-500/40 text-amber-400'
+                        : 'border-amber-500/20 text-amber-400/70 hover:bg-amber-500/10 hover:border-amber-500/30 hover:text-amber-400'
+                    }`}
+                  >
+                    <div className="relative">
+                      <Inbox className="w-5 h-5" />
+                      {officerPendingCount > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-amber-500 rounded-full ring-2 ring-soil" />
+                      )}
+                    </div>
+                    <span className="text-sm font-bold tracking-wide">Officer Inbox</span>
+                    <span className="ml-auto text-[9px] font-bold uppercase tracking-wider opacity-60 bg-amber-500/15 px-1.5 py-0.5 rounded">Staff</span>
+                  </button>
+                </>
+              )}
+            </nav>
+
+            {/* Sign Out at bottom */}
+            <div className="border-t border-white/10 p-3">
+              <button
+                onClick={() => { closeMenu(); setShowLogoutConfirm(true); }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400/80 hover:bg-red-400/10 hover:text-red-400 transition-all"
+              >
+                <LogOut className="w-5 h-5" />
+                <span className="text-sm font-semibold">Sign Out</span>
+              </button>
+            </div>
+
+            {/* Legal Links + Copyright */}
+            <div className="px-5 pb-4 pt-1 space-y-2">
+              <div className="flex items-center justify-center gap-3">
                 <button
-                  onClick={() => { closeMenu(); setShowLogoutConfirm(true); }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400/80 hover:bg-red-400/10 hover:text-red-400 transition-all"
+                  onClick={() => handleMenuNavigate('terms')}
+                  className="text-[10px] text-silk/40 hover:text-silk/70 font-medium uppercase tracking-wide transition-colors"
                 >
-                  <LogOut className="w-5 h-5" />
-                  <span className="text-sm font-semibold">Sign Out</span>
+                  Terms
+                </button>
+                <span className="w-0.5 h-0.5 rounded-full bg-silk/20" />
+                <button
+                  onClick={() => handleMenuNavigate('privacy')}
+                  className="text-[10px] text-silk/40 hover:text-silk/70 font-medium uppercase tracking-wide transition-colors"
+                >
+                  Privacy
                 </button>
               </div>
-
-              {/* Legal Links + Copyright */}
-              <div className="px-5 pb-4 pt-1 space-y-2">
-                <div className="flex items-center justify-center gap-3">
-                  <button
-                    onClick={() => handleMenuNavigate('terms')}
-                    className="text-[10px] text-silk/40 hover:text-silk/70 font-medium uppercase tracking-wide transition-colors"
-                  >
-                    Terms
-                  </button>
-                  <span className="w-0.5 h-0.5 rounded-full bg-silk/20" />
-                  <button
-                    onClick={() => handleMenuNavigate('privacy')}
-                    className="text-[10px] text-silk/40 hover:text-silk/70 font-medium uppercase tracking-wide transition-colors"
-                  >
-                    Privacy
-                  </button>
-                </div>
-                <p className="text-[10px] text-silk/30 text-center">
-                  &copy; The Corn Field 2023 – 2026
-                </p>
-              </div>
-            </motion.div>
+              <p className="text-[10px] text-silk/30 text-center">
+                &copy; The Corn Field 2023 – 2026
+              </p>
+            </div>
           </div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
 
       {/* ── Bottom Navigation Bar (desktop only) ── */}
       <div className="hidden sm:block fixed bottom-0 left-0 right-0 z-50 bg-soil border-t border-harvest/20">
