@@ -16,6 +16,11 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    // Force Vite to pre-bundle recharts through ESM optimizer to resolve
+    // internal circular dependencies before runtime (fixes "Ka" TDZ error)
+    include: ['recharts'],
+  },
   build: {
     rollupOptions: {
       output: {

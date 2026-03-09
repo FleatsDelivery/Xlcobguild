@@ -1,0 +1,87 @@
+index-DAwDDehn.js:851 <link rel=preload> uses an unsupported `as` value
+AS @ index-DAwDDehn.js:851
+index-DAwDDehn.js:868 🌽 Navigation restore — URL hash: "" | initialHash: "" | localStorage: null | effective: ""
+index-DAwDDehn.js:868 Discord user metadata: Object
+index-DAwDDehn.js:868 Discord user identities: Array(2)
+index-DAwDDehn.js:868 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+index-DAwDDehn.js:868 🔍 /auth/me response status: 200 
+index-DAwDDehn.js:868 ✅ Fetched user from database: Object
+index-DAwDDehn.js:868 Discord user metadata: Object
+index-DAwDDehn.js:868 Discord user identities: Array(2)
+index-DAwDDehn.js:868 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+index-DAwDDehn.js:868 Discord user metadata: Object
+index-DAwDDehn.js:868 Discord user identities: Array(2)
+index-DAwDDehn.js:868 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+index-DAwDDehn.js:868 🔍 /auth/me response status: 200 
+index-DAwDDehn.js:868 ✅ Fetched user from database: Object
+index-DAwDDehn.js:868 🔍 /auth/me response status: 200 
+index-DAwDDehn.js:868 ✅ Fetched user from database: Object
+recharts-BLEdcVst.js:32 ReferenceError: Cannot access 'Ka' before initialization
+    at OC (index-DAwDDehn.js:858:225234)
+    at zs (recharts-BLEdcVst.js:30:17352)
+    at Lg (recharts-BLEdcVst.js:32:44600)
+    at Mg (recharts-BLEdcVst.js:32:40206)
+    at IA (recharts-BLEdcVst.js:32:40134)
+    at du (recharts-BLEdcVst.js:32:39987)
+    at pc (recharts-BLEdcVst.js:32:36287)
+    at kg (recharts-BLEdcVst.js:32:37099)
+    at Vr (recharts-BLEdcVst.js:30:3273)
+    at recharts-BLEdcVst.js:32:34598
+Ys @ recharts-BLEdcVst.js:32
+u.callback @ recharts-BLEdcVst.js:32
+Tm @ recharts-BLEdcVst.js:30
+Eg @ recharts-BLEdcVst.js:32
+Ag @ recharts-BLEdcVst.js:32
+jA @ recharts-BLEdcVst.js:32
+MA @ recharts-BLEdcVst.js:32
+wn @ recharts-BLEdcVst.js:32
+kg @ recharts-BLEdcVst.js:32
+Vr @ recharts-BLEdcVst.js:30
+(anonymous) @ recharts-BLEdcVst.js:32
+hashchange
+d @ index-DAwDDehn.js:851
+J_ @ recharts-BLEdcVst.js:29
+tP @ recharts-BLEdcVst.js:29
+rP @ recharts-BLEdcVst.js:29
+om @ recharts-BLEdcVst.js:29
+um @ recharts-BLEdcVst.js:29
+(anonymous) @ recharts-BLEdcVst.js:29
+hc @ recharts-BLEdcVst.js:32
+py @ recharts-BLEdcVst.js:29
+hs @ recharts-BLEdcVst.js:29
+Ql @ recharts-BLEdcVst.js:29
+gP @ recharts-BLEdcVst.js:29
+recharts-BLEdcVst.js:30 Uncaught ReferenceError: Cannot access 'Ka' before initialization
+    at OC (index-DAwDDehn.js:858:225234)
+    at zs (recharts-BLEdcVst.js:30:17352)
+    at Lg (recharts-BLEdcVst.js:32:44600)
+    at Mg (recharts-BLEdcVst.js:32:40206)
+    at IA (recharts-BLEdcVst.js:32:40134)
+    at du (recharts-BLEdcVst.js:32:39987)
+    at pc (recharts-BLEdcVst.js:32:36287)
+    at kg (recharts-BLEdcVst.js:32:37099)
+    at Vr (recharts-BLEdcVst.js:30:3273)
+    at recharts-BLEdcVst.js:32:34598
+OC @ index-DAwDDehn.js:858
+zs @ recharts-BLEdcVst.js:30
+Lg @ recharts-BLEdcVst.js:32
+Mg @ recharts-BLEdcVst.js:32
+IA @ recharts-BLEdcVst.js:32
+du @ recharts-BLEdcVst.js:32
+pc @ recharts-BLEdcVst.js:32
+kg @ recharts-BLEdcVst.js:32
+Vr @ recharts-BLEdcVst.js:30
+(anonymous) @ recharts-BLEdcVst.js:32
+hashchange
+d @ index-DAwDDehn.js:851
+J_ @ recharts-BLEdcVst.js:29
+tP @ recharts-BLEdcVst.js:29
+rP @ recharts-BLEdcVst.js:29
+om @ recharts-BLEdcVst.js:29
+um @ recharts-BLEdcVst.js:29
+(anonymous) @ recharts-BLEdcVst.js:29
+hc @ recharts-BLEdcVst.js:32
+py @ recharts-BLEdcVst.js:29
+hs @ recharts-BLEdcVst.js:29
+Ql @ recharts-BLEdcVst.js:29
+gP @ recharts-BLEdcVst.js:29
