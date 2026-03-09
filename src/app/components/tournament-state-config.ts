@@ -85,7 +85,7 @@ export type OverviewSection =
   | 'live_matches'
   | 'all_registrants';
 
-export type TabKey = 'overview' | 'players' | 'teams' | 'staff' | 'matches' | 'gallery';
+export type TabKey = 'overview' | 'players' | 'teams' | 'staff' | 'matches' | 'gallery' | 'bracket' | 'prizes';
 
 // ═══════════════════════════════════════════════════════
 // PHASE CONFIGURATIONS
@@ -492,4 +492,66 @@ export function getCountdownTarget(status: string | null | undefined): { label: 
     default:
       return null;
   }
+}
+
+// ═══════════════════════════════════════════════════════
+// DYNAMIC TAB VISIBILITY
+// ═══════════════════════════════════════════════════════
+
+/**
+ * Get which tabs should be visible for a tournament based on its phase and state.
+ * 
+ * Philosophy: Tabs appear progressively as tournaments move through their lifecycle.
+ * - Early phases (anticipation): Overview, Players, Staff
+ * - Preparation phase (roster_lock without teams): Same as early
+ * - Competition phase (roster_lock with teams, live): Add Teams, Matches, Bracket
+ * - Legacy phase (finished): All tabs including Gallery, Prizes
+ * 
+ * @param tournament - Tournament object with status and team count
+ * @param teamCount - Number of teams that have locked in (optional, derived from tournament)
+ */
+export function getVisibleTabs(
+  tournament: any,
+  teamCount: number = 0
+): TabKey[] {
+  const status = tournament?.status;
+  
+  // Base tabs - always visible
+  const baseTabs: TabKey[] = ['overview', 'players', 'staff'];
+  
+  // Competition tabs - visible during active play
+  const competitionTabs: TabKey[] = ['teams', 'matches', 'bracket'];
+  
+  // Legacy tabs - only visible when finished
+  const legacyTabs: TabKey[] = ['gallery', 'prizes'];
+  
+  // ── Early phases: only base tabs ──
+  if (
+    status === 'upcoming' ||
+    status === 'registration_open' ||
+    status === 'registration' ||
+    status === 'registration_closed'
+  ) {
+    return baseTabs;
+  }
+  
+  // ── Roster lock: add competition tabs only if teams exist ──
+  if (status === 'roster_lock') {
+    return teamCount > 0
+      ? [...baseTabs, ...competitionTabs]
+      : baseTabs;
+  }
+  
+  // ── Live/active: show competition tabs ──
+  if (status === 'live' || status === 'active') {
+    return [...baseTabs, ...competitionTabs];
+  }
+  
+  // ── Finished/completed/archived: show everything ──
+  if (status === 'completed' || status === 'archived' || status === 'finished') {
+    return [...baseTabs, ...competitionTabs, ...legacyTabs];
+  }
+  
+  // ── Default fallback: show all tabs (safety net) ──
+  return [...baseTabs, ...competitionTabs, ...legacyTabs];
 }

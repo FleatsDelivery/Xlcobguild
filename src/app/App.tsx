@@ -1,38 +1,42 @@
-import { useEffect, useState, useCallback, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { Toaster } from 'sonner';
+import { ThemeProvider, useTheme } from '@/app/components/theme-provider';
 import { supabase, initialHash } from '@/lib/supabase';
 import { projectId, publicAnonKey } from '/utils/supabase/info';
-import { Loader2 } from 'lucide-react';
+
+// Pre-load the icon barrel to prevent TDZ race conditions during concurrent module initialization
+import '@/lib/icons';
+
+import { Loader2 } from '@/lib/icons';
 import { LoginPage } from '@/app/components/login-page';
 import { SignupPage } from '@/app/components/signup-page';
 import { Navigation } from '@/app/components/navigation';
 import { KKupStinger, preloadStingerVideo } from '@/app/components/kkup-stinger';
 import { isOfficer, loadCustomRoles } from '@/lib/roles';
-import { ThemeProvider, useTheme } from '@/app/components/theme-provider';
 import { saveCheckoutResult } from '@/lib/checkout-context';
 
-// Lazy-load ALL page components to avoid TDZ issues with lucide-react circular dependencies
-// when Figma's bundler flattens everything into a single file
-const HomePage = lazy(() => import('@/app/components/home-page').then(m => ({ default: m.HomePage })));
-const LeaderboardPage = lazy(() => import('@/app/components/leaderboard-page').then(m => ({ default: m.LeaderboardPage })));
-const InboxPage = lazy(() => import('@/app/components/inbox-page').then(m => ({ default: m.InboxPage })));
-const RulesPage = lazy(() => import('@/app/components/rules-page').then(m => ({ default: m.RulesPage })));
-const ProfilePage = lazy(() => import('@/app/components/profile-page').then(m => ({ default: m.ProfilePage })));
-const KKUPPage = lazy(() => import('@/app/components/kkup-page').then(m => ({ default: m.KKUPPage })));
-const LogoManagementPage = lazy(() => import('@/app/components/logo-management-page').then(m => ({ default: m.LogoManagementPage })));
-const SteamResearchPage = lazy(() => import('@/app/components/steam-research-page').then(m => ({ default: m.SteamResearchPage })));
-const PracticeTournamentPage = lazy(() => import('@/app/components/practice-tournament-page').then(m => ({ default: m.PracticeTournamentPage })));
-const HallOfFamePage = lazy(() => import('@/app/components/hall-of-fame-page').then(m => ({ default: m.HallOfFamePage })));
-const CsvTournamentImporter = lazy(() => import('@/app/components/csv-tournament-importer').then(m => ({ default: m.CsvTournamentImporter })));
-const TournamentHubPage = lazy(() => import('@/app/components/tournament-hub-page').then(m => ({ default: m.TournamentHubPage })));
-const OfficerPage = lazy(() => import('@/app/components/officer-page').then(m => ({ default: m.OfficerPage })));
-const OfficerInboxPage = lazy(() => import('@/app/components/officer-inbox-page').then(m => ({ default: m.OfficerInboxPage })));
-const GiveawaysPage = lazy(() => import('@/app/components/giveaways-page').then(m => ({ default: m.GiveawaysPage })));
-const GiveawayDetailPage = lazy(() => import('@/app/components/giveaway-detail-page').then(m => ({ default: m.GiveawayDetailPage })));
-const SecretShopPage = lazy(() => import('@/app/components/secret-shop-page').then(m => ({ default: m.SecretShopPage })));
-const TermsOfServicePage = lazy(() => import('@/app/components/terms-of-service-page').then(m => ({ default: m.TermsOfServicePage })));
-const PrivacyPolicyPage = lazy(() => import('@/app/components/privacy-policy-page').then(m => ({ default: m.PrivacyPolicyPage })));
-const TransparencyPage = lazy(() => import('@/app/components/transparency-page').then(m => ({ default: m.TransparencyPage })));
-const CooksNCobsPage = lazy(() => import('@/app/components/cooks-n-cobs-page').then(m => ({ default: m.CooksNCobsPage })));
+// Static imports for all pages to prevent TDZ race conditions
+import { HomePage } from '@/app/components/home-page';
+import { LeaderboardPage } from '@/app/components/leaderboard-page';
+import { InboxPage } from '@/app/components/inbox-page';
+import { RulesPage } from '@/app/components/rules-page';
+import { ProfilePage } from '@/app/components/profile-page';
+import { KKUPPage } from '@/app/components/kkup-page';
+import { LogoManagementPage } from '@/app/components/logo-management-page';
+import { SteamResearchPage } from '@/app/components/steam-research-page';
+import { PracticeTournamentPage } from '@/app/components/practice-tournament-page';
+import { HallOfFamePage } from '@/app/components/hall-of-fame-page';
+import { CsvTournamentImporter } from '@/app/components/csv-tournament-importer';
+import { TournamentHubPage } from '@/app/components/tournament-hub-page';
+import { OfficerPage } from '@/app/components/officer-page';
+import { OfficerInboxPage } from '@/app/components/officer-inbox-page';
+import { GiveawaysPage } from '@/app/components/giveaways-page';
+import { GiveawayDetailPage } from '@/app/components/giveaway-detail-page';
+import { SecretShopPage } from '@/app/components/secret-shop-page';
+import { TermsOfServicePage } from '@/app/components/terms-of-service-page';
+import { PrivacyPolicyPage } from '@/app/components/privacy-policy-page';
+import { TransparencyPage } from '@/app/components/transparency-page';
+import { CooksNCobsPage } from '@/app/components/cooks-n-cobs-page';
 
 type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup' | 'logo-management' | 'steam-research' | 'practice' | 'hall-of-fame' | 'csv-import' | 'tournament-hub' | 'officer' | 'officer-inbox' | 'giveaways' | 'giveaway-detail' | 'secret-shop' | 'terms' | 'privacy' | 'transparency' | 'cooks-n-cobs';
 
@@ -48,6 +52,50 @@ const MOCK_USER = {
   ranks: null,
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
+};
+
+// Resolve the "effective hash" — checks URL first, then module-level snapshot, then localStorage.
+// This handles: normal navigation (URL hash), Supabase clearing hash (initialHash), and
+// iframe reload / browser refresh stripping the hash entirely (localStorage).
+const getEffectiveHash = (): string => {
+  const urlHash = window.location.hash;
+  if (urlHash && urlHash !== '#') return urlHash;
+  if (initialHash && initialHash !== '#') return initialHash;
+  
+  // Last resort: check localStorage (survives iframe recreation on refresh)
+  return localStorage.getItem('tcf_current_hash') || '';
+};
+
+// Determine current page from hash
+const hashToPage = (hash: string): PageType => {
+  if (hash.startsWith('#tournament-hub/')) return 'tournament-hub';
+  if (hash.startsWith('#kkup/')) {
+    // Unified routing: redirect legacy #kkup/{id} to #tournament-hub/{id}
+    const id = hash.replace('#kkup/', '');
+    window.location.hash = `#tournament-hub/${id}`;
+    return 'tournament-hub';
+  }
+  if (hash === '#kernel-kup' || hash === '#kkup') return 'kkup';
+  if (hash === '#logo-management') return 'logo-management';
+  if (hash === '#leaderboard') return 'leaderboard';
+  if (hash === '#requests') return 'requests';
+  if (hash === '#inbox') return 'requests';
+  if (hash === '#rules') return 'rules';
+  if (hash === '#profile') return 'profile';
+  if (hash === '#steam-research') return 'steam-research';
+  if (hash === '#practice' || hash.startsWith('#practice/')) return 'practice';
+  if (hash === '#hall-of-fame') return 'hall-of-fame';
+  if (hash === '#csv-import') return 'csv-import';
+  if (hash === '#officer') return 'officer';
+  if (hash === '#officer-inbox') return 'officer-inbox';
+  if (hash === '#giveaways') return 'giveaways';
+  if (hash.startsWith('#giveaway/')) return 'giveaway-detail';
+  if (hash === '#secret-shop' || hash.startsWith('#secret-shop?')) return 'secret-shop';
+  if (hash === '#terms') return 'terms';
+  if (hash === '#privacy') return 'privacy';
+  if (hash === '#transparency') return 'transparency';
+  if (hash === '#cooks-n-cobs') return 'cooks-n-cobs';
+  return 'home';
 };
 
 /**
@@ -74,50 +122,6 @@ export default function App() {
   const [officerPendingCount, setOfficerPendingCount] = useState(0);
   const [showStinger, setShowStinger] = useState(false);
   const [onboarding, setOnboarding] = useState<{ mvp_request_count: number; reward_claimed: boolean } | null>(null);
-
-  // Resolve the "effective hash" — checks URL first, then module-level snapshot, then localStorage.
-  // This handles: normal navigation (URL hash), Supabase clearing hash (initialHash), and
-  // iframe reload / browser refresh stripping the hash entirely (localStorage).
-  const getEffectiveHash = (): string => {
-    const urlHash = window.location.hash;
-    if (urlHash && urlHash !== '#') return urlHash;
-    if (initialHash && initialHash !== '#') return initialHash;
-    
-    // Last resort: check localStorage (survives iframe recreation on refresh)
-    return localStorage.getItem('tcf_current_hash') || '';
-  };
-
-  // Determine current page from hash
-  const hashToPage = (hash: string): PageType => {
-    if (hash.startsWith('#tournament-hub/')) return 'tournament-hub';
-    if (hash.startsWith('#kkup/')) {
-      // Unified routing: redirect legacy #kkup/{id} to #tournament-hub/{id}
-      const id = hash.replace('#kkup/', '');
-      window.location.hash = `#tournament-hub/${id}`;
-      return 'tournament-hub';
-    }
-    if (hash === '#kernel-kup' || hash === '#kkup') return 'kkup';
-    if (hash === '#logo-management') return 'logo-management';
-    if (hash === '#leaderboard') return 'leaderboard';
-    if (hash === '#requests') return 'requests';
-    if (hash === '#inbox') return 'requests';
-    if (hash === '#rules') return 'rules';
-    if (hash === '#profile') return 'profile';
-    if (hash === '#steam-research') return 'steam-research';
-    if (hash === '#practice' || hash.startsWith('#practice/')) return 'practice';
-    if (hash === '#hall-of-fame') return 'hall-of-fame';
-    if (hash === '#csv-import') return 'csv-import';
-    if (hash === '#officer') return 'officer';
-    if (hash === '#officer-inbox') return 'officer-inbox';
-    if (hash === '#giveaways') return 'giveaways';
-    if (hash.startsWith('#giveaway/')) return 'giveaway-detail';
-    if (hash === '#secret-shop' || hash.startsWith('#secret-shop?')) return 'secret-shop';
-    if (hash === '#terms') return 'terms';
-    if (hash === '#privacy') return 'privacy';
-    if (hash === '#transparency') return 'transparency';
-    if (hash === '#cooks-n-cobs') return 'cooks-n-cobs';
-    return 'home';
-  };
 
   useEffect(() => {
     // ── Stripe Checkout Redirect Detection ──
@@ -514,80 +518,64 @@ export default function App() {
       />
       
       <main className="pt-14 sm:pt-16 pb-4 sm:pb-20">
-        {currentPage === 'home' && <Suspense fallback={<div>Loading...</div>}><HomePage user={user} onboarding={onboarding} onRefresh={handleRefreshUser} onBadgeRefresh={refreshBadgeCount} /></Suspense>}
-        {currentPage === 'leaderboard' && <Suspense fallback={<div>Loading...</div>}><LeaderboardPage user={user} onRefresh={handleRefreshUser} /></Suspense>}
-        {currentPage === 'requests' && <Suspense fallback={<div>Loading...</div>}><InboxPage user={user} onBadgeRefresh={refreshBadgeCount} /></Suspense>}
-        {currentPage === 'rules' && <Suspense fallback={<div>Loading...</div>}><RulesPage /></Suspense>}
-        {currentPage === 'profile' && <Suspense fallback={<div>Loading...</div>}><ProfilePage user={user} onboarding={onboarding} onRefresh={handleRefreshUser} /></Suspense>}
-        {currentPage === 'kkup' && <Suspense fallback={<div>Loading...</div>}><KKUPPage user={user} onHallOfFameNavigate={handleHallOfFameNavigate} /></Suspense>}
-        {currentPage === 'logo-management' && <Suspense fallback={<div>Loading...</div>}><LogoManagementPage /></Suspense>}
-        {currentPage === 'steam-research' && <Suspense fallback={<div>Loading...</div>}><SteamResearchPage /></Suspense>}
+        {currentPage === 'home' && <HomePage user={user} onboarding={onboarding} onRefresh={handleRefreshUser} onBadgeRefresh={refreshBadgeCount} />}
+        {currentPage === 'leaderboard' && <LeaderboardPage user={user} onRefresh={handleRefreshUser} />}
+        {currentPage === 'requests' && <InboxPage user={user} onBadgeRefresh={refreshBadgeCount} />}
+        {currentPage === 'rules' && <RulesPage />}
+        {currentPage === 'profile' && <ProfilePage user={user} onboarding={onboarding} onRefresh={handleRefreshUser} />}
+        {currentPage === 'kkup' && <KKUPPage user={user} onHallOfFameNavigate={handleHallOfFameNavigate} />}
+        {currentPage === 'logo-management' && <LogoManagementPage />}
+        {currentPage === 'steam-research' && <SteamResearchPage />}
         {currentPage === 'practice' && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <PracticeTournamentPage
-              user={user}
-              accessToken={session?.access_token || localStorage.getItem('supabase_token') || ''}
-              leagueId={(() => {
-                const hash = window.location.hash || initialHash || localStorage.getItem('tcf_current_hash') || '';
-                const match = hash.match(/^#practice\/(\d+)$/);
-                return match ? match[1] : undefined;
-              })()}
-              onBack={() => { window.location.hash = '#practice'; }}
-            />
-          </Suspense>
+          <PracticeTournamentPage
+            user={user}
+            accessToken={session?.access_token || localStorage.getItem('supabase_token') || ''}
+            leagueId={(() => {
+              const hash = window.location.hash || initialHash || localStorage.getItem('tcf_current_hash') || '';
+              const match = hash.match(/^#practice\/(\d+)$/);
+              return match ? match[1] : undefined;
+            })()}
+            onBack={() => { window.location.hash = '#practice'; }}
+          />
         )}
-        {currentPage === 'hall-of-fame' && <Suspense fallback={<div>Loading...</div>}><HallOfFamePage /></Suspense>}
+        {currentPage === 'hall-of-fame' && <HallOfFamePage />}
         {currentPage === 'csv-import' && user?.role === 'owner' && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <CsvTournamentImporter user={user} onBack={() => { window.location.hash = '#officer'; }} />
-          </Suspense>
+          <CsvTournamentImporter user={user} onBack={() => { window.location.hash = '#officer'; }} />
         )}
         {currentPage === 'tournament-hub' && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <TournamentHubPage
-              tournamentId={(window.location.hash || initialHash || localStorage.getItem('tcf_current_hash') || '').replace('#tournament-hub/', '')}
-              user={user}
-              accessToken={session?.access_token || localStorage.getItem('supabase_token') || ''}
-              onBack={() => { window.location.hash = '#kkup'; }}
-            />
-          </Suspense>
+          <TournamentHubPage
+            tournamentId={(window.location.hash || initialHash || localStorage.getItem('tcf_current_hash') || '').replace('#tournament-hub/', '')}
+            user={user}
+            accessToken={session?.access_token || localStorage.getItem('supabase_token') || ''}
+            onBack={() => { window.location.hash = '#kkup'; }}
+          />
         )}
         {currentPage === 'officer' && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <OfficerPage
-              user={user}
-              onRefresh={handleRefreshUser}
-            />
-          </Suspense>
+          <OfficerPage
+            user={user}
+            onRefresh={handleRefreshUser}
+          />
         )}
         {currentPage === 'officer-inbox' && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <OfficerInboxPage user={user} onBadgeRefresh={refreshOfficerBadge} />
-          </Suspense>
+          <OfficerInboxPage user={user} onBadgeRefresh={refreshOfficerBadge} />
         )}
         {currentPage === 'giveaways' && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <GiveawaysPage user={user} />
-          </Suspense>
+          <GiveawaysPage user={user} />
         )}
         {currentPage === 'giveaway-detail' && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <GiveawayDetailPage
-              id={(window.location.hash || initialHash || localStorage.getItem('tcf_current_hash') || '').replace('#giveaway/', '')}
-              user={user}
-              accessToken={session?.access_token || localStorage.getItem('supabase_token') || ''}
-            />
-          </Suspense>
+          <GiveawayDetailPage
+            id={(window.location.hash || initialHash || localStorage.getItem('tcf_current_hash') || '').replace('#giveaway/', '')}
+            user={user}
+            accessToken={session?.access_token || localStorage.getItem('supabase_token') || ''}
+          />
         )}
         {currentPage === 'secret-shop' && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <SecretShopPage user={user} />
-          </Suspense>
+          <SecretShopPage user={user} />
         )}
-        {currentPage === 'terms' && <Suspense fallback={<div>Loading...</div>}><TermsOfServicePage /></Suspense>}
-        {currentPage === 'privacy' && <Suspense fallback={<div>Loading...</div>}><PrivacyPolicyPage /></Suspense>}
-        {currentPage === 'transparency' && <Suspense fallback={<div>Loading...</div>}><TransparencyPage /></Suspense>}
-        {currentPage === 'cooks-n-cobs' && <Suspense fallback={<div>Loading...</div>}><CooksNCobsPage user={user} /></Suspense>}
+        {currentPage === 'terms' && <TermsOfServicePage />}
+        {currentPage === 'privacy' && <PrivacyPolicyPage />}
+        {currentPage === 'transparency' && <TransparencyPage />}
+        {currentPage === 'cooks-n-cobs' && <CooksNCobsPage user={user} />}
       </main>
 
       {/* Hall of Fame Stinger - renders on top of everything */}

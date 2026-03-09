@@ -9,7 +9,7 @@
  * Receives all data via props from the orchestrator.
  */
 
-import { Shield, Users, Crown, AlertCircle, Loader2, GraduationCap } from 'lucide-react';
+import { Shield, Users, Crown, AlertCircle, Loader2, GraduationCap } from '@/lib/icons';
 import { TeamLogo } from '@/app/components/team-logo';
 import { getRankDisplay, getMedalColor, calculateTeamRank, type TeamRankResult } from '@/lib/rank-utils';
 import { TcfPlusAvatarRing } from '@/app/components/tcf-plus-avatar-ring';

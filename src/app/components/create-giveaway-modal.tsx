@@ -9,7 +9,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { X, Gift, Loader2, Lock, Globe, ImageIcon } from 'lucide-react';
+import { X, Gift, Loader2, Lock, Globe, ImageIcon } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';

@@ -5,15 +5,17 @@
  * These are driven by the phase config's `overviewSections` ordering.
  */
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import {
-  Trophy, Clock, Sparkles, TrendingUp, Flame,
-} from 'lucide-react';
+  Trophy, Clock, Sparkles, TrendingUp, Flame, Loader2,
+} from '@/lib/icons';
 import { getCountdownTarget, type PhaseConfig } from './tournament-state-config';
 import { getRankDisplay } from '@/lib/rank-utils';
 import { timeAgo } from '@/lib/date-utils';
 import { RankBadge } from '@/app/components/rank-badge';
-import { ChooseYourPath } from './choose-your-path';
+
+// Lazy-load ChooseYourPath since it imports both lucide AND motion
+const ChooseYourPath = lazy(() => import('./choose-your-path').then(m => ({ default: m.ChooseYourPath })));
 
 // ═══════════════════════════════════════════════════════
 // COUNTDOWN SECTION
@@ -290,15 +292,17 @@ export function RegistrationHeroCta({
   // Only show Choose Your Path when not registered and can register
   if (!myRegistration && canRegister) {
     return (
-      <ChooseYourPath
-        tournamentName={tournamentName}
-        tournamentType={tournamentType}
-        isRankIneligible={isRankIneligible}
-        registering={registering}
-        onRegisterWithRole={onRegisterWithRole}
-        onOpenStaffModal={onOpenStaffModal}
-        isEarlyAccess={isEarlyAccess}
-      />
+      <Suspense fallback={<div className="flex items-center justify-center p-4"><Loader2 className="w-5 h-5 animate-spin" /></div>}>
+        <ChooseYourPath
+          tournamentName={tournamentName}
+          tournamentType={tournamentType}
+          isRankIneligible={isRankIneligible}
+          registering={registering}
+          onRegisterWithRole={onRegisterWithRole}
+          onOpenStaffModal={onOpenStaffModal}
+          isEarlyAccess={isEarlyAccess}
+        />
+      </Suspense>
     );
   }
 

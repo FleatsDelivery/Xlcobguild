@@ -5,7 +5,7 @@
  * Enforces team limit: Free = 1, TCF+ = 20.
  */
 import { useState } from 'react';
-import { Shield, Plus, Loader2 } from 'lucide-react';
+import { Shield, Plus, Loader2 } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';

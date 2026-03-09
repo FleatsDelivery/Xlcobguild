@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Shield, UserPlus, Loader2, CheckCircle } from 'lucide-react';
+import { X, Shield, UserPlus, Loader2, CheckCircle } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 
 interface RankModalProps {

@@ -6,7 +6,7 @@
  */
 
 import { useState } from 'react';
-import { X, Shield, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
+import { X, Shield, Loader2, CheckCircle, AlertTriangle } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { RankBadge } from '@/app/components/rank-badge';
 import { toast } from 'sonner';

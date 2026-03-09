@@ -15,7 +15,7 @@ import {
   Clock, Banknote, UserCheck,
 } from 'lucide-react';
 import { Footer } from '@/app/components/footer';
-import { PRIZE_POOL_CONFIG, BASE_POOL_TOTAL } from '@/app/components/kkup-detail-prizes';
+import { PRIZE_POOL_CONFIG, BASE_POOL_TOTAL } from '@/app/components/tournament-hub-prizes';
 
 // ═══════════════════════════════════════════════════════
 // SECTION WRAPPER

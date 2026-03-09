@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ArrowUp, ArrowDown, Search, Trophy, Target, Users } from 'lucide-react';
+import { ArrowUp, ArrowDown, Search, Trophy, Target, Users } from '@/lib/icons';
 import { getHeroImage } from '@/utils/dota-constants';
 
 interface PlayerStat {

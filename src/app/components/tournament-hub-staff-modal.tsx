@@ -5,7 +5,7 @@
  * Uses the BottomSheetModal pattern for consistent UX.
  */
 import { useState } from 'react';
-import { Briefcase, Send, Loader2 } from 'lucide-react';
+import { Briefcase, Send, Loader2 } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { Label } from '@/app/components/ui/label';
 import { BottomSheetModal } from '@/app/components/bottom-sheet-modal';

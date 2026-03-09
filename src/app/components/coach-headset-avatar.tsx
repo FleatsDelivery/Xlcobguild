@@ -11,7 +11,7 @@
  *   - No coach: dashed empty circle + faded headset
  */
 
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap } from '@/lib/icons';
 
 /**
  * Full-size headset SVG that wraps around an avatar.

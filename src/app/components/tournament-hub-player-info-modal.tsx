@@ -12,7 +12,7 @@
  * Uses dark mode semantic tokens throughout.
  */
 
-import { X, ExternalLink, Send, Loader2, Shield, Swords } from 'lucide-react';
+import { X, ExternalLink, Send, Loader2, Shield, Swords } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { getRankDisplay, getMedalColor } from '@/lib/rank-utils';
 import { timeAgo } from '@/lib/date-utils';

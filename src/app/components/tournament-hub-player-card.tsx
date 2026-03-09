@@ -6,7 +6,7 @@
  * invite / remove buttons. Supports captain and coach indicators.
  */
 
-import { Send, Loader2, Crown, GraduationCap, Trash2, Pencil } from 'lucide-react';
+import { Send, Loader2, Crown, GraduationCap, Trash2, Pencil } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { getRankDisplay } from '@/lib/rank-utils';
 import { TcfPlusAvatarRing } from '@/app/components/tcf-plus-avatar-ring';

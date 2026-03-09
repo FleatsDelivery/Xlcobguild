@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Loader2, RefreshCw, Shield, ArrowRight, AlertTriangle } from 'lucide-react';
+import { X, Loader2, RefreshCw, Shield, ArrowRight, AlertTriangle } from '@/lib/icons';
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
 import { toast } from 'sonner';

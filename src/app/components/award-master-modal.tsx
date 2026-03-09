@@ -20,7 +20,7 @@ import confetti from 'canvas-confetti';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 import { BottomSheetModal } from '@/app/components/bottom-sheet-modal';
-import { PRIZE_POOL_CONFIG } from '@/app/components/kkup-detail-prizes';
+import { PRIZE_POOL_CONFIG } from '@/app/components/tournament-hub-prizes';
 import { createAwardBatch, type CreateAwardBatchParams } from '@/lib/connect-api';
 import { projectId, publicAnonKey } from '/utils/supabase/info';
 import { supabase } from '@/lib/supabase';

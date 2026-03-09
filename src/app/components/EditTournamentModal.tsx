@@ -4,7 +4,7 @@ import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
 import { BottomSheetModal } from '@/app/components/bottom-sheet-modal';
 import { ImageUpload } from '@/app/components/image-upload';
-import { Loader2, Crown, Calendar, Users, Tv, ImageIcon, Trash2, AlertTriangle, Shield, ChevronDown } from 'lucide-react';
+import { Loader2, Crown, Calendar, Users, Tv, ImageIcon, Trash2, AlertTriangle, Shield, ChevronDown } from '@/lib/icons';
 import { projectId } from '/utils/supabase/info';
 import { toast } from 'sonner';
 import { getTournamentImageFolder } from '@/lib/slugify';

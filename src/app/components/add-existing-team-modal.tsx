@@ -10,7 +10,7 @@
  * and passed in as a prop — no in-modal role selection needed.
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Shield, Loader2, ChevronDown, Check, Info, Trophy } from 'lucide-react';
+import { Shield, Loader2, ChevronDown, Check, Info, Trophy } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { TeamLogo } from '@/app/components/team-logo';
 import { BottomSheetModal } from '@/app/components/bottom-sheet-modal';

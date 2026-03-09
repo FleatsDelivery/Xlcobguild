@@ -1,4 +1,4 @@
-import { AlertTriangle, X, Loader2, Trash2 } from 'lucide-react';
+import { AlertTriangle, X, Loader2, Trash2 } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 
 interface SecondaryAction {

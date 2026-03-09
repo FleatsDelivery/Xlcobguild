@@ -1,20 +1,21 @@
 /**
- * Tournament Hub — Staff Tab
+ * Tournament Hub — Staff Tab (Unified)
  *
- * Shows approved staff, pending applications (for officers/owners),
- * and an "Apply as Staff" CTA for registered users.
+ * Active tournaments: Shows staff applications, approval workflow
+ * Finished tournaments: Shows staff credits/roster only
  * Receives all data and handlers as props from the orchestrator.
  */
 
 import {
-  Shield, Briefcase, Mic, CheckCircle, XCircle, Clock,
   Users, Plus, Loader2, MessageSquare, Crown, Film, HandHelping, UserMinus,
-} from 'lucide-react';
+  Target, Clipboard, CheckCircle, Clock, Briefcase, Mic, XCircle, Shield,
+} from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { timeAgo } from '@/lib/date-utils';
 import { TcfPlusAvatarRing } from '@/app/components/tcf-plus-avatar-ring';
 import { TcfPlusBadge } from '@/app/components/tcf-plus-badge';
 import { useState } from 'react';
+import { TournamentHubEmptyState } from './tournament-hub-empty-state';
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -30,6 +31,12 @@ export interface TournamentHubStaffProps {
   handleStaffReview: (userId: string, status: 'approved' | 'denied', username: string) => void;
   handleRemoveStaff: (userId: string, username: string) => void;
   setShowStaffModal?: (show: boolean) => void;
+  /** NEW: If true, show finished-tournament credits view instead of applications */
+  isFinished?: boolean;
+  /** NEW: Historical staff data (for finished tournaments) */
+  staffMembers?: any[];
+  /** If true, this tab is not yet relevant for the current tournament phase */
+  isRelevant?: boolean;
 }
 
 // ── Status config ────────────────────────────────────────────────────
@@ -79,8 +86,28 @@ export function TournamentHubStaff({
   myRegistration,
   handleStaffReview,
   handleRemoveStaff,
+  isFinished,
+  staffMembers,
+  isRelevant = true,
 }: TournamentHubStaffProps) {
 
+  // ── EARLY PHASE: Not relevant yet ──
+  if (!isRelevant) {
+    return (
+      <TournamentHubEmptyState
+        icon={Shield}
+        title="Staff Applications Open During Registration"
+        description="Once the tournament registration begins, community members can apply to help as casters, observers, producers, or other roles. Check back when registration opens!"
+      />
+    );
+  }
+
+  // ── FINISHED TOURNAMENT: Show staff credits roster ──
+  if (isFinished && staffMembers) {
+    return <FinishedStaffCredits staffMembers={staffMembers} />;
+  }
+
+  // ── ACTIVE TOURNAMENT: Show applications workflow ──
   const approvedStaff = staffApps.filter(a => a.status === 'approved');
   const pendingStaff = staffApps.filter(a => a.status === 'pending');
   const deniedStaff = staffApps.filter(a => a.status === 'denied');
@@ -184,15 +211,11 @@ export function TournamentHubStaff({
           </div>
         </div>
       ) : (
-        !isOwner && pendingStaff.length === 0 && (
-          <div className="bg-card rounded-2xl border-2 border-dashed border-border p-12 text-center">
-            <Shield className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="text-muted-foreground font-semibold">No staff yet</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              Staff applications will appear here once reviewed.
-            </p>
-          </div>
-        )
+        <TournamentHubEmptyState
+          icon={Shield}
+          title="No staff yet"
+          description="Staff applications will appear here once reviewed."
+        />
       )}
 
       {/* Denied (owner only, collapsed) */}
@@ -223,7 +246,6 @@ export function TournamentHubStaff({
     </div>
   );
 }
-
 
 // ── Staff Member Card (approved, public) ─────────────────────────────
 
@@ -344,6 +366,61 @@ function StaffAppCard({ app, isOwner, onReview }: {
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+// ── Finished Staff Credits ───────────────────────────────────────────
+
+function FinishedStaffCredits({ staffMembers }: { staffMembers: any[] }) {
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+            <Shield className="w-5 h-5 text-[#6366f1]" />
+            Tournament Staff
+          </h3>
+          {staffMembers && (
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {staffMembers.length} staff members
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Staff Credits Roster */}
+      {staffMembers.length > 0 ? (
+        <div className="space-y-3">
+          <h4 className="text-sm font-bold text-[#10b981] uppercase tracking-wide flex items-center gap-2">
+            <CheckCircle className="w-4 h-4" /> Staff Credits ({staffMembers.length})
+          </h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {staffMembers.map((app: any, index: number) => (
+              <div
+                key={app.user_id || app.id}
+                className="animate-staff-card-scale-in"
+                style={{
+                  animationDelay: `${index * 0.05}s`,
+                }}
+              >
+                <StaffMemberCard
+                  app={app}
+                  isOwner={false}
+                  onRemove={() => {}} // No remove action for finished tournaments
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <TournamentHubEmptyState
+          icon={<Shield className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />}
+          title="No staff yet"
+          description="Staff applications will appear here once reviewed."
+        />
+      )}
     </div>
   );
 }

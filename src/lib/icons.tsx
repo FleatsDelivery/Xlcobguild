@@ -1,9 +1,132 @@
 /**
- * Custom SVG icons — Single source of truth
+ * Icons — Single source of truth
  *
- * Icons that aren't available in lucide-react live here.
- * Import: import { TwitchIcon } from '@/lib/icons';
+ * ALL icons must be imported from this file, never directly from lucide-react.
+ * This prevents TDZ (Temporal Dead Zone) errors caused by concurrent module initialization.
+ *
+ * Usage: import { Crown, TwitchIcon } from '@/lib/icons';
  */
+
+// ═══════════════════════════════════════════════════════
+// LUCIDE ICONS — Re-exported to prevent concurrent initialization
+// ═══════════════════════════════════════════════════════
+
+export {
+  // Navigation & UI
+  X,
+  XIcon,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  MoreHorizontal,
+  PanelLeftIcon,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ArrowDown,
+  Menu,
+  
+  // Status & Feedback
+  Loader2,
+  AlertCircle,
+  AlertTriangle,
+  CheckIcon,
+  Check,
+  CheckCircle,
+  XCircle,
+  Info,
+  
+  // Actions
+  Plus,
+  Pencil,
+  Edit,
+  Trash2,
+  Save,
+  Send,
+  Upload,
+  RefreshCw,
+  RotateCcw,
+  ExternalLink,
+  SearchIcon,
+  Search,
+  Filter,
+  LogOut,
+  
+  // Media & Content
+  Image as ImageIcon,
+  Youtube,
+  Tv,
+  Radio,
+  Eye,
+  Mic,
+  Camera,
+  Film,
+  Volume2,
+  Play,
+  
+  // User & Social
+  UserPlus,
+  UserMinus,
+  Users,
+  MessageSquare,
+  Heart,
+  ThumbsUp,
+  ThumbsDown,
+  Star,
+  
+  // Game & Tournament
+  Crown,
+  Trophy,
+  Shield,
+  Swords,
+  Target,
+  Skull,
+  Ban,
+  Sparkles,
+  Gamepad2,
+  
+  // Time & Calendar
+  Calendar,
+  CalendarDays,
+  Clock,
+  Timer,
+  TrendingUp,
+  History,
+  
+  // Work & Tools
+  Briefcase,
+  Clipboard,
+  ClipboardList,
+  GraduationCap,
+  HandHelping,
+  Headphones,
+  
+  // Code & Tech
+  GitBranch,
+  
+  // Other
+  Gift,
+  Zap,
+  DollarSign,
+  Scale,
+  Lock,
+  Unlock,
+  Globe,
+  CircleIcon,
+  MinusIcon,
+  GripVerticalIcon,
+  Popcorn,
+  Flame,
+  MailX,
+  Ticket,
+} from 'lucide-react';
+
+// ═══════════════════════════════════════════════════════
+// CUSTOM SVG ICONS
+// ═══════════════════════════════════════════════════════
 
 /** Twitch brand icon (not available in lucide-react) */
 export const TwitchIcon = ({ className }: { className?: string }) => (

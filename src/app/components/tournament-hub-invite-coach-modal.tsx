@@ -14,7 +14,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   GraduationCap, Send, Loader2, X, CheckCircle, Search,
-} from 'lucide-react';
+} from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { BottomSheetModal } from '@/app/components/bottom-sheet-modal';
 import { getRankDisplay, getMedalColor } from '@/lib/rank-utils';

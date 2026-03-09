@@ -11,7 +11,7 @@
  */
 
 import { useState } from 'react';
-import { Lock, Ticket, Loader2, Check, ChevronDown, AlertTriangle, Sparkles, GraduationCap, Crown } from 'lucide-react';
+import { Lock, Ticket, Loader2, Check, ChevronDown, AlertTriangle, Sparkles, GraduationCap, Crown } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { TcfPlusAvatarRing } from '@/app/components/tcf-plus-avatar-ring';
 

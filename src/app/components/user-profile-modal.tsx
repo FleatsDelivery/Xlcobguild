@@ -10,7 +10,7 @@
  *   Header includes linked account mini-avatars (Discord, Steam, Twitch) with labels
  */
 
-import { X, TrendingUp, Swords, Zap, Calendar, Star } from 'lucide-react';
+import { X, TrendingUp, Swords, Zap, Calendar, Star } from '@/lib/icons';
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { projectId, publicAnonKey } from '/utils/supabase/info';

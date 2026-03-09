@@ -9,7 +9,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { Radio, Clock, Eye, ChevronDown, ChevronUp, Swords, Ban, Shield, RefreshCw } from 'lucide-react';
+import { Radio, Clock, Eye, ChevronDown, ChevronUp, Swords, Ban, Shield, RefreshCw } from '@/lib/icons';
 import { getHeroImageUrl } from '@/utils/dota-constants';
 import { TeamLogo } from '@/app/components/team-logo';
 import { LiveMinimap } from '@/app/components/live-match-minimap';

@@ -1,4 +1,4 @@
-import { Crown } from 'lucide-react';
+import { Crown } from '@/lib/icons';
 
 /**
  * TCF+ membership badge — reusable across leaderboard, player modals, profiles, etc.

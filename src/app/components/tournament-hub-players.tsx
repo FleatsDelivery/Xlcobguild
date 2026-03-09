@@ -1,12 +1,14 @@
 /**
- * Tournament Hub — Players Tab
+ * Tournament Hub — Players Tab (Unified)
  *
- * Renders the player registry with sub-tabs (all, free agents, coaches).
+ * Active tournaments: Shows player registry with sub-tabs (all, free agents, coaches)
+ * Finished tournaments: Shows aggregated player statistics leaderboard
  * Receives all data and handlers as props from the orchestrator.
  */
 
-import { Users, Crown, GraduationCap } from 'lucide-react';
+import { Users, Crown, GraduationCap, Target, Clipboard } from '@/lib/icons';
 import { PlayerCard } from './tournament-hub-player-card';
+import { AggregatedPlayerStats } from '@/app/components/aggregated-player-stats';
 
 export interface TournamentHubPlayersProps {
   allPlayers: any[];
@@ -24,6 +26,14 @@ export interface TournamentHubPlayersProps {
   isOfficer?: boolean;
   /** Called when officer clicks the rank override pencil on an unranked player */
   onRankOverride?: (userId: string, displayName: string, currentMedal?: string | null, currentStars?: number) => void;
+  /** NEW: If true, show finished tournament stats leaderboard */
+  isFinished?: boolean;
+  /** NEW: Player stats for finished tournaments */
+  playerStats?: any[];
+  /** NEW: Coach members for finished tournaments */
+  coachMembers?: any[];
+  /** If true, this tab is not yet relevant for the current tournament phase */
+  isRelevant?: boolean;
 }
 
 export function TournamentHubPlayers({
@@ -33,7 +43,79 @@ export function TournamentHubPlayers({
   sendingInvite, handleSendInvite, setSelectedPlayer,
   isOfficer,
   onRankOverride,
+  isFinished,
+  playerStats,
+  coachMembers,
+  isRelevant = true,
 }: TournamentHubPlayersProps) {
+  
+  // ── EARLY PHASE: Not relevant yet ──
+  if (!isRelevant) {
+    return (
+      <div className="bg-card rounded-2xl border-2 border-dashed border-border p-12 text-center space-y-3">
+        <Users className="w-16 h-16 text-muted-foreground/20 mx-auto" />
+        <h3 className="text-xl font-bold text-foreground">Player Registry Opens Soon</h3>
+        <p className="text-muted-foreground max-w-md mx-auto">
+          Once registration begins, all signed-up players will appear here. Check back when the tournament opens for signups!
+        </p>
+      </div>
+    );
+  }
+  
+  // ── FINISHED TOURNAMENT: Show stats leaderboard ──
+  if (isFinished) {
+    return (
+      <div className="space-y-6">
+        {/* Coaches */}
+        {coachMembers && coachMembers.length > 0 && (
+          <div className="bg-card rounded-2xl border-2 border-border p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-[#3b82f6]/10 flex items-center justify-center">
+                <Clipboard className="w-5 h-5 text-[#3b82f6]" />
+              </div>
+              <h3 className="text-xl font-black text-foreground">Coaches</h3>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {coachMembers.map((coach: any) => (
+                <div key={coach.person_id} className="flex items-center gap-3 bg-[#3b82f6]/5 rounded-xl p-4 border border-[#3b82f6]/20">
+                  {coach.avatar_url ? (
+                    <img src={coach.avatar_url} alt={coach.display_name} className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-harvest to-orange-400 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
+                      {coach.display_name?.charAt(0)?.toUpperCase() || '?'}
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <p className="font-bold text-foreground truncate">{coach.display_name}</p>
+                    <p className="text-sm text-[#3b82f6] font-semibold">Coach — {coach.team_name}</p>
+                    {coach.steam_id && /^\d+$/.test(coach.steam_id) && (
+                      <a href={`https://www.opendota.com/players/${coach.steam_id}`} target="_blank" rel="noopener noreferrer"
+                        className="text-xs text-muted-foreground hover:text-harvest transition-colors">
+                        OpenDota Profile
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Player Stats */}
+        {!playerStats || playerStats.length === 0 ? (
+          <div className="bg-card rounded-2xl border-2 border-border p-12 text-center">
+            <Target className="w-16 h-16 mx-auto mb-4 text-muted-foreground/30" />
+            <p className="text-muted-foreground">No player stats available yet</p>
+          </div>
+        ) : (
+          <AggregatedPlayerStats stats={playerStats} />
+        )}
+      </div>
+    );
+  }
+
+  // ── ACTIVE TOURNAMENT: Show player registry ──
+  
   const subTabs: { key: typeof playersSubTab; label: string; count: number; color: string }[] = [
     { key: 'all', label: 'All Players', count: allPlayers.length, color: 'text-foreground' },
     { key: 'free_agents', label: 'Free Agents', count: freeAgents.length, color: 'text-[#3b82f6]' },

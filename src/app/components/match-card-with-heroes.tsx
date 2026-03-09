@@ -1,6 +1,6 @@
 import { getHeroName, getHeroImage } from '@/utils/dota-constants';
 import { TeamLogo } from '@/app/components/team-logo';
-import { ExternalLink, Youtube, Pencil, Trophy, Swords, Skull } from 'lucide-react';
+import { ExternalLink, Youtube, Pencil, Trophy, Swords, Skull } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { formatDateWithTime } from '@/lib/date-utils';
 

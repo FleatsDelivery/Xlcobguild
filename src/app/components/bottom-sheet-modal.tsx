@@ -34,7 +34,7 @@
 
 import { useEffect, Children, cloneElement, isValidElement, type ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { X } from 'lucide-react';
+import { X } from '@/lib/icons';
 
 // ════════════════════════════════════════════��══════════
 // TYPES

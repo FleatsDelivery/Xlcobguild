@@ -11,11 +11,10 @@
  */
 
 import {
-  Crown, Users, Shield, Plus, UserPlus,
-  Loader2,
+  Shield, Users, Crown, Plus, ChevronDown, ChevronUp, Send, Loader2, UserPlus,
   CheckCircle, XCircle, Clock, History, AlertTriangle,
   Gamepad2, MailX, GraduationCap, LogOut, Lock, Unlock, Trash2,
-} from 'lucide-react';
+} from '@/lib/icons';
 import { useState, useMemo } from 'react';
 import { Button } from '@/app/components/ui/button';
 import { TeamLogo } from '@/app/components/team-logo';
@@ -26,6 +25,8 @@ import { TicketMeterSection } from '@/app/components/tournament-hub-ticket-meter
 import { CoachHeadsetAvatar } from '@/app/components/coach-headset-avatar';
 import { RankBadge } from '@/app/components/rank-badge';
 import { PlayerCard } from '@/app/components/tournament-hub-player-card';
+import { getHeroImageUrl } from '@/lib/dota-heroes';
+import { TournamentHubEmptyState } from './tournament-hub-empty-state';
 
 // ════════════════════════════════════════════════════
 // HELPERS
@@ -98,17 +99,18 @@ export interface TournamentHubTeamsProps {
   readyingTeam: boolean;
   setActiveTab: (tab: 'overview' | 'players' | 'teams' | 'matches' | 'staff' | 'gallery') => void;
   setPlayersSubTab: (tab: 'all' | 'free_agents' | 'coaches') => void;
-  setShowCreateTeam: (show: boolean) => void;
-  setShowExistingTeam: (show: boolean) => void;
-  isUserCaptainOf: (team: any) => boolean;
-  teamInvites: Record<string, any[]>;
-  cancellingInvite: string | null;
-  handleCancelInvite: (teamId: string, inviteId: string, personName: string) => void;
-  setSelectedPlayer?: (reg: any) => void;
-  /** Officer mode — shows rank override button on unranked player badges */
-  isOfficer?: boolean;
-  /** Called when officer clicks the rank override pencil on an unranked player */
-  onRankOverride?: (userId: string, displayName: string, currentMedal?: string | null, currentStars?: number) => void;
+  /** NEW: If true, render finished tournament view (final standings) */
+  isFinished?: boolean;
+  /** NEW: Player stats for finished tournaments (used for top heroes) */
+  playerStats?: any[];
+  /** NEW: Loading state for rosters */
+  loadingRosters?: boolean;
+  /** NEW: Handler to select team for editing */
+  setSelectedTeam?: (team: any) => void;
+  /** NEW: Handler to show edit team modal */
+  setShowEditTeamModal?: (show: boolean) => void;
+  /** If true, this tab is not yet relevant for the current tournament phase */
+  isRelevant?: boolean;
 }
 
 type TeamsSubTab = 'all_teams' | 'my_team';
@@ -123,7 +125,37 @@ export function TournamentHubTeams(props: TournamentHubTeamsProps) {
     user, isOwner, canCreateTeam,
     isUserCaptainOf, teamRosters, teamCoachData,
     setShowCreateTeam, setShowExistingTeam,
+    isFinished, playerStats, loadingRosters,
+    setSelectedTeam, setShowEditTeamModal, setActiveTab,
+    isRelevant = true,
   } = props;
+
+  // ── EARLY PHASE: Not relevant yet ──
+  if (!isRelevant) {
+    return (
+      <TournamentHubEmptyState
+        icon={Users}
+        title="Teams Form During Roster Lock"
+        description="Once registration closes and the roster lock phase begins, teams will be created here. Players can join teams, captains can invite teammates, and rosters will be finalized."
+      />
+    );
+  }
+
+  // ── FINISHED TOURNAMENT: Show final standings with hero stats ──
+  if (isFinished) {
+    return <FinishedTeamsStandings 
+      teams={teams}
+      playerStats={playerStats || []}
+      teamRosters={teamRosters}
+      loadingRosters={loadingRosters || false}
+      isOwner={isOwner}
+      setSelectedTeam={setSelectedTeam || (() => {})}
+      setShowEditTeamModal={setShowEditTeamModal || (() => {})}
+      setActiveTab={setActiveTab}
+    />;
+  }
+
+  // ── ACTIVE TOURNAMENT: Show team management workflow ──
 
   // Find the user's team — captain OR roster member OR coach
   const myTeamAsCaptain = teams.find(t => isUserCaptainOf(t) && t.approval_status !== 'denied' && t.approval_status !== 'withdrawn');
@@ -625,6 +657,134 @@ function MyTeamView({
             onClose={() => setShowInviteCoach(false)}
           />
         )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════
+// FINISHED TOURNAMENT: Show final standings with hero stats
+// ═══════════════════════════════════════════════════════
+
+function FinishedTeamsStandings({
+  teams, playerStats, teamRosters, loadingRosters,
+  isOwner, setSelectedTeam, setShowEditTeamModal, setActiveTab,
+}: TournamentHubTeamsProps & { playerStats: any[]; loadingRosters: boolean }) {
+  const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+  const [selectedHeroId, setSelectedHeroId] = useState<string | null>(null);
+
+  // ─── Helper: Get top heroes for a team ───
+  const getTopHeroesForTeam = (teamId: string) => {
+    const teamStats = playerStats.filter(stat => stat.team_id === teamId);
+    const heroCounts: Record<string, number> = {};
+    teamStats.forEach(stat => {
+      if (stat.hero_id) {
+        heroCounts[stat.hero_id] = (heroCounts[stat.hero_id] || 0) + 1;
+      }
+    });
+    const sortedHeroes = Object.entries(heroCounts).sort((a, b) => b[1] - a[1]);
+    return sortedHeroes.map(([heroId, count]) => ({ heroId, count }));
+  };
+
+  // ─── Helper: Get hero name from ID ───
+  const getHeroName = (heroId: string) => {
+    const hero = playerStats.find(stat => stat.hero_id === heroId);
+    return hero ? hero.hero_name : 'Unknown Hero';
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h3 className="text-xl sm:text-2xl font-bold text-foreground">
+          Final Standings
+          <span className="text-muted-foreground text-sm sm:text-base font-normal ml-2">
+            {teams.length} team{teams.length !== 1 ? 's' : ''}
+          </span>
+        </h3>
+        {isOwner && (
+          <div className="flex gap-2">
+            <Button onClick={() => setShowEditTeamModal(true)} className="bg-[#8b5cf6] hover:bg-[#7c3aed] text-white font-bold rounded-xl shadow-lg">
+              <Plus className="w-4 h-4 mr-2" /> Edit Teams
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Teams Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {teams.map((team: any) => (
+          <div key={team.id} className={`bg-card rounded-xl border-2 overflow-hidden transition-all ${team.approval_status === 'ready' ? 'border-harvest/50 shadow-lg shadow-harvest/10' : 'border-border'}`}>
+            {/* Brown Header */}
+            <div className="bg-gradient-to-r from-soil to-[#1e293b] p-3 sm:p-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                  <TeamLogo logoUrl={team.logo_url} teamName={team.team_name} size="lg" />
+                  <CoachHeadsetAvatar coach={team.coach} coachData={teamCoachData[team.id]} size={36} />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h4 className="text-lg sm:text-xl font-bold text-white truncate">{team.team_name}</h4>
+                      {team.team_tag && <span className="text-white/50 text-sm font-mono">[{team.team_tag}]</span>}
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-black uppercase tracking-wider flex items-center gap-1 ${
+                        team.approval_status === 'ready'
+                          ? 'bg-harvest/20 text-harvest'
+                          : 'bg-white/10 text-white/40'
+                      }`}>
+                        {team.approval_status === 'ready' ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3" />}
+                        {team.approval_status === 'ready' ? 'Locked' : 'Unlocked'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-white/60 mt-1 flex-wrap">
+                      <span className="flex items-center gap-1"><Gamepad2 className="w-3.5 h-3.5 text-white/40" /><span className="text-white/80">{team.roster_count}/{team.min_team_size}</span></span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <RankBadge medal={team.rank_medal || 'Unranked'} stars={team.rank_stars || 0} size="lg" />
+                  <div className="text-center">
+                    <p className="text-[10px] sm:text-xs text-white/50 font-semibold mb-0.5">Team Rank</p>
+                    <p className="text-sm font-black" style={{ color: getMedalColor(team.rank_medal || 'Unranked') }}>
+                      {team.rank_display || 'Unranked'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="p-4 sm:p-5 space-y-5">
+              {/* Top Heroes */}
+              <div className="space-y-2">
+                <h5 className="text-sm font-bold text-muted-foreground uppercase tracking-wide">Top Heroes</h5>
+                {loadingRosters ? (
+                  <div className="flex items-center justify-center py-6"><Loader2 className="w-6 h-6 text-muted-foreground animate-spin" /></div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+                    {getTopHeroesForTeam(team.id).map(({ heroId, count }) => (
+                      <div key={heroId} className="bg-[#f59e0b]/5 border border-[#f59e0b]/20 rounded-xl p-2.5 flex items-center justify-between">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <img src={getHeroImageUrl(heroId)} alt={getHeroName(heroId)} className="w-7 h-7 rounded-full border border-border flex-shrink-0" width={28} height={28} />
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-foreground truncate">{getHeroName(heroId)}</p>
+                            <p className="text-[10px] text-[#f59e0b] font-semibold">Played {count} time{count > 1 ? 's' : ''}</p>
+                          </div>
+                        </div>
+                        <button onClick={() => {
+                          setSelectedTeamId(team.id);
+                          setSelectedHeroId(heroId);
+                          setActiveTab('players');
+                          setPlayersSubTab('all');
+                        }} className="text-muted-foreground hover:text-[#ef4444] transition-colors p-1.5 rounded-lg hover:bg-[#ef4444]/10" title="View hero stats">
+                          <Gamepad2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

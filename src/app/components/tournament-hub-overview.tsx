@@ -10,8 +10,8 @@ import { useMemo, useState, useRef, useEffect } from 'react';
 import {
   Users, Trophy, Shield, UserMinus, Loader2,
   Star, Briefcase, Swords, GraduationCap, Headphones, Clock, Plus,
-  History,
-} from 'lucide-react';
+  History, Crown, Youtube,
+} from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import {
   CountdownSection, WinnerBanner, AnimatedSection,
@@ -26,6 +26,10 @@ import { TcfPlusAvatarRing } from '@/app/components/tcf-plus-avatar-ring';
 import { TcfPlusBadge } from '@/app/components/tcf-plus-badge';
 import { RankBadge } from '@/app/components/rank-badge';
 import { DonatePrizePoolModal } from '@/app/components/donate-prize-pool-modal';
+import { TeamLogo } from '@/app/components/team-logo';
+import { TournamentTopPlayers } from '@/app/components/tournament-top-players';
+import { TournamentHeroStats } from '@/app/components/tournament-hero-stats';
+import { TrophyImage } from '@/app/components/trophy-image';
 
 // ═════════════════════════════════════════════════════
 // PROGRESS CARD
@@ -149,18 +153,20 @@ export interface TournamentHubOverviewProps {
   // Loading states
   registering: boolean;
   withdrawing: boolean;
-  sendingInvite: string | null;
-  respondingInvite: string | null;
-  // Setters
-  setActiveTab: (tab: 'overview' | 'players' | 'teams' | 'matches' | 'staff' | 'gallery') => void;
-  setPlayersSubTab: (tab: 'all' | 'free_agents' | 'coaches') => void;
-  setSelectedPlayer: (reg: any) => void;
-  setShowCreateTeam: (show: boolean) => void;
-  setShowExistingTeam: (show: boolean) => void;
+  // Tab navigation
+  setActiveTab: (tab: any) => void;
   setShowStaffModal: (show: boolean) => void;
   // Choose Your Path
   tournamentId: string;
   isRankIneligible: boolean;
+  // NEW: Finished tournament props
+  teams?: any[];
+  playerStats?: any[];
+  heroBans?: Record<number, number>;
+  getKKupNumber?: (t: any | null) => string | null;
+  setShowCreateTeam?: (show: boolean) => void;
+  setShowExistingTeam?: (show: boolean) => void;
+  setSelectedPlayer?: (player: any) => void;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -179,7 +185,22 @@ export function TournamentHubOverview(props: TournamentHubOverviewProps) {
     handleWithdrawStaffApp,
     setShowCreateTeam, setShowExistingTeam,
     setSelectedPlayer,
+    teams, playerStats, heroBans, getKKupNumber,
   } = props;
+
+  // ── FINISHED TOURNAMENT: Show final standings, winners, stats, movie ──
+  if (isFinished && teams && playerStats) {
+    return <FinishedOverview
+      tournament={tournament}
+      teams={teams}
+      playerStats={playerStats}
+      heroBans={heroBans || {}}
+      getKKupNumber={getKKupNumber}
+      setActiveTab={setActiveTab}
+    />;
+  }
+
+  // ── ACTIVE TOURNAMENT: Show phase-driven overview sections ──
 
   const totalActive = registrations?.summary?.total_active || 0;
   const staffNeeded = (tournament.casters_needed || 0) + (tournament.staff_needed || 0);
@@ -909,6 +930,189 @@ function TeamChoiceDropdown({
           <p className="text-[10px] text-muted-foreground">Register a team you already captain</p>
         </div>
       </button>
+    </div>
+  );
+}
+
+// ── Finished Tournament Overview ──
+function FinishedOverview({
+  tournament, teams, playerStats, heroBans, getKKupNumber, setActiveTab,
+}: {
+  tournament: any;
+  teams: any[];
+  playerStats: any[];
+  heroBans: Record<number, number>;
+  getKKupNumber: (t: any | null) => string | null;
+  setActiveTab: (tab: any) => void;
+}) {
+  const [selectedTeam, setSelectedTeam] = useState<any>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
+
+  // ── Team Selection ──
+  const handleSelectTeam = (team: any) => {
+    setSelectedTeam(team);
+    setSelectedPlayer(null);
+    setActiveTab('teams');
+  };
+
+  // ── Player Selection ──
+  const handleSelectPlayer = (player: any) => {
+    setSelectedPlayer(player);
+    setSelectedTeam(null);
+    setActiveTab('players');
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* ── Tournament Summary ── */}
+      <div className="bg-card rounded-2xl border-2 border-border p-5">
+        <h3 className="text-lg font-bold text-foreground mb-2">Tournament Summary</h3>
+        <p className="text-sm text-muted-foreground">
+          {tournament.name} concluded on {new Date(tournament.end_date).toLocaleDateString()}.
+          {tournament.winner && (
+            <> The winner was {tournament.winner}.</>
+          )}
+        </p>
+      </div>
+
+      {/* ── Top Teams ── */}
+      <div className="bg-card rounded-2xl border-2 border-border p-5">
+        <h3 className="text-lg font-bold text-foreground mb-2">Top Teams</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {teams.slice(0, 4).map((team: any) => (
+            <button
+              key={team.team_id}
+              onClick={() => handleSelectTeam(team)}
+              className="bg-card rounded-xl border-2 border-border p-3 sm:p-4 flex flex-col items-center text-center hover:border-harvest/50 transition-all cursor-pointer group"
+            >
+              {/* Team Logo */}
+              <TeamLogo
+                teamId={team.team_id}
+                size="sm"
+                className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-border group-hover:border-harvest/30 transition-colors"
+              />
+              {/* Team Name */}
+              <p className="font-bold text-foreground text-xs sm:text-sm truncate">{team.team_name}</p>
+              {/* Team Rank */}
+              <span className="text-[10px] text-muted-foreground mt-1.5">
+                Rank {team.rank}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Top Players ── */}
+      <div className="bg-card rounded-2xl border-2 border-border p-5">
+        <h3 className="text-lg font-bold text-foreground mb-2">Top Players</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {playerStats.slice(0, 4).map((player: any) => (
+            <button
+              key={player.player_id}
+              onClick={() => handleSelectPlayer(player)}
+              className="bg-card rounded-xl border-2 border-border p-3 sm:p-4 flex flex-col items-center text-center hover:border-harvest/50 transition-all cursor-pointer group"
+            >
+              {/* Avatar */}
+              <TcfPlusAvatarRing active={player.tcf_plus_active} size="sm">
+                {player.avatar_url ? (
+                  <img
+                    src={player.avatar_url}
+                    alt={player.display_name}
+                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-border group-hover:border-harvest/30 transition-colors"
+                    width={56} height={56}
+                  />
+                ) : (
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-muted border-2 border-border flex items-center justify-center group-hover:border-harvest/30 transition-colors">
+                    <span className="text-base sm:text-lg font-black text-muted-foreground">{player.display_name.charAt(0).toUpperCase()}</span>
+                  </div>
+                )}
+              </TcfPlusAvatarRing>
+              {/* Name + TCF+ badge */}
+              <div className="flex items-center gap-1 mt-2 justify-center w-full">
+                <p className="font-bold text-foreground text-xs sm:text-sm truncate">{player.display_name}</p>
+                {player.tcf_plus_active && <TcfPlusBadge size="xs" />}
+              </div>
+              {/* Rank badge */}
+              {player.rank && (
+                <RankBadge
+                  medal={player.rank.medal}
+                  stars={player.rank.stars}
+                  size="xs"
+                  className="mt-1"
+                />
+              )}
+              {/* Time ago */}
+              <span className="text-[10px] text-muted-foreground mt-1.5">
+                Rank {player.rank}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Hero Bans ── */}
+      {Object.keys(heroBans).length > 0 && (
+        <div className="bg-card rounded-2xl border-2 border-border p-5">
+          <h3 className="text-lg font-bold text-foreground mb-2">Hero Bans</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {Object.entries(heroBans).map(([heroId, count]) => (
+              <div key={heroId} className="bg-card rounded-xl border-2 border-border p-3 sm:p-4 flex flex-col items-center text-center hover:border-harvest/50 transition-all cursor-pointer group">
+                {/* Hero Image */}
+                <img
+                  src={`https://api.opendota.com/apps/dota2/images/heroes/${heroId}.png`}
+                  alt={`Hero ${heroId}`}
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-border group-hover:border-harvest/30 transition-colors"
+                  width={56} height={56}
+                />
+                {/* Hero Name */}
+                <p className="font-bold text-foreground text-xs sm:text-sm truncate">Hero {heroId}</p>
+                {/* Ban Count */}
+                <span className="text-[10px] text-muted-foreground mt-1.5">
+                  {count} bans
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Tournament Stats ── */}
+      <div className="bg-card rounded-2xl border-2 border-border p-5">
+        <h3 className="text-lg font-bold text-foreground mb-2">Tournament Stats</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="bg-card rounded-xl border-2 border-border p-3 sm:p-4 flex flex-col items-center text-center hover:border-harvest/50 transition-all cursor-pointer group">
+            <TrophyImage size="sm" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-border group-hover:border-harvest/30 transition-colors" />
+            <p className="font-bold text-foreground text-xs sm:text-sm truncate">Total Wins</p>
+            <span className="text-[10px] text-muted-foreground mt-1.5">
+              {tournament.total_wins}
+            </span>
+          </div>
+          <div className="bg-card rounded-xl border-2 border-border p-3 sm:p-4 flex flex-col items-center text-center hover:border-harvest/50 transition-all cursor-pointer group">
+            <Users size="sm" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-border group-hover:border-harvest/30 transition-colors" />
+            <p className="font-bold text-foreground text-xs sm:text-sm truncate">Total Players</p>
+            <span className="text-[10px] text-muted-foreground mt-1.5">
+              {tournament.total_players}
+            </span>
+          </div>
+          <div className="bg-card rounded-xl border-2 border-border p-3 sm:p-4 flex flex-col items-center text-center hover:border-harvest/50 transition-all cursor-pointer group">
+            <Clock size="sm" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-border group-hover:border-harvest/30 transition-colors" />
+            <p className="font-bold text-foreground text-xs sm:text-sm truncate">Duration</p>
+            <span className="text-[10px] text-muted-foreground mt-1.5">
+              {tournament.duration}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Tournament Movie ── */}
+      {tournament.movie_url && (
+        <div className="bg-card rounded-2xl border-2 border-border p-5">
+          <h3 className="text-lg font-bold text-foreground mb-2">Tournament Movie</h3>
+          <div className="relative w-full rounded-xl overflow-hidden bg-black" style={{ paddingTop: '56.25%' }}>
+            <iframe src={tournament.movie_url} className="absolute inset-0 w-full h-full" allowFullScreen allow="autoplay; encrypted-media" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
