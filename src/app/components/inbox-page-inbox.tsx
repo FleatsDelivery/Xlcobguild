@@ -10,7 +10,7 @@ import {
   Inbox, Bell, Loader2, CheckCircle, XCircle, Filter,
   UserPlus, Star, Gift, Trophy, Shield, ExternalLink,
   AlertTriangle, Eye, Trash2, ArrowRight, DollarSign,
-} from 'lucide-react';
+} from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { timeAgo } from '@/lib/date-utils';
 import { getNotificationConfig, type TypeDisplayConfig } from '@/app/components/inbox-activity-config';

@@ -39,6 +39,7 @@ export {
   CheckIcon,
   Check,
   CheckCircle,
+  CheckCircle2,
   XCircle,
   Info,
   

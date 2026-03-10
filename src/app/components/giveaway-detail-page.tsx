@@ -10,11 +10,10 @@ import {
   Gift, ArrowLeft, Users, Trophy, Clock, Loader2, AlertCircle, Check,
   LogOut, Timer, Crown, Star, ChevronDown, ChevronUp, Pencil, Trash2, CheckCircle2,
   Globe, Lock,
-} from 'lucide-react';
+} from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { projectId } from '/utils/supabase/info';
 import { toast } from 'sonner';
-import { motion } from 'motion/react';
 import { formatDate, timeAgo } from '@/lib/date-utils';
 import { isOfficer } from '@/lib/roles';
 import { CreateGiveawayModal } from '@/app/components/create-giveaway-modal';
@@ -33,7 +32,7 @@ import {
   type GiveawayPhase,
 } from './giveaway-state-config';
 
-// ══════════════════════════════════════���═══════════════
+// ═════════════════════════════════════════════════════
 // COUNTDOWN HOOK
 // ═══════════════════════════════════════════════════════
 
@@ -555,29 +554,19 @@ export function GiveawayDetailPage({ id, user, accessToken }: GiveawayDetailPage
 
         {/* ── Winners Section (drawn/completed) ── */}
         {showWinners && winners.length > 0 && (
-          <motion.div
-            className="mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          >
+          <div className="mb-6">
             <h2 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3 flex items-center gap-2 font-['Inter']">
               <Trophy className="w-4 h-4 text-harvest" />
               Winners
             </h2>
             <div className="bg-card rounded-2xl border-2 border-harvest/30 p-4 space-y-1" style={{ boxShadow: '0 0 24px rgba(214, 166, 21, 0.15)' }}>
-              {winners.map((entry, i) => (
-                <motion.div
-                  key={entry.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: i * 0.15, ease: 'easeOut' }}
-                >
+              {winners.map((entry) => (
+                <div key={entry.id}>
                   <EntrantRow entry={entry} />
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* ── Entrants Section ── */}

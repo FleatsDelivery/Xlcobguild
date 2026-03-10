@@ -32,11 +32,10 @@
  *   </BottomSheetModal>
  */
 
-import { useEffect, Children, cloneElement, isValidElement, type ReactNode } from 'react';
-import { motion } from 'motion/react';
+import { useEffect, Children, cloneElement, isValidElement, type ReactNode, useState } from 'react';
 import { X } from '@/lib/icons';
 
-// ════════════════════════════════════════════��══════════
+// ══════════════════════════════════════════════════════
 // TYPES
 // ═══════════════════════════════════════════════════════
 
@@ -138,6 +137,12 @@ export function BottomSheetModal({
   maxWidth = 'max-w-2xl',
   zIndex = 'z-40',
 }: BottomSheetModalProps) {
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  // Trigger entrance animation on mount
+  useEffect(() => {
+    setIsAnimating(true);
+  }, []);
 
   // Escape key listener
   useEffect(() => {
@@ -164,32 +169,19 @@ export function BottomSheetModal({
   return (
     <div className={`fixed inset-0 ${zIndex} flex flex-col justify-end`}>
       {/* Backdrop */}
-      <motion.div
-        className="absolute inset-0 bg-black/50"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
+      <div
+        className={`absolute inset-0 bg-black/50 transition-opacity duration-200 ${isAnimating ? 'opacity-100' : 'opacity-0'}`}
         onClick={onClose}
       />
 
-      {/* Card — springs up from behind the bottom nav */}
-      <motion.div
-        className={`relative w-full ${maxWidth} mx-auto`}
-        initial={{ y: '100%' }}
-        animate={{ y: 0 }}
-        exit={{ y: '100%' }}
-        transition={{
-          type: 'spring',
-          stiffness: 300,
-          damping: 24,
-          mass: 0.8,
-        }}
+      {/* Card — slides up from bottom */}
+      <div
+        className={`relative w-full ${maxWidth} mx-auto transition-transform duration-300 ease-out ${isAnimating ? 'translate-y-0' : 'translate-y-full'}`}
       >
         <div className="bg-card rounded-t-3xl shadow-2xl max-h-[90vh] sm:max-h-[85vh] flex flex-col overflow-hidden mx-0 sm:mx-4 sm:pb-20">
           {enhancedChildren}
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
