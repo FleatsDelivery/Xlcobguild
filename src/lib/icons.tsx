@@ -42,6 +42,7 @@ export {
   CheckCircle2,
   XCircle,
   Info,
+  Bell,
   
   // Actions
   Plus,
