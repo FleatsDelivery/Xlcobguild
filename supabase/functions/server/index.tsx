@@ -38,10 +38,8 @@ import { registerStripeRoutes } from "./routes-stripe.ts";
 import { registerConnectRoutes } from "./routes-connect.ts";
 
 import { registerPracticeTourneyRoutes } from "./routes-practice-tourney.ts";
-import { registerCooksNCobsRoutes } from "./routes-cooks-n-cobs.ts";
 
 import { registerDiscordCommandsRoute } from "./routes-discord-register.ts";
-import { registerConfigRoutes } from "./routes-config.ts";
 
 import { registerGuildRoutes } from "./routes-guilds.ts";
 import { registerSeasonRoutes } from "./routes-seasons.ts";
@@ -135,8 +133,6 @@ registerPrintfulRoutes(app, supabase, anonSupabase);
 registerStripeRoutes(app, supabase, anonSupabase);
 registerConnectRoutes(app, supabase, anonSupabase);
 registerPracticeTourneyRoutes(app, supabase, anonSupabase);
-registerCooksNCobsRoutes(app, supabase, anonSupabase);
-registerConfigRoutes(app, supabase, anonSupabase);
 registerDiscordCommandsRoute(app);
 registerGuildRoutes(app, supabase, anonSupabase);
 registerSeasonRoutes(app, supabase, anonSupabase);

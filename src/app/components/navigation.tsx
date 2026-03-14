@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Home, BookOpen, User, LogOut, Menu, X, Crown, Gift, Swords, Inbox, Trophy, ShieldAlert, ShoppingBag, FileText, Shield, ChefHat } from '@/lib/icons';
+import { Home, BookOpen, User, LogOut, Menu, X, Crown, Gift, Swords, Inbox, Trophy, ShieldAlert, ShoppingBag, FileText, Shield } from '@/lib/icons';
 import { supabase } from '@/lib/supabase';
 import { getRoleDisplayName, isOfficer } from '@/lib/roles';
 import { ConfirmModal } from '@/app/components/confirm-modal';
@@ -39,7 +39,7 @@ function injectLogoGlowKeyframes() {
   document.head.appendChild(style);
 }
 
-type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup' | 'logo-management' | 'steam-research' | 'practice' | 'hall-of-fame' | 'csv-import' | 'tournament-hub' | 'officer' | 'officer-inbox' | 'giveaways' | 'giveaway-detail' | 'secret-shop' | 'terms' | 'privacy' | 'transparency' | 'cooks-n-cobs';
+type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup' | 'logo-management' | 'steam-research' | 'practice' | 'hall-of-fame' | 'csv-import' | 'tournament-hub' | 'officer' | 'officer-inbox' | 'giveaways' | 'giveaway-detail' | 'secret-shop' | 'terms' | 'privacy' | 'transparency';
 
 /**
  * Maps any PageType to the nav item that should be highlighted.
@@ -135,7 +135,6 @@ export function Navigation({ currentPage, onNavigate, onHallOfFameNavigate, user
     { page: 'hall-of-fame' as PageType, icon: Trophy, label: 'Hall of Fame' },
     { page: 'giveaways', icon: Gift, label: 'Giveaways' },
     { page: 'secret-shop', icon: ShoppingBag, label: 'Secret Shop' },
-    { page: 'cooks-n-cobs' as PageType, icon: ChefHat, label: 'Cooks n Cobs' },
     { page: 'requests', icon: Inbox, label: 'Inbox', badge: pendingRequestsCount },
     { page: 'profile', icon: User, label: 'Profile' },
   ];

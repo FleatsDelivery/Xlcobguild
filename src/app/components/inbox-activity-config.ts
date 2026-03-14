@@ -128,17 +128,8 @@ export const ACTIVITY_TYPE_CONFIG: Record<string, TypeDisplayConfig> = {
   shop_order_placed:        { label: 'Order Placed',           icon: 'ShoppingBag',  color: '#10b981' },
   payment_completed:        { label: 'Payment',                icon: 'CreditCard',   color: '#10b981' },
 
-  // Cooks n Cobs recipes
-  recipe_created:           { label: 'Recipe Published',       icon: 'ChefHat',      color: '#d6a615' },
-  recipe_updated:           { label: 'Recipe Updated',         icon: 'ChefHat',      color: '#3b82f6' },
-  recipe_deleted:           { label: 'Recipe Deleted',         icon: 'ChefHat',      color: '#ef4444' },
-
   // Prize awards (Money OUT)
   prize_awarded:            { label: 'Prize Awarded',          icon: 'DollarSign',   color: '#d6a615' },
-  prize_accepted:           { label: 'Prize Accepted',         icon: 'CheckCircle',  color: '#10b981' },
-  prize_declined:           { label: 'Prize Declined',         icon: 'XCircle',      color: '#ef4444' },
-  prize_paid:               { label: 'Prize Paid',             icon: 'Banknote',     color: '#10b981' },
-  prize_revoked:            { label: 'Prize Revoked',          icon: 'XCircle',      color: '#ef4444' },
 };
 
 // ── Fallback config ──────────────────────────────────────────────────

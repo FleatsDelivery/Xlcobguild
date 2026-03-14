@@ -158,7 +158,7 @@ export async function handleGuildWars(body: any, supabase: any): Promise<Respons
       data: {
         embeds: [{
           title: '⚔️ Guild Wars Leaderboard',
-          description: `—— Top 3 Ranked Cobs ——\n${topUserLines.join('\n')}`,
+          description: `—— Top 3 Ranked Members ——\n${topUserLines.join('\n')}`,
           fields: restUserLines.length > 0 ? [{
             name: '——————————————————',
             value: restUserLines.join('\n'),

@@ -36,9 +36,8 @@ import { SecretShopPage } from '@/app/components/secret-shop-page';
 import { TermsOfServicePage } from '@/app/components/terms-of-service-page';
 import { PrivacyPolicyPage } from '@/app/components/privacy-policy-page';
 import { TransparencyPage } from '@/app/components/transparency-page';
-import { CooksNCobsPage } from '@/app/components/cooks-n-cobs-page';
 
-type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup' | 'logo-management' | 'steam-research' | 'practice' | 'hall-of-fame' | 'csv-import' | 'tournament-hub' | 'officer' | 'officer-inbox' | 'giveaways' | 'giveaway-detail' | 'secret-shop' | 'terms' | 'privacy' | 'transparency' | 'cooks-n-cobs';
+type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup' | 'logo-management' | 'steam-research' | 'practice' | 'hall-of-fame' | 'csv-import' | 'tournament-hub' | 'officer' | 'officer-inbox' | 'giveaways' | 'giveaway-detail' | 'secret-shop' | 'terms' | 'privacy' | 'transparency';
 
 // Mock user data for development mode
 const MOCK_USER = {
@@ -94,7 +93,6 @@ const hashToPage = (hash: string): PageType => {
   if (hash === '#terms') return 'terms';
   if (hash === '#privacy') return 'privacy';
   if (hash === '#transparency') return 'transparency';
-  if (hash === '#cooks-n-cobs') return 'cooks-n-cobs';
   return 'home';
 };
 
@@ -575,7 +573,6 @@ export default function App() {
         {currentPage === 'terms' && <TermsOfServicePage />}
         {currentPage === 'privacy' && <PrivacyPolicyPage />}
         {currentPage === 'transparency' && <TransparencyPage />}
-        {currentPage === 'cooks-n-cobs' && <CooksNCobsPage user={user} />}
       </main>
 
       {/* Hall of Fame Stinger - renders on top of everything */}

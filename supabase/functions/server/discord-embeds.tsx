@@ -30,7 +30,7 @@ export async function sendWebhookEmbed(webhookUrl: string, embed: any, content?:
 
 // ═══════════════════════════════════════════════════════
 // KKUP REGISTRATION EMBED (new + re-registration)
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 
 // Consistent role emoji mapping — matches frontend (tournament-hub-staff-modal.tsx)
 const ROLE_EMOJIS: Record<string, { emoji: string; label: string }> = {
@@ -375,7 +375,7 @@ export function buildPopdKernelEmbed(opts: {
 }) {
   const title = `🍿✨ POP'D KERNEL AWARD! ✨🍿`;
   const winnerLines = opts.winners.map((w, i) => {
-    const medal = i === 0 ? '��' : '🥈';
+    const medal = i === 0 ? '' : '🥈';
     const mention = w.discordId ? `<@${w.discordId}>` : w.name;
     return `${medal} ${mention}`;
   });
@@ -436,12 +436,6 @@ export function buildNewRecipeEmbed(opts: {
   if (opts.ingredientCount && opts.ingredientCount > 0) {
     fields.push({ name: '🥘 Ingredients', value: `${opts.ingredientCount} items`, inline: true });
   }
-
-  fields.push({
-    name: '\u200B',
-    value: `🌐 [Check it out on Cooks n Cobs!](${SITE_URL}/#cooks-n-cobs)`,
-    inline: false,
-  });
 
   // discord_avatar is already a full URL from Supabase Auth metadata
   const avatarUrl = opts.authorAvatar || undefined;

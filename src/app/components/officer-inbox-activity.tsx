@@ -9,7 +9,7 @@ import {
   Shield, AlertTriangle, CheckCircle, XCircle, UserCog, Crown, Trophy,
   Gift, FileText, LogIn, Users, DollarSign, Sparkles, Filter, Trash2,
   UserMinus, Lock, Star, ShieldAlert, Settings, TrendingUp, Upload, Wrench,
-  Ticket, CalendarClock, Package, Banknote, ChefHat, Lightbulb, Bug,
+  Ticket, CalendarClock, Package, Banknote, Lightbulb, Bug,
   MessageSquare, GitBranch, Activity, Clock, Loader2, ArrowRight, UserPlus,
 } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
@@ -112,8 +112,8 @@ const ADMIN_TYPE_CONFIG: Record<string, { label: string; icon: React.ElementType
   prize_disbursed:    { label: 'Prize Disbursed',      icon: Banknote,    color: '#10b981' },
   prize_revoked:      { label: 'Prize Revoked',        icon: XCircle,     color: '#ef4444' },
   // Cooks n Cobs recipes (officer actions)
-  recipe_deleted:     { label: 'Recipe Deleted',       icon: ChefHat,     color: '#ef4444' },
-  recipe_featured:    { label: 'Recipe Featured',      icon: ChefHat,     color: '#d6a615' },
+  recipe_deleted:     { label: 'Recipe Deleted',       icon: Lightbulb,     color: '#ef4444' },
+  recipe_featured:    { label: 'Recipe Featured',      icon: Lightbulb,     color: '#d6a615' },
   // Discord feedback commands
   suggestion:         { label: 'Suggestion',           icon: Lightbulb,   color: '#d6a615' },
   report_bug:         { label: 'Bug Report',           icon: Bug,         color: '#f59e0b' },
