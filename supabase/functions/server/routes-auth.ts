@@ -67,7 +67,7 @@ export function registerAuthRoutes(app: Hono, supabase: any, anonSupabase: any) 
         };
 
         // If email matches owner email and user is not already owner, upgrade them
-        if (discord_email === 'tmull_23@hotmail.com' && existingUser.role !== 'owner') {
+        if (discord_email === Deno.env.get('OWNER_EMAIL') && existingUser.role !== 'owner') {
           updateData.role = 'owner';
           console.log('EXISTING USER UPGRADED TO OWNER');
         }
@@ -107,7 +107,7 @@ export function registerAuthRoutes(app: Hono, supabase: any, anonSupabase: any) 
 
       // Determine role based on email - check if this is the owner
       let role = 'guest';
-      if (discord_email === 'tmull_23@hotmail.com') {
+      if (discord_email === Deno.env.get('OWNER_EMAIL')) {
         role = 'owner';
         console.log('OWNER ACCOUNT DETECTED - Setting role to owner');
       }
