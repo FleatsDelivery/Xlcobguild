@@ -123,9 +123,9 @@ export function registerAdminImportRoutes(app: Hono, supabase: any, anonSupabase
           const { data: dbMatch } = await supabase.from('kkup_matches').insert({
             tournament_id: kkupId, match_id: match.match_id, series_id: result.series_id || null, series_type: result.series_type || null,
             team1_id: radiantDbTeam?.id, team2_id: direDbTeam?.id, radiant_team_id: result.radiant_team_id, dire_team_id: result.dire_team_id,
-            winner_team_id: result.radiant_win ? radiantDbTeam?.id : direDbTeam?.id,
+            winning_team_id: result.radiant_win ? radiantDbTeam?.id : direDbTeam?.id,
             team1_score: result.radiant_win ? 1 : 0, team2_score: result.radiant_win ? 0 : 1,
-            radiant_win: result.radiant_win, duration: result.duration, status: 'completed', stage: 'playoffs',
+            duration: result.duration, status: 'completed', stage: 'playoffs',
             dotabuff_url: `https://www.dotabuff.com/matches/${match.match_id}`,
             scheduled_time: new Date(match.start_time * 1000).toISOString(), opendota_fetched: false
           }).select().single();
@@ -145,14 +145,28 @@ export function registerAdminImportRoutes(app: Hono, supabase: any, anonSupabase
                 }
                 if (!profile) continue;
                 const isRadiant = player.player_slot < 128;
-                await supabase.from('kkup_player_match_stats').insert({
-                  match_id: dbMatch.id, person_id: profile.id, team_id: isRadiant ? radiantDbTeam?.id : direDbTeam?.id,
-                  hero: getHeroName(player.hero_id || 0),
-                  kills: player.kills || 0, deaths: player.deaths || 0, assists: player.assists || 0,
-                  last_hits: player.last_hits || 0, denies: player.denies || 0,
-                  gpm: player.gold_per_min || 0, xpm: player.xp_per_min || 0,
-                  net_worth: player.total_gold || 0,
-                });
+                 const playerTeamId = isRadiant ? radiantDbTeam?.id : direDbTeam?.id;
+                 const isWinner = isRadiant ? (result.radiant_win === true) : (result.radiant_win === false);
+                 await supabase.from('kkup_player_match_stats').insert({
+                   match_id: dbMatch.id, person_id: profile.id, team_id: playerTeamId,
+                   hero: getHeroName(player.hero_id || 0),
+                   kills: player.kills || 0, deaths: player.deaths || 0, assists: player.assists || 0,
+                   last_hits: player.last_hits || 0, denies: player.denies || 0,
+                   gpm: player.gold_per_min || 0, xpm: player.xp_per_min || 0,
+                   net_worth: player.total_gold || 0,
+                   is_winner: isWinner,
+                   hero_damage: player.hero_damage || 0,
+                   tower_damage: player.tower_damage || 0,
+                   hero_healing: player.hero_healing || 0,
+                   level: player.level || 0,
+                   item_0: player.item_0 || 0,
+                   item_1: player.item_1 || 0,
+                   item_2: player.item_2 || 0,
+                   item_3: player.item_3 || 0,
+                   item_4: player.item_4 || 0,
+                   item_5: player.item_5 || 0,
+                   item_neutral: player.item_neutral || 0,
+                 });
               }
             }
           }
@@ -347,8 +361,8 @@ export function registerAdminImportRoutes(app: Hono, supabase: any, anonSupabase
             duration_seconds: result.duration || 0, scheduled_time: new Date(result.start_time * 1000).toISOString(),
             radiant_team_id: radiantDbTeam?.id, dire_team_id: direDbTeam?.id,
             team1_id: radiantDbTeam?.id, team2_id: direDbTeam?.id,
-            winner_team_id: result.radiant_win ? radiantDbTeam?.id : direDbTeam?.id,
-            radiant_win: result.radiant_win || false, radiant_score: result.radiant_score || 0, dire_score: result.dire_score || 0,
+            winning_team_id: result.radiant_win ? radiantDbTeam?.id : direDbTeam?.id,
+            radiant_score: result.radiant_score || 0, dire_score: result.dire_score || 0,
             team1_score: result.radiant_score || 0, team2_score: result.dire_score || 0,
             stage: 'tournament', status: 'completed', imported_at: new Date().toISOString()
           }).select().single();
@@ -369,14 +383,28 @@ export function registerAdminImportRoutes(app: Hono, supabase: any, anonSupabase
                 }
                 if (!profile) continue;
                 const isRadiant = player.player_slot < 128;
-                await supabase.from('kkup_player_match_stats').insert({
-                  match_id: dbMatch.id, person_id: profile.id, team_id: isRadiant ? radiantDbTeam?.id : direDbTeam?.id,
-                  hero: getHeroName(player.hero_id || 0),
-                  kills: player.kills || 0, deaths: player.deaths || 0, assists: player.assists || 0,
-                  last_hits: player.last_hits || 0, denies: player.denies || 0,
-                  gpm: player.gold_per_min || 0, xpm: player.xp_per_min || 0,
-                  net_worth: player.total_gold || 0,
-                });
+                 const playerTeamId = isRadiant ? radiantDbTeam?.id : direDbTeam?.id;
+                 const isWinner = isRadiant ? (result.radiant_win === true) : (result.radiant_win === false);
+                 await supabase.from('kkup_player_match_stats').insert({
+                   match_id: dbMatch.id, person_id: profile.id, team_id: playerTeamId,
+                   hero: getHeroName(player.hero_id || 0),
+                   kills: player.kills || 0, deaths: player.deaths || 0, assists: player.assists || 0,
+                   last_hits: player.last_hits || 0, denies: player.denies || 0,
+                   gpm: player.gold_per_min || 0, xpm: player.xp_per_min || 0,
+                   net_worth: player.total_gold || 0,
+                   is_winner: isWinner,
+                   hero_damage: player.hero_damage || 0,
+                   tower_damage: player.tower_damage || 0,
+                   hero_healing: player.hero_healing || 0,
+                   level: player.level || 0,
+                   item_0: player.item_0 || 0,
+                   item_1: player.item_1 || 0,
+                   item_2: player.item_2 || 0,
+                   item_3: player.item_3 || 0,
+                   item_4: player.item_4 || 0,
+                   item_5: player.item_5 || 0,
+                   item_neutral: player.item_neutral || 0,
+                 });
               }
             }
           }
@@ -388,9 +416,13 @@ export function registerAdminImportRoutes(app: Hono, supabase: any, anonSupabase
       const teamRecords = new Map<string, { wins: number; losses: number }>();
       for (const [_, dbTeam] of teamMap.entries()) teamRecords.set(dbTeam.id, { wins: 0, losses: 0 });
       for (const m of (allTournamentMatches || [])) {
-        if (m.radiant_team_id && m.dire_team_id) {
-          if (m.radiant_win) { const r = teamRecords.get(m.radiant_team_id); if (r) r.wins++; const d = teamRecords.get(m.dire_team_id); if (d) d.losses++; }
-          else { const d = teamRecords.get(m.dire_team_id); if (d) d.wins++; const r = teamRecords.get(m.radiant_team_id); if (r) r.losses++; }
+        if (m.winning_team_id) {
+          const winner = teamRecords.get(m.winning_team_id);
+          if (winner) winner.wins++;
+          // Find the loser (the other team in the match)
+          const loserId = m.radiant_team_id === m.winning_team_id ? m.dire_team_id : m.radiant_team_id;
+          const loser = loserId ? teamRecords.get(loserId) : null;
+          if (loser) loser.losses++;
         }
       }
       for (const [teamId, record] of teamRecords.entries()) await supabase.from('kkup_teams').update({ wins: record.wins, losses: record.losses }).eq('id', teamId);

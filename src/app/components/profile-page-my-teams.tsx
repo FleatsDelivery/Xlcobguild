@@ -199,6 +199,7 @@ export function ProfilePageMyTeams({ user }: ProfilePageMyTeamsProps) {
               <TeamLogo
                 logoUrl={team.current_logo_url}
                 teamName={team.current_name}
+                teamTag={team.current_tag}
                 size="sm"
               />
 

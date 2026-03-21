@@ -285,7 +285,7 @@ export function registerStaffApplicationRoutes(app: Hono, supabase: any, anonSup
                   await supabase.from('kkup_team_rosters').delete().eq('person_id', person.id).in('team_id', teamIds);
                   await supabase.from('kkup_team_invites')
                     .update({ status: 'expired', updated_at: new Date().toISOString() })
-                    .eq('person_id', person.id).eq('status', 'pending').in('team_id', teamIds);
+                    .eq('invitee_person_id', person.id).eq('status', 'pending').in('team_id', teamIds);
                 }
               }
             }
@@ -330,13 +330,18 @@ export function registerStaffApplicationRoutes(app: Hono, supabase: any, anonSup
       let currentUserId: string | null = null;
       const accessToken = c.req.header('Authorization')?.split(' ')[1];
       if (accessToken) {
-        const { data: { user: authUser } } = await anonSupabase.auth.getUser(accessToken);
-        if (authUser) {
-          const { data: dbUser } = await supabase.from('users').select('id, role').eq('supabase_id', authUser.id).single();
-          if (dbUser) {
-            isOwnerOrOfficer = isOfficer(dbUser.role);
-            currentUserId = dbUser.id;
+        try {
+          const { data, error: authErr } = await anonSupabase.auth.getUser(accessToken);
+          const authUser = data?.user ?? null;
+          if (!authErr && authUser) {
+            const { data: dbUser } = await supabase.from('users').select('id, role').eq('supabase_id', authUser.id).single();
+            if (dbUser) {
+              isOwnerOrOfficer = isOfficer(dbUser.role);
+              currentUserId = dbUser.id;
+            }
           }
+        } catch (authLookupErr) {
+          console.warn('Non-critical: auth lookup failed in staff list endpoint:', authLookupErr);
         }
       }
 
@@ -694,7 +699,7 @@ export function registerStaffApplicationRoutes(app: Hono, supabase: any, anonSup
                   await supabase.from('kkup_team_rosters').delete().eq('person_id', person.id).in('team_id', teamIds);
                   await supabase.from('kkup_team_invites')
                     .update({ status: 'expired', updated_at: new Date().toISOString() })
-                    .eq('person_id', person.id).eq('status', 'pending').in('team_id', teamIds);
+                    .eq('invitee_person_id', person.id).eq('status', 'pending').in('team_id', teamIds);
                 }
               }
             }

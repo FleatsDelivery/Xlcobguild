@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { Home, BookOpen, User, LogOut, Menu, X, Crown, Gift, Swords, Inbox, Trophy, ShieldAlert, ShoppingBag, FileText, Shield } from '@/lib/icons';
-import { supabase } from '@/lib/supabase';
+import { Home, BookOpen, User, Menu, X, Crown, Gift, Swords, Inbox, Trophy, ShieldAlert, ShoppingBag, Upload } from '@/lib/icons';
 import { getRoleDisplayName, isOfficer } from '@/lib/roles';
-import { ConfirmModal } from '@/app/components/confirm-modal';
 import { TcfPlusAvatarRing } from '@/app/components/tcf-plus-avatar-ring';
+import { MvpSubmissionModal } from '@/app/components/mvp-submission-modal';
 
 const TCF_LOGO = 'https://zizrvkkuqzwzxgwpuvxb.supabase.co/storage/v1/object/public/tcf_branding/logo_no_bg.png';
 
@@ -39,6 +38,21 @@ function injectLogoGlowKeyframes() {
   document.head.appendChild(style);
 }
 
+// Guild rank emojis (1-11)
+const RANK_EMOJIS = [
+  '🐛', // 1. Earwig
+  '🦌', // 2. Ugandan Kob
+  '🌽', // 3. Private Maize
+  '🥄', // 4. Specialist Ingredient
+  '🍞', // 5. Corporal Corn Bread
+  '🌾', // 6. Sergeant Husk
+  '🌻', // 7. Sergeant Major Fields
+  '🎯', // 8. Captain Cornhole
+  '⭐', // 9. Major Cob
+  '🌟', // 10. Corn Star
+  '💥', // 11. Pop'd Kernel
+];
+
 type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup' | 'logo-management' | 'steam-research' | 'practice' | 'hall-of-fame' | 'csv-import' | 'tournament-hub' | 'officer' | 'officer-inbox' | 'giveaways' | 'giveaway-detail' | 'secret-shop' | 'terms' | 'privacy' | 'transparency';
 
 /**
@@ -72,7 +86,7 @@ interface NavigationProps {
 
 export function Navigation({ currentPage, onNavigate, onHallOfFameNavigate, user, pendingRequestsCount, officerPendingCount = 0 }: NavigationProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [showMvpModal, setShowMvpModal] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
   // Inject TCF+ logo glow keyframes once
@@ -85,16 +99,6 @@ export function Navigation({ currentPage, onNavigate, onHallOfFameNavigate, user
       ? user.discord_avatar
       : `https://cdn.discordapp.com/avatars/${user.discord_id}/${user.discord_avatar}.png?size=64`
     : null;
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    // Clear navigation persistence so logout lands on home
-    localStorage.removeItem('tcf_current_hash');
-    localStorage.removeItem('tcf_hash_timestamp');
-    localStorage.removeItem('tcf_last_login_time');
-    localStorage.removeItem('tcf_redirect_hash');
-    window.location.reload();
-  };
 
   const handleNavigate = (page: PageType) => {
     if (page === 'hall-of-fame') {
@@ -179,7 +183,7 @@ export function Navigation({ currentPage, onNavigate, onHallOfFameNavigate, user
           {/* Center: Text branding — absolutely positioned so it's always dead center */}
           <button
             onClick={() => handleNavigate('home')}
-            className="absolute inset-0 flex flex-col items-center justify-center hover:opacity-80 transition-opacity pointer-events-none"
+            className="hidden sm:flex absolute inset-0 flex-col items-center justify-center hover:opacity-80 transition-opacity pointer-events-none"
           >
             <p className={`pointer-events-auto text-xs sm:text-sm font-bold text-silk font-['Barlow_Semi_Condensed'] tracking-wide leading-tight ${user?.tcf_plus_active ? 'tcf-text-glow' : ''}`}>
               THE CORN FIELD
@@ -265,13 +269,6 @@ export function Navigation({ currentPage, onNavigate, onHallOfFameNavigate, user
                 <User className="w-4 h-4 text-silk/60" />
               </button>
             )}
-            <button
-              onClick={() => setShowLogoutConfirm(true)}
-              className="p-1.5 rounded-lg text-silk/50 hover:text-silk hover:bg-white/10 transition-colors"
-              aria-label="Sign out"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
           </div>
         </div>
       </div>
@@ -386,19 +383,8 @@ export function Navigation({ currentPage, onNavigate, onHallOfFameNavigate, user
               )}
             </nav>
 
-            {/* Sign Out at bottom */}
-            <div className="border-t border-white/10 p-3">
-              <button
-                onClick={() => { closeMenu(); setShowLogoutConfirm(true); }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400/80 hover:bg-red-400/10 hover:text-red-400 transition-all"
-              >
-                <LogOut className="w-5 h-5" />
-                <span className="text-sm font-semibold">Sign Out</span>
-              </button>
-            </div>
-
             {/* Legal Links + Copyright */}
-            <div className="px-5 pb-4 pt-1 space-y-2">
+            <div className="px-5 pb-4 pt-1 space-y-2 border-t border-white/10 mt-auto">
               <div className="flex items-center justify-center gap-3">
                 <button
                   onClick={() => handleMenuNavigate('terms')}
@@ -423,50 +409,86 @@ export function Navigation({ currentPage, onNavigate, onHallOfFameNavigate, user
       )}
 
       {/* ── Bottom Navigation Bar (desktop only) ── */}
-      <div className="hidden sm:block fixed bottom-0 left-0 right-0 z-50 bg-soil border-t border-harvest/20">
-        <div className="flex items-center justify-around px-4 h-16 max-w-2xl mx-auto">
-          {(() => {
-            const bottomItems: { page: PageType; icon: typeof Home; label: string }[] = [
-              { page: 'home', icon: Home, label: 'Home' },
-              { page: 'leaderboard', icon: Swords, label: 'Guild Wars' },
-              { page: 'kkup' as PageType, icon: Crown, label: 'KKUP' },
-              { page: 'secret-shop', icon: ShoppingBag, label: 'Shop' },
-              { page: 'profile', icon: User, label: 'Profile' },
-            ];
+      <div className="hidden sm:block fixed bottom-0 left-0 right-0 z-50">
+        {/* Nav bar background */}
+        <div className="bg-soil border-t border-harvest/20">
+          <div className="grid grid-cols-5 items-center h-16 max-w-2xl mx-auto px-2">
+            {/* Col 1 — Home */}
+            <button
+              onClick={() => handleNavigate('home')}
+              className={`flex flex-col items-center justify-center gap-1 py-2 rounded-2xl transition-all duration-200 ${
+                getNavParent(currentPage) === 'home'
+                  ? 'text-harvest bg-harvest/15 scale-105'
+                  : 'text-silk/50 hover:text-silk/80 hover:bg-white/5'
+              }`}
+              title="Home"
+            >
+              <Home className="w-6 h-6" strokeWidth={getNavParent(currentPage) === 'home' ? 2.5 : 2} />
+              <span className="text-xs font-semibold tracking-wide">Home</span>
+            </button>
 
-            return bottomItems.map(({ page, icon: Icon, label }) => {
-              const activePage = getNavParent(currentPage);
-              const isActive = activePage === page;
+            {/* Col 2 — Guild Wars */}
+            <button
+              onClick={() => handleNavigate('leaderboard')}
+              className={`flex flex-col items-center justify-center gap-1 py-2 rounded-2xl transition-all duration-200 ${
+                getNavParent(currentPage) === 'leaderboard'
+                  ? 'text-harvest bg-harvest/15 scale-105'
+                  : 'text-silk/50 hover:text-silk/80 hover:bg-white/5'
+              }`}
+              title="Guild Wars"
+            >
+              <Swords className="w-6 h-6" strokeWidth={getNavParent(currentPage) === 'leaderboard' ? 2.5 : 2} />
+              <span className="text-xs font-semibold tracking-wide">Guild Wars</span>
+            </button>
 
-              return (
-                <button
-                  key={page}
-                  onClick={() => handleNavigate(page)}
-                  className={`relative flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-2xl transition-all duration-200 ${
-                    isActive
-                      ? 'text-harvest bg-harvest/15 scale-105'
-                      : 'text-silk/50 hover:text-silk/80 hover:bg-white/5'
-                  }`}
-                >
-                  <Icon className="w-6 h-6" strokeWidth={isActive ? 2.5 : 2} />
-                  <span className="text-xs font-semibold tracking-wide">{label}</span>
-                </button>
-              );
-            });
-          })()}
+            {/* Col 3 — FAB (mathematically centered by grid) */}
+            <div className="flex items-center justify-center">
+              <button
+                onClick={() => setShowMvpModal(true)}
+                className="w-16 h-16 -mt-8 rounded-full bg-gradient-to-br from-harvest to-[#c89612] hover:from-[#e8b71a] hover:to-[#d6a615] shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-4xl hover:scale-110 ring-4 ring-soil"
+                title="Upload MVP Screenshot"
+              >
+                {RANK_EMOJIS[(user?.rank_id || 1) - 1] || '🐛'}
+              </button>
+            </div>
+
+            {/* Col 4 — KKUP */}
+            <button
+              onClick={() => handleNavigate('kkup')}
+              className={`flex flex-col items-center justify-center gap-1 py-2 rounded-2xl transition-all duration-200 ${
+                getNavParent(currentPage) === 'kkup'
+                  ? 'text-harvest bg-harvest/15 scale-105'
+                  : 'text-silk/50 hover:text-silk/80 hover:bg-white/5'
+              }`}
+              title="KKUP"
+            >
+              <Crown className="w-6 h-6" strokeWidth={getNavParent(currentPage) === 'kkup' ? 2.5 : 2} />
+              <span className="text-xs font-semibold tracking-wide">KKUP</span>
+            </button>
+
+            {/* Col 5 — Shop */}
+            <button
+              onClick={() => handleNavigate('secret-shop')}
+              className={`flex flex-col items-center justify-center gap-1 py-2 rounded-2xl transition-all duration-200 ${
+                getNavParent(currentPage) === 'secret-shop'
+                  ? 'text-harvest bg-harvest/15 scale-105'
+                  : 'text-silk/50 hover:text-silk/80 hover:bg-white/5'
+              }`}
+              title="Shop"
+            >
+              <ShoppingBag className="w-6 h-6" strokeWidth={getNavParent(currentPage) === 'secret-shop' ? 2.5 : 2} />
+              <span className="text-xs font-semibold tracking-wide">Shop</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Logout Confirmation Modal */}
-      {showLogoutConfirm && (
-        <ConfirmModal
-          title="Sign Out"
-          message="Are you sure you want to sign out? You'll need to log in with Discord again to access your account."
-          confirmText="Sign Out"
-          cancelText="Stay Logged In"
-          confirmVariant="danger"
-          onConfirm={handleSignOut}
-          onCancel={() => setShowLogoutConfirm(false)}
+      {/* MVP Submission Modal */}
+      {showMvpModal && (
+        <MvpSubmissionModal
+          user={user}
+          onClose={() => setShowMvpModal(false)}
+          onRefresh={() => {}}
         />
       )}
     </>

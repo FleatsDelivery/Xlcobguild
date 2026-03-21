@@ -1,0 +1,200 @@
+sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:127 [Hydrated]
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:18201 <link rel=preload> uses an unsupported `as` value
+Xy @ a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:18201
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48479 🌽 Navigation restore — URL hash: "" | initialHash: "" | localStorage: "#tournament-hub/1bf18a5b-1904-43c4-9178-46abca49e5c1" | effective: "#tournament-hub/1bf18a5b-1904-43c4-9178-46abca49e5c1"
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48488 🌽 Restoring hash to URL: #tournament-hub/1bf18a5b-1904-43c4-9178-46abca49e5c1
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48523 Discord user metadata: Object
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48523 Discord user identities: Array(2)
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48523 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48544 🔍 /auth/me response status: 200 
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48546 ✅ Fetched user from database: Object
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48434 🌽 Synced theme from database: light
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:35474 🌽 Tournament Context: Fetching data for tournament 1bf18a5b-1904-43c4-9178-46abca49e5c1
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48523 Discord user metadata: Object
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48523 Discord user identities: Array(2)
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48523 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48523 Discord user metadata: Object
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48523 Discord user identities: Array(2)
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48523 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48544 🔍 /auth/me response status: 200 
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48546 ✅ Fetched user from database: Object
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48544 🔍 /auth/me response status: 200 
+a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48546 ✅ Fetched user from database: Object
+sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8 TypeError: Cannot read properties of undefined (reading 'toUpperCase')
+    at A3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:37073:20)
+    at iS (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:6:16997)
+    at P1 (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:43968)
+    at R1 (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:39726)
+    at zM (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:39654)
+    at qd (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:39508)
+    at Av (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:35876)
+    at DE (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:36679)
+    at Ri (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:6:3274)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:34209
+
+React stack:
+    at A3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:36962:22)
+    at div
+    at R3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:37285:43)
+    at div
+    at div
+    at J3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:38791:23)
+    at e3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:35417:17)
+    at X3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:38820:17)
+    at main
+    at div
+    at vn (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:97:25)
+    at OS (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48467:18)
+    at gs (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at zj (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:36328)
+    at pr (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:134507)
+    at div
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:34746
+    at pT (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:158494)
+    at zf (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:159790)
+    at gr (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:165567)
+    at Xt (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139517)
+    at ML (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:35221)
+    at yN (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139807)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:2313
+    at gs (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:4980
+    at QN (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:172143)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139375
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139375
+    at rL (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:176583)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:179005
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:154738
+    at yN (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139807)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:2313
+    at gs (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at sT (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:140528)
+    at fT (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:151778)
+    at d_ (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:1690)
+    at yN (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139807)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:2313
+    at Jx (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:5372)
+    at V4 (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:127:2833)
+    at div
+    at div
+    at LL (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:33845)
+    at X1 (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:72680)
+    at QS (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:65:13874)
+    at gs (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at mI (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:65:12626)
+    at h_ (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:127:53)Caused by: Error: React component stack where the error occurred
+    at A3 (a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:36962:22)
+    at /div
+    at R3 (a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:37285:43)
+    at /div
+    at /div
+    at J3 (a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:38791:23)
+    at e3 (a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:35417:17)
+    at X3 (a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:38820:17)
+    at /main
+    at /div
+    at vn (a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:97:25)
+    at OS (a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48467:18)
+    at gs (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at zj (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:36328)
+    at pr (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:134507)
+    at /div
+    at sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:34746
+    at pT (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:158494)
+    at zf (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:159790)
+    at gr (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:165567)
+    at Xt (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139517)
+    at ML (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:35221)
+    at yN (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139807)
+    at sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:2313
+    at gs (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:4980
+    at QN (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:172143)
+    at sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139375
+    at sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139375
+    at rL (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:176583)
+    at sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:179005
+    at sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:154738
+    at yN (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139807)
+    at sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:2313
+    at gs (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at sT (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:140528)
+    at fT (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:151778)
+    at d_ (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:1690)
+    at yN (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139807)
+    at sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:2313
+    at Jx (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:5372)
+    at V4 (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:127:2833)
+    at /div
+    at /div
+    at LL (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:33845)
+    at X1 (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:72680)
+    at QS (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:65:13874)
+    at gs (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at mI (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:65:12626)
+    at h_ (sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:127:53)
+yv @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:65 New error in code-component (0:7) TypeError: Cannot read properties of undefined (reading 'toUpperCase')
+    at A3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:37073:20)
+    at iS (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:6:16997)
+    at P1 (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:43968)
+    at R1 (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:39726)
+    at zM (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:39654)
+    at qd (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:39508)
+    at Av (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:35876)
+    at DE (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:36679)
+    at Ri (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:6:3274)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:34209
+
+React stack:
+    at A3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:36962:22)
+    at div
+    at R3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:37285:43)
+    at div
+    at div
+    at J3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:38791:23)
+    at e3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:35417:17)
+    at X3 (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:38820:17)
+    at main
+    at div
+    at vn (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:97:25)
+    at OS (https://thecornfield.figma.site/_components/v2/a869ac48f182a44f126b5d0a0a8d2cb605ceede9.js:48467:18)
+    at gs (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at zj (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:36328)
+    at pr (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:134507)
+    at div
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:34746
+    at pT (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:158494)
+    at zf (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:159790)
+    at gr (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:165567)
+    at Xt (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139517)
+    at ML (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:35221)
+    at yN (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139807)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:2313
+    at gs (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:4980
+    at QN (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:172143)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139375
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139375
+    at rL (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:176583)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:179005
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:154738
+    at yN (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139807)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:2313
+    at gs (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at sT (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:140528)
+    at fT (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:151778)
+    at d_ (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:1690)
+    at yN (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:139807)
+    at https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:124:2313
+    at Jx (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:75:5372)
+    at V4 (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:127:2833)
+    at div
+    at div
+    at LL (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:78:33845)
+    at X1 (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8:72680)
+    at QS (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:65:13874)
+    at gs (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:77:141)
+    at mI (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:65:12626)
+    at h_ (https://thecornfield.figma.site/_runtimes/sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:127:53)
+(anonymous) @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:65

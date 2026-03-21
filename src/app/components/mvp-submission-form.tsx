@@ -122,7 +122,21 @@ type SmartRankDownInfo = {
   reason?: string;
 };
 
-export function MvpSubmissionForm({ user, onRefresh, onBadgeRefresh, locked, variant = 'card' }: { user?: any; onRefresh?: () => Promise<void>; onBadgeRefresh?: () => void; locked?: boolean; variant?: 'card' | 'bare' }) {
+export function MvpSubmissionForm({ 
+  user, 
+  onRefresh, 
+  onBadgeRefresh, 
+  locked, 
+  variant = 'card',
+  notifyDiscord: externalNotifyDiscord 
+}: { 
+  user?: any; 
+  onRefresh?: () => Promise<void>; 
+  onBadgeRefresh?: () => void; 
+  locked?: boolean; 
+  variant?: 'card' | 'bare';
+  notifyDiscord?: boolean;
+}) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [matchId, setMatchId] = useState('');
@@ -142,9 +156,13 @@ export function MvpSubmissionForm({ user, onRefresh, onBadgeRefresh, locked, var
   const [selectedAction, setSelectedAction] = useState<ActionType>('rank_up');
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [notifyDiscord, setNotifyDiscord] = useState(true);
+  const [internalNotifyDiscord, setInternalNotifyDiscord] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const fetchedRef = useRef(false);
+
+  // Use external notifyDiscord if provided (bare variant), otherwise use internal state (card variant)
+  const notifyDiscord = externalNotifyDiscord !== undefined ? externalNotifyDiscord : internalNotifyDiscord;
+  const setNotifyDiscord = externalNotifyDiscord !== undefined ? () => {} : setInternalNotifyDiscord;
 
   // Fetch current user and all users in parallel
   useEffect(() => {
@@ -630,35 +648,6 @@ export function MvpSubmissionForm({ user, onRefresh, onBadgeRefresh, locked, var
               Submit an MVP screenshot to rank up yourself or others!
             </p>
           </div>
-        </div>
-      )}
-
-      {/* Discord toggle for bare variant — compact, inline with form */}
-      {variant === 'bare' && (
-        <div className="flex items-center justify-end mb-3">
-          <button
-            type="button"
-            onClick={() => setNotifyDiscord(!notifyDiscord)}
-            className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs font-medium transition-all duration-200 flex-shrink-0 ${
-              notifyDiscord
-                ? 'bg-[#5865F2]/15 text-[#5865F2] border border-[#5865F2]/30'
-                : 'bg-muted text-muted-foreground border border-border'
-            }`}
-          >
-            {notifyDiscord ? (
-              <Bell className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            ) : (
-              <BellOff className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            )}
-            <span>{notifyDiscord ? 'Discord ON' : 'Discord OFF'}</span>
-            <div className={`w-7 h-4 rounded-full relative transition-colors duration-200 ${
-              notifyDiscord ? 'bg-[#5865F2]' : 'bg-gray-300'
-            }`}>
-              <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow-sm transition-transform duration-200 ${
-                notifyDiscord ? 'translate-x-3.5' : 'translate-x-0.5'
-              }`} />
-            </div>
-          </button>
         </div>
       )}
 

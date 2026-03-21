@@ -1,0 +1,802 @@
+[
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 614ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "149cee27-47ec-46f1-ad32-ce9a3d1c8c13",
+    "level": "info",
+    "timestamp": 1773643053910000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "950cd749-a366-495b-9da7-009da6b8b6e7",
+    "level": "info",
+    "timestamp": 1773643053295000
+  },
+  {
+    "event_message": "booted (time: 151ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a6d85536-bf3d-4264-aefd-37683f51841b",
+    "level": "log",
+    "timestamp": 1773643053154000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 315ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cfe1c7aa-b89a-4ad4-94e5-9ed62886c053",
+    "level": "info",
+    "timestamp": 1773643052700000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "29df24a6-ca2f-44ac-9e68-2f82561bb29f",
+    "level": "info",
+    "timestamp": 1773643052384000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "95692b49-d4b8-46cf-a569-61777531854e",
+    "level": "log",
+    "timestamp": 1773643052381000
+  },
+  {
+    "event_message": "booted (time: 72ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "79e4d89c-812b-4885-bc98-08448e857826",
+    "level": "log",
+    "timestamp": 1773643052300000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 640ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b8f67f87-f918-4a1b-b001-3b0494b0aa1e",
+    "level": "info",
+    "timestamp": 1773643038870000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8f73600f-e6cf-42a2-a46e-dc633bd71017",
+    "level": "info",
+    "timestamp": 1773643038230000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4c52cb0e-b2d5-4f10-a3c6-eac54bd1811a",
+    "level": "log",
+    "timestamp": 1773643038105000
+  },
+  {
+    "event_message": "booted (time: 93ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f6bb4e5b-fb92-47e3-b567-3d43b7a1c992",
+    "level": "log",
+    "timestamp": 1773643038088000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 357ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9f1e5219-c204-4adc-bb15-f3a1728ec20d",
+    "level": "info",
+    "timestamp": 1773643037714000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6cde0aa1-764c-4a92-83df-d8cde0e3100b",
+    "level": "info",
+    "timestamp": 1773643037357000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f6c3b1fd-017e-45e3-b618-ee54f36d3e11",
+    "level": "log",
+    "timestamp": 1773643037336000
+  },
+  {
+    "event_message": "booted (time: 59ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "46b1445c-2db0-43a0-8358-71957dd6ec77",
+    "level": "log",
+    "timestamp": 1773643037269000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "22fbf3b6-1e66-44db-ad9a-b053ec0488d1",
+    "level": "log",
+    "timestamp": 1773643026711000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "11ca3027-e060-4d44-a58e-03edd92989a4",
+    "level": "log",
+    "timestamp": 1773643026642000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1026a805-4339-449b-9c57-c84432a06ddc",
+    "level": "log",
+    "timestamp": 1773643026593000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "703e2783-890e-4fc4-a1b3-3ffe38b29cf1",
+    "level": "log",
+    "timestamp": 1773643026575000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4bcedbad-5e54-4654-8867-ed7a251453d1",
+    "level": "log",
+    "timestamp": 1773643026574000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "61c27eaf-b00e-4981-9fd2-b291385f6e6e",
+    "level": "log",
+    "timestamp": 1773643026568000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "61836ccf-9d83-4779-b720-474ab2cad479",
+    "level": "log",
+    "timestamp": 1773643026516000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "000e22f0-f6a0-4f3f-a52a-274b59544ecd",
+    "level": "log",
+    "timestamp": 1773643026513000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e7a4a330-87b2-4a53-b583-e42a936d2952",
+    "level": "log",
+    "timestamp": 1773643026242000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ee2e20d9-734d-4dbb-b0ef-5d227a8dbb09",
+    "level": "log",
+    "timestamp": 1773643026195000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "65cdb6b3-50aa-4956-8ddc-23d999b5e629",
+    "level": "log",
+    "timestamp": 1773643026180000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "23b923c4-e0dd-4426-b5cd-782eb4dd0078",
+    "level": "log",
+    "timestamp": 1773643026171000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "1a6a7597-7692-4747-b9d4-61116b2b4189",
+    "level": "log",
+    "timestamp": 1773643026152000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7ab411fa-6231-40ae-a7c5-dd45bcf10bf6",
+    "level": "log",
+    "timestamp": 1773643026151000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "5ef76457-ea48-4b31-a02d-eccac2f38c2c",
+    "level": "log",
+    "timestamp": 1773643026142000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "63330c2e-5056-49e1-a1d1-4d2361fa5106",
+    "level": "log",
+    "timestamp": 1773643026130000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "fdb3e5c9-2029-4fa8-b2c5-8d001a37a4d5",
+    "level": "log",
+    "timestamp": 1773643026120000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "218f7c9c-2598-4a48-90f2-69b17b7be8b1",
+    "level": "log",
+    "timestamp": 1773643025463000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d4f6428a-9579-43ee-9986-b439019f7e72",
+    "level": "log",
+    "timestamp": 1773643025008000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 667ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "79c7304f-e5b0-4285-8c48-7b95140cdf0d",
+    "level": "info",
+    "timestamp": 1773643023852000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7d826908-06b7-4319-8ae1-869238e09172",
+    "level": "info",
+    "timestamp": 1773643023185000
+  },
+  {
+    "event_message": "booted (time: 59ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4e17aff6-462a-458e-b0b0-1dac3a9fa66a",
+    "level": "log",
+    "timestamp": 1773643023093000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e3e1ed3f-4b8c-4217-81a3-56c10d138fcb",
+    "level": "log",
+    "timestamp": 1773643023070000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 348ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "09565cc2-e088-4abe-84fe-ff0214f57d30",
+    "level": "info",
+    "timestamp": 1773643022797000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "672d9c2f-43e3-4d32-8ec0-80555ac1a250",
+    "level": "info",
+    "timestamp": 1773643022448000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2b086ac0-a4eb-4ff9-b608-0528df9171bb",
+    "level": "log",
+    "timestamp": 1773643022403000
+  },
+  {
+    "event_message": "booted (time: 84ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a11c0c93-c84b-4e7e-bfcd-a58c99e6eb6d",
+    "level": "log",
+    "timestamp": 1773643022336000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "63c996b0-a57a-4c23-8773-a107567dd606",
+    "level": "log",
+    "timestamp": 1773643022298000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "89758b9b-8a00-4662-8b5c-f08c6cac2c15",
+    "level": "log",
+    "timestamp": 1773643021226000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "972031bd-eea0-4f8e-8b17-72c36ab4e454",
+    "level": "log",
+    "timestamp": 1773643021218000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "410012c2-7849-431e-bcce-82783ed156bb",
+    "level": "log",
+    "timestamp": 1773643021218000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "03c44750-db67-46bf-ad51-a77df2f56436",
+    "level": "log",
+    "timestamp": 1773643021048000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "dd635577-6d8b-4370-a87f-f0ad13ecf443",
+    "level": "log",
+    "timestamp": 1773643019182000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bc172237-2201-48ef-b345-1b2e45cd15de",
+    "level": "log",
+    "timestamp": 1773643018677000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "99a00863-1b1c-4318-b38b-01731cc86f1f",
+    "level": "log",
+    "timestamp": 1773643018445000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c9bdb5ca-d18f-4cf3-817f-8058f999f996",
+    "level": "log",
+    "timestamp": 1773643018024000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a4bfc6ab-42ca-4c33-a473-3d378b1eec3c",
+    "level": "log",
+    "timestamp": 1773643017706000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "3faac75c-a05e-4851-98d0-8f8aeff98c53",
+    "level": "log",
+    "timestamp": 1773643017080000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b133e3d2-2d9f-4858-b053-c8cc37d8de36",
+    "level": "log",
+    "timestamp": 1773643016683000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c604efe6-ef13-4e1a-9e78-733e9fe20285",
+    "level": "log",
+    "timestamp": 1773643016119000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "ad04c957-5134-4713-8121-106ce4bec540",
+    "level": "log",
+    "timestamp": 1773643016023000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "f5c8fd4e-9e9c-4668-a140-b373d8bb3cad",
+    "level": "log",
+    "timestamp": 1773643015715000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "cd96ea6b-de56-4611-9561-0a3b70fca980",
+    "level": "log",
+    "timestamp": 1773643015676000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a7e82831-0e77-4644-9f79-134c94244be5",
+    "level": "log",
+    "timestamp": 1773643015629000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "72d3aef9-f429-4b77-83fe-a7e83db6864b",
+    "level": "log",
+    "timestamp": 1773643015623000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "64f52536-c747-4a8e-829d-d902e07c1e26",
+    "level": "log",
+    "timestamp": 1773643014178000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0f91e344-c70b-4b6c-9da0-9de06dfef823",
+    "level": "log",
+    "timestamp": 1773643013377000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/kkup/tournaments/1bf18a5b-1904-43c4-9178-46abca49e5c1/bracket 200 159ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e69c0733-b3d5-4a35-b98d-1126a5029e07",
+    "level": "info",
+    "timestamp": 1773643010489000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/kkup/tournaments/1bf18a5b-1904-43c4-9178-46abca49e5c1/bracket\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8a5e5bc4-e50c-4984-9344-9a0a34a1c060",
+    "level": "info",
+    "timestamp": 1773643010329000
+  },
+  {
+    "event_message": "booted (time: 86ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "71448d97-52f0-49d2-919b-eb34975ded73",
+    "level": "log",
+    "timestamp": 1773643010207000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/kkup/tournaments/1bf18a5b-1904-43c4-9178-46abca49e5c1/bracket 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "7e2a89f2-0a9a-4c72-a6e7-b95b05959c7c",
+    "level": "info",
+    "timestamp": 1773643009838000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/kkup/tournaments/1bf18a5b-1904-43c4-9178-46abca49e5c1/bracket\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "44297f40-0845-4648-bed6-485592250758",
+    "level": "info",
+    "timestamp": 1773643009837000
+  },
+  {
+    "event_message": "booted (time: 61ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "d609423e-6465-403b-918c-4927ef559315",
+    "level": "log",
+    "timestamp": 1773643009734000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 618ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "81255ec0-a0c6-4bc7-9abc-3bfcfb8b861f",
+    "level": "info",
+    "timestamp": 1773643008818000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "396ce6c1-8e15-40d9-bd56-935841a356a6",
+    "level": "info",
+    "timestamp": 1773643008199000
+  },
+  {
+    "event_message": "booted (time: 77ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6da83939-05f7-4cad-86c0-70b85e76580d",
+    "level": "log",
+    "timestamp": 1773643008093000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 301ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a8d1c091-be4c-451e-b460-ce1c1f1d1398",
+    "level": "info",
+    "timestamp": 1773643007753000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e5f31876-a170-4891-9871-a0a0e5584e15",
+    "level": "info",
+    "timestamp": 1773643007451000
+  },
+  {
+    "event_message": "booted (time: 78ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e08090c9-da26-4562-8f5e-5a20eb2956f0",
+    "level": "log",
+    "timestamp": 1773643007318000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0c178763-c6eb-4016-9d5d-5e924cff9e18",
+    "level": "log",
+    "timestamp": 1773643006591000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "8b57f737-bafb-439c-97ff-cfd64f289ae5",
+    "level": "log",
+    "timestamp": 1773643005850000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4fe3ccae-c958-4719-ae40-d6f45687ea8e",
+    "level": "log",
+    "timestamp": 1773643005524000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "41c635ac-18bd-486f-8b32-b02e4c7abd5e",
+    "level": "log",
+    "timestamp": 1773643005158000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "59c7d7db-77d7-4575-873d-e6b80ea5d4e2",
+    "level": "log",
+    "timestamp": 1773643005147000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/kkup/tournaments/1bf18a5b-1904-43c4-9178-46abca49e5c1/stats/players 200 568ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b3f63796-3c63-4150-b21d-059943ed1884",
+    "level": "info",
+    "timestamp": 1773643004944000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2f818e4c-3364-4d96-81e4-12e0f6195204",
+    "level": "log",
+    "timestamp": 1773643004889000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/kkup/tournaments/1bf18a5b-1904-43c4-9178-46abca49e5c1/stats/players\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "302ef1d0-ce03-4e36-b100-85484d7503ff",
+    "level": "info",
+    "timestamp": 1773643004375000
+  },
+  {
+    "event_message": "booted (time: 83ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "2c252eb4-3a8f-4076-a102-63dedf3a84da",
+    "level": "log",
+    "timestamp": 1773643004256000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "e3ed2fc0-692d-428c-969c-d0934eea5d46",
+    "level": "log",
+    "timestamp": 1773643004028000
+  },
+  {
+    "event_message": "--> OPTIONS /make-server-4789f4af/kkup/tournaments/1bf18a5b-1904-43c4-9178-46abca49e5c1/stats/players 204 1ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "bfa0a562-62e0-4be7-96f7-c80f847429dc",
+    "level": "info",
+    "timestamp": 1773643003921000
+  },
+  {
+    "event_message": "<-- OPTIONS /make-server-4789f4af/kkup/tournaments/1bf18a5b-1904-43c4-9178-46abca49e5c1/stats/players\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "23e05eb2-ec91-424d-a044-43e50b0b3e2c",
+    "level": "info",
+    "timestamp": 1773643003920000
+  },
+  {
+    "event_message": "booted (time: 87ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "78a88cf5-c032-470f-97e3-015ceeaeb691",
+    "level": "log",
+    "timestamp": 1773643003805000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "18cb29fb-64d2-43c5-a81a-d71c021e09d4",
+    "level": "log",
+    "timestamp": 1773643003310000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "a5159641-e2e4-42f5-ac4d-0234102756eb",
+    "level": "log",
+    "timestamp": 1773643003155000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 591ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "adfbec7a-9b0b-43db-8dfb-916893eff445",
+    "level": "info",
+    "timestamp": 1773642993621000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "0422a3ee-41b8-41cc-9707-509fa6cffe72",
+    "level": "info",
+    "timestamp": 1773642993030000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "c1b8f211-48ac-491d-9a87-c175315ce90a",
+    "level": "log",
+    "timestamp": 1773642992938000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 349ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "aa674554-374b-47fe-8221-f9cf20bde1ec",
+    "level": "info",
+    "timestamp": 1773642992792000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "789dc8b6-0c25-4a04-a03f-7368e6bc2016",
+    "level": "info",
+    "timestamp": 1773642992443000
+  },
+  {
+    "event_message": "booted (time: 76ms)",
+    "event_type": "Boot",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "b8e43db5-6ba8-4fa2-b10b-9d7c8548de62",
+    "level": "log",
+    "timestamp": 1773642992316000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/officer/pending-count 200 578ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "9fd56474-a40f-425d-8635-763f933f863b",
+    "level": "info",
+    "timestamp": 1773642978661000
+  },
+  {
+    "event_message": "shutdown",
+    "event_type": "Shutdown",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "beefdffe-a827-40c6-b444-132236963ded",
+    "level": "log",
+    "timestamp": 1773642978193000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/officer/pending-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "4929a5ef-1f27-4076-9efe-e717773e42c1",
+    "level": "info",
+    "timestamp": 1773642978083000
+  },
+  {
+    "event_message": "--> GET /make-server-4789f4af/notifications/unread-count 200 338ms\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "6267f1cb-09bc-4a3d-bc75-88d55f7fb462",
+    "level": "info",
+    "timestamp": 1773642977819000
+  },
+  {
+    "event_message": "<-- GET /make-server-4789f4af/notifications/unread-count\n",
+    "event_type": "Log",
+    "function_id": "91c7c103-6010-42aa-9c9b-8f10afda19b8",
+    "id": "aa898c62-aa8a-4ede-853e-fc22c229f826",
+    "level": "info",
+    "timestamp": 1773642977481000
+  }
+]

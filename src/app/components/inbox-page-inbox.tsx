@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 import {
   Inbox, Bell, Loader2, CheckCircle, XCircle, Filter,
   UserPlus, Star, Gift, Trophy, Shield, ExternalLink,
-  AlertTriangle, Eye, Trash2, ArrowRight, DollarSign,
+  AlertTriangle, Eye, Trash2, ArrowRight, DollarSign, Users,
 } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { timeAgo } from '@/lib/date-utils';
@@ -72,6 +72,7 @@ interface InboxTabProps {
   onDismiss: (id: string) => void;
   onAction: (n: Notification) => void;
   onInviteAction: (n: Notification, action: 'accepted' | 'declined') => void;
+  onJoinRequestAction: (n: Notification, action: 'accepted' | 'declined' | 'dismissed') => void;
   onPrizeAction: (n: Notification, action: 'accepted' | 'declined') => void;
   actioningId: string | null;
   actionResults: Map<string, ActionResult>;
@@ -90,6 +91,7 @@ export function InboxTab({
   onDismiss,
   onAction,
   onInviteAction,
+  onJoinRequestAction,
   onPrizeAction,
   actioningId,
   actionResults,
@@ -193,6 +195,7 @@ export function InboxTab({
                 onDismiss={onDismiss}
                 onAction={onAction}
                 onInviteAction={onInviteAction}
+                onJoinRequestAction={onJoinRequestAction}
                 onPrizeAction={onPrizeAction}
                 actioningId={actioningId}
                 actionResult={actionResults.get(notif.id)}
@@ -229,6 +232,7 @@ function NotificationCard({
   onDismiss,
   onAction,
   onInviteAction,
+  onJoinRequestAction,
   onPrizeAction,
   actioningId,
   actionResult,
@@ -239,6 +243,7 @@ function NotificationCard({
   onDismiss: (id: string) => void;
   onAction: (n: Notification) => void;
   onInviteAction: (n: Notification, action: 'accepted' | 'declined') => void;
+  onJoinRequestAction: (n: Notification, action: 'accepted' | 'declined' | 'dismissed') => void;
   onPrizeAction: (n: Notification, action: 'accepted' | 'declined') => void;
   actioningId: string | null;
   actionResult?: ActionResult;
@@ -248,8 +253,9 @@ function NotificationCard({
   const isActioned = n.status === 'actioned';
   const hasAction = !!n.action_url;
   const isTeamInvite = (n.type === 'team_invite' || n.type === 'coach_invite') && !isActioned;
+  const isJoinRequest = n.type === 'join_request' && !isActioned;
   const isPrizeAward = n.type === 'prize_awarded' && !isActioned;
-  const hasInlineActions = isTeamInvite || isPrizeAward;
+  const hasInlineActions = isTeamInvite || isJoinRequest || isPrizeAward;
   const isActioning = actioningId === n.id;
   const hasResult = !!actionResult;
 
@@ -339,6 +345,45 @@ function NotificationCard({
                 >
                   <XCircle className="w-3.5 h-3.5 mr-1" />
                   Decline
+                </Button>
+                {hasAction && (
+                  <button
+                    onClick={() => onAction(n)}
+                    className="p-1.5 rounded-lg hover:bg-harvest/10 text-muted-foreground hover:text-harvest transition-colors ml-auto"
+                    title="View tournament"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Inline join request actions (captain sees accept/decline/dismiss) */}
+            {isJoinRequest && (
+              <div className="flex items-center gap-2 mt-3" onClick={e => e.stopPropagation()}>
+                <Button
+                  onClick={() => onJoinRequestAction(n, 'accepted')}
+                  disabled={isActioning}
+                  className="bg-[#10b981] hover:bg-[#10b981]/90 text-white font-bold text-xs rounded-xl h-8 px-4"
+                >
+                  {isActioning ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : <CheckCircle className="w-3.5 h-3.5 mr-1" />}
+                  Accept
+                </Button>
+                <Button
+                  onClick={() => onJoinRequestAction(n, 'declined')}
+                  disabled={isActioning}
+                  className="bg-muted hover:bg-muted/80 text-muted-foreground font-bold text-xs rounded-xl h-8 px-4"
+                >
+                  <XCircle className="w-3.5 h-3.5 mr-1" />
+                  Decline
+                </Button>
+                <Button
+                  onClick={() => onJoinRequestAction(n, 'dismissed')}
+                  disabled={isActioning}
+                  className="bg-muted hover:bg-muted/80 text-muted-foreground/60 font-bold text-xs rounded-xl h-8 px-3"
+                  title="Dismiss silently — player won't be notified"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
                 </Button>
                 {hasAction && (
                   <button

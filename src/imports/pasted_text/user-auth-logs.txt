@@ -1,0 +1,34 @@
+sites-runtime.5fd7f14a7607f942d4ac001a8e59a1f298f13ccd58b6725e98070fe5777b608d.js:127 [Hydrated]
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:18207 <link rel=preload> uses an unsupported `as` value
+L1 @ 783ba33ccda910c71817d4854b57fe320ff2bff4.js:18207
+(anonymous) @ 783ba33ccda910c71817d4854b57fe320ff2bff4.js:46625
+sp @ sites-runtime.5fd7f14a7607f942d4ac001a8e59a1f298f13ccd58b6725e98070fe5777b608d.js:8
+Xa @ sites-runtime.5fd7f14a7607f942d4ac001a8e59a1f298f13ccd58b6725e98070fe5777b608d.js:8
+(anonymous) @ sites-runtime.5fd7f14a7607f942d4ac001a8e59a1f298f13ccd58b6725e98070fe5777b608d.js:8
+dy @ sites-runtime.5fd7f14a7607f942d4ac001a8e59a1f298f13ccd58b6725e98070fe5777b608d.js:1
+ay @ sites-runtime.5fd7f14a7607f942d4ac001a8e59a1f298f13ccd58b6725e98070fe5777b608d.js:1
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46625 🌽 Navigation restore — URL hash: "" | initialHash: "" | localStorage: "#kkup" | effective: "#kkup"
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46634 🌽 Restoring hash to URL: #kkup
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 Discord user identities: (2) [{…}, {…}]
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46690 🔍 /auth/me response status: 200 
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46692 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46580 🌽 Synced theme from database: light
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 Discord user identities: (2) [{…}, {…}]
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 Discord user identities: (2) [{…}, {…}]
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46690 🔍 /auth/me response status: 200 
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46692 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46690 🔍 /auth/me response status: 200 
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46692 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 Discord user identities: (2) [{…}, {…}]
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46669 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46690 🔍 /auth/me response status: 200 
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:46692 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+783ba33ccda910c71817d4854b57fe320ff2bff4.js:34897 🌽 Tournament Context: Fetching data for tournament 29a43c79-90cf-4dda-8894-086a07b73716
+(index):1 Refused to display 'https://www.youtube.com/' in a frame because it set 'X-Frame-Options' to 'sameorigin'.

@@ -5,8 +5,9 @@
  */
 import type { Hono } from "npm:hono";
 import * as kv from "./kv_store.tsx";
-import { PREFIX, getHeroName } from "./helpers.ts";
+import { PREFIX, getHeroName, getHeroIdFromName } from "./helpers.ts";
 import { createAdminLog } from "./routes-notifications.ts";
+import { normalizeToAccountId, steam32ToSteam64, getDotabuffUrl, getOpendotaUrl, getSteamProfileUrl } from "./steam-id-helpers.ts";
 
 export function registerKkupToolsRoutes(app: Hono, supabase: any, anonSupabase: any) {
 
@@ -91,6 +92,7 @@ export function registerKkupToolsRoutes(app: Hono, supabase: any, anonSupabase: 
 
             const statData = {
               match_id: match.id, team_id: teamId, person_id: profile?.id || null,
+              hero_id: player.hero_id || 0,
               hero: getHeroName(player.hero_id || 0),
               kills: player.kills || 0, deaths: player.deaths || 0, assists: player.assists || 0,
               last_hits: player.last_hits || 0, denies: player.denies || 0,
@@ -123,49 +125,219 @@ export function registerKkupToolsRoutes(app: Hono, supabase: any, anonSupabase: 
     try {
       if (!await requireOwner(c)) return c.json({ error: 'Owner access required' }, 403);
 
-      let playersUpdated = 0, teamsUpdated = 0;
+      let playersUpdated = 0, teamsUpdated = 0, usersUpdated = 0, masterTeamsUpdated = 0;
+      const errors: string[] = [];
 
+      // ═══════════════════════════════════════════════════════════════
+      // PHASE 1: Sync Player Names & Avatars from Steam Web API
+      // ═══════════════════════════════════════════════════════════════
       const { data: players } = await supabase.from('kkup_persons').select('id, steam_id, display_name').not('steam_id', 'is', null);
-      if (players) {
-        for (const player of players) {
+      if (players && players.length > 0) {
+        console.log(`🔄 Syncing ${players.length} players from Steam Web API...`);
+        
+        // Batch Steam IDs into groups of 100 (Steam API limit)
+        const BATCH_SIZE = 100;
+        for (let i = 0; i < players.length; i += BATCH_SIZE) {
+          const batch = players.slice(i, i + BATCH_SIZE);
+          const steamIds = batch.map((p: any) => p.steam_id).join(',');
+          
           try {
-            const res = await fetch(`https://api.opendota.com/api/players/${player.steam_id}`);
-            if (res.ok) {
-              const d = await res.json();
-              const updates: any = {};
-              if (d.profile?.personaname) updates.display_name = d.profile.personaname;
-              if (d.profile?.avatarfull) updates.avatar_url = d.profile.avatarfull;
-              if (Object.keys(updates).length > 0) { await supabase.from('kkup_persons').update(updates).eq('id', player.id); playersUpdated++; }
+            const steamApiKey = Deno.env.get('STEAM_WEB_API_KEY');
+            if (!steamApiKey) {
+              errors.push('STEAM_WEB_API_KEY not configured');
+              break;
             }
-            await new Promise(r => setTimeout(r, 100));
-          } catch (_) { /* skip */ }
+
+            // Call Steam Web API GetPlayerSummaries (source of truth!)
+            const res = await fetch(
+              `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamApiKey}&steamids=${steamIds}`
+            );
+            
+            if (res.ok) {
+              const data = await res.json();
+              const steamPlayers = data.response?.players || [];
+              
+              for (const steamPlayer of steamPlayers) {
+                const person = batch.find((p: any) => p.steam_id === steamPlayer.steamid);
+                if (!person) continue;
+                
+                const updates: any = {};
+                
+                // Update display name from Steam (current, real-time data!)
+                if (steamPlayer.personaname && steamPlayer.personaname !== person.display_name) {
+                  updates.display_name = steamPlayer.personaname;
+                }
+                
+                // Update avatar from Steam
+                if (steamPlayer.avatarfull) {
+                  updates.avatar_url = steamPlayer.avatarfull;
+                }
+                
+                if (Object.keys(updates).length > 0) {
+                  await supabase.from('kkup_persons').update(updates).eq('id', person.id);
+                  playersUpdated++;
+                  
+                  // Also sync to users table if they have a linked Discord account
+                  const { data: linkedUser } = await supabase
+                    .from('users')
+                    .select('id')
+                    .eq('steam_id', person.steam_id)
+                    .single();
+                  
+                  if (linkedUser) {
+                    await supabase.from('users').update({
+                      steam_name: updates.display_name || undefined,
+                      steam_avatar: updates.avatar_url || undefined
+                    }).eq('id', linkedUser.id);
+                    usersUpdated++;
+                  }
+                }
+              }
+            } else {
+              errors.push(`Steam API returned ${res.status} for batch ${i / BATCH_SIZE + 1}`);
+            }
+            
+            // Delay between batches to avoid rate limiting
+            await new Promise(r => setTimeout(r, 200));
+          } catch (batchError) {
+            console.error(`Error processing player batch ${i / BATCH_SIZE + 1}:`, batchError);
+            errors.push(`Batch ${i / BATCH_SIZE + 1} failed: ${batchError instanceof Error ? batchError.message : String(batchError)}`);
+          }
         }
       }
 
-      const { data: teams } = await supabase.from('kkup_teams').select('id, team_name, tournament_id');
-      if (teams) {
+      // ═══════════════════════════════════════════════════════════════
+      // PHASE 2: Sync Master Team Logos (Source of Truth)
+      // ═══════════════════════════════════════════════════════════════
+      const { data: masterTeams } = await supabase.from('kkup_master_teams').select('id, team_tag, team_name, logo_url');
+      if (masterTeams && masterTeams.length > 0) {
+        console.log(`🔄 Syncing ${masterTeams.length} master team logos from team_logos/ folder...`);
+        
+        for (const team of masterTeams) {
+          try {
+            const sanitizedTag = (team.team_tag || team.team_name || '')
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, '');
+            
+            if (!sanitizedTag || sanitizedTag.length < 2) continue;
+            
+            // Search in master team_logos/ folder for .png or .jpg
+            const { data: pngFiles } = await supabase.storage
+              .from('make-4789f4af-kkup-assets')
+              .list('team_logos', { search: sanitizedTag });
+            
+            let foundFile = pngFiles?.find((f: any) => f.name.toLowerCase().includes(sanitizedTag));
+            
+            if (foundFile) {
+              const { data: urlData } = supabase.storage
+                .from('make-4789f4af-kkup-assets')
+                .getPublicUrl(`team_logos/${foundFile.name}`);
+              
+              if (urlData?.publicUrl && urlData.publicUrl !== team.logo_url) {
+                await supabase.from('kkup_master_teams').update({ logo_url: urlData.publicUrl }).eq('id', team.id);
+                masterTeamsUpdated++;
+              }
+            }
+          } catch (teamError) {
+            console.error(`Error syncing master team ${team.team_tag}:`, teamError);
+          }
+        }
+      }
+
+      // ═══════════════════════════════════════════════════════════════
+      // PHASE 3: Sync Tournament Team Logos (per-tournament snapshots)
+      // ═══════════════════════════════════════════════════════════════
+      const { data: teams } = await supabase.from('kkup_teams').select('id, team_tag, team_name, tournament_id, master_team_id, logo_url');
+      if (teams && teams.length > 0) {
+        console.log(`🔄 Syncing ${teams.length} tournament team logos...`);
+        
         const { data: tournaments } = await supabase.from('kkup_tournaments').select('id, name');
         const tournamentMap = new Map(tournaments?.map((t: any) => [t.id, t.name]) || []);
+        
         for (const team of teams) {
           try {
             const tournamentName = tournamentMap.get(team.tournament_id);
             if (!tournamentName) continue;
+            
+            const isHeapsNHooks = tournamentName.toLowerCase().includes('heaps') && tournamentName.toLowerCase().includes('hooks');
             const folderName = tournamentName.toLowerCase().trim()
               .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+            
             if (folderName.length < 3) continue;
-            const sanitizedName = team.team_name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-            const { data: fileData } = await supabase.storage.from('make-4789f4af-kkup-assets').list(folderName, { search: sanitizedName });
-            if (fileData && fileData.length > 0) {
-              const { data: urlData } = supabase.storage.from('make-4789f4af-kkup-assets').getPublicUrl(`${folderName}/${fileData[0].name}`);
-              if (urlData?.publicUrl) { await supabase.from('kkup_teams').update({ logo_url: urlData.publicUrl }).eq('id', team.id); teamsUpdated++; }
+            
+            let foundLogoUrl: string | null = null;
+            
+            if (isHeapsNHooks) {
+              // Heaps n Hooks: Pull from tournament-specific folder
+              const sanitizedName = (team.team_tag || team.team_name || '')
+                .toLowerCase()
+                .replace(/[^a-z0-9]/g, '');
+              
+              const { data: fileData } = await supabase.storage
+                .from('make-4789f4af-kkup-assets')
+                .list(folderName, { search: sanitizedName });
+              
+              if (fileData && fileData.length > 0) {
+                const { data: urlData } = supabase.storage
+                  .from('make-4789f4af-kkup-assets')
+                  .getPublicUrl(`${folderName}/${fileData[0].name}`);
+                foundLogoUrl = urlData?.publicUrl || null;
+              }
+            } else {
+              // Kernel Kup: Pull from master team_logos/ folder
+              if (team.master_team_id) {
+                // Use master team logo if linked
+                const { data: masterTeam } = await supabase
+                  .from('kkup_master_teams')
+                  .select('logo_url')
+                  .eq('id', team.master_team_id)
+                  .single();
+                foundLogoUrl = masterTeam?.logo_url || null;
+              } else {
+                // Fallback: search team_logos/ by tag
+                const sanitizedTag = (team.team_tag || team.team_name || '')
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]/g, '');
+                
+                const { data: fileData } = await supabase.storage
+                  .from('make-4789f4af-kkup-assets')
+                  .list('team_logos', { search: sanitizedTag });
+                
+                if (fileData && fileData.length > 0) {
+                  const { data: urlData } = supabase.storage
+                    .from('make-4789f4af-kkup-assets')
+                    .getPublicUrl(`team_logos/${fileData[0].name}`);
+                  foundLogoUrl = urlData?.publicUrl || null;
+                }
+              }
             }
-          } catch (_) { /* skip */ }
+            
+            if (foundLogoUrl && foundLogoUrl !== team.logo_url) {
+              await supabase.from('kkup_teams').update({ logo_url: foundLogoUrl }).eq('id', team.id);
+              teamsUpdated++;
+            }
+          } catch (teamError) {
+            console.error(`Error syncing team ${team.team_tag}:`, teamError);
+          }
         }
       }
 
-      try { await createAdminLog({ type: 'data_sync', action: `Synced names & logos: ${playersUpdated} players, ${teamsUpdated} teams updated`, actor_name: 'Owner' }); } catch (_) {}
+      try { 
+        await createAdminLog({ 
+          type: 'data_sync', 
+          action: `Synced names & logos: ${playersUpdated} players, ${teamsUpdated} teams, ${masterTeamsUpdated} master teams, ${usersUpdated} users updated`, 
+          actor_name: 'Owner' 
+        }); 
+      } catch (_) {}
 
-      return c.json({ success: true, playersUpdated, teamsUpdated });
+      return c.json({ 
+        success: true, 
+        playersUpdated, 
+        teamsUpdated,
+        masterTeamsUpdated,
+        usersUpdated,
+        errors: errors.length > 0 ? errors : undefined
+      });
     } catch (error) {
       console.error('Sync error:', error);
       return c.json({ success: false, error: String(error) }, 500);
@@ -266,6 +438,81 @@ export function registerKkupToolsRoutes(app: Hono, supabase: any, anonSupabase: 
     } catch (error) {
       console.error('Fix hero names error:', error);
       return c.json({ error: 'Internal server error' }, 500);
+    }
+  });
+
+  // Backfill hero_id from hero names (Owner only)
+  app.post(`${PREFIX}/kkup/backfill-hero-ids`, async (c) => {
+    try {
+      if (!await requireOwner(c)) return c.json({ error: 'Owner access required' }, 403);
+
+      // Get all stats that have a hero name but missing hero_id
+      const { data: stats, error } = await supabase
+        .from('kkup_player_match_stats')
+        .select('id, hero, hero_id')
+        .not('hero', 'is', null);
+
+      if (error) return c.json({ error: 'Failed to fetch player stats: ' + error.message }, 500);
+      if (!stats || stats.length === 0) return c.json({ message: 'No records to backfill!', updated: 0 });
+
+      let updated = 0, skipped = 0, failed = 0;
+      const errors: string[] = [];
+
+      for (const stat of stats) {
+        try {
+          // Skip if hero_id already exists
+          if (stat.hero_id && stat.hero_id > 0) {
+            skipped++;
+            continue;
+          }
+
+          // Convert hero name to ID
+          const heroId = getHeroIdFromName(stat.hero);
+          
+          if (!heroId || heroId === 0) {
+            failed++;
+            errors.push(`Unknown hero name: "${stat.hero}" (stat ID: ${stat.id})`);
+            continue;
+          }
+
+          // Update the record
+          const { error: updateError } = await supabase
+            .from('kkup_player_match_stats')
+            .update({ hero_id: heroId })
+            .eq('id', stat.id);
+
+          if (updateError) {
+            failed++;
+            errors.push(`Failed to update stat ${stat.id}: ${updateError.message}`);
+          } else {
+            updated++;
+          }
+        } catch (rowError: any) {
+          failed++;
+          errors.push(`Error processing stat ${stat.id}: ${rowError.message}`);
+        }
+      }
+
+      try {
+        await createAdminLog({
+          type: 'data_fix',
+          action: `Backfilled hero IDs: ${updated} updated, ${skipped} skipped, ${failed} failed (${stats.length} total)`,
+          actor_name: 'Owner',
+        });
+      } catch (_) {}
+
+      return c.json({
+        success: true,
+        message: `Backfill complete: ${updated} hero IDs added!`,
+        updated,
+        skipped,
+        failed,
+        total: stats.length,
+        errors: errors.length > 0 ? errors.slice(0, 20) : undefined, // Show first 20 errors
+      });
+    } catch (error: any) {
+      console.error('Backfill hero IDs error:', error);
+      return c.json({ error: 'Internal server error: ' + error.message }, 500);
     }
   });
 
@@ -377,14 +624,19 @@ export function registerKkupToolsRoutes(app: Hono, supabase: any, anonSupabase: 
       const { data: teamsPlayed } = await supabase.from('kkup_teams').select('tournament_id').in('id', teamIds.length > 0 ? teamIds : ['__none__']);
       const uniqueTournaments = new Set(teamsPlayed?.map((t: any) => t.tournament_id));
 
-      // Get player match stats — join with match to determine wins
+      // Get player match stats — is_winner is pre-computed on the row (backfilled for KK1-9, set at import for future)
+      // Fall back to the join-based check for any rows where is_winner is null (edge case: pre-backfill imports)
       const { data: playerGames } = await supabase
         .from('kkup_player_match_stats')
-        .select('id, team_id, kills, deaths, assists, hero, match:kkup_matches!match_id(winning_team_id)')
+        .select('id, team_id, kills, deaths, assists, hero, is_winner, match:kkup_matches!match_id(winning_team_id)')
         .eq('person_id', personId);
 
       const totalGames = playerGames?.length || 0;
-      const wins = playerGames?.filter((g: any) => g.match && g.team_id === g.match.winning_team_id).length || 0;
+      const wins = playerGames?.filter((g: any) => {
+        // Prefer the pre-computed is_winner column; fall back to join-based check for null rows
+        if (g.is_winner !== null && g.is_winner !== undefined) return g.is_winner === true;
+        return g.match && g.team_id === g.match.winning_team_id;
+      }).length || 0;
       const totalKills = playerGames?.reduce((s: number, g: any) => s + (g.kills || 0), 0) || 0;
       const totalDeaths = playerGames?.reduce((s: number, g: any) => s + (g.deaths || 0), 0) || 0;
       const totalAssists = playerGames?.reduce((s: number, g: any) => s + (g.assists || 0), 0) || 0;
@@ -510,6 +762,173 @@ export function registerKkupToolsRoutes(app: Hono, supabase: any, anonSupabase: 
     } catch (error) {
       console.error('Find duplicates error:', error);
       return c.json({ error: 'Internal server error: ' + String(error) }, 500);
+    }
+  });
+
+  // Sync player profile by ANY Steam ID format (Account ID, Steam64, or vanity URL)
+  // Normalizes input to Account ID, fetches from Steam API, updates kkup_persons
+  app.post(`${PREFIX}/kkup/sync-player-by-steam-id`, async (c) => {
+    try {
+      if (!await requireOwner(c)) return c.json({ error: 'Owner access required' }, 403);
+
+      const { steam_id_input } = await c.req.json();
+      if (!steam_id_input) {
+        return c.json({ error: 'steam_id_input is required (can be Account ID, Steam64, or vanity URL)' }, 400);
+      }
+
+      console.log(`🔍 Normalizing Steam ID input: "${steam_id_input}"...`);
+
+      // Normalize ANY format to Account ID
+      const accountId = await normalizeToAccountId(steam_id_input);
+      if (!accountId) {
+        return c.json({ 
+          error: `Could not resolve Steam ID: "${steam_id_input}". Please provide a valid Account ID, Steam64, or vanity URL.`,
+          examples: {
+            account_id: '51579950',
+            steam64: '76561198011845678',
+            vanity_url: 'permasnooze'
+          }
+        }, 400);
+      }
+
+      console.log(`✅ Normalized to Account ID: ${accountId}`);
+
+      // Convert to Steam64 for API lookup
+      const steam64 = steam32ToSteam64(accountId);
+
+      // Fetch from Steam API
+      const steamApiKey = Deno.env.get('STEAM_WEB_API_KEY');
+      if (!steamApiKey) {
+        return c.json({ error: 'STEAM_WEB_API_KEY not configured' }, 500);
+      }
+
+      const res = await fetch(
+        `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamApiKey}&steamids=${steam64}`
+      );
+
+      if (!res.ok) {
+        return c.json({ error: `Steam API returned ${res.status}` }, 500);
+      }
+
+      const data = await res.json();
+      const steamPlayer = data.response?.players?.[0];
+
+      if (!steamPlayer) {
+        return c.json({ 
+          error: `No Steam profile found for Account ID ${accountId} (Steam64: ${steam64})`,
+          account_id: accountId,
+          steam64: steam64
+        }, 404);
+      }
+
+      // Check if player already exists
+      const { data: existing } = await supabase
+        .from('kkup_persons')
+        .select('*')
+        .eq('steam_id', String(accountId))
+        .maybeSingle();
+
+      let personRecord;
+      const playerData = {
+        steam_id: String(accountId),
+        display_name: steamPlayer.personaname || `Player ${accountId}`,
+        avatar_url: steamPlayer.avatarfull || steamPlayer.avatarmedium || steamPlayer.avatar || null,
+        steam_name: steamPlayer.personaname,
+        steam_avatar: steamPlayer.avatarfull || steamPlayer.avatarmedium || steamPlayer.avatar || null,
+        dotabuff_url: getDotabuffUrl(accountId),
+        opendota_url: getOpendotaUrl(accountId),
+        updated_at: new Date().toISOString(),
+      };
+
+      if (existing) {
+        // Update existing record
+        const { data: updated, error: updateError } = await supabase
+          .from('kkup_persons')
+          .update(playerData)
+          .eq('id', existing.id)
+          .select()
+          .single();
+
+        if (updateError) {
+          return c.json({ error: `Failed to update player: ${updateError.message}` }, 500);
+        }
+
+        personRecord = updated;
+        console.log(`✅ Updated existing player: ${personRecord.display_name} (${accountId})`);
+
+        try {
+          await createAdminLog({
+            type: 'player_sync',
+            action: `Synced player "${personRecord.display_name}" (${accountId}) from Steam`,
+            actor_name: 'Owner',
+          });
+        } catch (_) {}
+
+        return c.json({
+          success: true,
+          action: 'updated',
+          player: {
+            id: personRecord.id,
+            steam_id: personRecord.steam_id,
+            display_name: personRecord.display_name,
+            avatar_url: personRecord.avatar_url,
+            dotabuff_url: personRecord.dotabuff_url,
+            opendota_url: personRecord.opendota_url,
+            steam_profile_url: getSteamProfileUrl(accountId),
+          },
+          steam_data: {
+            account_id: accountId,
+            steam64: steam64,
+            personaname: steamPlayer.personaname,
+            profileurl: steamPlayer.profileurl,
+          },
+        });
+      } else {
+        // Create new record
+        const { data: created, error: createError } = await supabase
+          .from('kkup_persons')
+          .insert(playerData)
+          .select()
+          .single();
+
+        if (createError) {
+          return c.json({ error: `Failed to create player: ${createError.message}` }, 500);
+        }
+
+        personRecord = created;
+        console.log(`✅ Created new player: ${personRecord.display_name} (${accountId})`);
+
+        try {
+          await createAdminLog({
+            type: 'player_sync',
+            action: `Created new player "${personRecord.display_name}" (${accountId}) from Steam`,
+            actor_name: 'Owner',
+          });
+        } catch (_) {}
+
+        return c.json({
+          success: true,
+          action: 'created',
+          player: {
+            id: personRecord.id,
+            steam_id: personRecord.steam_id,
+            display_name: personRecord.display_name,
+            avatar_url: personRecord.avatar_url,
+            dotabuff_url: personRecord.dotabuff_url,
+            opendota_url: personRecord.opendota_url,
+            steam_profile_url: getSteamProfileUrl(accountId),
+          },
+          steam_data: {
+            account_id: accountId,
+            steam64: steam64,
+            personaname: steamPlayer.personaname,
+            profileurl: steamPlayer.profileurl,
+          },
+        });
+      }
+    } catch (error: any) {
+      console.error('Sync player by Steam ID error:', error);
+      return c.json({ error: 'Internal server error: ' + error.message }, 500);
     }
   });
 

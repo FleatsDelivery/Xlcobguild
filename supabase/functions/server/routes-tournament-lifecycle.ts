@@ -1,15 +1,16 @@
 /**
  * Tournament Lifecycle Routes — Phase 2+3: Live Tournament Creation & Registration
  *
- * 8 routes:
- *   POST   /kkup/tournaments/create           — Create a new tournament (owner only)
- *   PATCH  /kkup/tournaments/:id/config       — Update tournament config (owner only)
- *   PATCH  /kkup/tournaments/:id/status       — Change tournament status (owner only)
- *   DELETE /kkup/tournaments/:id              — Delete a tournament and all related data (owner only)
- *   POST   /kkup/tournaments/:id/register     — Register for tournament with chosen role
- *   PATCH  /kkup/tournaments/:id/register/role — Change role after registration
- *   DELETE /kkup/tournaments/:id/register     — Player withdraws registration
- *   GET    /kkup/tournaments/:id/registrations — List registrations (free agents + on-team)
+ * 9 routes:
+ *   POST   /kkup/tournaments/create              — Create a new tournament (owner only)
+ *   PATCH  /kkup/tournaments/:id/config          — Update tournament config (owner only)
+ *   PATCH  /kkup/tournaments/:id/status          — Change tournament status (owner only)
+ *   DELETE /kkup/tournaments/:id                 — Delete a tournament and all related data (owner only)
+ *   GET    /kkup/tournaments/:id/my-registration — Get current user's registration status
+ *   POST   /kkup/tournaments/:id/register        — Register for tournament with chosen role
+ *   PATCH  /kkup/tournaments/:id/register/role   — Change role after registration
+ *   DELETE /kkup/tournaments/:id/register        — Player withdraws registration
+ *   GET    /kkup/tournaments/:id/registrations   — List registrations (free agents + on-team)
  *
  * Tables used: kkup_tournaments, kkup_persons, kkup_registrations, users,
  *              kkup_teams, kkup_team_rosters, kkup_team_invites, kkup_coach_assignments,
@@ -190,11 +191,25 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
               };
             });
 
+            // Fetch winner team info if tournament is completed
+            let winner = null;
+            if (t.winning_team_id) {
+              const { data: winnerTeam } = await supabase
+                .from('kkup_teams')
+                .select('team_name, team_tag, logo_url')
+                .eq('id', t.winning_team_id)
+                .single();
+              if (winnerTeam) {
+                winner = winnerTeam;
+              }
+            }
+
             return {
               ...t,
               registration_count: deduped.length,
               teams_count: teamsCount,
               player_previews: playerPreviews,
+              winner,
             };
           } catch (enrichErr: any) {
             console.error(`Enrichment error for tournament ${t.id}:`, enrichErr);
@@ -207,6 +222,127 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
     } catch (error: any) {
       console.error('List kkup_tournaments error:', error);
       return c.json({ error: 'Internal server error listing tournaments: ' + error.message }, 500);
+    }
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // GET SINGLE TOURNAMENT (Public)
+  // ═══════════════════════════════════════════════════════
+
+  app.get(`${PREFIX}/kkup/tournaments/:id`, async (c) => {
+    try {
+      const tournamentId = c.req.param('id');
+
+      // Fetch tournament
+      const { data: tournament, error } = await supabase
+        .from('kkup_tournaments')
+        .select('*')
+        .eq('id', tournamentId)
+        .single();
+
+      if (error || !tournament) {
+        return c.json({ error: 'Tournament not found' }, 404);
+      }
+
+      // Enrich with winner data if completed
+      let winner = null;
+      if (tournament.winning_team_id) {
+        const { data: winnerTeam } = await supabase
+          .from('kkup_teams')
+          .select('team_name, team_tag, logo_url')
+          .eq('id', tournament.winning_team_id)
+          .single();
+        if (winnerTeam) {
+          winner = winnerTeam;
+        }
+      }
+
+      // Get counts based on tournament status
+      const isCompleted = ['completed', 'archived'].includes(tournament.status);
+      
+      let registrationCount = 0;
+      let teamsCount = 0;
+      
+      if (isCompleted) {
+        // For completed tournaments, count from rosters (player_count column if it exists, otherwise calculate)
+        if (tournament.player_count) {
+          registrationCount = tournament.player_count;
+        } else {
+          // Count unique players from team rosters
+          const { data: rosters } = await supabase
+            .from('kkup_team_rosters')
+            .select('person_id, team:kkup_teams!team_id(tournament_id)')
+            .eq('team.tournament_id', tournamentId);
+          
+          const uniquePlayers = new Set(
+            (rosters || [])
+              .filter((r: any) => r.team?.tournament_id === tournamentId)
+              .map((r: any) => r.person_id)
+          );
+          registrationCount = uniquePlayers.size;
+        }
+        
+        // Use team_count column if available
+        teamsCount = tournament.team_count || 0;
+        if (!teamsCount) {
+          const { count } = await supabase
+            .from('kkup_teams')
+            .select('id', { count: 'exact', head: true })
+            .eq('tournament_id', tournamentId);
+          teamsCount = count || 0;
+        }
+      } else {
+        // For active/pre-tournament phases, count from kkup_team_rosters (most accurate
+        // for roster_lock and reg_closed where players are on teams but may not have
+        // a matching kkup_registrations row).
+        const { data: activeTeams } = await supabase
+          .from('kkup_teams')
+          .select('id')
+          .eq('tournament_id', tournamentId)
+          .neq('approval_status', 'withdrawn');
+
+        const activeTeamIds = (activeTeams || []).map((t: any) => t.id);
+
+        if (activeTeamIds.length > 0) {
+          const { data: rosterRows } = await supabase
+            .from('kkup_team_rosters')
+            .select('person_id')
+            .in('team_id', activeTeamIds);
+          registrationCount = (rosterRows || []).length;
+        }
+
+        // Fallback: if no rosters yet (reg_open / upcoming), count player-role registrations
+        if (registrationCount === 0) {
+          const { count: regCount } = await supabase
+            .from('kkup_registrations')
+            .select('id', { count: 'exact', head: true })
+            .eq('tournament_id', tournamentId)
+            .eq('role', 'player')
+            .neq('status', 'withdrawn');
+          registrationCount = regCount || 0;
+        }
+
+        const { count: teamCount } = await supabase
+          .from('kkup_teams')
+          .select('id', { count: 'exact', head: true })
+          .eq('tournament_id', tournamentId);
+        teamsCount = teamCount || 0;
+      }
+
+      return c.json({
+        tournament: {
+          ...tournament,
+          winner,
+          registration_count: registrationCount,
+          player_count: registrationCount, // Same value, different field name
+          teams_count: teamsCount,
+          team_count: teamsCount, // Same value, different field name
+        },
+      });
+    } catch (error: any) {
+      console.error('Get single tournament error:', error);
+      return c.json({ error: 'Internal server error: ' + error.message }, 500);
     }
   });
 
@@ -683,12 +819,12 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
         try {
           const { data: pendingInvites } = await supabase
             .from('kkup_team_invites')
-            .select('id, person_id')
+            .select('id, invitee_person_id')
             .in('team_id', teamIds);
 
           if (pendingInvites && pendingInvites.length > 0) {
             const inviteIds = new Set(pendingInvites.map((i: any) => i.id));
-            const personIds = [...new Set(pendingInvites.map((i: any) => i.person_id).filter(Boolean))];
+            const personIds = [...new Set(pendingInvites.map((i: any) => i.invitee_person_id).filter(Boolean))];
 
             if (personIds.length > 0) {
               const { data: persons } = await supabase
@@ -831,7 +967,65 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
 
 
   // ═══════════════════════════════════════════════════════
-  // 5. REGISTER FOR TOURNAMENT (Any authenticated user)
+  // 5. GET MY REGISTRATION (Check if current user is registered)
+  // ═══════════════════════════════════════════════════════
+
+  app.get(`${PREFIX}/kkup/tournaments/:id/my-registration`, async (c) => {
+    try {
+      const auth = await requireAuth(c);
+      if (!auth.ok) return auth.response;
+
+      const tournamentId = c.req.param('id');
+
+      // Resolve user → kkup_persons
+      const personResult = await resolvePersonForUser(auth.dbUser);
+      if ('error' in personResult) {
+        return c.json({ error: personResult.error }, 500);
+      }
+      const { person } = personResult;
+      const personId = person.id;
+
+      // Look up registration
+      const { data: registration, error: regError } = await supabase
+        .from('kkup_registrations')
+        .select('*')
+        .eq('tournament_id', tournamentId)
+        .eq('person_id', personId)
+        .maybeSingle();
+
+      if (regError) {
+        console.error('Error fetching registration:', regError);
+        return c.json({ error: 'Failed to fetch registration' }, 500);
+      }
+
+      // If registered and on a team, fetch team details via roster
+      let teamInfo = null;
+      if (registration && registration.status === 'on_team') {
+        const { data: rosterEntry } = await supabase
+          .from('kkup_team_rosters')
+          .select('team_id, kkup_teams!inner(id, team_name, team_tag, approval_status)')
+          .eq('person_id', personId)
+          .eq('tournament_id', tournamentId)
+          .maybeSingle();
+        
+        if (rosterEntry?.kkup_teams) {
+          teamInfo = rosterEntry.kkup_teams;
+        }
+      }
+
+      // Return null if not registered, or the registration object with team info
+      return c.json({ 
+        registration: registration ? { ...registration, team: teamInfo } : null 
+      });
+    } catch (error: any) {
+      console.error('GET my-registration error:', error);
+      return c.json({ error: 'Internal server error: ' + error.message }, 500);
+    }
+  });
+
+
+  // ═══════════════════════════════════════════════════════
+  // 6. REGISTER FOR TOURNAMENT (Any authenticated user)
   // ═══════════════════════════════════════════════════════
 
   app.post(`${PREFIX}/kkup/tournaments/:id/register`, async (c) => {
@@ -1071,7 +1265,7 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
 
 
   // ═══════════════════════════════════════════════════════
-  // 6. WITHDRAW REGISTRATION (The registrant themselves)
+  // 7. WITHDRAW REGISTRATION (The registrant themselves)
   // ═══════════════════════════════════════════════════════
 
   app.delete(`${PREFIX}/kkup/tournaments/:id/register`, async (c) => {
@@ -1189,7 +1383,7 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
             await supabase
               .from('kkup_team_invites')
               .update({ status: 'declined', updated_at: new Date().toISOString() })
-              .eq('person_id', person.id)
+              .eq('invitee_person_id', person.id)
               .eq('status', 'pending')
               .in('team_id', teamIds);
           }
@@ -1286,7 +1480,7 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
 
 
   // ═══════════════════════════════════════════════════════
-  // 6b. CHOOSE YOUR PATH — Set registration role (Any authenticated user)
+  // 8. CHOOSE YOUR PATH — Set registration role (Any authenticated user)
   // ═══════════════════════════════════════════════════════
 
   const VALID_ROLES = ['player', 'coach', 'staff'] as const;
@@ -1497,7 +1691,7 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
 
 
   // ═══════════════════════════════════════════════════════
-  // 7. LIST REGISTRATIONS (Public — includes free agents + on-team)
+  // 9. LIST REGISTRATIONS (Public — includes free agents + on-team)
   // ═══════════════════════════════════════════════════════
 
   app.get(`${PREFIX}/kkup/tournaments/:id/registrations`, async (c) => {

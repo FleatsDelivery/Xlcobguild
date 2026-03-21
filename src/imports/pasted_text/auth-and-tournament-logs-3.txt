@@ -1,0 +1,50 @@
+sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:127 [Hydrated]
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:18185 <link rel=preload> uses an unsupported `as` value
+B1 @ ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:18185
+(anonymous) @ ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47234
+sp @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+Xa @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+(anonymous) @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+my @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:1
+uy @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:1
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47234 🌽 Navigation restore — URL hash: "" | initialHash: "" | localStorage: "#tournament-hub/1bf18a5b-1904-43c4-9178-46abca49e5c1" | effective: "#tournament-hub/1bf18a5b-1904-43c4-9178-46abca49e5c1"
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47243 🌽 Restoring hash to URL: #tournament-hub/1bf18a5b-1904-43c4-9178-46abca49e5c1
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47278 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47278 Discord user identities: (2) [{…}, {…}]
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47278 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47299 🔍 /auth/me response status: 200 
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47301 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47189 🌽 Synced theme from database: light
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:35327 🌽 Tournament Context: Fetching data for tournament 1bf18a5b-1904-43c4-9178-46abca49e5c1
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47278 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47278 Discord user identities: (2) [{…}, {…}]
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47278 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47278 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47278 Discord user identities: (2) [{…}, {…}]
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47278 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47299 🔍 /auth/me response status: 200 
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47301 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47299 🔍 /auth/me response status: 200 
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:47301 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:36515  GET https://zizrvkkuqzwzxgwpuvxb.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments/1bf18a5b-1904-43c4-9178-46abca49e5c1/staff-roster 500 (Internal Server Error)
+(anonymous) @ ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:36515
+(anonymous) @ ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:36532
+sp @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+Xa @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+jM @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+Is @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+DE @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+Ri @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:6
+(anonymous) @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:36528 Error fetching staff: Error: Failed to fetch staff data
+    at ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:36524:17
+(anonymous) @ ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:36528
+await in (anonymous)
+(anonymous) @ ee27193500afcdec4a37f4ee27bc8df2a4c1bce1.js:36532
+sp @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+Xa @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+jM @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+Is @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+DE @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+Ri @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:6
+(anonymous) @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8

@@ -213,7 +213,7 @@ export function EditTournamentModal({ tournament, onClose, onSave, onDeleted, le
   };
 
   return (
-    <BottomSheetModal onClose={onClose} maxWidth="max-w-2xl">
+    <BottomSheetModal onClose={onClose} maxWidth="max-w-2xl" zIndex="z-50">
       <BottomSheetModal.Header gradient="from-harvest/10 to-harvest/5" borderColor="border-harvest/20">
         <div className="flex items-center gap-3">
           <Crown className="w-6 h-6 text-harvest" />

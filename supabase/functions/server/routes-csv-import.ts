@@ -283,11 +283,20 @@ export function registerCsvImportRoutes(app: Hono, supabase: any, anonSupabase: 
         const personId = personIdMap.get(row.steam_id);
         if (!personId) { errors.push(`Staff person not found for steam_id ${row.steam_id}`); continue; }
 
+        // Fetch person name for denormalized column
+        const { data: person } = await supabase
+          .from('kkup_persons')
+          .select('display_name')
+          .eq('id', personId)
+          .single();
+
         const { error: staffError } = await supabase
           .from('kkup_tournament_staff')
           .insert({
             tournament_id: tournamentId,
+            tournament_name: tournamentName, // Denormalized for easy reading
             person_id: personId,
+            person_name: person?.display_name || 'Unknown', // Denormalized for easy reading
             role: row.role || 'Unknown',
           });
 

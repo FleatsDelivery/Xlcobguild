@@ -1,0 +1,51 @@
+sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:127 [Hydrated]
+265473d8251ad3e2b37f7699994cf88345dcd643.js:16963 <link rel=preload> uses an unsupported `as` value
+py @ 265473d8251ad3e2b37f7699994cf88345dcd643.js:16963
+(anonymous) @ 265473d8251ad3e2b37f7699994cf88345dcd643.js:44545
+sp @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:8
+Xa @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:8
+(anonymous) @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:8
+dy @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:1
+ay @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:1
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44545 🌽 Navigation restore — URL hash: "" | initialHash: "" | localStorage: "#kkup" | effective: "#kkup"
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44554 🌽 Restoring hash to URL: #kkup
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44589 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44589 Discord user identities: (2) [{…}, {…}]
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44589 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44610 🔍 /auth/me response status: 200 
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44612 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44589 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44589 Discord user identities: (2) [{…}, {…}]
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44589 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44589 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44589 Discord user identities: (2) [{…}, {…}]
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44589 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44610 🔍 /auth/me response status: 200 
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44612 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44610 🔍 /auth/me response status: 200 
+265473d8251ad3e2b37f7699994cf88345dcd643.js:44612 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+265473d8251ad3e2b37f7699994cf88345dcd643.js:34715 🌽 Tournament Context: Fetching data for tournament e2ca46f6-7f6b-4234-a3ff-75ade5fe0934
+265473d8251ad3e2b37f7699994cf88345dcd643.js:34693  GET https://zizrvkkuqzwzxgwpuvxb.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments/e2ca46f6-7f6b-4234-a3ff-75ade5fe0934/my-registration 404 (Not Found)
+p @ 265473d8251ad3e2b37f7699994cf88345dcd643.js:34693
+await in p
+(anonymous) @ 265473d8251ad3e2b37f7699994cf88345dcd643.js:34715
+sp @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:8
+Xa @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:8
+FM @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:8
+Is @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:8
+_E @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:8
+Ri @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:6
+(anonymous) @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:8
+hashchange
+onClick @ 265473d8251ad3e2b37f7699994cf88345dcd643.js:30735
+sD @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:5
+lD @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:5
+uD @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:5
+oE @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:5
+OC @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:5
+(anonymous) @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:5
+fS @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:8
+eC @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:5
+Iy @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:5
+Fv @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:5
+wD @ sites-runtime.343174caaaed17c584f4bbef3b4ac09803029223cd1847b05e791508001770d2.js:5

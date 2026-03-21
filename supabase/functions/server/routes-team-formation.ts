@@ -293,7 +293,7 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
             await supabase
               .from('kkup_team_invites')
               .update({ status: 'declined', updated_at: new Date().toISOString() })
-              .eq('person_id', captainPersonId)
+              .eq('invitee_person_id', captainPersonId)
               .eq('status', 'pending')
               .in('team_id', allTeamIds);
           }
@@ -389,7 +389,7 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
         return c.json({ error: `Failed to fetch teams: ${error.message}` }, 500);
       }
 
-      // Enrich with roster count + historical flag for each team
+      // Enrich with roster count + historical flag + actual roster data with TCF+ for each team
       const enrichedTeams = await Promise.all(
         (teams || []).map(async (team: any) => {
           const { count: rosterCount } = await supabase
@@ -406,10 +406,48 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
             .eq('team_tag', team.team_tag)
             .neq('id', team.id);
 
+          // Fetch roster with person data
+          const { data: rosterEntries } = await supabase
+            .from('kkup_team_rosters')
+            .select(`
+              id, person_id, tickets_contributed,
+              person:kkup_persons!person_id(id, steam_id, display_name, avatar_url)
+            `)
+            .eq('team_id', team.id);
+
+          // Enrich roster with TCF+ data from users table
+          const roster = rosterEntries || [];
+          const rosterSteamIds = roster.map((r: any) => r.person?.steam_id).filter(Boolean);
+          let userMap: Record<string, any> = {};
+
+          if (rosterSteamIds.length > 0) {
+            const { data: linkedUsers } = await supabase
+              .from('users')
+              .select('steam_id, tcf_plus_active, discord_avatar')
+              .in('steam_id', rosterSteamIds);
+            for (const u of (linkedUsers || [])) {
+              userMap[u.steam_id] = u;
+            }
+          }
+
+          // Merge user data into roster
+          const enrichedRoster = roster.map((r: any) => {
+            const linkedUser = r.person?.steam_id ? (userMap[r.person.steam_id] || null) : null;
+            return {
+              person_id: r.person_id,
+              player_name: r.person?.display_name || 'Unknown',
+              avatar_url: linkedUser?.discord_avatar || r.person?.avatar_url || null,
+              tcf_plus_active: linkedUser?.tcf_plus_active || false,
+              is_captain: r.person_id === team.captain_person_id,
+              tickets_contributed: r.tickets_contributed || 0,
+            };
+          });
+
           return {
             ...team,
             roster_count: rosterCount || 0,
             is_historical: (otherCount || 0) > 0,
+            roster: enrichedRoster,
           };
         })
       );
@@ -647,7 +685,7 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
       //    We must fetch invites BEFORE deleting them so we can find the related notifications.
       const { data: pendingInvites } = await supabase
         .from('kkup_team_invites')
-        .select('id, person_id')
+        .select('id, invitee_person_id')
         .eq('team_id', teamId);
 
       // Delete all invite rows
@@ -657,7 +695,7 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
       if (pendingInvites && pendingInvites.length > 0) {
         try {
           const inviteIds = new Set(pendingInvites.map((inv: any) => inv.id));
-          const personIds = [...new Set(pendingInvites.map((inv: any) => inv.person_id))];
+          const personIds = [...new Set(pendingInvites.map((inv: any) => inv.invitee_person_id))];
 
           // Resolve person_id → user_id via steam_id
           const { data: persons } = await supabase
@@ -980,12 +1018,13 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
         }
       }
 
-      // Check for existing invite for this team+person
+      // Check for existing captain→player invite for this team+person
       const { data: existingInvite } = await supabase
         .from('kkup_team_invites')
         .select('id, status')
         .eq('team_id', teamId)
-        .eq('person_id', person_id)
+        .eq('invitee_person_id', person_id)
+        .eq('direction', 'captain_to_player')
         .maybeSingle();
 
       if (existingInvite) {
@@ -1003,8 +1042,12 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
         .from('kkup_team_invites')
         .insert({
           team_id: teamId,
-          person_id: person_id,
-          invited_by_person_id: invitedByPersonId,
+          team_name: team.team_name,
+          invitee_person_id: person_id,
+          invitee_person_name: invitee.display_name,
+          inviter_person_id: invitedByPersonId,
+          inviter_person_name: auth.dbUser.discord_username || callerPerson?.display_name || 'Captain',
+          direction: 'captain_to_player',
           status: 'pending',
         })
         .select()
@@ -1092,10 +1135,12 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
       let query = supabase
         .from('kkup_team_invites')
         .select(`
-          id, team_id, status, created_at, updated_at,
-          person:kkup_persons!person_id(id, steam_id, display_name, avatar_url)
+          id, team_id, direction, status, created_at, updated_at,
+          invitee:kkup_persons!invitee_person_id(id, steam_id, display_name, avatar_url),
+          inviter:kkup_persons!inviter_person_id(id, display_name)
         `)
-        .eq('team_id', teamId);
+        .eq('team_id', teamId)
+        .eq('direction', 'captain_to_player');
       if (statusFilter) {
         query = query.eq('status', statusFilter);
       }
@@ -1135,7 +1180,7 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
       // Verify the invite belongs to this team and is still pending
       const { data: invite, error: fetchErr } = await supabase
         .from('kkup_team_invites')
-        .select('id, team_id, person_id, status')
+        .select('id, team_id, invitee_person_id, status')
         .eq('id', inviteId)
         .eq('team_id', teamId)
         .maybeSingle();
@@ -1164,7 +1209,7 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
       // Clean up the invitee's inbox notification for this invite (non-critical)
       try {
         const { data: invPerson } = await supabase
-          .from('kkup_persons').select('steam_id').eq('id', invite.person_id).maybeSingle();
+          .from('kkup_persons').select('steam_id').eq('id', invite.invitee_person_id).maybeSingle();
         if (invPerson?.steam_id) {
           const { data: invUser } = await supabase
             .from('users').select('id').eq('steam_id', invPerson.steam_id).maybeSingle();
@@ -1189,7 +1234,7 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
       // Log activity for the captain (non-critical)
       try {
         const { data: invitedPerson } = await supabase
-          .from('kkup_persons').select('display_name').eq('id', invite.person_id).maybeSingle();
+          .from('kkup_persons').select('display_name').eq('id', invite.invitee_person_id).maybeSingle();
         const { data: team } = await supabase
           .from('kkup_teams').select('team_name').eq('id', teamId).maybeSingle();
         await createUserActivity({
@@ -1237,11 +1282,12 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
       const { data: invites, error } = await supabase
         .from('kkup_team_invites')
         .select(`
-          id, team_id, status, created_at, updated_at,
+          id, team_id, direction, status, created_at, updated_at,
           team:kkup_teams!team_id(id, team_name, team_tag, captain_person_id),
-          invited_by:kkup_persons!invited_by_person_id(id, display_name)
+          inviter:kkup_persons!inviter_person_id(id, display_name)
         `)
-        .eq('person_id', person.id)
+        .eq('invitee_person_id', person.id)
+        .eq('direction', 'captain_to_player')
         .eq('status', 'pending')
         .in('team_id', teamIds)
         .order('created_at', { ascending: false });
@@ -1284,14 +1330,19 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
       // Fetch the invite
       const { data: invite, error: fetchError } = await supabase
         .from('kkup_team_invites')
-        .select('id, team_id, person_id, status')
+        .select('id, team_id, invitee_person_id, direction, status')
         .eq('id', inviteId)
         .single();
 
       if (fetchError || !invite) return c.json({ error: 'Invite not found' }, 404);
 
+      // Only captain→player invites can be responded to by the player
+      if (invite.direction !== 'captain_to_player') {
+        return c.json({ error: 'Use the team join-request endpoint to respond to player-initiated requests' }, 400);
+      }
+
       // Only the invited person can respond
-      if (invite.person_id !== person.id) {
+      if (invite.invitee_person_id !== person.id) {
         return c.json({ error: 'You can only respond to your own invites' }, 403);
       }
 
@@ -1358,7 +1409,7 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
             await supabase
               .from('kkup_team_invites')
               .update({ status: 'declined', updated_at: new Date().toISOString() })
-              .eq('person_id', person.id)
+              .eq('invitee_person_id', person.id)
               .eq('status', 'pending')
               .in('team_id', allTeamIds)
               .neq('id', inviteId);
@@ -1489,7 +1540,7 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
             await supabase
               .from('kkup_team_invites')
               .update({ status: 'declined', updated_at: new Date().toISOString() })
-              .eq('person_id', person.id)
+              .eq('invitee_person_id', person.id)
               .eq('status', 'pending')
               .in('team_id', allTeamIds)
               .neq('id', inviteId);
@@ -1604,6 +1655,488 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
     } catch (error: any) {
       console.error('Respond to invite error:', error);
       return c.json({ error: 'Internal server error responding to invite: ' + error.message }, 500);
+    }
+  });
+
+
+  // ===============================================
+  // 8b. PLAYER SENDS JOIN REQUEST (player_to_captain direction)
+  //     Free agent requests to join a specific team.
+  //     Sends notification to the captain's inbox.
+  // ===============================================
+
+  app.post(`${PREFIX}/kkup/tournaments/:tid/teams/:team_id/join-request`, async (c) => {
+    try {
+      const auth = await requireAuth(c);
+      if (!auth.ok) return auth.response;
+
+      const tournamentId = c.req.param('tid');
+      const teamId = c.req.param('team_id');
+
+      // Tournament must be mutable
+      const tCheck = await getTournamentIfMutable(tournamentId);
+      if (!tCheck.ok) return c.json({ error: tCheck.error }, 400);
+      const tournament = tCheck.tournament;
+
+      // Only reg_closed phase allows join requests (captains invite during reg_closed, players request too)
+      if (!['registration_closed', 'reg_closed', 'roster_lock'].includes(tournament.status)) {
+        return c.json({ error: 'Join requests are only available during registration_closed or roster_lock phases.' }, 400);
+      }
+
+      // Resolve caller's person
+      const personResult = await resolvePersonForUser(auth.dbUser);
+      if ('error' in personResult) return c.json({ error: personResult.error }, 500);
+      const { person } = personResult;
+
+      // Fetch the target team
+      const { data: team, error: teamErr } = await supabase
+        .from('kkup_teams')
+        .select('id, team_name, team_tag, captain_person_id, coach_person_id, approval_status')
+        .eq('id', teamId)
+        .eq('tournament_id', tournamentId)
+        .single();
+
+      if (teamErr || !team) return c.json({ error: 'Team not found in this tournament.' }, 404);
+      if (team.approval_status !== 'approved') return c.json({ error: 'You can only request to join an approved team.' }, 400);
+
+      // Caller must be registered for this tournament
+      const { data: callerReg } = await supabase
+        .from('kkup_registrations')
+        .select('id, status, role')
+        .eq('tournament_id', tournamentId)
+        .eq('person_id', person.id)
+        .maybeSingle();
+
+      if (!callerReg || callerReg.status === 'withdrawn') {
+        return c.json({ error: 'You must be registered for this tournament to request joining a team.' }, 400);
+      }
+
+      // Must be a free agent (not already on_team)
+      if (callerReg.status === 'on_team') {
+        return c.json({ error: 'You are already on a team. Withdraw from your current team first.' }, 400);
+      }
+
+      // Must not be a captain of another team in this tournament
+      const { data: captainCheck } = await supabase
+        .from('kkup_teams')
+        .select('id, team_name')
+        .eq('tournament_id', tournamentId)
+        .eq('captain_person_id', person.id)
+        .neq('approval_status', 'withdrawn')
+        .maybeSingle();
+
+      if (captainCheck) {
+        return c.json({ error: `You are the captain of "${captainCheck.team_name}". Captains cannot request to join other teams.` }, 400);
+      }
+
+      // Caller must not already have a pending join request to this team
+      const { data: existingRequest } = await supabase
+        .from('kkup_team_invites')
+        .select('id, status')
+        .eq('team_id', teamId)
+        .eq('invitee_person_id', person.id)
+        .eq('direction', 'player_to_captain')
+        .eq('status', 'pending')
+        .maybeSingle();
+
+      if (existingRequest) {
+        return c.json({ error: 'You already have a pending join request to this team.' }, 400);
+      }
+
+      // No poaching: must not already be on ANY team roster in this tournament
+      const { data: tournTeams } = await supabase
+        .from('kkup_teams').select('id').eq('tournament_id', tournamentId).neq('approval_status', 'withdrawn');
+      const tournTeamIds = (tournTeams || []).map((t: any) => t.id);
+      if (tournTeamIds.length > 0) {
+        const { data: existingRoster } = await supabase
+          .from('kkup_team_rosters')
+          .select('team_id')
+          .eq('person_id', person.id)
+          .in('team_id', tournTeamIds)
+          .maybeSingle();
+        if (existingRoster) {
+          return c.json({ error: 'You are already on a team roster. Withdraw from your current team first.' }, 400);
+        }
+      }
+
+      // Check roster size — don't let them request to a full team
+      if (tournament.max_team_size) {
+        const { count: rosterCount } = await supabase
+          .from('kkup_team_rosters')
+          .select('*', { count: 'exact', head: true })
+          .eq('team_id', teamId);
+        if ((rosterCount || 0) >= tournament.max_team_size) {
+          return c.json({ error: 'This team roster is already full.' }, 400);
+        }
+      }
+
+      // Create the join request (direction: player_to_captain)
+      const { data: joinRequest, error: insertErr } = await supabase
+        .from('kkup_team_invites')
+        .insert({
+          team_id: teamId,
+          team_name: team.team_name,
+          invitee_person_id: person.id,
+          invitee_person_name: person.display_name,
+          inviter_person_id: person.id,  // requester = the player themselves
+          inviter_person_name: person.display_name,
+          direction: 'player_to_captain',
+          status: 'pending',
+        })
+        .select()
+        .single();
+
+      if (insertErr) {
+        console.error('Join request insert error:', insertErr);
+        return c.json({ error: `Failed to send join request: ${insertErr.message}` }, 500);
+      }
+
+      console.log(`Join request: ${person.display_name} → team "${team.team_name}" (${teamId}) in tournament ${tournamentId}`);
+
+      // Log activity for the requesting player (non-critical)
+      try {
+        await createUserActivity({
+          user_id: auth.dbUser.id,
+          type: 'join_request_sent',
+          title: `Requested to join ${team.team_name}`,
+          description: `You sent a join request to "${team.team_name}" for ${tournament.name}.`,
+          related_id: teamId,
+          related_url: `#tournament-hub/${tournamentId}`,
+        });
+      } catch (actErr) { console.error('Non-critical: activity log for join request failed:', actErr); }
+
+      // Notify the captain (non-critical)
+      try {
+        const { data: captainPerson } = await supabase
+          .from('kkup_persons').select('steam_id').eq('id', team.captain_person_id).maybeSingle();
+        if (captainPerson?.steam_id) {
+          const { data: captainUser } = await supabase
+            .from('users').select('id').eq('steam_id', captainPerson.steam_id).maybeSingle();
+          if (captainUser?.id && captainUser.id !== auth.dbUser.id) {
+            await createNotification({
+              user_id: captainUser.id,
+              type: 'join_request',
+              title: `${person.display_name} wants to join ${team.team_name}`,
+              body: `${person.display_name} sent a join request to "${team.team_name}" for ${tournament.name}. Accept, decline, or dismiss.`,
+              related_id: joinRequest.id,
+              action_url: `#tournament-hub/${tournamentId}`,
+              actor_name: auth.dbUser.discord_username,
+              actor_avatar: auth.dbUser.discord_avatar,
+              metadata: { tournament_id: tournamentId, invite_id: joinRequest.id, team_id: teamId, team_name: team.team_name },
+            });
+          }
+        }
+      } catch (notifErr) {
+        console.warn('Non-critical: failed to notify captain of join request:', notifErr);
+      }
+
+      return c.json({
+        success: true,
+        join_request: joinRequest,
+        message: `Join request sent to "${team.team_name}". The captain will be notified.`,
+      });
+    } catch (error: any) {
+      console.error('Join request error:', error);
+      return c.json({ error: 'Internal server error sending join request: ' + error.message }, 500);
+    }
+  });
+
+
+  // ===============================================
+  // 8c. CAPTAIN RESPONDS TO JOIN REQUEST
+  //     Captain accepts, declines, or dismisses a player's join request.
+  //     direction: player_to_captain
+  // ===============================================
+
+  app.patch(`${PREFIX}/kkup/tournaments/:tid/teams/:team_id/join-requests/:invite_id`, async (c) => {
+    try {
+      const auth = await requireAuth(c);
+      if (!auth.ok) return auth.response;
+
+      const tournamentId = c.req.param('tid');
+      const teamId = c.req.param('team_id');
+      const inviteId = c.req.param('invite_id');
+      const { status: responseStatus } = await c.req.json();
+
+      if (!responseStatus || !['accepted', 'declined', 'dismissed'].includes(responseStatus)) {
+        return c.json({ error: 'status must be "accepted", "declined", or "dismissed"' }, 400);
+      }
+
+      // Only captain or owner can respond
+      const { authorized, team, person: callerPerson } = await isOwnerOrCaptain(auth.dbUser, teamId);
+      if (!authorized && !isOfficer(auth.dbUser.role)) {
+        return c.json({ error: 'Only the team captain or owner can respond to join requests.' }, 403);
+      }
+
+      // Fetch the join request
+      const { data: joinRequest, error: fetchErr } = await supabase
+        .from('kkup_team_invites')
+        .select('id, team_id, invitee_person_id, direction, status')
+        .eq('id', inviteId)
+        .eq('team_id', teamId)
+        .single();
+
+      if (fetchErr || !joinRequest) return c.json({ error: 'Join request not found.' }, 404);
+      if (joinRequest.direction !== 'player_to_captain') return c.json({ error: 'This endpoint is only for player join requests.' }, 400);
+      if (joinRequest.status !== 'pending') return c.json({ error: `Join request has already been ${joinRequest.status}.` }, 400);
+
+      // Tournament must be mutable
+      const tCheck = await getTournamentIfMutable(tournamentId);
+      if (!tCheck.ok) return c.json({ error: tCheck.error }, 400);
+      const tournament = tCheck.tournament;
+
+      // Get the requesting player's person record
+      const { data: requesterPerson } = await supabase
+        .from('kkup_persons')
+        .select('id, display_name, steam_id, avatar_url')
+        .eq('id', joinRequest.invitee_person_id)
+        .single();
+
+      if (!requesterPerson) return c.json({ error: 'Requesting player not found.' }, 404);
+
+      // Helper to resolve requester's user account for notifications
+      const getRequesterUser = async () => {
+        if (!requesterPerson.steam_id) return null;
+        const { data } = await supabase.from('users').select('id').eq('steam_id', requesterPerson.steam_id).maybeSingle();
+        return data;
+      };
+
+      // ── DISMISS: silent, no notification ──
+      if (responseStatus === 'dismissed') {
+        await supabase.from('kkup_team_invites').delete().eq('id', inviteId);
+        console.log(`Join request ${inviteId} dismissed by captain ${auth.dbUser.discord_username}`);
+
+        try {
+          await createUserActivity({
+            user_id: auth.dbUser.id,
+            type: 'join_request_dismissed',
+            title: `Dismissed join request`,
+            description: `You dismissed ${requesterPerson.display_name}'s request to join "${team?.team_name || teamId}" for ${tournament.name}.`,
+            related_id: teamId,
+            related_url: `#tournament-hub/${tournamentId}`,
+          });
+        } catch (_) { /* non-critical */ }
+
+        return c.json({ success: true, message: 'Join request dismissed.' });
+      }
+
+      // ── DECLINED: update status + notify requester ──
+      if (responseStatus === 'declined') {
+        await supabase.from('kkup_team_invites')
+          .update({ status: 'declined', updated_at: new Date().toISOString() })
+          .eq('id', inviteId);
+
+        console.log(`Join request ${inviteId} declined by captain ${auth.dbUser.discord_username}`);
+
+        // Notify requester (non-critical)
+        try {
+          const requesterUser = await getRequesterUser();
+          if (requesterUser?.id && requesterUser.id !== auth.dbUser.id) {
+            await createNotification({
+              user_id: requesterUser.id,
+              type: 'join_request_declined',
+              title: `Join request declined`,
+              body: `${auth.dbUser.discord_username || 'The captain'} declined your request to join "${team?.team_name || 'the team'}" for ${tournament.name}.`,
+              related_id: teamId,
+              action_url: `#tournament-hub/${tournamentId}`,
+              actor_name: auth.dbUser.discord_username,
+            });
+          }
+        } catch (_) { /* non-critical */ }
+
+        try {
+          await createUserActivity({
+            user_id: auth.dbUser.id,
+            type: 'join_request_declined',
+            title: `Declined join request`,
+            description: `You declined ${requesterPerson.display_name}'s request to join "${team?.team_name || 'the team'}" for ${tournament.name}.`,
+            related_id: teamId,
+            related_url: `#tournament-hub/${tournamentId}`,
+          });
+        } catch (_) { /* non-critical */ }
+
+        return c.json({ success: true, message: `Declined ${requesterPerson.display_name}'s join request.` });
+      }
+
+      // ── ACCEPTED: add to roster, notify requester ──
+
+      // Check roster size
+      if (tournament.max_team_size) {
+        const { count: rosterCount } = await supabase
+          .from('kkup_team_rosters')
+          .select('*', { count: 'exact', head: true })
+          .eq('team_id', teamId);
+        if ((rosterCount || 0) >= tournament.max_team_size) {
+          return c.json({ error: 'Team roster is full. Cannot accept this join request.' }, 400);
+        }
+      }
+
+      // Verify requester is still a free agent
+      const { data: requesterReg } = await supabase
+        .from('kkup_registrations')
+        .select('id, status, role')
+        .eq('tournament_id', tournamentId)
+        .eq('person_id', requesterPerson.id)
+        .maybeSingle();
+
+      if (!requesterReg || requesterReg.status === 'withdrawn') {
+        await supabase.from('kkup_team_invites').update({ status: 'expired', updated_at: new Date().toISOString() }).eq('id', inviteId);
+        return c.json({ error: 'This player is no longer registered for the tournament. Request expired.' }, 400);
+      }
+      if (requesterReg.status === 'on_team') {
+        await supabase.from('kkup_team_invites').update({ status: 'expired', updated_at: new Date().toISOString() }).eq('id', inviteId);
+        return c.json({ error: 'This player has already joined a team. Request expired.' }, 400);
+      }
+
+      // Add to roster
+      const { error: rosterError } = await supabase
+        .from('kkup_team_rosters')
+        .insert({ team_id: teamId, person_id: requesterPerson.id })
+        .select().single();
+
+      if (rosterError) {
+        if (rosterError.code === '23505') {
+          return c.json({ error: "This player is already on the team's roster." }, 409);
+        }
+        console.error('Roster insert on join request accept error:', rosterError);
+        return c.json({ error: `Failed to add player to roster: ${rosterError.message}` }, 500);
+      }
+
+      // Update invite status and registration status
+      await supabase.from('kkup_team_invites').update({ status: 'accepted', updated_at: new Date().toISOString() }).eq('id', inviteId);
+      await supabase.from('kkup_registrations').update({ status: 'on_team' }).eq('id', requesterReg.id);
+
+      // Auto-decline other pending invites/requests for this player across all teams in this tournament
+      const { data: allTournTeams } = await supabase.from('kkup_teams').select('id').eq('tournament_id', tournamentId);
+      const allTournTeamIds = (allTournTeams || []).map((t: any) => t.id);
+      if (allTournTeamIds.length > 0) {
+        await supabase.from('kkup_team_invites')
+          .update({ status: 'declined', updated_at: new Date().toISOString() })
+          .eq('invitee_person_id', requesterPerson.id)
+          .eq('status', 'pending')
+          .in('team_id', allTournTeamIds)
+          .neq('id', inviteId);
+      }
+
+      console.log(`Join request accepted: ${requesterPerson.display_name} joined "${team?.team_name}" in ${tournament.name}`);
+
+      // Notify the requester (non-critical)
+      try {
+        const requesterUser = await getRequesterUser();
+        if (requesterUser?.id && requesterUser.id !== auth.dbUser.id) {
+          await createNotification({
+            user_id: requesterUser.id,
+            type: 'join_request_accepted',
+            title: `Welcome to ${team?.team_name || 'the team'}!`,
+            body: `${auth.dbUser.discord_username || 'The captain'} accepted your join request for "${team?.team_name || 'the team'}" in ${tournament.name}.`,
+            related_id: teamId,
+            action_url: `#tournament-hub/${tournamentId}`,
+            actor_name: auth.dbUser.discord_username,
+          });
+          await createUserActivity({
+            user_id: requesterUser.id,
+            type: 'join_request_accepted',
+            title: `Joined ${team?.team_name || 'a team'}`,
+            description: `Your join request to "${team?.team_name}" for ${tournament.name} was accepted by ${auth.dbUser.discord_username || 'the captain'}.`,
+            related_id: teamId,
+            related_url: `#tournament-hub/${tournamentId}`,
+          });
+        }
+      } catch (_) { /* non-critical */ }
+
+      // Captain's activity log (non-critical)
+      try {
+        await createUserActivity({
+          user_id: auth.dbUser.id,
+          type: 'join_request_accepted',
+          title: `Accepted ${requesterPerson.display_name} into ${team?.team_name}`,
+          description: `You accepted ${requesterPerson.display_name}'s join request for "${team?.team_name}" in ${tournament.name}.`,
+          related_id: teamId,
+          related_url: `#tournament-hub/${tournamentId}`,
+        });
+      } catch (_) { /* non-critical */ }
+
+      return c.json({
+        success: true,
+        message: `${requesterPerson.display_name} has been added to "${team?.team_name}"!`,
+      });
+    } catch (error: any) {
+      console.error('Respond to join request error:', error);
+      return c.json({ error: 'Internal server error responding to join request: ' + error.message }, 500);
+    }
+  });
+
+
+  // ===============================================
+  // 8d. GET MY PENDING JOIN REQUESTS (player)
+  //     Returns join requests sent BY the current user (player_to_captain direction)
+  // ===============================================
+
+  app.get(`${PREFIX}/kkup/tournaments/:tid/my-join-requests`, async (c) => {
+    try {
+      const auth = await requireAuth(c);
+      if (!auth.ok) return auth.response;
+
+      const tournamentId = c.req.param('tid');
+
+      const personResult = await resolvePersonForUser(auth.dbUser);
+      if ('error' in personResult) return c.json({ error: personResult.error }, 500);
+      const { person } = personResult;
+
+      const { data: tournTeams } = await supabase.from('kkup_teams').select('id').eq('tournament_id', tournamentId);
+      const teamIds = (tournTeams || []).map((t: any) => t.id);
+      if (teamIds.length === 0) return c.json({ join_requests: [], person_id: person.id });
+
+      const { data: joinRequests, error } = await supabase
+        .from('kkup_team_invites')
+        .select(`id, team_id, team_name, direction, status, created_at`)
+        .eq('invitee_person_id', person.id)
+        .eq('direction', 'player_to_captain')
+        .eq('status', 'pending')
+        .in('team_id', teamIds)
+        .order('created_at', { ascending: false });
+
+      if (error) return c.json({ error: `Failed to fetch join requests: ${error.message}` }, 500);
+
+      return c.json({ join_requests: joinRequests || [], person_id: person.id });
+    } catch (error: any) {
+      return c.json({ error: 'Internal server error: ' + error.message }, 500);
+    }
+  });
+
+
+  // ===============================================
+  // 8e. GET TEAM JOIN REQUESTS (captain sees incoming)
+  //     Returns pending player_to_captain requests for a team
+  // ===============================================
+
+  app.get(`${PREFIX}/kkup/tournaments/:tid/teams/:team_id/join-requests`, async (c) => {
+    try {
+      const auth = await requireAuth(c);
+      if (!auth.ok) return auth.response;
+
+      const teamId = c.req.param('team_id');
+      const { authorized } = await isOwnerOrCaptain(auth.dbUser, teamId);
+      if (!authorized && !isOfficer(auth.dbUser.role)) {
+        return c.json({ error: 'Only the team captain, officers, or owner can view join requests.' }, 403);
+      }
+
+      const { data: joinRequests, error } = await supabase
+        .from('kkup_team_invites')
+        .select(`
+          id, team_id, team_name, direction, status, created_at, updated_at,
+          invitee:kkup_persons!invitee_person_id(id, steam_id, display_name, avatar_url)
+        `)
+        .eq('team_id', teamId)
+        .eq('direction', 'player_to_captain')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false });
+
+      if (error) return c.json({ error: `Failed to fetch join requests: ${error.message}` }, 500);
+
+      return c.json({ join_requests: joinRequests || [] });
+    } catch (error: any) {
+      return c.json({ error: 'Internal server error: ' + error.message }, 500);
     }
   });
 
@@ -1800,7 +2333,7 @@ export function registerTeamFormationRoutes(app: Hono, supabase: any, anonSupaba
         await supabase
           .from('kkup_team_invites')
           .update({ status: 'declined', updated_at: new Date().toISOString() })
-          .eq('person_id', personId)
+          .eq('invitee_person_id', personId)
           .eq('status', 'pending')
           .in('team_id', allTeamIds);
       }

@@ -14,7 +14,7 @@
  */
 import { useState } from 'react';
 import {
-  Crown, Loader2, Calendar, Users, Tv, Link2, ImageIcon, Shield, ChevronDown,
+  Crown, Loader2, Calendar, Users, Tv, Link2, ImageIcon, Shield, ChevronDown, CheckCircle, AlertCircle,
 } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -23,6 +23,7 @@ import { ImageUpload } from '@/app/components/image-upload';
 import { BottomSheetModal } from '@/app/components/bottom-sheet-modal';
 import { projectId } from '/utils/supabase/info';
 import { getTournamentImageFolder } from '@/lib/slugify';
+import { getTournamentBanner, getTournamentLargeIcon, getTournamentSquareIcon, getTournamentFolder } from '@/lib/tournament-assets';
 import { numericToRank, rankToNumeric } from '@/lib/rank-utils';
 
 const MEDAL_ORDER = ['Herald', 'Guardian', 'Crusader', 'Archon', 'Legend', 'Ancient', 'Divine', 'Immortal'] as const;
@@ -87,8 +88,75 @@ export function TournamentCreateModal({ accessToken, onClose, onCreated }: Tourn
   const [largeIconUrl, setLargeIconUrl] = useState('');
   const [squareIconUrl, setSquareIconUrl] = useState('');
 
+  // Auto-detection state
+  const [checkingGraphics, setCheckingGraphics] = useState(false);
+  const [graphicsFound, setGraphicsFound] = useState<{
+    banner: boolean;
+    large: boolean;
+    square: boolean;
+  } | null>(null);
+
   // Derive a clean folder name from the tournament name (reactive to input)
   const uploadFolder = getTournamentImageFolder(name || '');
+  const tournamentFolder = getTournamentFolder(name || '');
+
+  // Auto-check for existing graphics when name changes
+  const checkForExistingGraphics = async (tournamentName: string) => {
+    if (!tournamentName.trim()) {
+      setGraphicsFound(null);
+      return;
+    }
+
+    setCheckingGraphics(true);
+    
+    const bannerUrl = getTournamentBanner(tournamentName);
+    const largeIconUrl = getTournamentLargeIcon(tournamentName);
+    const squareIconUrl = getTournamentSquareIcon(tournamentName);
+
+    // Check if each image exists by trying to load it
+    const checkImage = (url: string): Promise<boolean> => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+      });
+    };
+
+    const [bannerExists, largeExists, squareExists] = await Promise.all([
+      checkImage(bannerUrl),
+      checkImage(largeIconUrl),
+      checkImage(squareIconUrl)
+    ]);
+
+    setGraphicsFound({
+      banner: bannerExists,
+      large: largeExists,
+      square: squareExists
+    });
+
+    // Auto-fill URLs if graphics exist
+    if (bannerExists) setBannerUrl(bannerUrl);
+    if (largeExists) setLargeIconUrl(largeIconUrl);
+    if (squareExists) setSquareIconUrl(squareIconUrl);
+
+    setCheckingGraphics(false);
+  };
+
+  // Debounced check when name changes
+  const handleNameChange = (newName: string) => {
+    setName(newName);
+    
+    // Clear previous results immediately
+    setGraphicsFound(null);
+    
+    // Debounce the actual check
+    const timer = setTimeout(() => {
+      checkForExistingGraphics(newName);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  };
 
   const handleSubmit = async () => {
     if (!name.trim()) {
@@ -213,7 +281,7 @@ export function TournamentCreateModal({ accessToken, onClose, onCreated }: Tourn
               <Input
                 id="name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => handleNameChange(e.target.value)}
                 placeholder='e.g. "Kernel Kup 10"'
                 className={inputClass}
                 required
@@ -286,11 +354,65 @@ export function TournamentCreateModal({ accessToken, onClose, onCreated }: Tourn
             <span className="text-xs text-muted-foreground">(same files uploaded to Dota)</span>
           </div>
           {name.trim() && (
-            <p className="text-[10px] text-muted-foreground font-mono bg-muted rounded-lg px-2 py-1 inline-block">
-              Storage: /{uploadFolder}/
-            </p>
+            <div className="space-y-2">
+              <p className="text-[10px] text-muted-foreground font-mono bg-muted rounded-lg px-2 py-1 inline-block">
+                Storage: /{tournamentFolder}/
+              </p>
+              
+              {/* Auto-detection status */}
+              {checkingGraphics && (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                  <span>Checking for existing graphics...</span>
+                </div>
+              )}
+              
+              {graphicsFound && !checkingGraphics && (
+                <div className="bg-muted rounded-xl p-3 space-y-1.5">
+                  <div className="text-xs font-bold text-foreground mb-2">Graphics Detection:</div>
+                  <div className="flex items-center gap-2">
+                    {graphicsFound.banner ? (
+                      <CheckCircle className="w-4 h-4 text-[#10b981]" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 text-[#f59e0b]" />
+                    )}
+                    <span className={`text-xs ${graphicsFound.banner ? 'text-[#10b981]' : 'text-[#f59e0b]'}`}>
+                      {graphicsFound.banner ? 'Banner found' : 'Banner not found'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {graphicsFound.large ? (
+                      <CheckCircle className="w-4 h-4 text-[#10b981]" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 text-[#f59e0b]" />
+                    )}
+                    <span className={`text-xs ${graphicsFound.large ? 'text-[#10b981]' : 'text-[#f59e0b]'}`}>
+                      {graphicsFound.large ? 'Large icon found' : 'Large icon not found'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {graphicsFound.square ? (
+                      <CheckCircle className="w-4 h-4 text-[#10b981]" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 text-[#f59e0b]" />
+                    )}
+                    <span className={`text-xs ${graphicsFound.square ? 'text-[#10b981]' : 'text-[#f59e0b]'}`}>
+                      {graphicsFound.square ? 'Square icon found' : 'Square icon not found'}
+                    </span>
+                  </div>
+                  
+                  {(!graphicsFound.banner || !graphicsFound.large || !graphicsFound.square) && (
+                    <div className="mt-3 pt-3 border-t border-border">
+                      <p className="text-[10px] text-muted-foreground mb-1">Upload missing files to:</p>
+                      <p className="text-[10px] font-mono text-muted-foreground bg-background rounded px-2 py-1">
+                        Storage → make-4789f4af-kkup-assets → {tournamentFolder}/
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           )}
-
           {/* Banner - full width */}
           <ImageUpload
             currentUrl={bannerUrl || null}

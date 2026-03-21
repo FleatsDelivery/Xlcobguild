@@ -382,3 +382,15 @@ export function getHeroImageByName(heroName: string): string {
   if (!heroId) return '';
   return getHeroImageUrl(heroId);
 }
+
+/**
+ * Get hero ID from hero display name (e.g. "Pudge" → 14)
+ * Useful for CSV imports where hero names are stored as strings
+ * @param heroName - The hero display name (case-insensitive)
+ * @returns Hero ID or null if not found
+ */
+export function getHeroIdByName(heroName: string): number | null {
+  const map = getNameToIdMap();
+  const heroId = map[heroName.toLowerCase()];
+  return heroId || null;
+}

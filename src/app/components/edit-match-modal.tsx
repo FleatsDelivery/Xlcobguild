@@ -40,13 +40,13 @@ interface EditMatchModalProps {
 
 export function EditMatchModal({ match, tournamentId, availableTeams, onClose, onSave }: EditMatchModalProps) {
   const [formData, setFormData] = useState({
-    team1_id: match.team1_id,
-    team2_id: match.team2_id,
-    team1_score: match.team1_score.toString(),
-    team2_score: match.team2_score.toString(),
+    team1_id: match.team1_id || '',
+    team2_id: match.team2_id || '',
+    team1_score: (match.team1_score ?? 0).toString(),
+    team2_score: (match.team2_score ?? 0).toString(),
     winner_team_id: match.winner_team_id || '',
-    stage: match.stage,
-    status: match.status,
+    stage: match.stage || '',
+    status: match.status || '',
     scheduled_time: match.scheduled_time ? new Date(match.scheduled_time).toISOString().slice(0, 16) : '',
     twitch_vod_url: match.twitch_vod_url || '',
     youtube_vod_url: match.youtube_vod_url || '',
@@ -180,7 +180,7 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
               )}
             </div>
             <p className="text-xs text-center text-field-dark/60">
-              {formData.stage.replace('_', ' ').toUpperCase()} • {formData.status.toUpperCase()}
+              {formData.stage ? formData.stage.replace('_', ' ').toUpperCase() : 'NO STAGE'} • {formData.status ? formData.status.toUpperCase() : 'NO STATUS'}
             </p>
           </div>
 

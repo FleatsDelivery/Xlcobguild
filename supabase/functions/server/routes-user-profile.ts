@@ -298,6 +298,49 @@ export function registerUserProfileRoutes(app: Hono, supabase: any, anonSupabase
     }
   });
 
+  // Update user theme preference (light/dark/system)
+  app.patch(`${PREFIX}/users/me/theme`, async (c) => {
+    try {
+      const accessToken = c.req.header('Authorization')?.split(' ')[1];
+      if (!accessToken) return c.json({ error: 'No access token provided' }, 401);
+
+      const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+      if (authError || !authUser) return c.json({ error: 'Unauthorized' }, 401);
+
+      const { data: dbUser, error: userError } = await supabase
+        .from('users').select('id, tcf_plus_active').eq('supabase_id', authUser.id).single();
+      if (userError || !dbUser) return c.json({ error: 'User not found' }, 404);
+
+      const { theme } = await c.req.json();
+      
+      // Validate theme value
+      if (!['light', 'dark', 'system'].includes(theme)) {
+        return c.json({ error: 'Invalid theme. Must be light, dark, or system.' }, 400);
+      }
+
+      // Enforce TCF+ gating for dark/system modes
+      if ((theme === 'dark' || theme === 'system') && !dbUser.tcf_plus_active) {
+        return c.json({ error: 'Dark and system themes require TCF+ membership.' }, 403);
+      }
+
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ dark_mode: theme })
+        .eq('id', dbUser.id);
+
+      if (updateError) {
+        console.error('Error updating theme preference:', updateError);
+        return c.json({ error: 'Failed to update theme preference' }, 500);
+      }
+
+      console.log(`Theme preference updated for user ${dbUser.id}: ${theme}`);
+      return c.json({ success: true, theme });
+    } catch (error) {
+      console.error('Update theme error:', error);
+      return c.json({ error: 'Internal server error' }, 500);
+    }
+  });
+
   // Get recent rank actions for a user
   app.get(`${PREFIX}/rank-actions/:userId`, async (c) => {
     try {

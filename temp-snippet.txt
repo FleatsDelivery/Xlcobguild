@@ -1,0 +1,1 @@
+Discord toggle bare variant is at lines 654-681 in mvp-submission-form.tsx and needs to be removed completely.

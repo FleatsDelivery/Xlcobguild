@@ -977,6 +977,141 @@ export function registerKkupReadRoutes(app: Hono, supabase: any, _anonSupabase: 
   });
 
   // ============================================================
+  // LIST ALL TOURNAMENTS (Simple endpoint for Kernel Kup page)
+  // ============================================================
+
+  app.get(`${PREFIX}/kkup/tournaments`, async (c) => {
+    try {
+      // Fetch all tournaments with winner info and POPD Kernel person IDs
+      const { data: tournaments, error } = await supabase
+        .from('kkup_tournaments')
+        .select(`
+          id,
+          name,
+          description,
+          status,
+          tournament_start_date,
+          tournament_end_date,
+          tournament_type,
+          prize_pool,
+          prize_pool_donations,
+          max_teams,
+          team_count,
+          player_count,
+          winning_team_id,
+          winning_team_name,
+          popd_kernel_1_person_id,
+          popd_kernel_2_person_id,
+          league_id,
+          kkup_season
+        `)
+        .order('tournament_start_date', { ascending: false });
+
+      if (error) {
+        console.error('Failed to fetch tournaments list:', error);
+        return c.json({ error: 'Failed to fetch tournaments', details: error.message }, 500);
+      }
+
+      // For tournaments with winning_team_id, fetch team details
+      const winningTeamIds = (tournaments || [])
+        .map(t => t.winning_team_id)
+        .filter(Boolean);
+
+      let winnerMap = new Map<string, any>();
+      if (winningTeamIds.length > 0) {
+        const { data: winningTeams } = await supabase
+          .from('kkup_teams')
+          .select('id, team_name, team_tag, logo_url')
+          .in('id', winningTeamIds);
+
+        (winningTeams || []).forEach(team => {
+          winnerMap.set(team.id, {
+            team_name: team.team_name,
+            team_tag: team.team_tag,
+            logo_url: team.logo_url,
+          });
+        });
+      }
+
+      // For tournaments with POPD Kernel winners, fetch person names
+      const popdPersonIds = (tournaments || [])
+        .flatMap(t => [t.popd_kernel_1_person_id, t.popd_kernel_2_person_id])
+        .filter(Boolean);
+
+      let popdPersonMap = new Map<string, string>();
+      if (popdPersonIds.length > 0) {
+        const { data: persons } = await supabase
+          .from('kkup_persons')
+          .select('id, display_name')
+          .in('id', popdPersonIds);
+
+        (persons || []).forEach(person => {
+          popdPersonMap.set(person.id, person.display_name);
+        });
+      }
+
+      // For active tournaments, fetch registration data with player previews
+      const activeTournamentIds = (tournaments || [])
+        .filter(t => ['upcoming', 'registration_open', 'registration_closed', 'roster_lock', 'live', 'paused', 'in_progress'].includes(t.status))
+        .map(t => t.id);
+
+      let registrationMap = new Map<string, { count: number; previews: any[] }>();
+      if (activeTournamentIds.length > 0) {
+        const { data: registrations } = await supabase
+          .from('kkup_registrations')
+          .select(`
+            tournament_id,
+            user_id,
+            users!inner(
+              discord_avatar,
+              discord_username,
+              tcf_plus_active
+            )
+          `)
+          .in('tournament_id', activeTournamentIds)
+          .order('created_at', { ascending: false });
+
+        // Group by tournament
+        const regsByTournament = (registrations || []).reduce<Record<string, any[]>>((acc, reg) => {
+          if (!acc[reg.tournament_id]) acc[reg.tournament_id] = [];
+          acc[reg.tournament_id].push(reg);
+          return acc;
+        }, {});
+
+        // Build preview data for each tournament
+        Object.entries(regsByTournament).forEach(([tournamentId, regs]) => {
+          registrationMap.set(tournamentId, {
+            count: regs.length,
+            previews: regs.slice(0, 15).map(r => ({
+              avatar: r.users?.discord_avatar || null,
+              name: r.users?.discord_username || 'Unknown',
+              tcf_plus_active: r.users?.tcf_plus_active || false,
+            })),
+          });
+        });
+      }
+
+      // Enrich tournaments with winner data, POPD Kernel names, and registration info
+      const enrichedTournaments = (tournaments || []).map(t => {
+        const regData = registrationMap.get(t.id);
+        return {
+          ...t,
+          winner: t.winning_team_id ? winnerMap.get(t.winning_team_id) : null,
+          popd_kernel_1_name: t.popd_kernel_1_person_id ? popdPersonMap.get(t.popd_kernel_1_person_id) : null,
+          popd_kernel_2_name: t.popd_kernel_2_person_id ? popdPersonMap.get(t.popd_kernel_2_person_id) : null,
+          registration_count: regData?.count || 0,
+          player_previews: regData?.previews || [],
+        };
+      });
+
+      return c.json({ tournaments: enrichedTournaments });
+    } catch (error: any) {
+      console.error('Get tournaments list error:', error);
+      return c.json({ error: 'Internal server error: ' + error.message }, 500);
+    }
+  });
+
+  // ============================================================
   // TOURNAMENT DETAIL — the big endpoint
   // ============================================================
 
@@ -1353,5 +1488,8 @@ export function registerKkupReadRoutes(app: Hono, supabase: any, _anonSupabase: 
       return c.json({ error: 'Internal server error: ' + error.message }, 500);
     }
   });
+
+  // NOTE: GET /kkup/tournaments/:id/staff is handled by routes-staff-applications.ts
+  // Duplicate removed to avoid route conflicts.
 
 }

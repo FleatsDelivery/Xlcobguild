@@ -1,8 +1,8 @@
-import { getHeroName, getHeroImage } from '@/utils/dota-constants';
+import { Pencil, Trophy, Swords, Skull } from '@/lib/icons';
 import { TeamLogo } from '@/app/components/team-logo';
-import { ExternalLink, Youtube, Pencil, Trophy, Swords, Skull } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { formatDateWithTime } from '@/lib/date-utils';
+import { getHeroName, getHeroImageUrl as getHeroImage, getHeroImageByName } from '@/lib/dota-heroes';
 
 interface PlayerProfile {
   id: string;
@@ -24,14 +24,20 @@ interface RosterEntry {
 interface PlayerStat {
   id: string;
   player_name: string;
-  hero_id: number;
-  hero_name: string;
+  hero_id?: number;        // Optional: numeric hero ID
+  hero?: string;           // Optional: hero name string (from kkup_player_match_stats)
+  hero_name?: string;      // Optional: hero name (alternative field)
   kills: number;
   deaths: number;
   assists: number;
   team_id: string;
-  is_winner: boolean;
+  is_winner?: boolean;
   net_worth?: number;
+  steam_id?: string | null;
+  account_id?: number | null;
+  dotabuff_url?: string | null;
+  opendota_url?: string | null;
+  avatar_url?: string | null;
   player?: {
     avatar_url: string | null;
   };
@@ -54,6 +60,7 @@ interface Match {
   youtube_url: string | null;
   match_id: number | null;
   series_id: number | null;
+  tournament_name?: string;  // For TeamLogo dynamic URL generation
 }
 
 interface MatchCardWithHeroesProps {
@@ -81,6 +88,21 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
   const team1Score = match.team1_score; // This is total kills for team 1
   const team2Score = match.team2_score; // This is total kills for team 2
 
+  // Helper: resolve hero display name from whichever field is populated
+  const resolveHeroName = (stat: PlayerStat): string => {
+    if (stat.hero) return stat.hero.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    if (stat.hero_name) return stat.hero_name;
+    if (stat.hero_id) return getHeroName(stat.hero_id);
+    return 'Unknown Hero';
+  };
+
+  // Helper: resolve hero portrait URL
+  const resolveHeroImage = (stat: PlayerStat): string | null => {
+    if (stat.hero) return getHeroImageByName(stat.hero) || null;
+    if (stat.hero_id) return getHeroImage(stat.hero_id) || null;
+    return null;
+  };
+
   return (
     <div className="bg-card rounded-2xl border-2 border-border overflow-hidden">
       {/* Match Header */}
@@ -88,7 +110,7 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-harvest text-white">
-              {match.stage.replace('_', ' ').toUpperCase()}
+              {match.stage.replace(/_/g, ' ').toUpperCase()}
             </span>
             <span className="text-sm text-white/80 font-semibold">
               {formatDate(match.scheduled_time)}
@@ -99,7 +121,7 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
               </span>
             )}
             {match.match_id && (
-              <span className="text-xs text-white/50 font-mono">
+              <span className="text-xs text-white/50 font-mono hidden sm:inline">
                 Match #{match.match_id}
               </span>
             )}
@@ -110,26 +132,6 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
             )}
           </div>
           <div className="flex gap-2">
-            {match.dotabuff_url && (
-              <Button
-                size="sm"
-                onClick={() => window.open(match.dotabuff_url!, '_blank')}
-                className="bg-[#3b82f6] hover:bg-[#2563eb] text-white"
-              >
-                <ExternalLink className="w-3 h-3 mr-1" />
-                Dotabuff
-              </Button>
-            )}
-            {match.youtube_url && (
-              <Button
-                size="sm"
-                onClick={() => window.open(match.youtube_url!, '_blank')}
-                className="bg-[#ff0000] hover:bg-[#cc0000] text-white"
-              >
-                <Youtube className="w-3 h-3 mr-1" />
-                VOD
-              </Button>
-            )}
             {isOwner && onEdit && (
               <Button
                 size="sm"
@@ -156,11 +158,20 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
             }`}>
               {/* Left: Team Info */}
               <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-                <TeamLogo logoUrl={match.team1.logo_url} teamName={match.team1.name} size="lg" />
+                <TeamLogo 
+                  logoUrl={match.team1.logo_url} 
+                  teamName={match.team1.name} 
+                  teamTag={match.team1.tag}
+                  size="lg" 
+                  tournamentName={match.tournament_name}
+                />
                 <div className="min-w-0">
                   <h3 className={`text-lg sm:text-2xl font-black truncate ${team1Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                     {match.team1.name}
                   </h3>
+                  {team1Won && match.winner_team_id && (
+                    <p className="text-xs font-black uppercase tracking-widest text-[#10b981]">Victory</p>
+                  )}
                   <p className="text-sm text-muted-foreground font-semibold">
                     {match.team1.tag && <span>{match.team1.tag} - </span>}
                     <span>Radiant</span>
@@ -182,7 +193,9 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Radiant Roster & Heroes</h4>
                 {team1Stats.map((stat) => {
-                  const heroName = getHeroName(stat.hero_id);
+                  const heroName = resolveHeroName(stat);
+                  const heroImage = resolveHeroImage(stat);
+                  const avatarUrl = stat.avatar_url || stat.player?.avatar_url;
                   return (
                     <div
                       key={stat.id}
@@ -192,35 +205,56 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                           : 'bg-background border-border hover:border-harvest/30'
                       }`}
                     >
-                      {/* Player Avatar */}
-                      <div className="relative group">
-                        {stat.player?.avatar_url ? (
+                      {/* Player Avatar → OpenDota */}
+                      <a
+                        href={stat.opendota_url || undefined}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className={stat.opendota_url ? 'hover:opacity-80 transition-opacity flex-shrink-0' : 'flex-shrink-0 cursor-default'}
+                        title={stat.opendota_url ? 'View on OpenDota' : undefined}
+                      >
+                        {avatarUrl ? (
                           <img
-                            src={stat.player.avatar_url}
+                            src={avatarUrl}
                             alt={stat.player_name}
-                            className="w-12 h-12 rounded-full border-2 border-border group-hover:border-harvest transition-all"
+                            className="w-10 h-10 rounded-full border-2 border-border"
                           />
                         ) : (
-                          <div className="w-12 h-12 rounded-full bg-harvest/20 flex items-center justify-center text-harvest font-bold border-2 border-border">
+                          <div className="w-10 h-10 rounded-full bg-harvest/20 flex items-center justify-center text-harvest font-bold border-2 border-border">
                             {stat.player_name ? stat.player_name.charAt(0).toUpperCase() : '?'}
                           </div>
                         )}
-                      </div>
+                      </a>
                       
                       {/* Player Info */}
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-foreground text-sm truncate">{stat.player_name}</p>
-                        <p className="text-xs text-muted-foreground truncate">{heroName}</p>
+                        {/* Name → Dotabuff */}
+                        <a
+                          href={stat.dotabuff_url || undefined}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className={`font-bold text-sm truncate block ${stat.dotabuff_url ? 'text-foreground hover:text-harvest transition-colors' : 'text-foreground cursor-default'}`}
+                          title={stat.dotabuff_url ? 'View on Dotabuff' : undefined}
+                        >
+                          {stat.player_name}
+                        </a>
+                        {/* Hero with portrait */}
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          {heroImage && (
+                            <img src={heroImage} alt={heroName} className="w-4 h-4 rounded object-cover flex-shrink-0" />
+                          )}
+                          <p className="text-xs text-muted-foreground truncate">{heroName}</p>
+                        </div>
                       </div>
 
                       {/* Net Worth */}
                       {stat.net_worth != null && (
                         <div className="text-right">
-                          {/* Desktop: Full number */}
                           <p className="hidden sm:block text-xs font-bold text-harvest">
                             {stat.net_worth.toLocaleString()}
                           </p>
-                          {/* Mobile: Truncated */}
                           <p className="sm:hidden text-xs font-bold text-harvest">
                             {(stat.net_worth / 1000).toFixed(1)}k
                           </p>
@@ -309,11 +343,20 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
             }`}>
               {/* Left: Team Info */}
               <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-                <TeamLogo logoUrl={match.team2.logo_url} teamName={match.team2.name} size="lg" />
+                <TeamLogo 
+                  logoUrl={match.team2.logo_url} 
+                  teamName={match.team2.name}
+                  teamTag={match.team2.tag}
+                  size="lg" 
+                  tournamentName={match.tournament_name}
+                />
                 <div className="min-w-0">
                   <h3 className={`text-lg sm:text-2xl font-black truncate ${team2Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                     {match.team2.name}
                   </h3>
+                  {team2Won && match.winner_team_id && (
+                    <p className="text-xs font-black uppercase tracking-widest text-[#10b981]">Victory</p>
+                  )}
                   <p className="text-sm text-muted-foreground font-semibold">
                     {match.team2.tag && <span>{match.team2.tag} - </span>}
                     <span>Dire</span>
@@ -335,7 +378,9 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Dire Roster & Heroes</h4>
                 {team2Stats.map((stat) => {
-                  const heroName = getHeroName(stat.hero_id);
+                  const heroName = resolveHeroName(stat);
+                  const heroImage = resolveHeroImage(stat);
+                  const avatarUrl = stat.avatar_url || stat.player?.avatar_url;
                   return (
                     <div
                       key={stat.id}
@@ -345,35 +390,56 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                           : 'bg-background border-border hover:border-harvest/30'
                       }`}
                     >
-                      {/* Player Avatar */}
-                      <div className="relative group">
-                        {stat.player?.avatar_url ? (
+                      {/* Player Avatar → OpenDota */}
+                      <a
+                        href={stat.opendota_url || undefined}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className={stat.opendota_url ? 'hover:opacity-80 transition-opacity flex-shrink-0' : 'flex-shrink-0 cursor-default'}
+                        title={stat.opendota_url ? 'View on OpenDota' : undefined}
+                      >
+                        {avatarUrl ? (
                           <img
-                            src={stat.player.avatar_url}
+                            src={avatarUrl}
                             alt={stat.player_name}
-                            className="w-12 h-12 rounded-full border-2 border-border group-hover:border-harvest transition-all"
+                            className="w-10 h-10 rounded-full border-2 border-border"
                           />
                         ) : (
-                          <div className="w-12 h-12 rounded-full bg-harvest/20 flex items-center justify-center text-harvest font-bold border-2 border-border">
+                          <div className="w-10 h-10 rounded-full bg-harvest/20 flex items-center justify-center text-harvest font-bold border-2 border-border">
                             {stat.player_name ? stat.player_name.charAt(0).toUpperCase() : '?'}
                           </div>
                         )}
-                      </div>
+                      </a>
                       
                       {/* Player Info */}
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-foreground text-sm truncate">{stat.player_name}</p>
-                        <p className="text-xs text-muted-foreground truncate">{heroName}</p>
+                        {/* Name → Dotabuff */}
+                        <a
+                          href={stat.dotabuff_url || undefined}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className={`font-bold text-sm truncate block ${stat.dotabuff_url ? 'text-foreground hover:text-harvest transition-colors' : 'text-foreground cursor-default'}`}
+                          title={stat.dotabuff_url ? 'View on Dotabuff' : undefined}
+                        >
+                          {stat.player_name}
+                        </a>
+                        {/* Hero with portrait */}
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          {heroImage && (
+                            <img src={heroImage} alt={heroName} className="w-4 h-4 rounded object-cover flex-shrink-0" />
+                          )}
+                          <p className="text-xs text-muted-foreground truncate">{heroName}</p>
+                        </div>
                       </div>
 
                       {/* Net Worth */}
                       {stat.net_worth != null && (
                         <div className="text-right">
-                          {/* Desktop: Full number */}
                           <p className="hidden sm:block text-xs font-bold text-harvest">
                             {stat.net_worth.toLocaleString()}
                           </p>
-                          {/* Mobile: Truncated */}
                           <p className="sm:hidden text-xs font-bold text-harvest">
                             {(stat.net_worth / 1000).toFixed(1)}k
                           </p>

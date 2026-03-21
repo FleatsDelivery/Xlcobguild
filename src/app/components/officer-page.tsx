@@ -39,6 +39,8 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [showSyncConfirm, setShowSyncConfirm] = useState(false);
   const [refreshingOpenDota, setRefreshingOpenDota] = useState(false);
+  const [backfillingHeroes, setBackfillingHeroes] = useState(false);
+  const [showBackfillConfirm, setShowBackfillConfirm] = useState(false);
 
   // Handler for syncing names and logos
   const handleSyncNamesAndLogos = async () => {
@@ -61,7 +63,7 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
         throw new Error(errorData.error || `Server error: ${response.status}`);
       }
       const data = await response.json();
-      toast.success(`Synced ${data.playersUpdated} players and ${data.teamsUpdated} teams!`);
+      toast.success(`Synced ${data.playersUpdated} players, ${data.teamsUpdated} teams, ${data.masterTeamsUpdated} master teams, ${data.usersUpdated} users!`);
     } catch (error) {
       console.error('Sync error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to sync names & logos';
@@ -98,6 +100,40 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
       toast.error('An unexpected error occurred. Please try again.');
     } finally {
       setRefreshingOpenDota(false);
+    }
+  };
+
+  // Handler for backfilling hero IDs from hero names
+  const handleBackfillHeroIds = async () => {
+    setBackfillingHeroes(true);
+    try {
+      const token = localStorage.getItem('supabase_token');
+      if (!token) {
+        toast.error('Authentication token not found. Please log in again.');
+        return;
+      }
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/backfill-hero-ids`,
+        {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        }
+      );
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
+      }
+      const data = await response.json();
+      toast.success(`Hero ID backfill complete: ${data.updated} updated, ${data.skipped} skipped, ${data.failed} failed!`);
+      if (data.errors && data.errors.length > 0) {
+        console.warn('Hero backfill errors:', data.errors);
+      }
+    } catch (error) {
+      console.error('Backfill error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to backfill hero IDs';
+      toast.error(`Backfill failed: ${errorMessage}`);
+    } finally {
+      setBackfillingHeroes(false);
     }
   };
 
@@ -237,6 +273,20 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
                     <div className="text-left">
                       <p className="text-sm font-bold text-foreground">{refreshingOpenDota ? 'Syncing with OpenDota...' : 'Refresh All User Stats'}</p>
                       <p className="text-xs text-muted-foreground">Sync MMR, medals & match history for all members</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-harvest group-hover:translate-x-1 transition-transform" />
+                </button>
+
+                {/* Backfill Hero IDs */}
+                <button onClick={() => setShowBackfillConfirm(true)} disabled={backfillingHeroes} className={adminBtnClass}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-harvest to-amber flex items-center justify-center shadow-md">
+                      {backfillingHeroes ? <Loader2 className="w-6 h-6 text-white animate-spin" /> : <RefreshCw className="w-6 h-6 text-white" />}
+                    </div>
+                    <div className="text-left">
+                      <p className="text-sm font-bold text-foreground">{backfillingHeroes ? 'Backfilling...' : 'Backfill Hero IDs'}</p>
+                      <p className="text-xs text-muted-foreground">Update hero IDs from hero names</p>
                     </div>
                   </div>
                   <ChevronRight className="w-5 h-5 text-harvest group-hover:translate-x-1 transition-transform" />
@@ -393,6 +443,20 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
             handleSyncNamesAndLogos();
           }}
           onCancel={() => setShowSyncConfirm(false)}
+        />
+      )}
+
+      {showBackfillConfirm && (
+        <ConfirmModal
+          title="Confirm Backfill"
+          message="This will update hero IDs from hero names in the database. Existing data will be overwritten. Are you sure?"
+          confirmText="Backfill Now"
+          confirmVariant="primary"
+          onConfirm={() => {
+            setShowBackfillConfirm(false);
+            handleBackfillHeroIds();
+          }}
+          onCancel={() => setShowBackfillConfirm(false)}
         />
       )}
     </div>

@@ -23,6 +23,7 @@ import { registerKkupReadRoutes } from "./routes-kkup-read.ts";
 import { registerKkupWriteRoutes } from "./routes-kkup-write.ts";
 import { registerTournamentCrudRoutes } from "./routes-tournament-crud.ts";
 import { registerTournamentBuilderRoutes } from "./routes-tournament-builder.ts";
+import { registerTournamentTabRoutes } from "./routes-tournament-tabs.ts";
 import { registerAdminImportRoutes } from "./routes-admin-import.ts";
 import { registerKkupToolsRoutes } from "./routes-kkup-tools.ts";
 import { registerCsvImportRoutes } from "./routes-csv-import.ts";
@@ -45,6 +46,8 @@ import { registerGuildRoutes } from "./routes-guilds.ts";
 import { registerSeasonRoutes } from "./routes-seasons.ts";
 
 import { registerBracketRoutes } from "./routes-bracket.ts";
+import { registerConfigRoutes } from "./routes-config.ts";
+import { registerBracketBuilderRoutes } from "./routes-bracket-builder.ts";
 
 import { PREFIX } from "./helpers.ts";
 
@@ -118,6 +121,7 @@ registerStaffApplicationRoutes(app, supabase, anonSupabase);  // Must be before 
 registerKkupReadRoutes(app, supabase, anonSupabase);       // hall-of-fame before :kkup_id
 registerKkupWriteRoutes(app, supabase, anonSupabase);
 registerTournamentCrudRoutes(app, supabase, anonSupabase);
+registerTournamentTabRoutes(app, supabase, anonSupabase);
 registerTournamentBuilderRoutes(app, supabase, anonSupabase);
 registerAdminImportRoutes(app, supabase, anonSupabase);
 registerKkupToolsRoutes(app, supabase, anonSupabase);
@@ -137,6 +141,8 @@ registerDiscordCommandsRoute(app);
 registerGuildRoutes(app, supabase, anonSupabase);
 registerSeasonRoutes(app, supabase, anonSupabase);
 registerBracketRoutes(app, supabase, anonSupabase);
+registerConfigRoutes(app, supabase, anonSupabase);
+registerBracketBuilderRoutes(app, supabase, anonSupabase);
 
 // ── Start server ──
 Deno.serve(app.fetch);

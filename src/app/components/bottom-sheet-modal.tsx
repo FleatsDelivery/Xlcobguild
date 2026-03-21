@@ -153,6 +153,13 @@ export function BottomSheetModal({
     return () => document.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
+  // Close on navigation — any hash change means the user left the page
+  useEffect(() => {
+    const handleHashChange = () => onClose();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [onClose]);
+
   // Lock background scroll
   useEffect(() => {
     const original = document.body.style.overflow;

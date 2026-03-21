@@ -516,7 +516,7 @@ export function registerNotificationRoutes(
 
   // ═══════════════════════════════════════════════════════
   // 4c. TOGGLE FREEZE ON ACTIVITY ENTRY
-  // ═══════════════════════════════════════════════════════
+  // ═════════════════════���═════════════════════════════════
 
   app.patch(`${PREFIX}/user-activity/:id/freeze`, async (c: any) => {
     try {
@@ -655,7 +655,7 @@ export function registerNotificationRoutes(
   });
 
 
-  // ═══════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════
   // 7. SEED DEFAULT NOTIFICATION CONFIGS (one-time setup)
   // ═══════════════════════════════════════════════════════
 
@@ -724,31 +724,13 @@ export function registerNotificationRoutes(
         count += mvpCount || 0;
       } catch (_) { /* non-critical */ }
 
-      // 3. Pending staff applications (KV-based — scan all tournaments)
+      // 3. Pending staff applications (use kkup_staff_applications table)
       try {
-        const { data: tournaments } = await supabase
-          .from('kkup_tournaments')
-          .select('id')
-          .in('status', ['upcoming', 'registration_open', 'registration_closed']);
-        for (const t of (tournaments || [])) {
-          const apps = await kv.getByPrefix(`staff_app:${t.id}:`);
-          for (const item of (apps || [])) {
-            try {
-              // Robust parsing: handle objects (new) and legacy JSON strings
-              let app: any;
-              if (typeof item === 'string') {
-                app = JSON.parse(item);
-              } else if (item?.value && typeof item.value === 'string') {
-                app = JSON.parse(item.value);
-              } else if (item?.value && typeof item.value === 'object') {
-                app = item.value;
-              } else {
-                app = item;
-              }
-              if (app?.status === 'pending') count++;
-            } catch { /* skip bad entries */ }
-          }
-        }
+        const { count: staffCount } = await supabase
+          .from('kkup_staff_applications')
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'pending');
+        count += staffCount || 0;
       } catch (_) { /* non-critical */ }
 
       return c.json({ pending_count: count });

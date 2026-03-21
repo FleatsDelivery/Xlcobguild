@@ -533,6 +533,77 @@ export function InboxPage({ user, onBadgeRefresh }: InboxPageProps) {
     }
   };
 
+  // Join request inline actions (captain: accept / decline / dismiss)
+  const handleJoinRequestAction = async (notif: Notification, action: 'accepted' | 'declined' | 'dismissed') => {
+    const meta = notif.metadata;
+    const inviteId = meta?.invite_id || notif.related_id;
+    const teamId = meta?.team_id;
+    const tournamentId = meta?.tournament_id;
+
+    if (!inviteId || !teamId || !tournamentId) {
+      if (notif.action_url) {
+        window.location.hash = notif.action_url.replace('#', '');
+      }
+      return;
+    }
+
+    setActioningId(notif.id);
+    try {
+      const headers = await getHeaders();
+      const res = await fetch(
+        `${apiBase}/kkup/tournaments/${tournamentId}/teams/${teamId}/join-requests/${inviteId}`,
+        {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify({ status: action }),
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'Unknown error' }));
+        if (res.status === 404) {
+          showResultAndRemove(notif.id, { status: 'stale', message: 'This join request is no longer valid.' });
+          markNotifActioned(notif.id);
+          return;
+        }
+        setActionResults(prev => new Map(prev).set(notif.id, {
+          status: 'error' as const,
+          message: err.error || `Failed to ${action} join request`,
+        }));
+        setTimeout(() => {
+          setActionResults(prev => { const next = new Map(prev); next.delete(notif.id); return next; });
+        }, 4000);
+        return;
+      }
+
+      const data = await res.json();
+
+      if (action === 'dismissed') {
+        // Dismissed: silently remove without actioning
+        setNotifications(prev => prev.filter(n => n.id !== notif.id));
+        setActionResults(prev => { const next = new Map(prev); next.delete(notif.id); return next; });
+      } else {
+        markNotifActioned(notif.id);
+        showResultAndRemove(notif.id, {
+          status: action,
+          message: data.message || (action === 'accepted' ? 'Player added to roster!' : 'Join request declined.'),
+        });
+        invalidateActivity();
+      }
+    } catch (err) {
+      console.error('Join request action error:', err);
+      setActionResults(prev => new Map(prev).set(notif.id, {
+        status: 'error' as const,
+        message: 'Something went wrong. Please try again.',
+      }));
+      setTimeout(() => {
+        setActionResults(prev => { const next = new Map(prev); next.delete(notif.id); return next; });
+      }, 4000);
+    } finally {
+      setActioningId(null);
+    }
+  };
+
   // Prize award inline actions (Accept / Decline)
   const handlePrizeAction = async (notif: Notification, action: 'accepted' | 'declined') => {
     const meta = notif.metadata;
@@ -743,6 +814,7 @@ export function InboxPage({ user, onBadgeRefresh }: InboxPageProps) {
             onDismiss={dismissNotif}
             onAction={handleActionClick}
             onInviteAction={handleInviteAction}
+            onJoinRequestAction={handleJoinRequestAction}
             onPrizeAction={handlePrizeAction}
             actioningId={actioningId}
             actionResults={actionResults}

@@ -39,6 +39,28 @@ import { TransparencyPage } from '@/app/components/transparency-page';
 
 type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kkup' | 'logo-management' | 'steam-research' | 'practice' | 'hall-of-fame' | 'csv-import' | 'tournament-hub' | 'officer' | 'officer-inbox' | 'giveaways' | 'giveaway-detail' | 'secret-shop' | 'terms' | 'privacy' | 'transparency';
 
+// ═══════════════════════════════════════════════════════
+// Theme Syncer — syncs DB theme preference when user loads
+// ═══════════════════════════════════════════════════════
+function ThemeSyncer({ user }: { user: any }) {
+  const { setTheme } = useTheme();
+  const [synced, setSynced] = useState(false);
+
+  useEffect(() => {
+    if (user && !synced && user.dark_mode) {
+      // Sync theme from database (but only once on initial load)
+      const savedTheme = user.dark_mode as 'light' | 'dark' | 'system';
+      if (['light', 'dark', 'system'].includes(savedTheme)) {
+        setTheme(savedTheme);
+        setSynced(true);
+        console.log(`🌽 Synced theme from database: ${savedTheme}`);
+      }
+    }
+  }, [user, synced, setTheme]);
+
+  return null; // No UI, just side effects
+}
+
 // Mock user data for development mode
 const MOCK_USER = {
   id: 'dev-user-123',
@@ -422,15 +444,25 @@ export default function App() {
       // Fetch officer pending count (lightweight, runs for officers only)
       if (isOfficer(user.role)) {
         try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+          
           const officerRes = await fetch(
             `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/officer/pending-count`,
-            { headers: { 'Authorization': `Bearer ${session.access_token}` } }
+            { 
+              headers: { 'Authorization': `Bearer ${session.access_token}` },
+              signal: controller.signal
+            }
           );
+          clearTimeout(timeoutId);
+          
           if (officerRes.ok) {
             const officerData = await officerRes.json();
             setOfficerPendingCount(officerData.pending_count || 0);
           }
-        } catch (_) { /* non-critical */ }
+        } catch (err) { 
+          console.warn('Officer pending count timed out or failed:', err);
+        }
       }
     };
 
@@ -505,6 +537,7 @@ export default function App() {
   return (
     <ThemeProvider>
     <ThemeEnforcer isTcfPlus={!!user?.tcf_plus_active} />
+    <ThemeSyncer user={user} />
     <div className="min-h-screen bg-background">
       <Navigation 
         currentPage={currentPage} 

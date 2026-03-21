@@ -1,0 +1,290 @@
+[
+  {
+    "tournament": "Kernel Kup 1",
+    "id": "a3a33d3f-2b44-45e9-a53e-4ee7f2206f60",
+    "team_name": "CaramellRoshan",
+    "team_tag": "CaraRosh",
+    "placement": "1",
+    "wins": 2,
+    "losses": 0
+  },
+  {
+    "tournament": "Kernel Kup 1",
+    "id": "d06af86c-6125-4db2-aed1-d96eeb6f5a58",
+    "team_name": "Big Dick LaNm",
+    "team_tag": "BDLN",
+    "placement": null,
+    "wins": 1,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 1",
+    "id": "f64b408a-88aa-4b14-bbc8-dd0c36e8111f",
+    "team_name": "Mutha Shuckas",
+    "team_tag": "SHUCK",
+    "placement": null,
+    "wins": 0,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 2",
+    "id": "71f3528d-8e35-444e-a352-772a4afdb121",
+    "team_name": "Elliott Jewelers",
+    "team_tag": "EJew",
+    "placement": "1",
+    "wins": 3,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 2",
+    "id": "0e9eecfd-3264-4076-8fe1-fa5d85b06624",
+    "team_name": "Staff Infection",
+    "team_tag": "S.I.",
+    "placement": null,
+    "wins": 2,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 2",
+    "id": "ed0da65e-130f-4caa-9f5d-b2b8199a506e",
+    "team_name": "Eat A Frosted Donut",
+    "team_tag": "EAFD",
+    "placement": null,
+    "wins": 0,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 3",
+    "id": "dd878e9b-cada-481d-9b49-5d86a60b3768",
+    "team_name": "Eat A Frosted Donut",
+    "team_tag": "EAFD",
+    "placement": "1",
+    "wins": 3,
+    "losses": 0
+  },
+  {
+    "tournament": "Kernel Kup 3",
+    "id": "aeb130a3-160e-4e0e-86cc-8b96b1904f74",
+    "team_name": "Mutha Shuckas",
+    "team_tag": "SHUCK",
+    "placement": null,
+    "wins": 2,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 3",
+    "id": "a2888973-0510-4449-b33f-b24aea1f242a",
+    "team_name": "Staff Infection",
+    "team_tag": "S.I.",
+    "placement": null,
+    "wins": 1,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 3",
+    "id": "9f2edc66-b4ba-45a7-9acc-1b1c88b6b9ce",
+    "team_name": "CA$HFLOW",
+    "team_tag": "CA$H",
+    "placement": null,
+    "wins": 1,
+    "losses": 3
+  },
+  {
+    "tournament": "Kernel Kup 4",
+    "id": "9b647bfa-38f0-49a8-9a64-b340f541cd26",
+    "team_name": "Eat A Frosted Donut",
+    "team_tag": "EAFD",
+    "placement": "1",
+    "wins": 3,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 4",
+    "id": "adc21345-9567-402e-a3df-221d741668f9",
+    "team_name": "Pizzadog Academy",
+    "team_tag": "PizzadogA",
+    "placement": null,
+    "wins": 1,
+    "losses": 3
+  },
+  {
+    "tournament": "Kernel Kup 5",
+    "id": "6079d7b2-70e4-4383-99fd-8726d7a70fba",
+    "team_name": "Foop City",
+    "team_tag": "FOOP",
+    "placement": "1",
+    "wins": 4,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 5",
+    "id": "e6863dfe-db04-457e-b946-6d5c7d928373",
+    "team_name": "CORN DAWGS",
+    "team_tag": "CDAWGS",
+    "placement": null,
+    "wins": 3,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 5",
+    "id": "a507272b-6e2e-405e-927b-3ce79fd23d9c",
+    "team_name": "Malibu DILFs",
+    "team_tag": "MDILFS",
+    "placement": null,
+    "wins": 1,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 5",
+    "id": "7ee653c8-7137-4ead-b719-1e3faac36281",
+    "team_name": "Korn in my Poop",
+    "team_tag": "KIMP",
+    "placement": null,
+    "wins": 1,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 5",
+    "id": "7a80a24b-5038-4c62-a5a5-f182f7a03e2a",
+    "team_name": "Pizzadog Academy",
+    "team_tag": "PizzadogA",
+    "placement": null,
+    "wins": 0,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 5",
+    "id": "6e39f579-8487-4b9c-b59e-0160c0d71610",
+    "team_name": "Fear The Hog",
+    "team_tag": "FTHOG",
+    "placement": null,
+    "wins": 0,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 6",
+    "id": "c3b543b8-86ab-49e6-9f70-7729091bd36e",
+    "team_name": "Anti-Mage Enjoyers",
+    "team_tag": "FPAM",
+    "placement": "1",
+    "wins": 2,
+    "losses": 0
+  },
+  {
+    "tournament": "Kernel Kup 6",
+    "id": "11595e4b-c214-43a6-87ab-91c04c8e1ac7",
+    "team_name": "Mutha Shuckas",
+    "team_tag": "SHUCK",
+    "placement": null,
+    "wins": 0,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 7",
+    "id": "4164d02f-438c-41df-ada5-6a14cf974dc5",
+    "team_name": "Nebraska Cornhuskers",
+    "team_tag": "Iowa-Sucks",
+    "placement": "1",
+    "wins": 2,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 7",
+    "id": "859d5309-ffd3-4047-a877-3df89ad2552a",
+    "team_name": "Cornhub",
+    "team_tag": "CHUB",
+    "placement": null,
+    "wins": 1,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 8",
+    "id": "35a5945f-ee46-483f-ba51-8d4520d1f70c",
+    "team_name": "Tiny Corn Energy",
+    "team_tag": "TCE",
+    "placement": "1",
+    "wins": 2,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 8",
+    "id": "6a5945bd-3624-4cef-8ad6-5994d83c680d",
+    "team_name": "CornHub",
+    "team_tag": "CHUB",
+    "placement": null,
+    "wins": 1,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 9",
+    "id": "5928e030-1b42-4e80-99dc-9558aaf491f2",
+    "team_name": "Elliott Jewelers",
+    "team_tag": "Bojangles",
+    "placement": "1",
+    "wins": 4,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 9",
+    "id": "0b1462a4-fe24-4bd9-8aaf-e159d5835dea",
+    "team_name": "Team Mavi",
+    "team_tag": "Mavi",
+    "placement": null,
+    "wins": 3,
+    "losses": 2
+  },
+  {
+    "tournament": "Kernel Kup 9",
+    "id": "5ad96953-18f9-47fe-9a38-9849e4cd15a1",
+    "team_name": "Fear The Hog",
+    "team_tag": "Dr Clayton",
+    "placement": null,
+    "wins": 1,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 9",
+    "id": "5f6b474b-862f-4e2b-b9fa-96d479d39496",
+    "team_name": "Tiny Corn Energy",
+    "team_tag": ".4leks...",
+    "placement": null,
+    "wins": 1,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 9",
+    "id": "605d9c42-79bf-4462-9074-9ac2728d355c",
+    "team_name": "Nebraska Cornhuskers",
+    "team_tag": "businessCasual",
+    "placement": null,
+    "wins": 1,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 9",
+    "id": "4e40aa48-246b-483f-b69e-2883f7ded10d",
+    "team_name": "Team Pr1de",
+    "team_tag": "Pr1de",
+    "placement": null,
+    "wins": 0,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 9",
+    "id": "9351affb-77dc-4d86-803b-8ff134e4b1a3",
+    "team_name": "Eat Booty O's",
+    "team_tag": "Vriggchan",
+    "placement": null,
+    "wins": 0,
+    "losses": 1
+  },
+  {
+    "tournament": "Kernel Kup 9",
+    "id": "be2f0549-3d82-43bc-b980-150125ab629d",
+    "team_name": "Isiah From The News",
+    "team_tag": "Z.T. Pastamancer",
+    "placement": null,
+    "wins": 0,
+    "losses": 2
+  }
+]

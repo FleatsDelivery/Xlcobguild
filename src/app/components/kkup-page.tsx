@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Trophy, Sparkles, Loader2, AlertCircle, Plus, Swords, Crown, Users } from 'lucide-react';
+import { Sparkles, Swords, Plus, Trophy, Crown, Users, AlertCircle } from 'lucide-react';
+import { TournamentCard } from './tournament-card';
+import { ActiveTournamentCard } from './active-tournament-card';
 import { Button } from '@/app/components/ui/button';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
-import { Footer } from '@/app/components/footer';
-import { TournamentCreateModal } from '@/app/components/tournament-create-modal';
-import { TournamentCard } from '@/app/components/tournament-card';
+import { TournamentCreateModal } from './tournament-create-modal';
+import { Footer } from './footer';
 import { toast } from 'sonner';
+import { projectId, publicAnonKey } from '/utils/supabase/info';
 
 interface Tournament {
   id: string;
@@ -143,12 +144,13 @@ function Top3Skeleton() {
 }
 
 export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
-  const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [liveTournaments, setLiveTournaments] = useState<any[]>([]);
   const [loadingLive, setLoadingLive] = useState(true);
+  // Completed tournaments from kkup_tournaments table (includes winner data)
+  const [completedKkupTournaments, setCompletedKkupTournaments] = useState<any[]>([]);
 
   // Top 3 Hall of Fame
   const [top3Players, setTop3Players] = useState<HofPlayer[]>([]);
@@ -157,32 +159,17 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
   // Fire all three fetches in parallel on mount
   useEffect(() => {
     fetchLiveTournaments();
-    fetchTournaments();
+    // Removed fetchTournaments() — we don't need Phase 1 data anymore
     fetchTop3Players();
   }, []);
 
-  const fetchTournaments = async () => {
-    try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/tournaments`,
-        { headers: { 'Authorization': `Bearer ${publicAnonKey}` } }
-      );
-
-      if (!response.ok) throw new Error('Failed to fetch tournaments');
-
-      const data = await response.json();
-      setTournaments(data.tournaments || []);
-    } catch (err) {
-      console.error('Error fetching tournaments:', err);
-      setError('Failed to load tournament data');
-    } finally {
-      setLoadingHistory(false);
-    }
-  };
+  // REMOVED: No longer needed, kkup/tournaments endpoint handles everything
+  // const fetchTournaments = async () => { ... };
 
   // Fetch Phase 2 live tournaments from kkup_tournaments
   const fetchLiveTournaments = async () => {
     setLoadingLive(true);
+    setLoadingHistory(true); // Also controls history loading now
     try {
       const token = localStorage.getItem('supabase_token') || publicAnonKey;
       const response = await fetch(
@@ -191,16 +178,41 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
       );
       if (response.ok) {
         const data = await response.json();
-        // Only show non-archived, non-completed Phase 2 tournaments
-        const active = (data.tournaments || []).filter((t: any) =>
+        const allTournaments = data.tournaments || [];
+        
+        // Split into active and completed
+        const active = allTournaments.filter((t: any) =>
           ['upcoming', 'registration_open', 'registration_closed', 'roster_lock', 'live', 'registration', 'active'].includes(t.status)
         );
+        const completed = allTournaments.filter((t: any) =>
+          ['completed', 'archived'].includes(t.status)
+        );
+        
         setLiveTournaments(active);
+        
+        // Map kkup_tournaments fields to match Tournament interface
+        const mappedCompleted = completed.map((t: any) => ({
+          id: t.id,
+          name: t.name,
+          status: t.status,
+          start_date: t.tournament_start_date,
+          end_date: t.tournament_end_date,
+          prize_pool_cents: t.prize_pool,
+          team_count: t.team_count,
+          kkup_season: t.kkup_season,
+          winner: t.winner, // Already enriched by server with { team_name, team_tag, logo_url }
+          popd_kernel_1_name: t.popd_kernel_1_name,
+          popd_kernel_2_name: t.popd_kernel_2_name,
+        }));
+        
+        setCompletedKkupTournaments(mappedCompleted);
       }
     } catch (err) {
       console.log('Live tournaments fetch failed:', err);
+      setError('Failed to load tournament data');
     } finally {
       setLoadingLive(false);
+      setLoadingHistory(false);
     }
   };
 
@@ -234,18 +246,18 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
     }
   };
 
-  // Past tournaments grouped by season, sorted within each group by name/number desc
+  // Past tournaments grouped by season, sorted within each group by name/number ascending (chronological)
   const getKKupNumber = (t: any): number => {
     const match = t.name.match(/Kernel Kup (\d+)|KKup (\d+)|KKUP (\d+)/i);
     return match ? parseInt(match[1] || match[2] || match[3]) : 0;
   };
 
-  const pastTournaments = tournaments
-    .filter(t => t.status === 'completed' || t.status === 'archived')
-    .sort((a, b) => getKKupNumber(b) - getKKupNumber(a));
+  // Now just use the completed kkup tournaments (no merging needed)
+  const pastTournaments = completedKkupTournaments
+    .sort((a, b) => getKKupNumber(a) - getKKupNumber(b)); // Ascending: 4, 5, 6 instead of 6, 5, 4
 
-  // Group by season (descending season number)
-  const tournamentsBySeason = pastTournaments.reduce<Record<number, Tournament[]>>((acc, t) => {
+  // Group by season (ascending season number - chronological story from Season 1 onwards)
+  const tournamentsBySeason = pastTournaments.reduce<Record<number, any[]>>((acc, t) => {
     const season = t.kkup_season ?? 0; // 0 = unassigned
     if (!acc[season]) acc[season] = [];
     acc[season].push(t);
@@ -254,7 +266,12 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
 
   const seasonNumbers = Object.keys(tournamentsBySeason)
     .map(Number)
-    .sort((a, b) => b - a); // Descending: Season 4, 3, 2, 1, 0(unassigned)
+    .sort((a, b) => {
+      // Put unassigned (0) at the end, otherwise sort ascending (1, 2, 3, 4)
+      if (a === 0) return 1;
+      if (b === 0) return -1;
+      return a - b; // Ascending: Season 1, 2, 3, 4
+    });
 
   if (error && !loadingLive) {
     return (
@@ -320,21 +337,21 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
           </div>
         </div>
 
-        {/* ── Live Tournaments (Phase 2 — kkup_tournaments) ── */}
+        {/* ── New Tournaments (Phase 2 — kkup_tournaments) ── */}
         {loadingLive ? (
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <Swords className="w-6 h-6 text-harvest" />
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Live Tournaments</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground">New Tournaments</h2>
             </div>
             <LiveTournamentSkeleton />
           </div>
-        ) : (liveTournaments.length > 0 || user?.role === 'owner') ? (
+        ) : liveTournaments.length > 0 ? (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Swords className="w-6 h-6 text-harvest" />
-                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Live Tournaments</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">New Tournaments</h2>
               </div>
               {user?.role === 'owner' && (
                 <Button
@@ -358,10 +375,9 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 {liveTournaments.map((t: any) => (
-                  <TournamentCard
+                  <ActiveTournamentCard
                     key={t.id}
                     tournament={t}
-                    variant="live"
                     onClick={() => window.location.hash = `#tournament-hub/${t.id}`}
                   />
                 ))}
@@ -407,12 +423,11 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
 
                   {/* Tournament cards grid — inside the season card */}
                   <div className="p-3 sm:p-5">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                       {seasonTournaments.map((tournament: any) => (
                         <TournamentCard
                           key={tournament.id}
                           tournament={tournament}
-                          variant="past"
                           onClick={() => window.location.hash = `#tournament-hub/${tournament.id}`}
                         />
                       ))}

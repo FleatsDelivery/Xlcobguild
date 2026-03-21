@@ -1,0 +1,110 @@
+sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:127 [Hydrated]
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:18257 <link rel=preload> uses an unsupported `as` value
+fw @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:18257
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49563
+sp @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+Xa @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+(anonymous) @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+my @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:1
+uy @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:1
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49563 🌽 Navigation restore — URL hash: "" | initialHash: "" | localStorage: "#tournament-hub/9da03d90-3ed1-4047-a92d-b985ec55f44a" | effective: "#tournament-hub/9da03d90-3ed1-4047-a92d-b985ec55f44a"
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49572 🌽 Restoring hash to URL: #tournament-hub/9da03d90-3ed1-4047-a92d-b985ec55f44a
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 Discord user identities: (2) [{…}, {…}]
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49628 🔍 /auth/me response status: 200 
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49630 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49518 🌽 Synced theme from database: light
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:35677 🌽 Tournament Context: Fetching data for tournament 9da03d90-3ed1-4047-a92d-b985ec55f44a
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 Discord user identities: (2) [{…}, {…}]
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 Discord user identities: (2) [{…}, {…}]
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49628 🔍 /auth/me response status: 200 
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49630 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49628 🔍 /auth/me response status: 200 
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49630 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+/#tournament-hub/9da03d90-3ed1-4047-a92d-b985ec55f44a:1 Access to fetch at 'https://zizrvkkuqzwzxgwpuvxb.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments/9da03d90-3ed1-4047-a92d-b985ec55f44a/staff' from origin 'https://thecornfield.figma.site' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:35657  GET https://zizrvkkuqzwzxgwpuvxb.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments/9da03d90-3ed1-4047-a92d-b985ec55f44a/staff net::ERR_FAILED
+b @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:35657
+await in b
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:35677
+sp @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+Xa @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+(anonymous) @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+my @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:1
+uy @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:1
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:35671 ❌ Tournament context fetch error: TypeError: Failed to fetch
+    at b (abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:35657:23)
+b @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:35671
+await in b
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:35677
+sp @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+Xa @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+(anonymous) @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:8
+my @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:1
+uy @ sites-runtime.33e2ee7bb17c42f7a05f714ed67ab906b1bcf091eed03f65b17c30067e8dbd40.js:1
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 Discord user identities: (2) [{…}, {…}]
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49628 🔍 /auth/me response status: 200 
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49630 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}
+/#tournament-hub/9da03d90-3ed1-4047-a92d-b985ec55f44a:1 Access to fetch at 'https://zizrvkkuqzwzxgwpuvxb.supabase.co/auth/v1/user' from origin 'https://thecornfield.figma.site' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:6947  GET https://zizrvkkuqzwzxgwpuvxb.supabase.co/auth/v1/user net::ERR_FAILED 500 (Internal Server Error)
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:6947
+tx @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:7164
+$e @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:7154
+_getUser @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9478
+getUser @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9471
+x @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49605
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49595
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9984
+_notifyAllSubscribers @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9982
+_recoverAndRefresh @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9941
+await in _recoverAndRefresh
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:10160
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9398
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:7751
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:7166 TypeError: Failed to fetch
+    at abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:6947:53
+    at tx (abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:7164:15)
+    at $e (abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:7154:93)
+    at Hx._getUser (abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9478:24)
+    at Hx.getUser (abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9471:25)
+    at x (abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49605:109)
+    at Object.callback (abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49595:86)
+    at abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9984:19
+    at Array.map (<anonymous>)
+    at Hx._notifyAllSubscribers (abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9982:71)
+tx @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:7166
+await in tx
+$e @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:7154
+_getUser @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9478
+getUser @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9471
+x @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49605
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49595
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9984
+_notifyAllSubscribers @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9982
+_recoverAndRefresh @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9941
+await in _recoverAndRefresh
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:10160
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9398
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:7751
+/#tournament-hub/9da03d90-3ed1-4047-a92d-b985ec55f44a:1 Access to fetch at 'https://zizrvkkuqzwzxgwpuvxb.supabase.co/functions/v1/make-server-4789f4af/roles' from origin 'https://thecornfield.figma.site' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49602  GET https://zizrvkkuqzwzxgwpuvxb.supabase.co/functions/v1/make-server-4789f4af/roles net::ERR_FAILED 500 (Internal Server Error)
+x @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49602
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49595
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9984
+_notifyAllSubscribers @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9982
+_recoverAndRefresh @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9941
+await in _recoverAndRefresh
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:10160
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:9398
+(anonymous) @ abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:7751
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 Discord user metadata: {avatar_url: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', custom_claims: {…}, email: 'tmull_23@hotmail.com', email_verified: true, full_name: 'jeffwonderpouch', …}
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 Discord user identities: (2) [{…}, {…}]
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49607 🌽 Supabase User ID: e7b2d89c-c979-4cd1-b22e-28a75b42cb1b
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49628 🔍 /auth/me response status: 200 
+abd8f047766c9c6d6eeeda568c5da9d588b7d74e.js:49630 ✅ Fetched user from database: {id: 'd531472d-e798-4593-9cd6-c6617cc89f0b', supabase_id: 'e7b2d89c-c979-4cd1-b22e-28a75b42cb1b', discord_id: '239193203486621706', discord_username: 'Tate', discord_avatar: 'https://cdn.discordapp.com/avatars/239193203486621706/d935fa99dea8ed54c80a6e894f536096.png', …}

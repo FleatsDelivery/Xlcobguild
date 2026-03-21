@@ -108,6 +108,63 @@ export const getHeroIdFromName = (heroName: string | null | undefined): number =
 export const PREFIX = '/make-server-4789f4af';
 
 // ══════════════════════════════════════════════════════
+// USER ENRICHMENT — shared across all tournament tab routes
+// ══════════════════════════════════════════════════════
+
+/**
+ * Given a list of Steam32 IDs, returns a map of steam_id → user data
+ * from the `users` table.
+ *
+ * Use this anywhere you have kkup_persons rows and want to know:
+ *   - Is this person a TCF+ member?           → .tcf_plus_active
+ *   - Do they have a Discord avatar?           → .discord_avatar
+ *   - Are they a Twitch streamer?              → .twitch_username / .twitch_avatar
+ *
+ * Pattern (in any route):
+ *   const steamIds = persons.map(p => p.steam_id).filter(Boolean);
+ *   const userMap = await enrichPersonsWithUserData(supabase, steamIds);
+ *   const enriched = persons.map(p => ({ ...p, ...userMap[p.steam_id] }));
+ *
+ * Non-throwing — returns {} on error (enrichment is always best-effort).
+ */
+export interface EnrichedUserData {
+  tcf_plus_active: boolean;
+  discord_avatar: string | null;
+  twitch_username: string | null;
+  twitch_avatar: string | null;
+}
+
+export async function enrichPersonsWithUserData(
+  supabase: any,
+  steamIds: string[],
+): Promise<Record<string, EnrichedUserData>> {
+  if (steamIds.length === 0) return {};
+
+  const { data: users, error } = await supabase
+    .from('users')
+    .select('steam_id, tcf_plus_active, discord_avatar, twitch_username, twitch_avatar')
+    .in('steam_id', steamIds);
+
+  if (error) {
+    console.error('enrichPersonsWithUserData: failed to fetch user data:', error);
+    return {};
+  }
+
+  const map: Record<string, EnrichedUserData> = {};
+  for (const user of (users || [])) {
+    map[user.steam_id] = {
+      tcf_plus_active: user.tcf_plus_active || false,
+      discord_avatar: user.discord_avatar || null,
+      twitch_username: user.twitch_username || null,
+      twitch_avatar: user.twitch_avatar || null,
+    };
+  }
+
+  console.log(`enrichPersonsWithUserData: matched ${Object.keys(map).length}/${steamIds.length} persons to users`);
+  return map;
+}
+
+// ══════════════════════════════════════════════════════
 // AUTH HELPERS — shared across route modules
 // ══════════════════════════════════════════════════════
 

@@ -198,6 +198,7 @@ function MyComponent() {
 | `/src/lib/date-utils.ts`  | `formatDate()`, `formatDateShort()`, `formatDateLong()`, `formatDateWithTime()`, `timeAgo()` |
 | `/src/lib/rank-utils.ts`  | `RANK_MEDALS`, `getRankDisplay()` for Dota 2 ranks |
 | `/src/lib/icons.tsx`       | `TwitchIcon` and other custom SVG icons            |
+| `/src/lib/tournament-assets.ts` | Tournament asset URL generators (banners, icons, team logos) |
 
 ### Recently Extracted Utilities (completed)
 These were previously duplicated across files and have been centralized:
@@ -230,12 +231,90 @@ These were previously duplicated across files and have been centralized:
 
 Both share: `EditTournamentModal`, `TeamLogo`, `slugifyTournamentName()`, `tournament-state-config.ts`
 
+### Data Source Priority by Tournament Phase
+
+The tournament system uses **phase-based data priority** to determine which API to query and in what order to fall back. This ensures we use the most reliable/authoritative data source for each phase.
+
+**Implementation:** `/supabase/functions/server/routes-tournament-tabs.ts` (overview endpoint) + `/supabase/functions/server/opendota-helpers.ts`
+
+| Phase | Primary | Fallback 1 | Fallback 2 | Rationale |
+|-------|---------|------------|------------|-----------|
+| **Upcoming** | Internal (DB) | Steam API | OpenDota | Pre-configured data, no live matches yet |
+| **Reg_Open** | Internal (DB) | Steam API | OpenDota | Registration data in DB, minimal match data |
+| **Reg_Closed** | Internal (DB) | Steam API | OpenDota | Teams finalized in DB, matches may be scheduled |
+| **Roster_Lock** | Internal (DB) | Steam API | OpenDota | Rosters locked in DB, bracket may exist |
+| **Live** | **Steam API** | **OpenDota** | Internal (DB) | Real-time match data critical—APIs are primary |
+| **Completed** | Internal (DB) | Steam API | OpenDota | CSV uploads are manually verified truth |
+| **Archived** | Internal (DB) | *(Steam)* | — | Locked truth, API fallback should never fire |
+
+**Key Rules:**
+- **Live phase is the ONLY phase where APIs are primary** — because real-time data matters
+- **Completed/Archived always trust CSV uploads** — manual verification > API data
+- **Pre-tournament phases use DB first** — no matches exist yet, or they're pre-configured
+- **OpenDota is ONLY used for Live tournaments** — cost-effective, no unnecessary API calls
+
+**Code Pattern:**
+```typescript
+const status = tournament.status;
+const isLive = status === 'live';
+const isCompleted = status === 'completed';
+const isArchived = status === 'archived';
+
+if (isArchived) {
+  // Database ONLY
+} else if (isCompleted) {
+  // Database PRIMARY
+} else if (isLive) {
+  // Steam → OpenDota → Database
+} else {
+  // Pre-tournament: Database PRIMARY
+}
+```
+
 ### Storage Conventions
-- Tournament assets bucket: `make-4789f4af-kkup-assets`
-- Folder naming: `kernel-kup-#` (e.g., `kernel-kup-10`)
-- Path generation: always use `slugifyTournamentName()` from `/src/lib/slugify.ts`
-- Team logos: `{tournament-slug}/teams/{team-slug}.png`
-- Gallery images: `{tournament-slug}/gallery/{filename}`
+
+**Bucket:** `make-4789f4af-kkup-assets` (public)  
+**Base URL:** `https://zizrvkkuqzwzxgwpuvxb.supabase.co/storage/v1/object/public/make-4789f4af-kkup-assets`
+
+**Standardized Asset Structure:**
+
+All tournaments follow a strict naming convention derived from the tournament name:
+- "Kernel Kup 10" → `kernel-kup-10/`
+- "Heaps n Hooks 2" → `heaps-n-hooks-2/`
+
+**Tournament Assets (per tournament):**
+```
+kernel-kup-{N}/league_banner.png       → Hero banner for tournament pages
+kernel-kup-{N}/league_large_icon.png   → Large icon for tournament cards
+kernel-kup-{N}/league_square_icon.png  → Square icon (gallery only)
+kernel-kup-{N}/*.{png|jpg}             → Gallery images (team logos included)
+```
+
+**Team Logos (double-stored):**
+```
+team_logos/{team-tag}.{png|jpg}              → Master location (persists across tournaments)
+kernel-kup-{N}/{team-tag}.{png|jpg}          → Tournament gallery copy
+```
+
+**Team Logo Source Rule:**
+- **Kernel Kup tournaments:** Pull from `team_logos/` (master location)
+- **Heaps n Hooks tournaments:** Pull from `heaps-n-hooks-{N}/` (tournament-specific folder)
+- The `TeamLogo` component detects tournament type and chooses the correct source automatically
+
+**Asset URL Generation:**
+- **Always use** `/src/lib/tournament-assets.ts` utilities:
+  - `getTournamentBanner(name)` — Hero banner
+  - `getTournamentLargeIcon(name)` — Card icon
+  - `getTeamLogoUrl(teamTag)` — Master team logo (Kernel Kups)
+  - `getTournamentTeamLogoUrl(name, teamTag)` — Tournament-specific logo (Heaps n Hooks)
+- **Never hardcode** asset URLs — derive them dynamically
+
+**File Uploads:**
+- Team logos are stored in **both** `team_logos/` and `kernel-kup-{N}/`
+- Filenames use slugified team tag: "FT HOG" → `fthog.png`, "s.i." → `si.png`
+- **File extensions MUST be lowercase:** `.png` or `.jpg` (NOT `.PNG` or `.JPG`)
+- Server-side compression targets: Logos <200KB, Banners <500KB
+- Supported formats: PNG, JPG only
 
 ---
 
@@ -272,6 +351,19 @@ When deprecating an endpoint:
 
 ## 6b. Database & Schema Conventions
 
+### Database Schema Documentation
+
+**See `/guidelines/DATABASE_SCHEMA.md` for complete schema reference** including:
+- All table definitions with columns, types, and constraints
+- Foreign key relationships
+- Common query patterns
+- Critical notes about table structure
+
+The schema doc is the source of truth for:
+- What columns exist on each table
+- How tables relate to each other
+- Which tables to use for specific data (e.g., `kkup_player_match_stats` has NO `tournament_id` - filter by `match_id` instead)
+
 ### Prefer Real Tables Over KV
 
 The KV store (`kv_store_4789f4af`) is appropriate for:
@@ -305,9 +397,15 @@ Do NOT:
 | `kkup_master_teams`      | Canonical team identity across all time   |
 | `kkup_team_rosters`      | Per-tournament roster membership          |
 | `kkup_team_invites`      | Team invite records                       |
+| `kkup_team_placements`   | Final tournament placements (1st, 2nd, 3rd, etc.) |
 | `kkup_registrations`     | Player tournament registrations           |
-| `kkup_staff_applications`| Staff/volunteer applications              |
+| `kkup_staff_applications`| Staff/volunteer applications (pending)    |
+| `kkup_tournament_staff`  | Approved staff with roles + stream assignments |
+| `kkup_matches`           | Match records (CSV for completed, Steam API for live) |
+| `kkup_player_match_stats`| Per-player per-match stats (normalized)   |
 | `kv_store_4789f4af`      | KV store for logs, notifications, config  |
+
+**For detailed column definitions, relationships, and query patterns, see `/guidelines/DATABASE_SCHEMA.md`.**
 
 *(Update this table when new tables are created.)*
 

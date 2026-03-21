@@ -69,6 +69,9 @@ const THEME_OPTIONS = [
 
 function ThemeSelector({ isTcfPlus }: { isTcfPlus: boolean }) {
   const { theme, setTheme } = useTheme();
+  const [saving, setSaving] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [localTheme, setLocalTheme] = useState(theme);
 
   const handleThemeClick = (value: 'light' | 'dark' | 'system', requiresPlus: boolean) => {
     if (requiresPlus && !isTcfPlus) {
@@ -81,7 +84,40 @@ function ThemeSelector({ isTcfPlus }: { isTcfPlus: boolean }) {
       });
       return;
     }
-    setTheme(value);
+    setLocalTheme(value);
+    setTheme(value); // Apply immediately
+    setHasChanges(true); // Show save button
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const token = localStorage.getItem('supabase_token') || publicAnonKey;
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/users/me/theme`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ theme: localTheme }),
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to save theme');
+      }
+
+      toast.success('Appearance saved! 🌽');
+      setHasChanges(false);
+    } catch (err: any) {
+      console.error('Failed to save theme:', err);
+      toast.error(err.message || 'Failed to save appearance settings');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -101,7 +137,7 @@ function ThemeSelector({ isTcfPlus }: { isTcfPlus: boolean }) {
       <div className="grid grid-cols-3 gap-2">
         {THEME_OPTIONS.map(({ value, icon: Icon, label, requiresPlus }) => {
           const isLocked = requiresPlus && !isTcfPlus;
-          const isActive = theme === value;
+          const isActive = localTheme === value;
 
           return (
             <button
@@ -128,6 +164,24 @@ function ThemeSelector({ isTcfPlus }: { isTcfPlus: boolean }) {
           );
         })}
       </div>
+      {hasChanges && (
+        <div className="mt-4 pt-4 border-t border-border">
+          <Button
+            onClick={handleSave}
+            disabled={saving}
+            className="w-full bg-harvest hover:bg-harvest/90 text-soil font-bold"
+          >
+            {saving ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              'Save Appearance'
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
