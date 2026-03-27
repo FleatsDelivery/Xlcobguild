@@ -39,7 +39,7 @@ function ErrorState({ error, onBack }: { error: string; onBack: () => void }) {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-card rounded-2xl border-2 border-error/20 p-8 text-center">
         <AlertCircle className="w-16 h-16 text-error mx-auto mb-4" />
-        <h2 className="text-2xl font-black text-foreground mb-2">Failed to Load Tournament</h2>
+        <h2 className="text-2xl font-bold text-foreground mb-2">Failed to Load Tournament</h2>
         <p className="text-muted-foreground mb-6">{error}</p>
         <button
           onClick={onBack}
@@ -57,7 +57,7 @@ function ErrorState({ error, onBack }: { error: string; onBack: () => void }) {
 // ═══════════════════════════════════════════════════════
 
 function TournamentHeader({ onBack }: { onBack: () => void }) {
-  const { tournament, isOwner, accessToken, refetch } = useTournament();
+  const { tournament, staff, myRegistration, myStaffApp, user, isOwner, accessToken, refetch } = useTournament();
   const [imageError, setImageError] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -75,6 +75,25 @@ function TournamentHeader({ onBack }: { onBack: () => void }) {
     setShowEditModal(false);
     onBack(); // Navigate back to main page after deletion
   };
+
+  const isUserApprovedStaff = myStaffApp?.status === 'approved' || (myRegistration as any)?.role === 'staff';
+  const isUserInStaffList = staff?.some(s => s.person_id === user?.id);
+  
+  const baseCount = (
+    (tournament as any).total_registrants || 
+    (tournament as any).total_players || 
+    (tournament as any).player_count || 
+    (tournament as any).staff_count || 
+    tournament.registration_count || 
+    0
+  );
+
+  const staffCount = staff?.length || 0;
+  
+  // Add +1 if current user is approved staff but NOT already included in the staff list or base count
+  const extraStaffCount = (isUserApprovedStaff && !isUserInStaffList) ? 1 : 0;
+  
+  const totalParticipants = baseCount + staffCount + extraStaffCount;
 
   return (
     <div className="px-3 sm:px-4 pt-4 pb-2 bg-background">
@@ -94,7 +113,7 @@ function TournamentHeader({ onBack }: { onBack: () => void }) {
             {/* LEFT SIDE: Title, Description, Status, Stats */}
             <div className="flex-1 min-w-0 space-y-4">
               {/* Title */}
-              <h1 className="text-2xl sm:text-3xl font-black text-foreground">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                 {tournament.name}
               </h1>
 
@@ -117,21 +136,29 @@ function TournamentHeader({ onBack }: { onBack: () => void }) {
               </div>
 
               {/* Quick Stats */}
-              <div className="flex gap-6">
+              <div className="flex flex-wrap gap-x-8 gap-y-4">
                 <div>
-                  <div className="text-3xl font-black text-foreground">
-                    {tournament.player_count || tournament.registration_count || 0}
+                  <div className="text-3xl font-bold text-foreground">
+                    {totalParticipants}
                   </div>
                   <div className="text-xs uppercase tracking-wide text-muted-foreground font-semibold">
-                    Players
+                    Participants
                   </div>
                 </div>
                 <div>
-                  <div className="text-3xl font-black text-foreground">
+                  <div className="text-3xl font-bold text-foreground">
                     {tournament.team_count || tournament.teams_count || 0}
                   </div>
                   <div className="text-xs uppercase tracking-wide text-muted-foreground font-semibold">
                     Teams
+                  </div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-harvest">
+                    ${((Number(tournament.prize_pool) || 0) + (Number(tournament.prize_pool_donations) || 0)).toLocaleString()}
+                  </div>
+                  <div className="text-xs uppercase tracking-wide text-muted-foreground font-semibold">
+                    Prize Pool
                   </div>
                 </div>
               </div>

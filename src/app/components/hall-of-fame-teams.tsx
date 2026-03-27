@@ -153,11 +153,11 @@ export function HallOfFameTeams({ allTeamStats, kernelKupTeamStats, heapsNHooksT
                       </div>
                     </div>
                   </td>
-                  <td className="py-5 px-6 text-center">{team.championships > 0 ? <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-600 font-black">{team.championships}</span> : null}</td>
-                  <td className="py-5 px-6 text-center">{team.popdKernels > 0 ? <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-harvest/10 text-harvest font-black">{team.popdKernels}</span> : null}</td>
+                  <td className="py-5 px-6 text-center">{team.championships > 0 ? <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-600 font-bold">{team.championships}</span> : null}</td>
+                  <td className="py-5 px-6 text-center">{team.popdKernels > 0 ? <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-harvest/10 text-harvest font-bold">{team.popdKernels}</span> : null}</td>
                   <td className="py-5 px-6 text-center">
                     {team.prizeWinnings > 0 ? (
-                      <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 font-black text-sm whitespace-nowrap">
+                      <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 font-bold text-sm whitespace-nowrap">
                         ${(team.prizeWinnings / 100).toFixed(2)}
                       </span>
                     ) : (
@@ -176,7 +176,7 @@ export function HallOfFameTeams({ allTeamStats, kernelKupTeamStats, heapsNHooksT
                   <td className="py-5 px-6 text-center text-[#10b981] font-bold">{team.totalKills}</td>
                   <td className="py-5 px-6 text-center text-[#ef4444] font-bold">{team.totalDeaths}</td>
                   <td className="py-5 px-6 text-center text-[#3b82f6] font-bold">{team.totalAssists}</td>
-                  <td className="py-5 px-6 text-center text-foreground font-black text-base">{team.kda}</td>
+                  <td className="py-5 px-6 text-center text-foreground font-bold text-base">{team.kda}</td>
                   <td className="py-5 px-6 text-center text-[#fbbf24] font-semibold">{team.avgGPM}</td>
                   <td className="py-5 px-6 text-center text-[#a855f7] font-semibold">{team.avgXPM}</td>
                 </tr>

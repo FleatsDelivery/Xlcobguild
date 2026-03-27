@@ -731,7 +731,7 @@ export function InboxPage({ user, onBadgeRefresh }: InboxPageProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-foreground flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground flex items-center gap-3">
             <Inbox className="w-7 h-7 text-harvest" />
             Inbox
           </h1>
@@ -781,7 +781,7 @@ export function InboxPage({ user, onBadgeRefresh }: InboxPageProps) {
           <Inbox className="w-4 h-4" />
           Inbox
           {unreadCount > 0 && (
-            <span className="bg-harvest text-white text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+            <span className="bg-harvest text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
               {unreadCount}
             </span>
           )}

@@ -222,7 +222,7 @@ export function ProfilePage({ user, onboarding, onRefresh }: ProfilePageProps) {
 
               {/* Name + badges — beside avatar on desktop, below on mobile */}
               <div className="flex-1 min-w-0 text-center sm:text-left pb-0 sm:pb-1">
-                <h1 className="text-xl sm:text-2xl font-black text-foreground truncate">
+                <h1 className="text-xl sm:text-2xl font-bold text-foreground truncate">
                   {user?.discord_username || 'Guest User'}
                 </h1>
 
@@ -361,14 +361,14 @@ export function ProfilePage({ user, onboarding, onRefresh }: ProfilePageProps) {
                   <Ticket className="w-3 h-3 text-muted-foreground" />
                   <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Tickets</span>
                 </div>
-                <p className="text-lg sm:text-xl font-black text-foreground">{user?.kkup_tickets ?? 0}</p>
+                <p className="text-lg sm:text-xl font-bold text-foreground">{user?.kkup_tickets ?? 0}</p>
               </div>
               <div className="bg-muted/50 rounded-xl p-2.5 text-center">
                 <div className="flex items-center justify-center gap-1 mb-0.5">
                   <Gamepad2 className="w-3 h-3 text-muted-foreground" />
                   <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Dota</span>
                 </div>
-                <p className="text-lg sm:text-xl font-black text-foreground">
+                <p className="text-lg sm:text-xl font-bold text-foreground">
                   {(() => {
                     const rank = getRankDisplay(user?.opendota_data?.badge_rank);
                     if (!rank) return <span className="text-muted-foreground text-sm">—</span>;
@@ -385,7 +385,7 @@ export function ProfilePage({ user, onboarding, onRefresh }: ProfilePageProps) {
                   <Calendar className="w-3 h-3 text-muted-foreground" />
                   <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Joined</span>
                 </div>
-                <p className="text-sm sm:text-base font-black text-foreground">
+                <p className="text-sm sm:text-base font-bold text-foreground">
                   {user?.created_at
                     ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
                     : '—'}

@@ -147,8 +147,8 @@ export function MerchProductModal({ product, onClose }: MerchProductModalProps) 
         <div className="p-4 sm:p-6 space-y-4">
           {/* Product name + price */}
           <div>
-            <h2 className="text-lg sm:text-xl font-black text-foreground">{product.name}</h2>
-            <p className="text-xl sm:text-2xl font-black text-harvest mt-1">
+            <h2 className="text-lg sm:text-xl font-bold text-foreground">{product.name}</h2>
+            <p className="text-xl sm:text-2xl font-bold text-harvest mt-1">
               ${price.toFixed(2)}
             </p>
           </div>

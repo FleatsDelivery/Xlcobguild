@@ -187,7 +187,7 @@ export function HallOfFamePlayers({ players, selectedTab, searchTerm }: Props) {
                             const style = getRoleBadgeStyle(player.user.role);
                             return (
                               <span
-                                className={`text-[10px] font-black px-1.5 py-0.5 rounded ${style.badge}`}
+                                className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${style.badge}`}
                                 style={style.hex && !style.badge ? { color: style.hex, backgroundColor: `${style.hex}15` } : undefined}
                               >
                                 {tag}
@@ -208,11 +208,11 @@ export function HallOfFamePlayers({ players, selectedTab, searchTerm }: Props) {
                         </div>
                       )}
                     </td>
-                    <td className="py-5 px-6 text-center">{stats.championships > 0 ? <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-600 font-black">{stats.championships}</span> : null}</td>
-                    <td className="py-5 px-6 text-center">{stats.mvps > 0 ? <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-harvest/10 text-harvest font-black">{stats.mvps}</span> : null}</td>
+                    <td className="py-5 px-6 text-center">{stats.championships > 0 ? <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-600 font-bold">{stats.championships}</span> : null}</td>
+                    <td className="py-5 px-6 text-center">{stats.mvps > 0 ? <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-harvest/10 text-harvest font-bold">{stats.mvps}</span> : null}</td>
                     <td className="py-5 px-6 text-center">
                       {stats.prizeWinnings > 0 ? (
-                        <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 font-black text-sm whitespace-nowrap">
+                        <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 font-bold text-sm whitespace-nowrap">
                           ${(stats.prizeWinnings / 100).toFixed(2)}
                         </span>
                       ) : (
@@ -231,7 +231,7 @@ export function HallOfFamePlayers({ players, selectedTab, searchTerm }: Props) {
                     <td className="py-5 px-6 text-center text-[#10b981] font-bold">{stats.totalKills}</td>
                     <td className="py-5 px-6 text-center text-[#ef4444] font-bold">{stats.totalDeaths}</td>
                     <td className="py-5 px-6 text-center text-[#3b82f6] font-bold">{stats.totalAssists}</td>
-                    <td className="py-5 px-6 text-center text-foreground font-black text-base">{stats.avgKDA}</td>
+                    <td className="py-5 px-6 text-center text-foreground font-bold text-base">{stats.avgKDA}</td>
                     <td className="py-5 px-6 text-center text-[#10b981]/70 font-semibold">{avgKills}</td>
                     <td className="py-5 px-6 text-center text-[#ef4444]/70 font-semibold">{avgDeaths}</td>
                     <td className="py-5 px-6 text-center text-[#3b82f6]/70 font-semibold">{avgAssists}</td>

@@ -1,6 +1,34 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { projectId, publicAnonKey } from '/utils/supabase/info';
 
+export interface Prize {
+  id: string;
+  tournament_id: string;
+  title: string;
+  value_type: 'fixed' | 'percentage' | 'bragging_rights';
+  value: number;
+  sort_order: number;
+}
+
+export interface Award {
+  id: string;
+  prize_id: string;
+  amount_cents: number;
+  recipient_user_id?: string;
+  team_id?: string;
+  recipient?: {
+    id: string;
+    discord_username: string;
+    discord_avatar: string | null;
+  };
+  team?: {
+    id: string;
+    team_name: string;
+    team_tag: string;
+    logo_url: string | null;
+  };
+}
+
 // ═══════════════════════════════════════════════════════
 // TYPES
 // ═══════════════════════════════════════════════════════
@@ -15,6 +43,7 @@ export interface Tournament {
   max_teams: number;
   registration_deadline: string;
   prize_pool: string;
+  prize_pool_donations?: number;
   format: string;
   rules: string;
   banner_url?: string;
@@ -43,6 +72,12 @@ export interface Tournament {
   teams_count?: number;
   twitch_url_1?: string;
   twitch_url_2?: string;
+  total_registrants?: number;
+  total_players?: number;
+  staff_count?: number;
+  tournament_type?: string;
+  prizes?: Prize[];
+  awards?: Award[];
 }
 
 export interface Registration {
@@ -57,6 +92,7 @@ export interface Registration {
   is_early_access?: boolean;
   team_id?: string;
   team?: any;
+  role?: string;
 }
 
 export interface StaffMember {
@@ -65,12 +101,14 @@ export interface StaffMember {
   display_name: string;
   steam_id: string;
   avatar_url: string | null;
+  tcf_plus?: boolean;
 }
 
 interface TournamentContextValue {
   tournament: Tournament | null;
   myRegistration: Registration | null;
   staff: StaffMember[];
+  myStaffApp: any | null;
   isOfficer: boolean;
   isOwner: boolean;
   user: any;
@@ -106,6 +144,7 @@ export function TournamentProvider({
   const [tournament, setTournament] = useState<Tournament | null>(null);
   const [myRegistration, setMyRegistration] = useState<Registration | null>(null);
   const [staff, setStaff] = useState<StaffMember[]>([]);
+  const [myStaffApp, setMyStaffApp] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -170,8 +209,10 @@ export function TournamentProvider({
         if (staffResponse.ok) {
           const staffData = await staffResponse.json();
           setStaff(staffData.staff || []);
+          setMyStaffApp(staffData.my_application || null);
         } else {
           setStaff([]);
+          setMyStaffApp(null);
         }
       } catch (staffErr) {
         // Non-fatal: staff fetch failed (e.g. CORS/network hiccup), page still loads
@@ -198,6 +239,7 @@ export function TournamentProvider({
     tournament,
     myRegistration,
     staff,
+    myStaffApp,
     isOfficer,
     isOwner,
     user,

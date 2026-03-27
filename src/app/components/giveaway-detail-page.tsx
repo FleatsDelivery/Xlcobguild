@@ -458,7 +458,7 @@ export function GiveawayDetailPage({ id, user, accessToken }: GiveawayDetailPage
                 <Gift className={`w-6 h-6 ${phase.accentColor}`} />
               </div>
               <div className="flex-1 min-w-0">
-                <h1 className="text-xl sm:text-2xl font-black text-foreground leading-tight font-['Inter']">
+                <h1 className="text-xl sm:text-2xl font-bold text-foreground leading-tight font-['Inter']">
                   {giveaway.title}
                 </h1>
                 {giveaway.description && (
@@ -493,7 +493,7 @@ export function GiveawayDetailPage({ id, user, accessToken }: GiveawayDetailPage
                 <Timer className="w-5 h-5 text-[#10b981]" />
                 <div>
                   <p className="text-xs font-semibold text-[#10b981]">Time Remaining</p>
-                  <p className="text-lg font-black text-[#10b981]">{countdown}</p>
+                  <p className="text-lg font-bold text-[#10b981]">{countdown}</p>
                 </div>
               </div>
             )}

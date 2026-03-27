@@ -57,7 +57,7 @@ function HeroChips({ heroes }: { heroes: Array<{ name: string; count: number }> 
             )}
             {/* Count badge if played more than once */}
             {hero.count > 1 && (
-              <span className="absolute -bottom-1 -right-1 bg-harvest text-field-dark text-[9px] font-black rounded-full w-3.5 h-3.5 flex items-center justify-center leading-none">
+              <span className="absolute -bottom-1 -right-1 bg-harvest text-field-dark text-[9px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center leading-none">
                 {hero.count}
               </span>
             )}
@@ -225,7 +225,7 @@ function PlayerStatsHeader({
               {finished ? 'Total Players' : 'Registered'}
             </span>
           </div>
-          <div className="text-3xl font-black text-foreground">
+          <div className="text-3xl font-bold text-foreground">
             {playerCount}
           </div>
           {!finished && (
@@ -244,7 +244,7 @@ function PlayerStatsHeader({
           {avgRankDisplay ? (
             <div className="flex items-center gap-3">
               <RankBadge medal={avgRankDisplay.medal} stars={avgRankDisplay.stars} size="xl" />
-              <div className="text-2xl font-black text-foreground leading-none">
+              <div className="text-2xl font-bold text-foreground leading-none">
                 {avgRankDisplay.medal}
                 {avgRankDisplay.stars > 0 && (
                   <span className="text-muted-foreground font-semibold"> {avgRankDisplay.stars}</span>
@@ -269,7 +269,7 @@ function PlayerStatsHeader({
               <div>
                 <div className="flex items-baseline gap-3">
                   <span
-                    className="text-3xl font-black leading-none"
+                    className="text-3xl font-bold leading-none"
                     style={{
                       color: avgKda >= 5 ? '#10b981' : avgKda >= 3 ? '#f59e0b' : avgKda >= 2 ? '#d6a615' : '#ef4444',
                     }}
@@ -310,7 +310,7 @@ function PlayerStatsHeader({
             {highestRankDisplay ? (
               <div className="flex items-center gap-3">
                 <RankBadge medal={highestRankDisplay.medal} stars={highestRankDisplay.stars} size="xl" />
-                <div className="text-2xl font-black text-foreground leading-none">
+                <div className="text-2xl font-bold text-foreground leading-none">
                   {highestRankDisplay.medal}
                   {highestRankDisplay.stars > 0 && (
                     <span className="text-muted-foreground font-semibold"> {highestRankDisplay.stars}</span>
@@ -513,7 +513,7 @@ function PlayerLeaderboard({ players }: { players: any[] }) {
                   >
                     {/* Rank */}
                     <td className="p-3 sm:p-4">
-                      <span className={`text-sm font-black ${
+                      <span className={`text-sm font-bold ${
                         rankNum === 1 ? 'text-[#ffd700]' :
                         rankNum === 2 ? 'text-[#c0c0c0]' :
                         rankNum === 3 ? 'text-[#cd7f32]' :
@@ -984,8 +984,8 @@ function RegistrationPlayerList({
 }) {
   // Bucket by type
   const coaches    = players.filter(p => p.registration_type === 'coach');
-  const rostered   = players.filter(p => p.registration_type !== 'coach' && p.team_tag);
-  const freeAgents = players.filter(p => p.registration_type !== 'coach' && !p.team_tag);
+  const rostered   = players.filter(p => p.registration_type === 'player' && p.team_tag);
+  const freeAgents = players.filter(p => p.registration_type === 'player' && !p.team_tag);
 
   if (players.length === 0) {
     return (
@@ -1122,10 +1122,13 @@ export function TournamentPlayersTab() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        setPlayers(data.players || data.registrations || []);
-      }
+        if (response.ok) {
+          const data = await response.json();
+          let rawPlayers = data.players || data.registrations || [];
+          // Safety filter: exclude anyone with 'withdrawn' status
+          const activePlayers = rawPlayers.filter((p: any) => p.status !== 'withdrawn');
+          setPlayers(activePlayers);
+        }
     } catch (err) {
       console.error('Failed to fetch players:', err);
     } finally {

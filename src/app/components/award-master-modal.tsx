@@ -1309,7 +1309,7 @@ export function AwardMasterModal({ onClose, onSuccess }: AwardMasterModalProps) 
               >
                 {awardConfig && <awardConfig.icon className="w-8 h-8" style={{ color: awardConfig.color }} />}
               </motion.div>
-              <h3 className="text-xl font-black text-foreground mb-1">Final Check</h3>
+              <h3 className="text-xl font-bold text-foreground mb-1">Final Check</h3>
               <p className="text-sm text-muted-foreground">
                 You're about to send {totalAmountCents > 0 ? <strong className="text-foreground">{formatDollars(totalAmountCents)}</strong> : <strong className="text-foreground">honorary awards</strong>}
               </p>
@@ -1390,7 +1390,7 @@ export function AwardMasterModal({ onClose, onSuccess }: AwardMasterModalProps) 
               >
                 <Trophy className="w-10 h-10 text-harvest" />
               </motion.div>
-              <motion.h3 className="text-2xl sm:text-3xl font-black text-foreground mb-1.5" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.4 }}>
+              <motion.h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-1.5" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.4 }}>
                 Awards Sent!
               </motion.h3>
               <motion.p className="text-sm text-muted-foreground" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.4 }}>
@@ -1410,7 +1410,7 @@ export function AwardMasterModal({ onClose, onSuccess }: AwardMasterModalProps) 
               ].map((line: any, i) => (
                 <motion.div key={line.label} className="flex items-center justify-between text-xs" initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 + i * 0.06 }}>
                   <span className="text-muted-foreground">{line.label}</span>
-                  <span className={line.highlight ? 'font-black text-foreground text-sm' : 'font-semibold text-muted-foreground'}>{line.value}</span>
+                  <span className={line.highlight ? 'font-bold text-foreground text-sm' : 'font-semibold text-muted-foreground'}>{line.value}</span>
                 </motion.div>
               ))}
             </motion.div>

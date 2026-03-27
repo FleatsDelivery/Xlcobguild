@@ -242,7 +242,7 @@ export function LiveMinimap({ game }: LiveMinimapProps) {
                 />
                 {hero.isDead && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-                    <span className="text-[7px] font-black text-white">{hero.respawnTimer}</span>
+                    <span className="text-[7px] font-bold text-white">{hero.respawnTimer}</span>
                   </div>
                 )}
               </div>

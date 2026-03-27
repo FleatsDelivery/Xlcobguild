@@ -11,6 +11,7 @@ export const InteractionResponseType = {
   PONG: 1,
   CHANNEL_MESSAGE_WITH_SOURCE: 4,
   DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE: 5,
+  DEFERRED_UPDATE_MESSAGE: 6,
   UPDATE_MESSAGE: 7,
 };
 
@@ -30,17 +31,14 @@ export const RANK_NAMES = [
   "Pop'd Kernel",
 ];
 
+// Global cache for the Discord public key to speed up handshakes
+let cachedCryptoKey: CryptoKey | null = null;
+
 // Verify Discord request signature
 export async function verifyDiscordRequest(request: Request): Promise<boolean> {
   const signature = request.headers.get('x-signature-ed25519');
   const timestamp = request.headers.get('x-signature-timestamp');
   const publicKey = Deno.env.get('DISCORD_PUBLIC_KEY');
-
-  console.log('Verifying Discord request...');
-  console.log('  Signature present:', !!signature);
-  console.log('  Timestamp present:', !!timestamp);
-  console.log('  Public Key present:', !!publicKey);
-  console.log('  Public Key length:', publicKey?.length || 0);
 
   if (!signature || !timestamp || !publicKey) {
     console.error('Missing required headers or environment variable');
@@ -48,34 +46,32 @@ export async function verifyDiscordRequest(request: Request): Promise<boolean> {
   }
 
   const body = await request.clone().text();
-  console.log('  Request body:', body);
 
   try {
     const encoder = new TextEncoder();
     const message = encoder.encode(timestamp + body);
     const signatureBytes = hexToBytes(signature);
-    const publicKeyBytes = hexToBytes(publicKey);
 
-    console.log('  Message to verify length:', message.length);
-    console.log('  Signature bytes length:', signatureBytes.length);
-    console.log('  Public key bytes length:', publicKeyBytes.length);
-
-    const cryptoKey = await crypto.subtle.importKey(
-      'raw',
-      publicKeyBytes,
-      { name: 'Ed25519', namedCurve: 'Ed25519' },
-      false,
-      ['verify']
-    );
+    // Use cached key if available, otherwise import it
+    if (!cachedCryptoKey) {
+      const publicKeyBytes = hexToBytes(publicKey);
+      cachedCryptoKey = await crypto.subtle.importKey(
+        'raw',
+        publicKeyBytes,
+        { name: 'Ed25519' },
+        false,
+        ['verify']
+      );
+      console.log('Discord public key imported and cached');
+    }
 
     const isValid = await crypto.subtle.verify(
       'Ed25519',
-      cryptoKey,
+      cachedCryptoKey,
       signatureBytes,
       message
     );
 
-    console.log('  Signature valid:', isValid);
     return isValid;
   } catch (error) {
     console.error('Signature verification error:', error);
@@ -167,7 +163,7 @@ export function publicSuccessResponse(
           type: 2,
           style: 5,
           label: 'View on Web App',
-          url: 'https://thecornfield.figma.site/#requests',
+          url: 'https://kernelkup.com/#requests',
           emoji: { name: '🌐' },
         }],
       }],
@@ -183,4 +179,23 @@ export function deferredResponse() {
       flags: 0, // Public response
     },
   };
+}
+
+// Helper to patch a deferred response
+export async function patchInteractionResponse(applicationId: string, interactionToken: string, body: any) {
+  const url = `https://discord.com/api/v10/webhooks/${applicationId}/${interactionToken}/messages/@original`;
+  const response = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+  
+  if (!response.ok) {
+    const error = await response.text();
+    console.error('Failed to patch interaction response:', error);
+  }
+  
+  return response;
 }

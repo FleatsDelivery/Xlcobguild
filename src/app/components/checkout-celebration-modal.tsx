@@ -381,7 +381,7 @@ function TcfPlusOnboardingWizard({ onComplete }: { onComplete: () => void }) {
                 <current.icon className="w-8 h-8" style={{ color: current.iconColor }} />
               </motion.div>
 
-              <h3 className="text-xl sm:text-2xl font-black text-foreground mb-1">
+              <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-1">
                 {current.title}
               </h3>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
@@ -576,7 +576,7 @@ function SimpleCelebrationModal({
               </motion.div>
 
               <motion.h3
-                className="text-2xl sm:text-3xl font-black text-foreground mb-1.5"
+                className="text-2xl sm:text-3xl font-bold text-foreground mb-1.5"
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25, duration: 0.4 }}

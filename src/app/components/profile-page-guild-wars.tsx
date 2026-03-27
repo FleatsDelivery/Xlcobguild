@@ -4,7 +4,7 @@
  * Contains: Rank progression, My Guilds manager (placeholder), and action buttons.
  */
 import { useState } from 'react';
-import { Swords, Plus, LogOut, Lock, TrendingUp } from 'lucide-react';
+import { Swords, Plus, LogOut, Lock, TrendingUp, Award } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { MvpSubmissionModal } from '@/app/components/mvp-submission-modal';
 import { PopEmoji } from '@/app/components/pop-emoji';
@@ -54,27 +54,46 @@ export function ProfilePageGuildWars({ user, onSignOut, onRefresh, onBadgeRefres
 
   return (
     <div className="space-y-4">
-      {/* ═══ Upload MVP Header Button ═══ */}
+      {/* ═══ Header Stats/Actions Row ═══ */}
       {user?.role !== 'guest' && (
-        <button
-          onClick={() => setShowMvpModal(true)}
-          className="w-full bg-gradient-to-r from-[#3b82f6] to-[#2563eb] hover:from-[#2563eb] hover:to-[#1d4ed8] text-white rounded-2xl p-4 sm:p-5 border-2 border-[#3b82f6]/30 transition-all hover:shadow-lg hover:shadow-[#3b82f6]/20 group"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover:bg-white/30 transition-colors">
-                <TrendingUp className="w-5 h-5" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          {/* Upload MVP Button */}
+          <button
+            onClick={() => setShowMvpModal(true)}
+            className="bg-gradient-to-r from-[#3b82f6] to-[#2563eb] hover:from-[#2563eb] hover:to-[#1d4ed8] text-white rounded-2xl p-4 sm:p-5 border-2 border-[#3b82f6]/30 transition-all hover:shadow-lg hover:shadow-[#3b82f6]/20 group text-left"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover:bg-white/30 transition-colors">
+                  <TrendingUp className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm sm:text-base font-bold">Upload MVP</p>
+                  <p className="text-[11px] sm:text-xs text-white/70">Submit a screenshot to rank up</p>
+                </div>
               </div>
-              <div className="text-left">
-                <p className="text-sm sm:text-base font-bold">Upload MVP</p>
-                <p className="text-[11px] sm:text-xs text-white/70">Submit a screenshot to rank up</p>
+              <div className="text-white/60 group-hover:text-white/90 transition-colors text-xl">
+                +
               </div>
             </div>
-            <div className="text-white/60 group-hover:text-white/90 transition-colors text-xl">
-              +
+          </button>
+
+          {/* MVP Count Card */}
+          <div className="bg-card rounded-2xl p-4 sm:p-5 border-2 border-border flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                <Award className="w-5 h-5 text-amber-500" />
+              </div>
+              <div>
+                <p className="text-sm sm:text-base font-bold text-foreground">MVP Count</p>
+                <p className="text-[11px] sm:text-xs text-muted-foreground">MVP Count resets at the end of each season</p>
+              </div>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-amber-500 tabular-nums">
+              {user?.mvp_count ?? 0}
             </div>
           </div>
-        </button>
+        </div>
       )}
 
       {/* ═══ Your Guild Rank Progress ═══ */}
@@ -102,17 +121,15 @@ export function ProfilePageGuildWars({ user, onSignOut, onRefresh, onBadgeRefres
                   >
                     {isAchieved ? (
                       <PopEmoji emoji={emoji} unlocked sizeClass="text-2xl sm:text-3xl">
-                        <span className={`text-2xl sm:text-3xl leading-none drop-shadow-lg ${
-                          isCurrent ? 'scale-110 sm:scale-125' : ''
-                        }`}>
+                        <span className={`text-2xl sm:text-3xl leading-none drop-shadow-lg ${isCurrent ? 'scale-110 sm:scale-125' : ''
+                          }`}>
                           {emoji}
                         </span>
                       </PopEmoji>
                     ) : (
                       <div
-                        className={`text-2xl sm:text-3xl transition-all duration-200 cursor-default opacity-25 scale-90 grayscale ${
-                          hoveredPrestige === level ? '!scale-[1.5] drop-shadow-lg !opacity-100 !grayscale-0' : ''
-                        }`}
+                        className={`text-2xl sm:text-3xl transition-all duration-200 cursor-default opacity-25 scale-90 grayscale ${hoveredPrestige === level ? '!scale-[1.5] drop-shadow-lg !opacity-100 !grayscale-0' : ''
+                          }`}
                       >
                         {emoji}
                       </div>
@@ -148,17 +165,15 @@ export function ProfilePageGuildWars({ user, onSignOut, onRefresh, onBadgeRefres
                   >
                     {isUnlocked ? (
                       <PopEmoji emoji={emoji} unlocked sizeClass="text-xl sm:text-2xl">
-                        <span className={`text-xl sm:text-2xl leading-none drop-shadow-lg ${
-                          isCurrent ? 'scale-125' : ''
-                        }`}>
+                        <span className={`text-xl sm:text-2xl leading-none drop-shadow-lg ${isCurrent ? 'scale-125' : ''
+                          }`}>
                           {emoji}
                         </span>
                       </PopEmoji>
                     ) : (
                       <div
-                        className={`text-xl sm:text-2xl transition-all duration-200 cursor-default scale-90 opacity-30 ${
-                          hoveredRank === index ? '!scale-[1.6] drop-shadow-lg' : ''
-                        }`}
+                        className={`text-xl sm:text-2xl transition-all duration-200 cursor-default scale-90 opacity-30 ${hoveredRank === index ? '!scale-[1.6] drop-shadow-lg' : ''
+                          }`}
                       >
                         {emoji}
                       </div>

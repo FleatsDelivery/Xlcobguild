@@ -410,7 +410,7 @@ export function HallOfFamePage() {
       <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <div className="bg-card rounded-2xl border-2 border-error/30 p-8 max-w-md text-center">
           <Trophy className="w-16 h-16 mx-auto mb-4 text-error" />
-          <h2 className="text-2xl font-black text-foreground mb-2">Failed to Load</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-2">Failed to Load</h2>
           <p className="text-muted-foreground">{error}</p>
         </div>
       </div>
@@ -436,7 +436,7 @@ export function HallOfFamePage() {
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-3">
             <Trophy className="w-8 h-8 sm:w-12 sm:h-12 text-harvest" />
-            <h1 className="text-3xl sm:text-5xl font-black text-foreground">Hall of Fame</h1>
+            <h1 className="text-3xl sm:text-5xl font-bold text-foreground">Hall of Fame</h1>
             <Trophy className="w-8 h-8 sm:w-12 sm:h-12 text-harvest" />
           </div>
           <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -454,7 +454,7 @@ export function HallOfFamePage() {
               <PodiumSkeleton />
             ) : top3.length >= 3 ? (
               <div className="bg-card rounded-2xl border-2 border-border p-3 sm:p-6">
-                <h2 className="text-base sm:text-xl font-black text-foreground mb-0.5 text-center">{podiumTitle}</h2>
+                <h2 className="text-base sm:text-xl font-bold text-foreground mb-0.5 text-center">{podiumTitle}</h2>
                 <p className="text-[10px] sm:text-xs text-muted-foreground text-center mb-3 sm:mb-5">
                   {statsView === 'players' ? 'Ranked by Championships, Tournaments Played, Win Rate' :
                    statsView === 'teams' ? 'Ranked by Championships, then Wins' :
@@ -470,7 +470,7 @@ export function HallOfFamePage() {
                       <div key={entry.id} className={`${s.padTop}`}>
                         <div className={`bg-gradient-to-br ${s.bgGradient} rounded-xl border-2 ${s.border} p-2.5 sm:p-4 text-center relative transition-all hover:scale-[1.03] hover:shadow-lg`}>
                           {/* Position badge */}
-                          <div className={`${s.badgeBg} text-white rounded-full w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center font-black text-xs sm:text-base mx-auto mb-1.5 sm:mb-2 border-2 border-card shadow-md`}>
+                          <div className={`${s.badgeBg} text-white rounded-full w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center font-bold text-xs sm:text-base mx-auto mb-1.5 sm:mb-2 border-2 border-card shadow-md`}>
                             {dataIdx + 1}
                           </div>
                           {s.crown && <Crown className="w-4 h-4 sm:w-6 sm:h-6 mx-auto mb-0.5 text-yellow-500" />}
@@ -481,7 +481,7 @@ export function HallOfFamePage() {
                               {statsView === 'staff' ? <Mic className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" /> : statsView === 'coaches' ? <ClipboardList className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" /> : <Users className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" />}
                             </div>
                           )}
-                          <p className={`${s.nameSize} font-black text-foreground mb-0.5 truncate`}>{entry.name}</p>
+                          <p className={`${s.nameSize} font-bold text-foreground mb-0.5 truncate`}>{entry.name}</p>
                           <div className="space-y-0.5 text-[10px] sm:text-xs text-muted-foreground">
                             <p><Trophy className="w-3 h-3 sm:w-3.5 sm:h-3.5 inline mr-0.5" />{entry.subtitle}</p>
                             <p>{entry.stat1}</p>
@@ -503,7 +503,7 @@ export function HallOfFamePage() {
                   return (
                     <div key={idx} className="bg-card rounded-xl border-2 border-border p-2.5 sm:p-3 text-center">
                       <Icon className={`w-4 h-4 sm:w-5 sm:h-5 mx-auto mb-1 ${stat.color}`} />
-                      <p className="text-lg sm:text-xl font-black text-foreground leading-tight">{stat.value}</p>
+                      <p className="text-lg sm:text-xl font-bold text-foreground leading-tight">{stat.value}</p>
                       <p className="text-[9px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-wide">{stat.label}</p>
                     </div>
                   );

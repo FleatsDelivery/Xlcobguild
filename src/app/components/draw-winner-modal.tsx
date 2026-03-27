@@ -100,7 +100,7 @@ function NameShuffler({ names }: { names: string[] }) {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.06 }}
-        className="text-2xl font-black text-foreground/30 font-['Inter']"
+        className="text-2xl font-bold text-foreground/30 font-['Inter']"
       >
         {names[current]}
       </motion.div>
@@ -170,7 +170,7 @@ function WinnerRevealCard({ winner, index, total }: { winner: DrawWinner; index:
           </div>
         )}
         <div>
-          <p className={`font-black font-['Inter'] ${
+          <p className={`font-bold font-['Inter'] ${
             isGrandWinner ? 'text-xl text-foreground' : 'text-base text-foreground'
           }`}>
             {winner.discord_username}
@@ -274,7 +274,7 @@ export function DrawWinnerModal({ entrantNames, onConfirmDraw, onClose }: DrawWi
               >
                 <span className="text-3xl">🎰</span>
               </motion.div>
-              <h2 className="text-xl font-black text-foreground font-['Inter'] mb-2">Draw Winners?</h2>
+              <h2 className="text-xl font-bold text-foreground font-['Inter'] mb-2">Draw Winners?</h2>
               <p className="text-sm text-muted-foreground mb-1">
                 This will randomly select winner(s) from
               </p>
@@ -362,7 +362,7 @@ export function DrawWinnerModal({ entrantNames, onConfirmDraw, onClose }: DrawWi
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-2xl font-black text-harvest font-['Inter'] mb-2"
+                className="text-2xl font-bold text-harvest font-['Inter'] mb-2"
               >
                 Congratulations!
               </motion.h2>

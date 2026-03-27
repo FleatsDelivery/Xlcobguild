@@ -260,7 +260,7 @@ function MembershipTicketsCard({ user }: { user: any }) {
             <Ticket className="w-4 h-4 text-muted-foreground" />
             <span className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">Tickets</span>
           </div>
-          <p className="text-2xl font-black text-foreground">{ticketBalance}</p>
+          <p className="text-2xl font-bold text-foreground">{ticketBalance}</p>
         </div>
       </div>
 

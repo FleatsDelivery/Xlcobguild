@@ -7,6 +7,7 @@ import { PREFIX } from "./helpers.ts";
 import { isOfficer } from './roles.ts';
 import { isValidRoleDynamic } from "./routes-admin-roles.ts";
 import { createAdminLog, createUserActivity } from "./routes-notifications.ts";
+import { syncDiscordUserRoles, syncAllDiscordRoles } from "./discord-api.ts";
 
 export function registerAdminUsersRoutes(app: Hono, supabase: any, anonSupabase: any) {
 
@@ -61,15 +62,23 @@ export function registerAdminUsersRoutes(app: Hono, supabase: any, anonSupabase:
       if (dbUser.role !== 'owner') return c.json({ error: 'Only owners can update user roles' }, 403);
 
       const userId = c.req.param('userId');
-      const { role } = await c.req.json();
+      const { role, rank_id, prestige_level } = await c.req.json();
 
-      if (!isValidRoleDynamic(role, supabase)) {
-        return c.json({ error: 'Invalid role' }, 400);
+      const updatePayload: any = { updated_at: new Date().toISOString() };
+      
+      if (role !== undefined) {
+        if (!isValidRoleDynamic(role, supabase)) {
+          return c.json({ error: 'Invalid role' }, 400);
+        }
+        updatePayload.role = role;
       }
+      
+      if (rank_id !== undefined) updatePayload.rank_id = rank_id;
+      if (prestige_level !== undefined) updatePayload.prestige_level = prestige_level;
 
       const { data: updatedUser, error: updateError } = await supabase
         .from('users')
-        .update({ role, updated_at: new Date().toISOString() })
+        .update(updatePayload)
         .eq('id', userId).select().single();
 
       if (updateError) {
@@ -102,9 +111,43 @@ export function registerAdminUsersRoutes(app: Hono, supabase: any, anonSupabase:
         });
       } catch (logErr) { console.error('Non-critical: role change logging failed:', logErr); }
 
+      // Sync Discord roles (background/best-effort)
+      // @ts-ignore: EdgeRuntime is available in Supabase
+      if (updatePayload.role || updatePayload.rank_id !== undefined || updatePayload.prestige_level !== undefined) {
+        EdgeRuntime.waitUntil(syncDiscordUserRoles(supabase, userId));
+      }
+
       return c.json({ user: updatedUser });
     } catch (error) {
       console.error('Update user role error:', error);
+      return c.json({ error: 'Internal server error' }, 500);
+    }
+  });
+
+  // Sync All Discord Roles (Owner only - Heavy operation)
+  app.post(`${PREFIX}/admin/sync-all-discord-roles`, async (c) => {
+    try {
+      const accessToken = c.req.header('Authorization')?.split(' ')[1];
+      if (!accessToken) return c.json({ error: 'No access token provided' }, 401);
+
+      const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+      if (authError || !authUser) return c.json({ error: 'Unauthorized' }, 401);
+
+      const { data: dbUser, error: userError } = await supabase
+        .from('users').select('role').eq('supabase_id', authUser.id).single();
+      if (userError || !dbUser) return c.json({ error: 'User not found' }, 404);
+      if (dbUser.role !== 'owner') return c.json({ error: 'Only owners can trigger a global sync' }, 403);
+
+      // Trigger the heavy sync in the background
+      // @ts-ignore: EdgeRuntime is available in Supabase
+      EdgeRuntime.waitUntil(syncAllDiscordRoles(supabase));
+
+      return c.json({ 
+        message: 'Server-wide Discord role synchronization started in the background. Check logs for progress.',
+        status: 'processing'
+      });
+    } catch (error) {
+      console.error('Sync all discord roles error:', error);
       return c.json({ error: 'Internal server error' }, 500);
     }
   });

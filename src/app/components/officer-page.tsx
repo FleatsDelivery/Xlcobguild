@@ -41,6 +41,8 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
   const [refreshingOpenDota, setRefreshingOpenDota] = useState(false);
   const [backfillingHeroes, setBackfillingHeroes] = useState(false);
   const [showBackfillConfirm, setShowBackfillConfirm] = useState(false);
+  const [isSyncingDiscord, setIsSyncingDiscord] = useState(false);
+  const [showDiscordSyncConfirm, setShowDiscordSyncConfirm] = useState(false);
 
   // Handler for syncing names and logos
   const handleSyncNamesAndLogos = async () => {
@@ -134,6 +136,36 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
       toast.error(`Backfill failed: ${errorMessage}`);
     } finally {
       setBackfillingHeroes(false);
+    }
+  };
+
+  const handleSyncDiscordRoles = async () => {
+    setIsSyncingDiscord(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Please sign in to sync Discord roles.');
+        return;
+      }
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/sync-all-discord-roles`,
+        {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${session.access_token}` },
+        }
+      );
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
+      }
+      const data = await response.json();
+      toast.success(`Discord role sync complete! Processed ${data.processedCount || 0} users.`);
+    } catch (error) {
+      console.error('Discord sync error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to sync Discord roles';
+      toast.error(`Sync failed: ${errorMessage}`);
+    } finally {
+      setIsSyncingDiscord(false);
     }
   };
 
@@ -291,6 +323,22 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
                   </div>
                   <ChevronRight className="w-5 h-5 text-harvest group-hover:translate-x-1 transition-transform" />
                 </button>
+
+                {/* Sync Discord Roles — Owner only */}
+                {isOwner && (
+                  <button onClick={() => setShowDiscordSyncConfirm(true)} disabled={isSyncingDiscord} className={adminBtnClass}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#5865F2] to-[#404EED] flex items-center justify-center shadow-md">
+                        {isSyncingDiscord ? <Loader2 className="w-6 h-6 text-white animate-spin" /> : <RefreshCw className="w-6 h-6 text-white" />}
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm font-bold text-foreground">{isSyncingDiscord ? 'Syncing Roles...' : 'Sync Discord Roles'}</p>
+                        <p className="text-xs text-muted-foreground">Reconcile all users app ranks with Discord roles</p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-harvest group-hover:translate-x-1 transition-transform" />
+                  </button>
+                )}
 
                 {/* CSV Tournament Importer — Owner only */}
                 {isOwner && (
@@ -457,6 +505,20 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
             handleBackfillHeroIds();
           }}
           onCancel={() => setShowBackfillConfirm(false)}
+        />
+      )}
+
+      {showDiscordSyncConfirm && (
+        <ConfirmModal
+          title="Confirm Discord Sync"
+          message="This will iterate through EVERY user in the database and update their Discord roles to match their current app rank. This process is rate-limited and may take a few minutes. Continue?"
+          confirmText="Sync All Roles"
+          confirmVariant="primary"
+          onConfirm={() => {
+            setShowDiscordSyncConfirm(false);
+            handleSyncDiscordRoles();
+          }}
+          onCancel={() => setShowDiscordSyncConfirm(false)}
         />
       )}
     </div>

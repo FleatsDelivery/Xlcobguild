@@ -78,25 +78,6 @@ export function TournamentCard({ tournament, onClick }: TournamentCardProps) {
       onClick={onClick}
       className="group relative bg-card rounded-2xl border-2 border-border hover:border-harvest/50 transition-all cursor-pointer overflow-hidden"
     >
-      {/* Winner Badge - Top Right with glow */}
-      {hasWinner && (
-        <div className="absolute top-3 right-3 z-10 bg-kernel-gold text-soil px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg animate-pulse-slow">
-          <Crown className="w-4 h-4" />
-          <span className="font-bold text-xs">{tournament.winner?.team_tag || tournament.winner?.team_name}</span>
-        </div>
-      )}
-
-      {/* Phase Badge - Top Left */}
-      <div className={`absolute top-3 left-3 z-10 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 ${phaseConfig.statusPillBg} ${phaseConfig.statusPillText}`}>
-        {phaseConfig.pingDot && (
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-current"></span>
-          </span>
-        )}
-        {phaseConfig.icon} {phaseConfig.label}
-      </div>
-
       {/* League Icon - Rectangular aspect ratio (3:2) */}
       <div className="aspect-[3/2] w-full bg-muted relative overflow-hidden">
         {!imageError ? (
@@ -108,7 +89,7 @@ export function TournamentCard({ tournament, onClick }: TournamentCardProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-harvest/10">
-            <span className="text-6xl font-black text-harvest/30">
+            <span className="text-6xl font-bold text-harvest/30">
               {tournament.name.match(/\d+/)?.[0] || '?'}
             </span>
           </div>
@@ -117,10 +98,22 @@ export function TournamentCard({ tournament, onClick }: TournamentCardProps) {
 
       {/* Bottom Info Bar */}
       <div className="p-4 space-y-3">
-        {/* Tournament Title */}
-        <h3 className="text-lg font-bold text-foreground truncate">
-          {tournament.name}
-        </h3>
+        {/* Tournament Title & Status */}
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="text-lg font-bold text-foreground truncate">
+            {tournament.name}
+          </h3>
+          
+          <div className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1 shrink-0 ${phaseConfig.statusPillBg} ${phaseConfig.statusPillText}`}>
+            {phaseConfig.pingDot && (
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-current"></span>
+              </span>
+            )}
+            {phaseConfig.icon} {phaseConfig.label}
+          </div>
+        </div>
         
         {/* Date & Champion */}
         <div className="flex items-center justify-between text-sm">

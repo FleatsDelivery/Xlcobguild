@@ -106,7 +106,7 @@ function BracketMatchCard({ match, showScores }: { match: any; showScores: boole
           </div>
         </div>
         {showScores && match.team1_score !== null && match.team1_score !== undefined && (
-          <div className={`text-xl font-black ${team1Won ? 'text-[#10b981]' : 'text-muted-foreground'}`}>
+          <div className={`text-xl font-bold ${team1Won ? 'text-[#10b981]' : 'text-muted-foreground'}`}>
             {match.team1_score}
           </div>
         )}
@@ -123,7 +123,7 @@ function BracketMatchCard({ match, showScores }: { match: any; showScores: boole
           </div>
         </div>
         {showScores && match.team2_score !== null && match.team2_score !== undefined && (
-          <div className={`text-xl font-black ${team2Won ? 'text-[#10b981]' : 'text-muted-foreground'}`}>
+          <div className={`text-xl font-bold ${team2Won ? 'text-[#10b981]' : 'text-muted-foreground'}`}>
             {match.team2_score}
           </div>
         )}
@@ -251,7 +251,7 @@ function PhaseBracketViewer({
                     style={{ background: display.color }}
                   />
                   <span
-                    className="text-xs font-black uppercase tracking-widest"
+                    className="text-xs font-bold uppercase tracking-widest"
                     style={{ color: display.color }}
                   >
                     {display.label}

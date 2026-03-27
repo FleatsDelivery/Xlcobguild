@@ -98,8 +98,18 @@ const DISCORD_COMMANDS = [
         ],
       },
       { name: 'description', description: 'Describe the issue in detail', type: 3, required: true },
-      { name: 'screenshot', description: 'Optional screenshot or evidence', type: 11, required: false },
+      {
+        name: 'screenshot',
+        description: 'Optional screenshot or evidence',
+        type: 11, // ATTACHMENT type
+        required: false,
+      },
     ],
+  },
+  {
+    name: 'setup-react-roles',
+    description: 'Send the self-assignable roles message with buttons (Owner only)',
+    default_member_permissions: '8', // ADMINISTRATOR
   },
 ];
 

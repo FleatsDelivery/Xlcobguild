@@ -83,7 +83,7 @@ export function TournamentHeroStats({ playerStats, heroBans }: TournamentHeroSta
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-2xl font-black text-harvest">
+                <p className="text-2xl font-bold text-harvest">
                   {stat.winRate.toFixed(0)}%
                 </p>
                 <p className="text-xs text-field-dark/60">

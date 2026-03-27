@@ -1,0 +1,7 @@
+# Supabase Project Configuration
+
+[functions.discord-interactions]
+verify_jwt = false
+
+[functions.make-server-4789f4af]
+verify_jwt = false

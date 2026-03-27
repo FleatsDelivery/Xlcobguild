@@ -74,14 +74,14 @@ export function PlayerProfileCards({ players }: PlayerProfileCardsProps) {
                       <Trophy className="w-3 h-3 text-harvest" />
                       <span className="text-xs font-semibold text-field-dark/60">Win Rate</span>
                     </div>
-                    <p className="text-xl font-black text-harvest">{winRate}%</p>
+                    <p className="text-xl font-bold text-harvest">{winRate}%</p>
                   </div>
                   <div className="bg-silk rounded-lg p-3">
                     <div className="flex items-center gap-1 mb-1">
                       <Target className="w-3 h-3 text-harvest" />
                       <span className="text-xs font-semibold text-field-dark/60">KDA</span>
                     </div>
-                    <p className="text-xl font-black text-harvest">{kda}</p>
+                    <p className="text-xl font-bold text-harvest">{kda}</p>
                   </div>
                 </div>
 
@@ -89,15 +89,15 @@ export function PlayerProfileCards({ players }: PlayerProfileCardsProps) {
                   <p className="text-xs font-semibold text-field-dark/60 mb-2">Tournament Stats</p>
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div>
-                      <p className="text-sm font-black text-field-dark">{player.stats.total_games}</p>
+                      <p className="text-sm font-bold text-field-dark">{player.stats.total_games}</p>
                       <p className="text-xs text-field-dark/60">Games</p>
                     </div>
                     <div>
-                      <p className="text-sm font-black text-green-600">{player.stats.wins}</p>
+                      <p className="text-sm font-bold text-green-600">{player.stats.wins}</p>
                       <p className="text-xs text-field-dark/60">Wins</p>
                     </div>
                     <div>
-                      <p className="text-sm font-black text-red-600">{player.stats.total_games - player.stats.wins}</p>
+                      <p className="text-sm font-bold text-red-600">{player.stats.total_games - player.stats.wins}</p>
                       <p className="text-xs text-field-dark/60">Losses</p>
                     </div>
                   </div>
@@ -107,13 +107,13 @@ export function PlayerProfileCards({ players }: PlayerProfileCardsProps) {
                   <p className="text-xs font-semibold text-field-dark/60 mb-2">K / D / A</p>
                   <div className="grid grid-cols-3 gap-1 text-center">
                     <div>
-                      <p className="text-lg font-black text-green-600">{player.stats.kills}</p>
+                      <p className="text-lg font-bold text-green-600">{player.stats.kills}</p>
                     </div>
                     <div>
-                      <p className="text-lg font-black text-red-600">{player.stats.deaths}</p>
+                      <p className="text-lg font-bold text-red-600">{player.stats.deaths}</p>
                     </div>
                     <div>
-                      <p className="text-lg font-black text-blue-600">{player.stats.assists}</p>
+                      <p className="text-lg font-bold text-blue-600">{player.stats.assists}</p>
                     </div>
                   </div>
                 </div>

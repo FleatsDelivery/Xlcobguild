@@ -162,7 +162,7 @@ export function HallOfFameStaffTab({ staff, selectedTab, searchTerm, staffLoadin
                             const style = getRoleBadgeStyle(member.user.role);
                             return (
                               <span
-                                className={`text-[10px] font-black px-1.5 py-0.5 rounded ${style.badge}`}
+                                className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${style.badge}`}
                                 style={style.hex && !style.badge ? { color: style.hex, backgroundColor: `${style.hex}15` } : undefined}
                               >
                                 {tag}
@@ -187,7 +187,7 @@ export function HallOfFameStaffTab({ staff, selectedTab, searchTerm, staffLoadin
                       </div>
                     </td>
                     <td className="py-5 px-6 text-center">
-                      <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-harvest/10 text-harvest font-black">
+                      <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-harvest/10 text-harvest font-bold">
                         {stats.totalTournaments}
                       </span>
                     </td>

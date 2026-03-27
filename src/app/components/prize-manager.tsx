@@ -229,7 +229,7 @@ function StatBlock({ label, value, icon: Icon, color }: { label: string; value: 
   return (
     <div className="bg-muted rounded-xl p-3 text-center">
       <Icon className={`w-4 h-4 ${color} mx-auto mb-1`} />
-      <p className="text-lg sm:text-xl font-black text-foreground">{value}</p>
+      <p className="text-lg sm:text-xl font-bold text-foreground">{value}</p>
       <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{label}</p>
     </div>
   );
@@ -275,7 +275,7 @@ function AwardRow({
             <p className="text-sm font-bold text-foreground truncate">
               {award.recipient?.discord_username || 'Unknown User'}
             </p>
-            <span className="text-base font-black text-foreground whitespace-nowrap">
+            <span className="text-base font-bold text-foreground whitespace-nowrap">
               {formatCents(award.amount_cents)}
             </span>
           </div>

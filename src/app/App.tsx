@@ -394,7 +394,7 @@ export default function App() {
   }, []);
 
   // Fetch pending requests count — extracted as a stable callback so children can trigger it
-  const fetchPendingCountRef = useRef<() => Promise<void>>();
+  const fetchPendingCountRef = useRef<() => Promise<void>>(undefined);
 
   // If a direct count is provided, set it immediately without a server round-trip.
   // Otherwise, fetch from server (existing behavior for polling / visibility change).

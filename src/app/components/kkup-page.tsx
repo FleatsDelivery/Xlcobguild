@@ -254,9 +254,9 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
 
   // Now just use the completed kkup tournaments (no merging needed)
   const pastTournaments = completedKkupTournaments
-    .sort((a, b) => getKKupNumber(a) - getKKupNumber(b)); // Ascending: 4, 5, 6 instead of 6, 5, 4
+    .sort((a, b) => getKKupNumber(b) - getKKupNumber(a)); // Descending: 6, 5, 4 instead of 4, 5, 6
 
-  // Group by season (ascending season number - chronological story from Season 1 onwards)
+  // Group by season
   const tournamentsBySeason = pastTournaments.reduce<Record<number, any[]>>((acc, t) => {
     const season = t.kkup_season ?? 0; // 0 = unassigned
     if (!acc[season]) acc[season] = [];
@@ -267,10 +267,10 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
   const seasonNumbers = Object.keys(tournamentsBySeason)
     .map(Number)
     .sort((a, b) => {
-      // Put unassigned (0) at the end, otherwise sort ascending (1, 2, 3, 4)
+      // Put unassigned (0) at the end, otherwise sort descending (4, 3, 2, 1)
       if (a === 0) return 1;
       if (b === 0) return -1;
-      return a - b; // Ascending: Season 1, 2, 3, 4
+      return b - a; // Descending: Season 4, 3, 2, 1
     });
 
   if (error && !loadingLive) {
@@ -305,7 +305,7 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
           <div className="relative z-10">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="flex-1 text-center sm:text-left">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight drop-shadow-lg">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight drop-shadow-lg">
                   🌽 Kernel Kup
                 </h1>
                 <p className="text-xl sm:text-2xl text-white/90 font-semibold mb-6 drop-shadow-md">
@@ -318,14 +318,6 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
                   >
                     🏛️ Hall of Fame
                   </Button>
-                  {liveTournaments.length > 0 && (
-                    <Button
-                      onClick={() => window.location.hash = `#tournament-hub/${liveTournaments[0].id}`}
-                      className="bg-[#fbbf24] text-soil hover:bg-[#fbbf24]/90 font-bold text-lg px-8 py-6 rounded-xl shadow-lg transition-all hover:scale-105"
-                    >
-                      View Current Tournament
-                    </Button>
-                  )}
                 </div>
               </div>
               <div className="flex-shrink-0">
@@ -412,7 +404,7 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
                   <div className={`bg-gradient-to-r ${config.gradient} px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-3 border-b ${config.border}`}>
                     <span className="text-xl sm:text-2xl">{config.icon}</span>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-base sm:text-lg font-black text-foreground tracking-wide">
+                      <h3 className="text-base sm:text-lg font-bold text-foreground tracking-wide">
                         {config.label}
                       </h3>
                     </div>
@@ -465,27 +457,27 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
             </div>
 
             <div className="bg-card rounded-2xl border-2 border-border p-8">
-              <h3 className="text-2xl font-black text-foreground mb-2 text-center">All-Time Legends</h3>
+              <h3 className="text-2xl font-bold text-foreground mb-2 text-center">All-Time Legends</h3>
               <p className="text-sm text-muted-foreground text-center mb-8">Ranked by Championships, then Tournaments Played, then Win Rate</p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                 {/* 2nd Place */}
                 <div className="order-2 md:order-1">
-                  <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl border-2 border-gray-300 p-6 text-center relative">
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gray-400 text-white w-10 h-10 rounded-full flex items-center justify-center text-xl font-black border-2 border-white shadow-lg">
+                  <div className="bg-gradient-to-br from-muted to-muted/50 rounded-2xl border-2 border-border p-6 text-center relative">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-muted-foreground text-background w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold border-2 border-background shadow-lg">
                       2
                     </div>
                     {top3Players[1].avatar_url ? (
                       <img
                         src={top3Players[1].avatar_url}
                         alt={top3Players[1].name}
-                        className="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-gray-300"
+                        className="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-border"
                       />
                     ) : (
-                      <div className="w-20 h-20 rounded-full mx-auto mb-4 bg-gray-300 flex items-center justify-center border-4 border-gray-400">
-                        <Users className="w-10 h-10 text-gray-500" />
+                      <div className="w-20 h-20 rounded-full mx-auto mb-4 bg-muted flex items-center justify-center border-4 border-border">
+                        <Users className="w-10 h-10 text-muted-foreground" />
                       </div>
                     )}
-                    <p className="text-xl font-black text-foreground mb-1">{top3Players[1].name}</p>
+                    <p className="text-xl font-bold text-foreground mb-1">{top3Players[1].name}</p>
                     {top3Players[1].stats && (
                       <div className="space-y-1 text-sm text-muted-foreground">
                         <p><Trophy className="w-4 h-4 inline mr-1" />{top3Players[1].stats.championships} Championships</p>
@@ -498,23 +490,23 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
 
                 {/* 1st Place */}
                 <div className="order-1 md:order-2">
-                  <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-2xl border-2 border-yellow-400 p-6 text-center relative transform md:scale-110">
-                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-gradient-to-br from-yellow-400 to-yellow-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl font-black border-4 border-white shadow-xl">
+                  <div className="bg-gradient-to-br from-kernel-gold/20 to-kernel-gold/5 rounded-2xl border-2 border-kernel-gold/50 p-6 text-center relative transform md:scale-110">
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-kernel-gold text-soil w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold border-4 border-background shadow-xl">
                       1
                     </div>
-                    <Crown className="w-8 h-8 mx-auto mb-2 text-yellow-600" />
+                    <Crown className="w-8 h-8 mx-auto mb-2 text-kernel-gold" />
                     {top3Players[0].avatar_url ? (
                       <img
                         src={top3Players[0].avatar_url}
                         alt={top3Players[0].name}
-                        className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-yellow-400"
+                        className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-kernel-gold/80"
                       />
                     ) : (
-                      <div className="w-24 h-24 rounded-full mx-auto mb-4 bg-yellow-300 flex items-center justify-center border-4 border-yellow-400">
-                        <Users className="w-12 h-12 text-yellow-600" />
+                      <div className="w-24 h-24 rounded-full mx-auto mb-4 bg-kernel-gold/10 flex items-center justify-center border-4 border-kernel-gold/80">
+                        <Users className="w-12 h-12 text-kernel-gold" />
                       </div>
                     )}
-                    <p className="text-2xl font-black text-foreground mb-2">{top3Players[0].name}</p>
+                    <p className="text-2xl font-bold text-foreground mb-2">{top3Players[0].name}</p>
                     {top3Players[0].stats && (
                       <div className="space-y-1 text-sm text-muted-foreground font-bold">
                         <p><Trophy className="w-4 h-4 inline mr-1" />{top3Players[0].stats.championships} Championships</p>
@@ -527,22 +519,22 @@ export function KKUPPage({ user, onHallOfFameNavigate }: KKUPPageProps) {
 
                 {/* 3rd Place */}
                 <div className="order-3">
-                  <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl border-2 border-orange-300 p-6 text-center relative">
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-orange-400 text-white w-10 h-10 rounded-full flex items-center justify-center text-xl font-black border-2 border-white shadow-lg">
+                  <div className="bg-gradient-to-br from-[#cd7f32]/20 to-[#cd7f32]/5 rounded-2xl border-2 border-[#cd7f32]/50 p-6 text-center relative">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#cd7f32] text-white w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold border-2 border-background shadow-lg">
                       3
                     </div>
                     {top3Players[2].avatar_url ? (
                       <img
                         src={top3Players[2].avatar_url}
                         alt={top3Players[2].name}
-                        className="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-orange-300"
+                        className="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-[#cd7f32]/80"
                       />
                     ) : (
-                      <div className="w-20 h-20 rounded-full mx-auto mb-4 bg-orange-300 flex items-center justify-center border-4 border-orange-400">
-                        <Users className="w-10 h-10 text-orange-500" />
+                      <div className="w-20 h-20 rounded-full mx-auto mb-4 bg-[#cd7f32]/10 flex items-center justify-center border-4 border-[#cd7f32]/80">
+                        <Users className="w-10 h-10 text-[#cd7f32]" />
                       </div>
                     )}
-                    <p className="text-xl font-black text-foreground mb-1">{top3Players[2].name}</p>
+                    <p className="text-xl font-bold text-foreground mb-1">{top3Players[2].name}</p>
                     {top3Players[2].stats && (
                       <div className="space-y-1 text-sm text-muted-foreground">
                         <p><Trophy className="w-4 h-4 inline mr-1" />{top3Players[2].stats.championships} Championships</p>

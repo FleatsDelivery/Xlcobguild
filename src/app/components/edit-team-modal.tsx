@@ -189,7 +189,7 @@ export function EditTeamModal({ team, tournamentId, onClose, onSave }: EditTeamM
           {/* Stats Display */}
           <div className="p-4 bg-silk rounded-xl border-2 border-field-dark/10">
             <p className="text-sm font-semibold text-field-dark/60 mb-2">Current Record</p>
-            <p className="text-2xl font-black text-harvest">
+            <p className="text-2xl font-bold text-harvest">
               {team.wins}W - {team.losses}L
             </p>
             <p className="text-xs text-field-dark/60 mt-1">

@@ -1,7 +1,7 @@
 // /help slash command handler — Context-aware command list and community info
-import { InteractionResponseType, jsonResponse } from './utils.ts';
+import { InteractionResponseType } from './utils.ts';
 
-export async function handleHelp(body: any, supabase: any): Promise<Response> {
+export async function handleHelp(body: any, supabase: any): Promise<any> {
   try {
     const discordUser = body.member?.user || body.user;
     const discordId = discordUser?.id;
@@ -59,10 +59,10 @@ export async function handleHelp(body: any, supabase: any): Promise<Response> {
         {
           name: '🔗 Quick Links',
           value: [
-            '[🌐 Website](https://thecornfield.figma.site/)',
-            '[📋 Leaderboard](https://thecornfield.figma.site/#leaderboard)',
-            '[👑 Kernel Kup](https://thecornfield.figma.site/#kkup)',
-            '[🏛️ Hall of Fame](https://thecornfield.figma.site/#hall-of-fame)',
+            '[🌐 Website](https://kernelkup.com/)',
+            '[📋 Leaderboard](https://kernelkup.com/#leaderboard)',
+            '[👑 Kernel Kup](https://kernelkup.com/#kkup)',
+            '[🏛️ Hall of Fame](https://kernelkup.com/#hall-of-fame)',
           ].join(' • '),
           inline: false,
         },
@@ -73,7 +73,7 @@ export async function handleHelp(body: any, supabase: any): Promise<Response> {
       timestamp: new Date().toISOString(),
     };
 
-    return jsonResponse({
+    return {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
         embeds: [embed],
@@ -83,16 +83,16 @@ export async function handleHelp(body: any, supabase: any): Promise<Response> {
             type: 2,
             style: 5,
             label: 'Visit The Corn Field',
-            url: 'https://thecornfield.figma.site/',
+            url: 'https://kernelkup.com/',
             emoji: { name: '🌽' },
           }],
         }],
         flags: 64, // Ephemeral — only the user sees it
       },
-    });
+    };
   } catch (error) {
     console.error('Error handling /help command:', error);
-    return jsonResponse({
+    return {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
         embeds: [{
@@ -102,6 +102,6 @@ export async function handleHelp(body: any, supabase: any): Promise<Response> {
         }],
         flags: 64,
       },
-    });
+    };
   }
-}
+}

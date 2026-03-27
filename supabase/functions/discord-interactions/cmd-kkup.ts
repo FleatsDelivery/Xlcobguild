@@ -1,13 +1,13 @@
 // /kkup slash command handler — View Kernel Kup tournament standings
-import { errorResponse, InteractionResponseType, jsonResponse } from './utils.ts';
+import { errorResponse, InteractionResponseType } from './utils.ts';
 
-export async function handleKkup(body: any, supabase: any): Promise<Response> {
+export async function handleKkup(body: any, supabase: any): Promise<any> {
   try {
     const options = body.data.options || [];
     const tournamentNumber = options.find((opt: any) => opt.name === 'tournament')?.value;
 
     if (!tournamentNumber) {
-      return jsonResponse(errorResponse('Please select a tournament number!'));
+      return errorResponse('Please select a tournament number!');
     }
 
     // Look up the tournament by name
@@ -19,7 +19,7 @@ export async function handleKkup(body: any, supabase: any): Promise<Response> {
 
     if (tournamentError || !tournament) {
       console.error('Tournament lookup error:', tournamentError);
-      return jsonResponse(errorResponse(`Kernel Kup ${tournamentNumber} not found in the database!`));
+      return errorResponse(`Kernel Kup ${tournamentNumber} not found in the database!`);
     }
 
     console.log(`/kkup command: Found tournament "${tournament.name}" (${tournament.id})`);
@@ -232,7 +232,7 @@ export async function handleKkup(body: any, supabase: any): Promise<Response> {
     const leagueIconUrl = `https://zizrvkkuqzwzxgwpuvxb.supabase.co/storage/v1/object/public/make-4789f4af-kkup-assets/${slug}/league_square_icon.png`;
     embed.thumbnail = { url: leagueIconUrl };
 
-    const response = {
+    return {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
         embeds: [embed],
@@ -242,16 +242,14 @@ export async function handleKkup(body: any, supabase: any): Promise<Response> {
             type: 2,
             style: 5,
             label: `View ${tournament.name}`,
-            url: `https://thecornfield.figma.site/#kkup/${tournament.id}`,
+            url: `https://kernelkup.com/#kkup/${tournament.id}`,
             emoji: { name: '🌽' },
           }],
         }],
       },
     };
-
-    return jsonResponse(response);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error handling /kkup command:', error);
-    return jsonResponse(errorResponse('An unexpected error occurred. Please try again later.'));
+    return errorResponse(`An unexpected error occurred: ${error.message || 'Unknown error'}`);
   }
 }

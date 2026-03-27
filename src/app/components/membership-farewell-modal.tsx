@@ -135,7 +135,7 @@ export function MembershipFarewellModal({ periodEnd, onClose }: Props) {
               </motion.div>
 
               <motion.h3
-                className="text-2xl sm:text-3xl font-black text-foreground mb-2"
+                className="text-2xl sm:text-3xl font-bold text-foreground mb-2"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
@@ -171,7 +171,7 @@ export function MembershipFarewellModal({ periodEnd, onClose }: Props) {
                 <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-0.5">
                   Active Until
                 </p>
-                <p className="text-lg font-black text-foreground">{endDateStr}</p>
+                <p className="text-lg font-bold text-foreground">{endDateStr}</p>
                 <p className="text-xs text-muted-foreground">
                   {daysLeft === 0 ? 'Ends today' : `${daysLeft} day${daysLeft !== 1 ? 's' : ''} remaining`}
                 </p>

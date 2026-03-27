@@ -9,6 +9,7 @@ import { PREFIX } from "./helpers.ts";
 import { isOfficer } from "./roles.ts";
 import { createNotification, createAdminLog, createUserActivity } from "./routes-notifications.ts";
 import { DISCORD_WEBHOOKS } from "./discord-config.ts";
+import { syncDiscordUserRoles } from "./discord-api.ts";
 
 export function registerMVPRoutes(app: Hono, supabase: any, anonSupabase: any) {
 
@@ -19,7 +20,7 @@ export function registerMVPRoutes(app: Hono, supabase: any, anonSupabase: any) {
         .from('rank_up_requests')
         .select(`discord_message_id, discord_channel_id, action, match_id, screenshot_url,
           users!rank_up_requests_user_id_fkey(discord_id, discord_username, rank_id, prestige_level),
-          target_user:users!rank_up_requests_target_user_id_fkey(discord_id, discord_username, rank_id, prestige_level)`)
+          target_user:users!rank_up_requests_target_user_id_fkey(discord_id, discord_username, rank_id, prestige_level, ranks(name))`)
         .eq('id', requestId).single();
 
       if (requestError || !request || !request.discord_message_id || !request.discord_channel_id) return;
@@ -41,6 +42,7 @@ export function registerMVPRoutes(app: Hono, supabase: any, anonSupabase: any) {
         submitter?.discord_id || null, submitter?.discord_username || 'Unknown User',
         targetUser?.discord_id || null, targetUser?.discord_username || 'Unknown User',
         request.action || 'rank_up', request.match_id || null, imageUrl, status, reviewerUsername,
+        (targetUser as any)?.ranks?.name,
       );
 
       const response = await fetch(
@@ -60,8 +62,8 @@ export function registerMVPRoutes(app: Hono, supabase: any, anonSupabase: any) {
       const { data: request, error: requestError } = await supabase
         .from('rank_up_requests')
         .select(`discord_message_id, action, match_id, screenshot_url,
-          users!rank_up_requests_user_id_fkey(discord_id, discord_username, discord_avatar, ranks!inner(name), rank_id, prestige_level),
-          target_user:users!rank_up_requests_target_user_id_fkey(discord_id, discord_username, discord_avatar, ranks!inner(name), rank_id, prestige_level)`)
+          users!rank_up_requests_user_id_fkey(discord_id, discord_username, discord_avatar, ranks(name), rank_id, prestige_level),
+          target_user:users!rank_up_requests_target_user_id_fkey(discord_id, discord_username, discord_avatar, ranks(name), rank_id, prestige_level)`)
         .eq('id', requestId).single();
 
       if (requestError || !request) return;
@@ -80,6 +82,7 @@ export function registerMVPRoutes(app: Hono, supabase: any, anonSupabase: any) {
         submittingUser?.discord_id || null, submittingUser?.discord_username || 'Unknown User',
         targetUser?.discord_id || null, targetUser?.discord_username || 'Unknown User',
         request.action || 'rank_up', request.match_id || null, fullScreenshotUrl, status, reviewerUsername,
+        (targetUser as any)?.ranks?.name,
       );
 
       const response = await fetch(`${webhookUrl}/messages/${request.discord_message_id}`,
@@ -325,6 +328,10 @@ export function registerMVPRoutes(app: Hono, supabase: any, anonSupabase: any) {
         .eq('id', userId).select().single();
       if (updateError) { console.error('Error updating user rank:', updateError); return c.json({ error: 'Failed to update user rank' }, 500); }
 
+      // Sync Discord roles (background/best-effort)
+      // @ts-ignore: EdgeRuntime is available in Supabase
+      EdgeRuntime.waitUntil(syncDiscordUserRoles(supabase, userId, newRankId, newPrestigeLevel));
+
       // ── Activity logging (non-critical) ──
       try {
         const { data: targetUsername } = await supabase
@@ -550,6 +557,10 @@ export function registerMVPRoutes(app: Hono, supabase: any, anonSupabase: any) {
         .from('users').update({ rank_id: newRankId, prestige_level: newPrestigeLevel, updated_at: new Date().toISOString() })
         .eq('id', userToRankUp);
       if (updateUserError) return c.json({ error: 'Failed to rank up user' }, 500);
+
+      // Sync Discord roles (background/best-effort)
+      // @ts-ignore: EdgeRuntime is available in Supabase
+      EdgeRuntime.waitUntil(syncDiscordUserRoles(supabase, userToRankUp));
 
       try {
         await kv.set(`rank_action:${userToRankUp}:${Date.now()}`, {

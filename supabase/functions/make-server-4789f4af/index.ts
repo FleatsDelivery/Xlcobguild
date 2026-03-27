@@ -37,6 +37,7 @@ import { registerMasterTeamsRoutes } from "./routes-master-teams.ts";
 import { registerPrintfulRoutes } from "./routes-printful.ts";
 import { registerStripeRoutes } from "./routes-stripe.ts";
 import { registerConnectRoutes } from "./routes-connect.ts";
+import { registerPrizeRoutes } from "./routes-prizes.ts";
 
 import { registerPracticeTourneyRoutes } from "./routes-practice-tourney.ts";
 
@@ -136,6 +137,7 @@ registerMasterTeamsRoutes(app, supabase, anonSupabase);
 registerPrintfulRoutes(app, supabase, anonSupabase);
 registerStripeRoutes(app, supabase, anonSupabase);
 registerConnectRoutes(app, supabase, anonSupabase);
+registerPrizeRoutes(app, supabase, anonSupabase);
 registerPracticeTourneyRoutes(app, supabase, anonSupabase);
 registerDiscordCommandsRoute(app);
 registerGuildRoutes(app, supabase, anonSupabase);

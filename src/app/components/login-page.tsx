@@ -69,7 +69,7 @@ export function LoginPage() {
         <div className="text-center mb-10">
           <img src={TCF_LOGO} alt="The Corn Field" className="w-36 h-36 mx-auto mb-6 object-contain drop-shadow-lg" />
 
-          <h1 className="text-4xl sm:text-5xl font-black text-foreground mb-2 font-['Barlow_Semi_Condensed'] uppercase tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-2 font-['Barlow_Semi_Condensed'] uppercase tracking-tight">
             The Corn Field
           </h1>
           <p className="text-lg text-muted-foreground">

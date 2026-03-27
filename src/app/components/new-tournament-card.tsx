@@ -90,7 +90,7 @@ export function NewTournamentCard({ tournament, onClick }: NewTournamentCardProp
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-harvest/10">
-            <span className="text-4xl font-black text-harvest/30">
+            <span className="text-4xl font-bold text-harvest/30">
               {tournament.name}
             </span>
           </div>
@@ -101,7 +101,7 @@ export function NewTournamentCard({ tournament, onClick }: NewTournamentCardProp
         
         {/* Tournament Name - Overlaid on banner */}
         <div className="absolute bottom-3 left-3 right-3">
-          <h3 className="text-lg sm:text-xl font-black text-silk drop-shadow-lg">
+          <h3 className="text-lg sm:text-xl font-bold text-silk drop-shadow-lg">
             {tournament.name}
           </h3>
         </div>

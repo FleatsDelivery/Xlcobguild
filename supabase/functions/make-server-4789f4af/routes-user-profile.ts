@@ -7,6 +7,7 @@ import { PREFIX } from "./helpers.ts";
 import { createUserActivity, createAdminLog, createNotification } from "./routes-notifications.ts";
 import { isOfficer } from "./roles.ts";
 import * as kv from "./kv_store.tsx";
+import { syncDiscordUserRoles } from "./discord-api.ts";
 
 // Helper function to fetch and parse OpenDota data
 async function fetchOpenDotaData(opendotaId: string) {
@@ -524,6 +525,10 @@ export function registerUserProfileRoutes(app: Hono, supabase: any, anonSupabase
       } catch (actErr) {
         console.error('Non-critical: activity log for officer rank override failed:', actErr);
       }
+
+      // Sync Discord roles (background/best-effort)
+      // @ts-ignore: EdgeRuntime is available in Supabase
+      EdgeRuntime.waitUntil(syncDiscordUserRoles(supabase, targetUserId));
 
       // Notification to the target user (non-critical)
       try {

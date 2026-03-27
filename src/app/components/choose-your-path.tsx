@@ -21,6 +21,7 @@ interface ChooseYourPathProps {
   onRegisterWithRole: (role: string) => void;
   onOpenStaffModal: () => void;
   isEarlyAccess?: boolean;   // TCF+ early registration during upcoming phase
+  choosingRole?: string | null; // Lifted state from parent to control "clogging"
 }
 
 interface PathOption {
@@ -37,10 +38,8 @@ interface PathOption {
 export function ChooseYourPath({
   tournamentName, tournamentType,
   isRankIneligible, registering, onRegisterWithRole, onOpenStaffModal,
-  isEarlyAccess,
+  isEarlyAccess, choosingRole = null,
 }: ChooseYourPathProps) {
-  const [choosingRole, setChoosingRole] = useState<string | null>(null);
-
   const handleChoose = (role: string) => {
     // Staff path opens the staff modal instead of directly registering
     if (role === 'staff') {
@@ -48,7 +47,6 @@ export function ChooseYourPath({
       return;
     }
 
-    setChoosingRole(role);
     onRegisterWithRole(role);
   };
 
@@ -109,7 +107,7 @@ export function ChooseYourPath({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-lg font-black text-foreground">
+              <h3 className="text-lg font-bold text-foreground">
                 {isEarlyAccess ? 'Early Access Registration' : 'Choose Your Path'}
               </h3>
               {isEarlyAccess && <TcfPlusBadge size="sm" />}
@@ -158,7 +156,7 @@ export function ChooseYourPath({
                 </div>
 
                 {/* Title + subtitle */}
-                <h4 className="text-base font-black text-foreground mb-0.5">
+                <h4 className="text-base font-bold text-foreground mb-0.5">
                   {path.title}
                 </h4>
                 <p className="text-xs font-bold mb-2" style={{ color: path.color }}>

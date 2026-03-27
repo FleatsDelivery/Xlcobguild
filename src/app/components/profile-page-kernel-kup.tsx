@@ -86,14 +86,14 @@ export function ProfilePageKernelKup({ user, kkupStats, loadingKkupStats, onSign
                   <div className="flex justify-center mb-1">
                     <TrophyImage type="kernel_kup_champion" size="xl" />
                   </div>
-                  <p className="text-xl font-black text-harvest">{kkupStats.championships!.kernel_kup}x</p>
+                  <p className="text-xl font-bold text-harvest">{kkupStats.championships!.kernel_kup}x</p>
                   <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wide">KK Champ</p>
                 </div>
               )}
               {kkupStats.championships?.heaps_n_hooks! > 0 && (
                 <div className="flex-1 bg-card/80 rounded-2xl p-3 border border-[#10b981]/20 text-center">
                   <span className="text-2xl block mb-0.5">{'\u2693'}</span>
-                  <p className="text-xl font-black text-[#10b981]">{kkupStats.championships!.heaps_n_hooks}x</p>
+                  <p className="text-xl font-bold text-[#10b981]">{kkupStats.championships!.heaps_n_hooks}x</p>
                   <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wide">H&H Champ</p>
                 </div>
               )}
@@ -102,7 +102,7 @@ export function ProfilePageKernelKup({ user, kkupStats, loadingKkupStats, onSign
                   <div className="flex justify-center mb-1">
                     <TrophyImage type="popd_kernel_mvp" size="xl" />
                   </div>
-                  <p className="text-xl font-black text-[#dc2626]">{kkupStats.popd_kernels}x</p>
+                  <p className="text-xl font-bold text-[#dc2626]">{kkupStats.popd_kernels}x</p>
                   <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wide">Pop'd Kernel</p>
                 </div>
               )}
@@ -113,17 +113,17 @@ export function ProfilePageKernelKup({ user, kkupStats, loadingKkupStats, onSign
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
             <div className="bg-card/80 rounded-xl p-3 border border-border text-center">
               <p className="text-xs text-muted-foreground font-medium mb-1">Tournaments</p>
-              <p className="text-xl font-black text-foreground">{kkupStats.tournaments_played}</p>
+              <p className="text-xl font-bold text-foreground">{kkupStats.tournaments_played}</p>
             </div>
             <div className="bg-card/80 rounded-xl p-3 border border-border text-center">
               <p className="text-xs text-muted-foreground font-medium mb-1">Win Rate</p>
-              <p className={`text-xl font-black ${kkupStats.total_games > 0 && ((kkupStats.wins / kkupStats.total_games) * 100) >= 50 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+              <p className={`text-xl font-bold ${kkupStats.total_games > 0 && ((kkupStats.wins / kkupStats.total_games) * 100) >= 50 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                 {kkupStats.total_games > 0 ? `${((kkupStats.wins / kkupStats.total_games) * 100).toFixed(1)}%` : '-'}
               </p>
             </div>
             <div className="bg-card/80 rounded-xl p-3 border border-border text-center">
               <p className="text-xs text-muted-foreground font-medium mb-1">Record</p>
-              <p className="text-xl font-black">
+              <p className="text-xl font-bold">
                 <span className="text-[#10b981]">{kkupStats.wins}W</span>
                 <span className="text-muted-foreground/40"> / </span>
                 <span className="text-[#ef4444]">{kkupStats.losses}L</span>
@@ -131,15 +131,15 @@ export function ProfilePageKernelKup({ user, kkupStats, loadingKkupStats, onSign
             </div>
             <div className="bg-card/80 rounded-xl p-3 border border-border text-center">
               <p className="text-xs text-muted-foreground font-medium mb-1">Total Kills</p>
-              <p className="text-xl font-black text-[#ef4444]">{kkupStats.total_kills?.toLocaleString() || 0}</p>
+              <p className="text-xl font-bold text-[#ef4444]">{kkupStats.total_kills?.toLocaleString() || 0}</p>
             </div>
             <div className="bg-card/80 rounded-xl p-3 border border-border text-center">
               <p className="text-xs text-muted-foreground font-medium mb-1">Total Deaths</p>
-              <p className="text-xl font-black text-muted-foreground">{kkupStats.total_deaths?.toLocaleString() || 0}</p>
+              <p className="text-xl font-bold text-muted-foreground">{kkupStats.total_deaths?.toLocaleString() || 0}</p>
             </div>
             <div className="bg-card/80 rounded-xl p-3 border border-border text-center">
               <p className="text-xs text-muted-foreground font-medium mb-1">Total Assists</p>
-              <p className="text-xl font-black text-[#3b82f6]">{kkupStats.total_assists?.toLocaleString() || 0}</p>
+              <p className="text-xl font-bold text-[#3b82f6]">{kkupStats.total_assists?.toLocaleString() || 0}</p>
             </div>
           </div>
 
@@ -148,7 +148,7 @@ export function ProfilePageKernelKup({ user, kkupStats, loadingKkupStats, onSign
             <div className="bg-card/80 rounded-xl p-3 border border-border mb-5">
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted-foreground font-medium">Avg KDA per Game</p>
-                <p className="text-sm font-black text-foreground">
+                <p className="text-sm font-bold text-foreground">
                   <span className="text-[#ef4444]">{(kkupStats.total_kills / kkupStats.total_games).toFixed(1)}</span>
                   <span className="text-muted-foreground/40"> / </span>
                   <span className="text-muted-foreground">{(kkupStats.total_deaths / kkupStats.total_games).toFixed(1)}</span>

@@ -110,7 +110,7 @@ function PhaseTransitionModal({ tournament, direction, targetPhase, onConfirm, o
       <div className="bg-card rounded-2xl border-2 border-border max-w-lg w-full p-6 sm:p-8">
         {/* Header */}
         <div className="mb-6">
-          <h2 className="text-xl sm:text-2xl font-black text-foreground mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">
             {action}
           </h2>
           <p className="text-muted-foreground">
@@ -152,11 +152,11 @@ function PhaseTransitionModal({ tournament, direction, targetPhase, onConfirm, o
         {/* Tournament Stats */}
         <div className="grid grid-cols-2 gap-4 p-4 bg-muted rounded-lg mb-6">
           <div className="text-center">
-            <div className="text-2xl font-black text-foreground">{tournament.team_count || 0}</div>
+            <div className="text-2xl font-bold text-foreground">{tournament.team_count || 0}</div>
             <div className="text-xs uppercase tracking-wide text-muted-foreground font-semibold">Teams Approved</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-black text-foreground">{tournament.registration_count || 0}</div>
+            <div className="text-2xl font-bold text-foreground">{tournament.registration_count || 0}</div>
             <div className="text-xs uppercase tracking-wide text-muted-foreground font-semibold">Players</div>
           </div>
         </div>
@@ -214,7 +214,7 @@ function ErrorModal({ error, details, onClose }: ErrorModalProps) {
         <div className="flex items-start gap-4 mb-6">
           <AlertTriangle className="w-8 h-8 text-error flex-shrink-0" />
           <div>
-            <h2 className="text-xl font-black text-foreground mb-2">Phase Transition Failed</h2>
+            <h2 className="text-xl font-bold text-foreground mb-2">Phase Transition Failed</h2>
             <p className="text-muted-foreground">{error}</p>
           </div>
         </div>
@@ -261,14 +261,14 @@ function SuccessModal({ message, newPhase, onClose }: SuccessModalProps) {
         <div className="flex items-start gap-4 mb-6">
           <CheckCircle className="w-8 h-8 text-husk flex-shrink-0" />
           <div>
-            <h2 className="text-xl font-black text-foreground mb-2">Phase Updated!</h2>
+            <h2 className="text-xl font-bold text-foreground mb-2">Phase Updated!</h2>
             <p className="text-muted-foreground">{message}</p>
           </div>
         </div>
 
         <div className="bg-husk/10 border border-husk/20 rounded-lg p-4 mb-6 text-center">
           <p className="text-sm text-muted-foreground mb-1">Tournament is now in</p>
-          <p className="text-lg font-black text-foreground">{PHASE_LABELS[newPhase]}</p>
+          <p className="text-lg font-bold text-foreground">{PHASE_LABELS[newPhase]}</p>
         </div>
 
         <button

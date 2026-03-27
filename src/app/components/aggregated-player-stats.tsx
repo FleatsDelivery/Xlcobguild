@@ -428,7 +428,7 @@ export function AggregatedPlayerStats({ stats }: AggregatedPlayerStatsProps) {
                   </td>
 
                   {/* KDA */}
-                  <td className="py-5 px-6 text-center text-foreground font-black text-base">
+                  <td className="py-5 px-6 text-center text-foreground font-bold text-base">
                     {player.kda.toFixed(2)}
                   </td>
 

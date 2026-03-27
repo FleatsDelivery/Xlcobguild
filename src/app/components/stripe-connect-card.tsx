@@ -5,7 +5,7 @@
  * Matches the visual style of the Discord/Steam/Twitch cards in profile-page-settings.
  */
 import { useState, useEffect } from 'react';
-import { DollarSign, Loader2, ExternalLink, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { Loader2, ExternalLink, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { getConnectStatus, startOnboarding, getDashboardLink, type ConnectStatus } from '@/lib/connect-api';
 import { toast } from 'sonner';
 
@@ -84,13 +84,13 @@ export function StripeConnectCard({ user }: StripeConnectCardProps) {
     <div className={`p-4 rounded-2xl border-2 ${display.bg} ${display.borderColor}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 min-w-0">
-          <div className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${
-            isActive ? 'bg-[#10b981]' : isPending ? 'bg-amber-500' : 'bg-muted'
+          <div className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden border border-border ${
+            loading ? (isActive ? 'bg-[#10b981]' : isPending ? 'bg-amber-500' : 'bg-muted') : 'bg-white'
           }`}>
             {loading ? (
               <Loader2 className="w-5 h-5 text-white animate-spin" />
             ) : (
-              <DollarSign className="w-5 h-5 text-white" />
+              <img src="/stripe-logo.png" alt="Stripe" className="w-full h-full object-contain p-2" />
             )}
           </div>
           <div className="text-left min-w-0">

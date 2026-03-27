@@ -174,4 +174,9 @@ export const DISCORD_COMMANDS = [
       },
     ],
   },
+  {
+    name: 'setup-react-roles',
+    description: 'Send the self-assignable roles message with buttons (Owner only)',
+    default_member_permissions: '8', // ADMINISTRATOR
+  },
 ];

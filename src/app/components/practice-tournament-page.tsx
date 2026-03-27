@@ -170,7 +170,7 @@ function PracticeList({ user, accessToken, onBack }: { user: any; accessToken: s
               <ArrowLeft className="w-5 h-5 text-foreground" />
             </button>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-foreground flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground flex items-center gap-2">
                 <Zap className="w-6 h-6 sm:w-7 sm:h-7 text-harvest" />
                 Practice Tournaments
               </h1>
@@ -456,7 +456,7 @@ function PracticeDetail({ leagueId, user, accessToken, onBack }: { leagueId: str
                 </span>
                 <span className="text-white/60 text-xs font-mono">League #{meta.league_id}</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white">{meta.name}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">{meta.name}</h1>
               <p className="text-white/60 text-sm mt-1">
                 {meta.detailed_matches} matches • {meta.team_count} teams • Last refreshed {new Date(meta.last_refreshed).toLocaleString()}
               </p>
@@ -595,7 +595,7 @@ function PracticeDetail({ leagueId, user, accessToken, onBack }: { leagueId: str
                         return (
                           <tr key={team.id} className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-all">
                             <td className="p-3 sm:p-4">
-                              <span className={`font-black text-sm ${i === 0 ? 'text-harvest' : i < 3 ? 'text-foreground' : 'text-muted-foreground'}`}>
+                              <span className={`font-bold text-sm ${i === 0 ? 'text-harvest' : i < 3 ? 'text-foreground' : 'text-muted-foreground'}`}>
                                 {i + 1}
                               </span>
                             </td>
@@ -608,8 +608,8 @@ function PracticeDetail({ leagueId, user, accessToken, onBack }: { leagueId: str
                                 </div>
                               </div>
                             </td>
-                            <td className="p-3 sm:p-4 text-center font-black text-[#10b981] text-sm">{team.wins}</td>
-                            <td className="p-3 sm:p-4 text-center font-black text-[#ef4444] text-sm">{team.losses}</td>
+                            <td className="p-3 sm:p-4 text-center font-bold text-[#10b981] text-sm">{team.wins}</td>
+                            <td className="p-3 sm:p-4 text-center font-bold text-[#ef4444] text-sm">{team.losses}</td>
                             <td className="p-3 sm:p-4 text-center font-bold text-foreground text-sm hidden sm:table-cell">{winRate}%</td>
                             <td className="p-3 sm:p-4 text-center font-bold text-muted-foreground text-sm hidden sm:table-cell">{team.total_kills.toLocaleString()}</td>
                           </tr>

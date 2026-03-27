@@ -127,7 +127,7 @@ export function TournamentTopPlayers({ playerStats, onPlayerClick }: TournamentT
               onClick={() => onPlayerClick?.(player.playerName)}
             >
               <span
-                className={`font-black min-w-[40px] text-center ${
+                className={`font-bold min-w-[40px] text-center ${
                   index === 0 ? 'text-3xl text-harvest' : 'text-2xl text-muted-foreground'
                 }`}
               >
@@ -159,7 +159,7 @@ export function TournamentTopPlayers({ playerStats, onPlayerClick }: TournamentT
                 <p className={index === 0 ? 'text-sm text-muted-foreground' : 'text-xs text-muted-foreground'}>K/D/A</p>
               </div>
               <div className="text-center">
-                <p className={`font-black text-harvest ${index === 0 ? 'text-2xl' : 'text-xl'}`}>{kda}</p>
+                <p className={`font-bold text-harvest ${index === 0 ? 'text-2xl' : 'text-xl'}`}>{kda}</p>
                 <p className={index === 0 ? 'text-sm text-muted-foreground' : 'text-xs text-muted-foreground'}>KDA</p>
               </div>
               <div className="text-center">

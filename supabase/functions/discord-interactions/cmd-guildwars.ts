@@ -1,8 +1,8 @@
 // /guildwars slash command handler — Guild leaderboard (top players)
 // Uses real Postgres tables for championship/pop'd kernel data
-import { errorResponse, InteractionResponseType, jsonResponse } from './utils.ts';
+import { errorResponse, InteractionResponseType } from './utils.ts';
 
-export async function handleGuildWars(body: any, supabase: any): Promise<Response> {
+export async function handleGuildWars(body: any, supabase: any): Promise<any> {
   try {
     // Parallel fetch: users, tournaments (for championships/pop'd kernels), persons, rosters
     const [usersResult, tournamentsResult] = await Promise.all([
@@ -23,7 +23,7 @@ export async function handleGuildWars(body: any, supabase: any): Promise<Respons
 
     if (error || !users) {
       console.error('Failed to fetch guildwars leaderboard:', error);
-      return jsonResponse(errorResponse('Failed to load leaderboard data!'));
+      return errorResponse('Failed to load leaderboard data!');
     }
 
     // Build winning team set and pop'd kernel set from tournaments table
@@ -153,7 +153,7 @@ export async function handleGuildWars(body: any, supabase: any): Promise<Respons
     const topUserLines = topUsers.map((user: any, index: number) => formatLine(user, index + 1));
     const restUserLines = restUsers.map((user: any, index: number) => formatLine(user, index + 4));
 
-    return jsonResponse({
+    return {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
         embeds: [{
@@ -175,14 +175,14 @@ export async function handleGuildWars(body: any, supabase: any): Promise<Respons
             type: 2,
             style: 5,
             label: 'View Full Leaderboard',
-            url: 'https://thecornfield.figma.site/#leaderboard',
+            url: 'https://kernelkup.com/#leaderboard',
             emoji: { name: '⚔️' },
           }],
         }],
       },
-    });
-  } catch (error) {
+    };
+  } catch (error: any) {
     console.error('Error handling /guildwars command:', error);
-    return jsonResponse(errorResponse('An unexpected error occurred. Please try again later.'));
+    return errorResponse(`An unexpected error occurred: ${error.message || 'Unknown error'}`);
   }
 }

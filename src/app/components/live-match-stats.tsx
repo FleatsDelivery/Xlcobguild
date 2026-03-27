@@ -171,7 +171,7 @@ function StatBar({
       <div className="flex items-center justify-between mb-1.5">
         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{label}</span>
         <span
-          className="text-[10px] font-black"
+          className="text-[10px] font-bold"
           style={{ color: diff > 0 ? RADIANT : diff < 0 ? DIRE : '#9ca3af' }}
         >
           {diffLabel}
@@ -224,7 +224,7 @@ function TopPlayerCard({
             />
             <div className="min-w-0">
               <p className="text-xs font-bold text-foreground truncate">{left.name}</p>
-              <p className="text-[10px] font-black" style={{ color: RADIANT }}>{left.value}</p>
+              <p className="text-[10px] font-bold" style={{ color: RADIANT }}>{left.value}</p>
             </div>
           </div>
         ) : (
@@ -246,7 +246,7 @@ function TopPlayerCard({
             />
             <div className="min-w-0 text-right">
               <p className="text-xs font-bold text-foreground truncate">{right.name}</p>
-              <p className="text-[10px] font-black" style={{ color: DIRE }}>{right.value}</p>
+              <p className="text-[10px] font-bold" style={{ color: DIRE }}>{right.value}</p>
             </div>
           </div>
         ) : (

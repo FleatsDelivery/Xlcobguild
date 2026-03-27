@@ -317,7 +317,7 @@ function PhaseCard({
           className="w-2.5 h-2.5 rounded-full flex-shrink-0"
           style={{ background: color }}
         />
-        <span className="font-black text-foreground text-base tracking-wide flex-1">
+        <span className="font-bold text-foreground text-base tracking-wide flex-1">
           {phase.name.toUpperCase()}
         </span>
         <div className="flex items-center gap-1">
@@ -548,7 +548,7 @@ export function BracketBuilder({
       {/* Builder Header */}
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-black text-foreground flex items-center gap-2">
+          <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
             <Trophy className="w-5 h-5 text-harvest" />
             Bracket Builder
           </h2>

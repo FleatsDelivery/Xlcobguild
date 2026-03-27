@@ -213,7 +213,7 @@ export function TransparencyPage() {
             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-harvest/15 border-2 border-harvest/25 flex items-center justify-center mx-auto mb-4">
               <Scale className="w-7 h-7 sm:w-8 sm:h-8 text-harvest" />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-foreground mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
               Where The Money Goes
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto leading-relaxed">
@@ -246,7 +246,7 @@ export function TransparencyPage() {
                     <Wallet className="w-4 h-4 text-harvest" />
                   </div>
                   <div>
-                    <p className="text-2xl font-black text-harvest">95%</p>
+                    <p className="text-2xl font-bold text-harvest">95%</p>
                   </div>
                 </div>
                 <p className="text-xs font-bold text-foreground mb-1">Community Pool</p>
@@ -264,7 +264,7 @@ export function TransparencyPage() {
                     <Server className="w-4 h-4 text-muted-foreground" />
                   </div>
                   <div>
-                    <p className="text-2xl font-black text-foreground">5%</p>
+                    <p className="text-2xl font-bold text-foreground">5%</p>
                   </div>
                 </div>
                 <p className="text-xs font-bold text-foreground mb-1">Operations Fund</p>
@@ -335,7 +335,7 @@ export function TransparencyPage() {
                 <div key={row.product} className="rounded-xl border border-border bg-muted/20 p-3 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-foreground">{row.product}</span>
-                    <span className="text-xs font-black text-foreground">{row.price}</span>
+                    <span className="text-xs font-bold text-foreground">{row.price}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px]">
                     <div className="flex justify-between">
@@ -402,7 +402,7 @@ export function TransparencyPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-xs font-bold text-foreground">{item.service}</span>
-                        <span className="text-xs font-black text-foreground whitespace-nowrap">{item.cost}</span>
+                        <span className="text-xs font-bold text-foreground whitespace-nowrap">{item.cost}</span>
                       </div>
                       <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{item.note}</p>
                     </div>
@@ -490,7 +490,7 @@ export function TransparencyPage() {
                         <div className="flex items-center justify-between gap-2">
                           <span className="text-xs font-bold text-foreground">{prize.label}</span>
                           <div className="flex items-center gap-2 flex-shrink-0">
-                            <span className="text-xs font-black text-foreground">${(prize.baseAmount / 100).toFixed(2)}</span>
+                            <span className="text-xs font-bold text-foreground">${(prize.baseAmount / 100).toFixed(2)}</span>
                             <span
                               className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
                               style={{ backgroundColor: `${prize.color}15`, color: prize.color }}
@@ -647,17 +647,17 @@ export function TransparencyPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 <div className="rounded-xl border border-border bg-muted/20 p-3 text-center">
                   <p className="text-xs font-bold text-foreground">1–4 Tickets</p>
-                  <p className="text-lg font-black text-foreground mt-1">$5.00<span className="text-xs font-semibold text-muted-foreground">/ea</span></p>
+                  <p className="text-lg font-bold text-foreground mt-1">$5.00<span className="text-xs font-semibold text-muted-foreground">/ea</span></p>
                   <p className="text-[10px] text-muted-foreground mt-0.5">Standard price</p>
                 </div>
                 <div className="rounded-xl border border-[#10b981]/20 bg-[#10b981]/5 p-3 text-center">
                   <p className="text-xs font-bold text-foreground">5+ Tickets</p>
-                  <p className="text-lg font-black text-[#10b981] mt-1">$24.00<span className="text-xs font-semibold text-[#10b981]/60"> total</span></p>
+                  <p className="text-lg font-bold text-[#10b981] mt-1">$24.00<span className="text-xs font-semibold text-[#10b981]/60"> total</span></p>
                   <p className="text-[10px] text-muted-foreground mt-0.5">Save $1.00</p>
                 </div>
                 <div className="rounded-xl border border-[#10b981]/20 bg-[#10b981]/5 p-3 text-center">
                   <p className="text-xs font-bold text-foreground">10 Tickets</p>
-                  <p className="text-lg font-black text-[#10b981] mt-1">$48.00<span className="text-xs font-semibold text-[#10b981]/60"> total</span></p>
+                  <p className="text-lg font-bold text-[#10b981] mt-1">$48.00<span className="text-xs font-semibold text-[#10b981]/60"> total</span></p>
                   <p className="text-[10px] text-muted-foreground mt-0.5">Save $2.00</p>
                 </div>
               </div>

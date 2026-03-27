@@ -1,15 +1,15 @@
 // /register slash command handler — Kernel Kup tournament registration
 // Supports TCF+ early access during "upcoming" phase
-import { errorResponse, InteractionResponseType, jsonResponse } from './utils.ts';
+import { errorResponse, InteractionResponseType } from './utils.ts';
 
-export async function handleRegister(body: any, supabase: any): Promise<Response> {
+export async function handleRegister(body: any, supabase: any): Promise<any> {
   try {
     const discordUser = body.member?.user || body.user;
-    const discordId = discordUser.id;
-    const discordUsername = discordUser.username || discordUser.global_name || 'Unknown';
+    const discordId = discordUser?.id;
+    const discordUsername = discordUser?.username || discordUser?.global_name || 'Unknown';
 
     if (!discordId) {
-      return jsonResponse(errorResponse('Could not identify your Discord account.'));
+      return errorResponse('Could not identify your Discord account.');
     }
 
     // Get the role option
@@ -17,7 +17,7 @@ export async function handleRegister(body: any, supabase: any): Promise<Response
     const role = options.find((opt: any) => opt.name === 'role')?.value;
 
     if (!role) {
-      return jsonResponse(errorResponse('Please select a role!'));
+      return errorResponse('Please select a role!');
     }
 
     // Check if user exists in TCF
@@ -51,7 +51,7 @@ export async function handleRegister(body: any, supabase: any): Promise<Response
         isEarlyAccess = true;
       } else {
         // There's an upcoming tournament but user isn't TCF+
-        return jsonResponse({
+        return {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             embeds: [{
@@ -67,20 +67,18 @@ export async function handleRegister(body: any, supabase: any): Promise<Response
                 type: 2,
                 style: 5,
                 label: 'Visit The Corn Field',
-                url: 'https://thecornfield.figma.site/',
+                url: 'https://kernelkup.com/',
                 emoji: { name: '🌽' },
               }],
             }],
             flags: 64,
           },
-        });
+        };
       }
     }
 
     if (!tournament) {
-      return jsonResponse(
-        errorResponse('No tournament is currently accepting registrations! Check back later.')
-      );
+      return errorResponse('No tournament is currently accepting registrations! Check back later.');
     }
 
     // Check if user has already registered for this tournament
@@ -92,9 +90,7 @@ export async function handleRegister(body: any, supabase: any): Promise<Response
       .maybeSingle();
 
     if (existingRegistration) {
-      return jsonResponse(
-        errorResponse(`You're already registered for ${tournament.name} as a **${existingRegistration.role}**!`)
-      );
+      return errorResponse(`You're already registered for ${tournament.name} as a **${existingRegistration.role}**!`);
     }
 
     // Create registration
@@ -115,12 +111,11 @@ export async function handleRegister(body: any, supabase: any): Promise<Response
 
     if (insertError || !registration) {
       console.error('Failed to create registration:', insertError);
-      return jsonResponse(errorResponse('Failed to register. Please try again later.'));
+      return errorResponse('Failed to register. Please try again later.');
     }
 
     console.log(`KKUP registration created: ${registration.id}${isEarlyAccess ? ' (TCF+ early access)' : ''}`);
 
-    // Role-specific emoji and messaging
     const roleEmoji = role === 'player' ? '🎮' : role === 'coach' ? '📋' : role === 'caster' ? '🎙️' : '👁️';
     const earlyAccessBadge = isEarlyAccess ? '\n\n✨ **TCF+ Early Access** — You registered before public registration opened!' : '';
     const roleFollowUp = role === 'player'
@@ -129,7 +124,7 @@ export async function handleRegister(body: any, supabase: any): Promise<Response
       ? '\n\n🎙️ An officer will reach out about casting assignments!'
       : '';
 
-    const response = {
+    return {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
         embeds: [{
@@ -144,17 +139,15 @@ export async function handleRegister(body: any, supabase: any): Promise<Response
             type: 2,
             style: 5,
             label: 'View KKUP Portal',
-            url: 'https://thecornfield.figma.site/#kkup',
+            url: 'https://kernelkup.com/#kkup',
             emoji: { name: '👑' },
           }],
         }],
         flags: 64, // Ephemeral
       },
     };
-
-    return jsonResponse(response);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error handling /register command:', error);
-    return jsonResponse(errorResponse('An unexpected error occurred. Please try again later.'));
+    return errorResponse(`An unexpected error occurred: ${error.message || 'Unknown error'}`);
   }
 }

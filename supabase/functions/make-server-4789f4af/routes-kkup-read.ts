@@ -1069,6 +1069,7 @@ export function registerKkupReadRoutes(app: Hono, supabase: any, _anonSupabase: 
             )
           `)
           .in('tournament_id', activeTournamentIds)
+          .neq('status', 'withdrawn')
           .order('created_at', { ascending: false });
 
         // Group by tournament

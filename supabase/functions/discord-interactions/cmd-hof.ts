@@ -1,7 +1,7 @@
 // /hof slash command handler — Hall of Fame (uses real Postgres tables, not KV)
-import { errorResponse, InteractionResponseType, jsonResponse } from './utils.ts';
+import { errorResponse, InteractionResponseType } from './utils.ts';
 
-export async function handleHof(body: any, supabase: any): Promise<Response> {
+export async function handleHof(body: any, supabase: any): Promise<any> {
   try {
     // Parallel fetch all data needed
     const [tournamentsResult, personsResult, rostersResult, teamsResult] = await Promise.all([
@@ -32,7 +32,6 @@ export async function handleHof(body: any, supabase: any): Promise<Response> {
     teams.forEach((t: any) => { teamNameMap[t.id] = t.team_name; });
 
     // ── Championships ──
-    // A championship = a tournament with a winning_team_id
     const winningTeamIds = new Set(
       tournaments.map((t: any) => t.winning_team_id).filter(Boolean)
     );
@@ -45,7 +44,7 @@ export async function handleHof(body: any, supabase: any): Promise<Response> {
       }
     }
 
-    // Count championships per player (player was on a winning roster)
+    // Count championships per player
     const playerChampionships: Record<string, number> = {};
     for (const roster of rosters) {
       if (winningTeamIds.has(roster.team_id)) {
@@ -54,7 +53,6 @@ export async function handleHof(body: any, supabase: any): Promise<Response> {
     }
 
     // ── Pop'd Kernels ──
-    // From kkup_tournaments.popd_kernel_1_person_id and popd_kernel_2_person_id
     const playerPopdKernels: Record<string, number> = {};
     for (const t of tournaments) {
       if (t.popd_kernel_1_person_id) {
@@ -65,7 +63,7 @@ export async function handleHof(body: any, supabase: any): Promise<Response> {
       }
     }
 
-    // Sort and get top 5 for each category
+    // Sort and get top 5
     const topChampionPlayers = Object.entries(playerChampionships)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
@@ -90,39 +88,13 @@ export async function handleHof(body: any, supabase: any): Promise<Response> {
         return `${medal} ${teamNameMap[id] || 'Unknown'} — ${'🏆'.repeat(Math.min(count, 5))} (${count})`;
       });
 
-    // Build embed fields
     const fields: any[] = [];
-
-    if (topChampionPlayers.length > 0) {
-      fields.push({
-        name: '🏆 Most Championships (Players)',
-        value: topChampionPlayers.join('\n'),
-        inline: false,
-      });
-    }
-
-    if (topPopdKernelPlayers.length > 0) {
-      fields.push({
-        name: "🍿 Most Pop'd Kernels",
-        value: topPopdKernelPlayers.join('\n'),
-        inline: false,
-      });
-    }
-
-    if (topTeams.length > 0) {
-      fields.push({
-        name: '👑 Most Championships (Teams)',
-        value: topTeams.join('\n'),
-        inline: false,
-      });
-    }
+    if (topChampionPlayers.length > 0) fields.push({ name: '🏆 Most Championships (Players)', value: topChampionPlayers.join('\n'), inline: false });
+    if (topPopdKernelPlayers.length > 0) fields.push({ name: "🍿 Most Pop'd Kernels", value: topPopdKernelPlayers.join('\n'), inline: false });
+    if (topTeams.length > 0) fields.push({ name: '👑 Most Championships (Teams)', value: topTeams.join('\n'), inline: false });
 
     if (fields.length === 0) {
-      fields.push({
-        name: 'No Data Yet',
-        value: 'Championship and Pop\'d Kernel awards will appear here once tournaments are completed.',
-        inline: false,
-      });
+      fields.push({ name: 'No Data Yet', value: 'Championship and Pop\'d Kernel awards will appear here once tournaments are completed.', inline: false });
     }
 
     const totalTournaments = tournaments.filter((t: any) => t.winning_team_id).length;
@@ -132,12 +104,10 @@ export async function handleHof(body: any, supabase: any): Promise<Response> {
       description: `All-time greats across ${totalTournaments} tournament${totalTournaments !== 1 ? 's' : ''}`,
       fields,
       color: 0xF97316,
-      footer: {
-        text: `The Corn Field Dota 2 • Today at ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`,
-      },
+      footer: { text: `The Corn Field Dota 2 • Today at ${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}` },
     };
 
-    return jsonResponse({
+    return {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
         embeds: [embed],
@@ -147,14 +117,14 @@ export async function handleHof(body: any, supabase: any): Promise<Response> {
             type: 2,
             style: 5,
             label: 'View Full Hall of Fame',
-            url: 'https://thecornfield.figma.site/#hall-of-fame',
+            url: 'https://kernelkup.com/#hall-of-fame',
             emoji: { name: '🏛️' },
           }],
         }],
       },
-    });
-  } catch (error) {
+    };
+  } catch (error: any) {
     console.error('Error handling /hof command:', error);
-    return jsonResponse(errorResponse('An unexpected error occurred. Please try again later.'));
+    return errorResponse(`An unexpected error occurred: ${error.message || 'Unknown error'}`);
   }
 }

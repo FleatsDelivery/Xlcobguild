@@ -147,7 +147,7 @@ export function GiveawaysPage({ user }: GiveawaysPageProps) {
               <Gift className="w-5 h-5 sm:w-6 sm:h-6 text-harvest" />
             </div>
             <div>
-              <h1 className="text-xl sm:text-2xl font-black text-foreground font-['Inter']">Giveaways</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground font-['Inter']">Giveaways</h1>
               <p className="text-xs sm:text-sm text-muted-foreground">Monthly prizes for the community</p>
             </div>
           </div>

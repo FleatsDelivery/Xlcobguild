@@ -237,7 +237,7 @@ function TopThreePodium({
 
   return (
     <div className="bg-card rounded-2xl border-2 border-border p-3 sm:p-6 mb-3 sm:mb-6">
-      <h2 className="text-base sm:text-xl font-black text-foreground mb-0.5 text-center">
+      <h2 className="text-base sm:text-xl font-bold text-foreground mb-0.5 text-center">
         Top 3 MVPs
       </h2>
       <p className="text-[10px] sm:text-xs text-muted-foreground text-center mb-3 sm:mb-5">
@@ -263,7 +263,7 @@ function TopThreePodium({
             >
               <div className={`bg-gradient-to-br ${s.bgGradient} rounded-xl border-2 ${s.border} p-2.5 sm:p-4 text-center relative transition-all group-hover:scale-[1.03] group-hover:shadow-lg`}>
                 {/* Position badge */}
-                <div className={`${s.badgeBg} text-white rounded-full w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center font-black text-xs sm:text-base mx-auto mb-1.5 sm:mb-2 border-2 border-card shadow-md`}>
+                <div className={`${s.badgeBg} text-white rounded-full w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center font-bold text-xs sm:text-base mx-auto mb-1.5 sm:mb-2 border-2 border-card shadow-md`}>
                   {dataIdx + 1}
                 </div>
 
@@ -283,7 +283,7 @@ function TopThreePodium({
                   />
                 ) : (
                   <div className={`${s.avatarSize} rounded-full bg-harvest/20 flex items-center justify-center border-4 ${s.avatarBorder}`}>
-                    <span className="text-harvest font-black text-lg sm:text-2xl">
+                    <span className="text-harvest font-bold text-lg sm:text-2xl">
                       {u.discord_username[0].toUpperCase()}
                     </span>
                   </div>
@@ -292,7 +292,7 @@ function TopThreePodium({
                 </div>
 
                 {/* Name */}
-                <p className={`${s.nameSize} font-black text-foreground mb-0.5 truncate`}>
+                <p className={`${s.nameSize} font-bold text-foreground mb-0.5 truncate`}>
                   {u.discord_username}
                 </p>
 

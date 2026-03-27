@@ -216,7 +216,7 @@ export function LiveMatchPanel({ games, polledAt, onRefresh, refreshing, pollInt
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef4444] opacity-75" />
             <span className="relative inline-flex rounded-full h-3 w-3 bg-[#ef4444]" />
           </span>
-          <span className="font-black text-[#ef4444] text-sm uppercase tracking-wide">
+          <span className="font-bold text-[#ef4444] text-sm uppercase tracking-wide">
             {games.length} Live {games.length === 1 ? 'Game' : 'Games'}
           </span>
         </div>
@@ -284,7 +284,7 @@ function PhaseBadge({ phase }: { phase: GamePhase }) {
 
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider"
+      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider"
       style={{ color: config.color, backgroundColor: config.bgColor }}
     >
       {config.pulse && (
@@ -477,7 +477,7 @@ function LiveGameCard({ game }: { game: LiveGame }) {
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <TeamLogo logoUrl={game.radiant_team.logo_url} teamName={game.radiant_team.name} size="md" />
             <div className="min-w-0">
-              <p className="font-black text-white text-sm sm:text-base truncate">{game.radiant_team.name}</p>
+              <p className="font-bold text-white text-sm sm:text-base truncate">{game.radiant_team.name}</p>
               <p className="text-[10px] sm:text-xs text-white/50 font-semibold">Radiant</p>
             </div>
           </div>
@@ -485,15 +485,15 @@ function LiveGameCard({ game }: { game: LiveGame }) {
           {/* Score / VS */}
           <div className="text-center px-2 sm:px-4">
             {isDraftPhase && game.radiant_score === 0 && game.dire_score === 0 ? (
-              <span className="text-lg sm:text-2xl font-black" style={{ color: phaseConfig.color }}>VS</span>
+              <span className="text-lg sm:text-2xl font-bold" style={{ color: phaseConfig.color }}>VS</span>
             ) : (
               <div className="flex flex-col items-center">
                 <div className="flex items-center gap-2 sm:gap-4">
-                  <span className={`text-2xl sm:text-4xl font-black ${radiantLeads ? 'text-[#10b981]' : 'text-white/80'}`}>
+                  <span className={`text-2xl sm:text-4xl font-bold ${radiantLeads ? 'text-[#10b981]' : 'text-white/80'}`}>
                     {game.radiant_score}
                   </span>
                   <Swords className="w-4 h-4 sm:w-5 sm:h-5 text-white/30" />
-                  <span className={`text-2xl sm:text-4xl font-black ${!radiantLeads ? 'text-[#ef4444]' : 'text-white/80'}`}>
+                  <span className={`text-2xl sm:text-4xl font-bold ${!radiantLeads ? 'text-[#ef4444]' : 'text-white/80'}`}>
                     {game.dire_score}
                   </span>
                 </div>
@@ -510,7 +510,7 @@ function LiveGameCard({ game }: { game: LiveGame }) {
           {/* Dire Team */}
           <div className="flex items-center gap-2 sm:gap-3 justify-end min-w-0">
             <div className="min-w-0 text-right">
-              <p className="font-black text-white text-sm sm:text-base truncate">{game.dire_team.name}</p>
+              <p className="font-bold text-white text-sm sm:text-base truncate">{game.dire_team.name}</p>
               <p className="text-[10px] sm:text-xs text-white/50 font-semibold">Dire</p>
             </div>
             <TeamLogo logoUrl={game.dire_team.logo_url} teamName={game.dire_team.name} size="md" />
@@ -663,7 +663,7 @@ function PlayerStatRow({ player, side }: { player: LivePlayer; side: 'radiant' |
           />
           {isDead && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-[8px] font-black text-[#ef4444] bg-black/70 px-1 rounded">{player.respawn_timer}s</span>
+              <span className="text-[8px] font-bold text-[#ef4444] bg-black/70 px-1 rounded">{player.respawn_timer}s</span>
             </div>
           )}
           {/* Ult indicator dot */}
@@ -717,7 +717,7 @@ function PlayerStatRow({ player, side }: { player: LivePlayer; side: 'radiant' |
 
         {/* KDA */}
         <div className="text-right flex-shrink-0">
-          <p className="text-xs font-black text-foreground">{player.kills}/{player.deaths}/{player.assists}</p>
+          <p className="text-xs font-bold text-foreground">{player.kills}/{player.deaths}/{player.assists}</p>
           <p className="text-[9px] text-muted-foreground font-bold uppercase">KDA</p>
         </div>
 

@@ -48,8 +48,8 @@ export function ConfirmModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={loading ? undefined : onCancel}>
-      <div className="bg-card rounded-3xl shadow-2xl max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 animate-in fade-in duration-200" onClick={loading ? undefined : onCancel}>
+      <div className="bg-card rounded-3xl shadow-2xl max-w-md w-full animate-in zoom-in-[0.7] fade-in duration-500 ease-[cubic-bezier(0.34,1.76,0.64,1)]" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="relative bg-gradient-to-br from-harvest/10 to-harvest/5 rounded-t-3xl p-6 border-b-2 border-harvest/20">
           <button

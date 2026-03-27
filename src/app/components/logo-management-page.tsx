@@ -289,7 +289,7 @@ export function LogoManagementPage() {
           <div className="bg-gradient-to-br from-harvest to-amber rounded-3xl p-8 sm:p-12">
             <div className="flex items-center gap-4 mb-4">
               <ImageIcon className="w-10 h-10 text-white" />
-              <h1 className="text-4xl sm:text-5xl font-black text-white">
+              <h1 className="text-4xl sm:text-5xl font-bold text-white">
                 Team Logo Management
               </h1>
             </div>

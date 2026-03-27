@@ -226,7 +226,7 @@ function MembershipCard({ tier, user, subscriptionStatus }: { tier: MembershipTi
           ) : (
             <Users className="w-5 h-5 text-muted-foreground" />
           )}
-          <h3 className={`text-lg sm:text-xl font-black ${isTcfPlus ? (isCancelling ? 'text-harvest/70' : 'text-harvest') : 'text-foreground'}`}>
+          <h3 className={`text-lg sm:text-xl font-bold ${isTcfPlus ? (isCancelling ? 'text-harvest/70' : 'text-harvest') : 'text-foreground'}`}>
             {tier.name}
           </h3>
           {isTcfPlus && isSubscribed && !isCancelling && (
@@ -248,7 +248,7 @@ function MembershipCard({ tier, user, subscriptionStatus }: { tier: MembershipTi
 
         {/* Price */}
         <div className="flex items-baseline gap-1 mb-2">
-          <span className="text-3xl sm:text-4xl font-black text-foreground">{tier.price}</span>
+          <span className="text-3xl sm:text-4xl font-bold text-foreground">{tier.price}</span>
           <span className="text-sm text-muted-foreground font-medium">{tier.priceNote}</span>
         </div>
 
@@ -492,7 +492,7 @@ function MerchProductCard({ product, onSelect }: { product: PrintfulProduct; onS
         </div>
 
         <div className="flex items-center justify-between gap-3">
-          <span className="text-base sm:text-lg font-black text-foreground">{priceStr}</span>
+          <span className="text-base sm:text-lg font-bold text-foreground">{priceStr}</span>
           <button
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-harvest text-silk hover:bg-deep-corn transition-colors"
             onClick={(e) => { e.stopPropagation(); onSelect(product); }}
@@ -609,7 +609,7 @@ export function SecretShopPage({ user }: { user: any }) {
             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-harvest/15 border-2 border-harvest/25 flex items-center justify-center mx-auto mb-4">
               <ShoppingBag className="w-7 h-7 sm:w-8 sm:h-8 text-harvest" />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-foreground mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
               The Secret Shop
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">
@@ -704,14 +704,14 @@ export function SecretShopPage({ user }: { user: any }) {
                         <span className="text-sm text-muted-foreground line-through font-semibold">
                           ${discount.totalBefore.toFixed(2)}
                         </span>
-                        <span className="text-lg sm:text-xl font-black text-[#10b981]">
+                        <span className="text-lg sm:text-xl font-bold text-[#10b981]">
                           ${discount.totalAfter.toFixed(2)}
                         </span>
                       </div>
                     );
                   }
                   return (
-                    <span className="text-lg sm:text-xl font-black text-foreground whitespace-nowrap">
+                    <span className="text-lg sm:text-xl font-bold text-foreground whitespace-nowrap">
                       ${(ticketQty * TICKET_PRICE).toFixed(2)}
                     </span>
                   );
@@ -764,7 +764,7 @@ export function SecretShopPage({ user }: { user: any }) {
                 {/* Current Balance */}
                 <div className="bg-[#10b981]/5 border border-[#10b981]/15 rounded-xl p-3 sm:p-4 text-center">
                   <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Current Balance</p>
-                  <p className="text-2xl sm:text-3xl font-black text-[#10b981]">
+                  <p className="text-2xl sm:text-3xl font-bold text-[#10b981]">
                     {user?.kkup_tickets ?? 0}
                   </p>
                   <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
@@ -775,7 +775,7 @@ export function SecretShopPage({ user }: { user: any }) {
                 {/* Lifetime Purchased */}
                 <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4 text-center">
                   <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">All-Time</p>
-                  <p className="text-2xl sm:text-3xl font-black text-foreground">
+                  <p className="text-2xl sm:text-3xl font-bold text-foreground">
                     {user?.total_tickets_purchased ?? 0}
                   </p>
                   <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
@@ -882,7 +882,7 @@ export function SecretShopPage({ user }: { user: any }) {
                 {/* Total Donated */}
                 <div className="bg-[#10b981]/5 border border-[#10b981]/15 rounded-xl p-3 sm:p-4 text-center">
                   <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Total Donated</p>
-                  <p className="text-2xl sm:text-3xl font-black text-[#10b981]">
+                  <p className="text-2xl sm:text-3xl font-bold text-[#10b981]">
                     ${((user?.total_donations_amount ?? 0) as number).toFixed(2)}
                   </p>
                   <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
@@ -895,7 +895,7 @@ export function SecretShopPage({ user }: { user: any }) {
                   <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Last Donation</p>
                   {user?.most_recent_donation ? (
                     <>
-                      <p className="text-lg sm:text-xl font-black text-foreground">
+                      <p className="text-lg sm:text-xl font-bold text-foreground">
                         {timeAgo(user.most_recent_donation)}
                       </p>
                       <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
@@ -904,7 +904,7 @@ export function SecretShopPage({ user }: { user: any }) {
                     </>
                   ) : (
                     <>
-                      <p className="text-lg sm:text-xl font-black text-muted-foreground/40">—</p>
+                      <p className="text-lg sm:text-xl font-bold text-muted-foreground/40">—</p>
                       <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5">
                         no donations yet
                       </p>
@@ -1002,7 +1002,7 @@ export function SecretShopPage({ user }: { user: any }) {
             <div className="rounded-xl border border-harvest/15 bg-harvest/5 p-3">
               <div className="flex items-center gap-2 mb-1">
                 <PieChart className="w-3.5 h-3.5 text-harvest" />
-                <span className="text-sm font-black text-harvest">95%</span>
+                <span className="text-sm font-bold text-harvest">95%</span>
                 <span className="text-xs font-bold text-foreground">Community Pool</span>
               </div>
               <p className="text-[11px] text-muted-foreground leading-relaxed">
@@ -1012,7 +1012,7 @@ export function SecretShopPage({ user }: { user: any }) {
             <div className="rounded-xl border border-border bg-muted/30 p-3">
               <div className="flex items-center gap-2 mb-1">
                 <PieChart className="w-3.5 h-3.5 text-muted-foreground" />
-                <span className="text-sm font-black text-foreground">5%</span>
+                <span className="text-sm font-bold text-foreground">5%</span>
                 <span className="text-xs font-bold text-foreground">Operations</span>
               </div>
               <p className="text-[11px] text-muted-foreground leading-relaxed">

@@ -21,6 +21,7 @@ import { useTournament } from '@/app/contexts/tournament-context';
 import { RankModal } from '@/app/components/tournament-hub-rank-modal';
 import { RANK_MEDALS } from '@/lib/rank-utils';
 import { toast } from 'sonner';
+import { RegOpenOverview } from './tournament-overview-reg-open';
 
 interface TournamentOverviewTabProps {
   tournamentId: string;
@@ -39,6 +40,8 @@ interface OverviewData {
     total_matches: number;
     total_heroes_picked: number;
     youtube_vod_url: string | null;
+    prize_pool?: string | number | null;
+    prize_pool_donations?: number | null;
     all_teams_ticket_ready?: boolean;
   };
   champion: {
@@ -117,7 +120,9 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
     fetchOverview();
   }, [tournamentId]);
 
-  if (loading) {
+  // Only show full-page loading if we don't have any data yet.
+  // This prevents the page from blanking out during background refreshes (e.g. timer zero refetch).
+  if (loading && !data) {
     return (
       <div className="flex items-center justify-center py-12 sm:py-16">
         <div className="text-center space-y-3">
@@ -218,15 +223,15 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
               <Users className="w-4 h-4 text-harvest" />
               <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Teams</p>
             </div>
-            <p className="text-2xl sm:text-3xl font-black text-foreground">{tournament.total_teams}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-foreground">{tournament.total_teams}</p>
           </div>
 
           <div className="bg-card border-2 border-border rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Target className="w-4 h-4 text-husk" />
-              <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Players</p>
+              <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Participants</p>
             </div>
-            <p className="text-2xl sm:text-3xl font-black text-foreground">-</p>
+            <p className="text-2xl sm:text-3xl font-bold text-foreground">-</p>
           </div>
 
           <div className="bg-card border-2 border-border rounded-xl p-4">
@@ -234,7 +239,7 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
               <Gamepad2 className="w-4 h-4 text-harvest" />
               <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Matches</p>
             </div>
-            <p className="text-2xl sm:text-3xl font-black text-foreground">0</p>
+            <p className="text-2xl sm:text-3xl font-bold text-foreground">0</p>
           </div>
 
           <div className="bg-card border-2 border-border rounded-xl p-4">
@@ -258,7 +263,7 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
         <div className="bg-gradient-to-br from-[#f59e0b]/20 to-transparent border-2 border-[#f59e0b]/30 rounded-2xl p-8 sm:p-12 text-center">
           <div className="max-w-md mx-auto space-y-4">
             <div className="text-6xl sm:text-7xl">🌽</div>
-            <h3 className="text-xl sm:text-2xl font-black text-foreground">
+            <h3 className="text-xl sm:text-2xl font-bold text-foreground">
               No Match Data Available
             </h3>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
@@ -310,11 +315,11 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
             <div className="flex-1 text-center sm:text-left space-y-2">
               <div className="flex items-center justify-center sm:justify-start gap-2">
                 <Trophy className="w-6 h-6 sm:w-7 sm:h-7 text-kernel-gold" />
-                <h2 className="text-2xl sm:text-3xl font-black text-foreground">
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
                   {tournament.name} Champions
                 </h2>
               </div>
-              <p className="text-3xl sm:text-4xl font-black text-kernel-gold">
+              <p className="text-3xl sm:text-4xl font-bold text-kernel-gold">
                 {champion.team_name}
               </p>
               <p className="text-base sm:text-lg text-muted-foreground">
@@ -329,13 +334,18 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
       {/* TOURNAMENT STATS GRID */}
       {/* ══════════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        {/* Teams */}
+        {/* Prize Pool */}
         <div className="bg-card border-2 border-border rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Users className="w-4 h-4 text-harvest" />
-            <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Teams</p>
+            <Trophy className="w-4 h-4 text-harvest" />
+            <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Prize Pool</p>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">{tournament.total_teams}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-harvest drop-shadow-sm">
+            ${(parseFloat(tournament.prize_pool?.toString().replace(/[^0-9.]/g, '') || '0') + (tournament.prize_pool_donations || 0)).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+          </p>
+          <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">
+            {(tournament.prize_pool_donations || 0) > 0 ? `+ $${(tournament.prize_pool_donations || 0).toLocaleString()} Donations` : 'Base Pool'}
+          </p>
         </div>
 
         {/* Matches */}
@@ -344,7 +354,7 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
             <Gamepad2 className="w-4 h-4 text-husk" />
             <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Matches</p>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">{tournament.total_matches}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-foreground">{tournament.total_matches}</p>
         </div>
 
         {/* Participants (Players + Coaches + Staff) */}
@@ -353,7 +363,7 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
             <Target className="w-4 h-4 text-harvest" />
             <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Participants</p>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">{tournament.total_players}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-foreground">{tournament.total_players}</p>
         </div>
 
         {/* Heroes Picked */}
@@ -362,7 +372,7 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
             <Calendar className="w-4 h-4 text-husk" />
             <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Heroes Picked</p>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">
+          <p className="text-2xl sm:text-3xl font-bold text-foreground">
             {totalHeroesPicked}/{maxDotaHeroes}
           </p>
         </div>
@@ -443,7 +453,7 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
                   key={hero.hero_id}
                   className="flex items-center gap-3 sm:gap-4 bg-muted/50 border-2 border-border rounded-xl p-3"
                 >
-                  <div className="text-lg sm:text-xl font-black text-muted-foreground w-6">
+                  <div className="text-lg sm:text-xl font-bold text-muted-foreground w-6">
                     #{idx + 1}
                   </div>
                   <img
@@ -500,7 +510,7 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
 
                   return (
                     <tr key={player.person_id} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                      <td className={`py-3 px-2 font-black text-base sm:text-lg ${rankColor}`}>
+                      <td className={`py-3 px-2 font-bold text-base sm:text-lg ${rankColor}`}>
                         #{idx + 1}
                       </td>
                       <td className="py-3 px-2">
@@ -522,7 +532,7 @@ export function TournamentOverviewTab({ tournamentId }: TournamentOverviewTabPro
                         </div>
                       </td>
                       <td className="py-3 px-2 text-center">
-                        <span className="font-black text-base sm:text-lg text-harvest">
+                        <span className="font-bold text-base sm:text-lg text-harvest">
                           {player.kda.toFixed(2)}
                         </span>
                       </td>
@@ -613,7 +623,7 @@ function RegClosedOverview({ data }: { data: OverviewData }) {
             <Users className="w-8 h-8 sm:w-10 sm:h-10 text-[#3b82f6]" />
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-2xl sm:text-3xl font-black text-foreground leading-tight mb-1">
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground leading-tight mb-1">
               Team Assembly In Progress
             </h2>
             <div className="flex items-center gap-2 mb-2">
@@ -627,7 +637,7 @@ function RegClosedOverview({ data }: { data: OverviewData }) {
           {/* Deadline chip */}
           {daysLeft !== null && (
             <div className="flex-shrink-0 text-center bg-soil/80 border-2 border-[#3b82f6]/30 rounded-2xl px-5 py-4 self-start sm:self-auto">
-              <div className="text-3xl sm:text-4xl font-black text-[#3b82f6] leading-none">
+              <div className="text-3xl sm:text-4xl font-bold text-[#3b82f6] leading-none">
                 {daysLeft === 0 ? 'Today' : daysLeft}
               </div>
               {daysLeft !== 0 && (
@@ -648,7 +658,7 @@ function RegClosedOverview({ data }: { data: OverviewData }) {
             <Trophy className="w-4 h-4 text-harvest" />
             <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Teams</p>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">{tournament.total_teams}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-foreground">{tournament.total_teams}</p>
           <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">Forming</p>
         </div>
 
@@ -657,7 +667,7 @@ function RegClosedOverview({ data }: { data: OverviewData }) {
             <Users className="w-4 h-4 text-[#3b82f6]" />
             <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Players</p>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">{tournament.total_players}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-foreground">{tournament.total_players}</p>
           <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">Registered</p>
         </div>
 
@@ -666,7 +676,7 @@ function RegClosedOverview({ data }: { data: OverviewData }) {
             <Ticket className={`w-4 h-4 ${allReady ? 'text-[#10b981]' : 'text-[#f59e0b]'}`} />
             <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Tickets</p>
           </div>
-          <p className={`text-2xl sm:text-3xl font-black ${allReady ? 'text-[#10b981]' : 'text-foreground'}`}>
+          <p className={`text-2xl sm:text-3xl font-bold ${allReady ? 'text-[#10b981]' : 'text-foreground'}`}>
             {totalTickets}{maxTickets > 0 ? `/${maxTickets}` : ''}
           </p>
           <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">
@@ -679,7 +689,7 @@ function RegClosedOverview({ data }: { data: OverviewData }) {
             <Clock className="w-4 h-4 text-[#f59e0b]" />
             <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Pending</p>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">{pendingTeams.length}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-foreground">{pendingTeams.length}</p>
           <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">Awaiting Approval</p>
         </div>
       </div>
@@ -852,7 +862,7 @@ function RosterLockOverview({ data }: { data: OverviewData }) {
           </div>
 
           <div className="flex-1 min-w-0">
-            <h2 className="text-2xl sm:text-3xl font-black text-foreground leading-tight mb-1">
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground leading-tight mb-1">
               The Battle Lines Are Drawn
             </h2>
             <div className="flex items-center gap-2 mb-2">
@@ -866,7 +876,7 @@ function RosterLockOverview({ data }: { data: OverviewData }) {
           {/* Countdown chip */}
           {daysUntil !== null && (
             <div className="flex-shrink-0 text-center bg-soil/80 border-2 border-harvest/30 rounded-2xl px-5 py-4 self-start sm:self-auto">
-              <div className="text-3xl sm:text-4xl font-black text-harvest leading-none">
+              <div className="text-3xl sm:text-4xl font-bold text-harvest leading-none">
                 {daysUntil === 0 ? 'Today' : daysUntil}
               </div>
               {daysUntil !== 0 && (
@@ -896,7 +906,7 @@ function RosterLockOverview({ data }: { data: OverviewData }) {
             <Swords className="w-4 h-4 text-harvest" />
             <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Teams</p>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">{tournament.total_teams}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-foreground">{tournament.total_teams}</p>
           <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">Competing</p>
         </div>
 
@@ -905,7 +915,7 @@ function RosterLockOverview({ data }: { data: OverviewData }) {
             <Users className="w-4 h-4 text-[#3b82f6]" />
             <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Players</p>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">{tournament.total_players}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-foreground">{tournament.total_players}</p>
           <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">Registered</p>
         </div>
 
@@ -914,7 +924,7 @@ function RosterLockOverview({ data }: { data: OverviewData }) {
             <Clock className={`w-4 h-4 ${tournament.all_teams_ticket_ready ? 'text-[#10b981]' : 'text-[#f59e0b]'}`} />
             <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Status</p>
           </div>
-          <p className={`text-base sm:text-lg font-black leading-tight ${tournament.all_teams_ticket_ready ? 'text-[#10b981]' : 'text-[#f59e0b]'}`}>
+          <p className={`text-base sm:text-lg font-bold leading-tight ${tournament.all_teams_ticket_ready ? 'text-[#10b981]' : 'text-[#f59e0b]'}`}>
             {tournament.all_teams_ticket_ready ? 'Ready' : 'Not Ready'}
           </p>
           <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">
@@ -1005,384 +1015,3 @@ function RosterLockOverview({ data }: { data: OverviewData }) {
   );
 }
 
-// ══════════════════════════════════════════════════════════
-// REG OPEN OVERVIEW (B2) — Live Registration Hub
-// ══════════════════════════════════════════════════════════
-
-type RegRole = 'player' | 'coach' | 'staff';
-
-const ROLE_OPTIONS: { role: RegRole; label: string; desc: string; color: string; selectedBg: string }[] = [
-  { role: 'player', label: 'Player', desc: 'Compete on a team', color: 'text-[#10b981]', selectedBg: 'border-[#10b981] bg-[#10b981]/15' },
-  { role: 'coach', label: 'Coach', desc: 'Lead your squad', color: 'text-[#3b82f6]', selectedBg: 'border-[#3b82f6] bg-[#3b82f6]/15' },
-  { role: 'staff', label: 'Staff', desc: 'Help run the show', color: 'text-[#8b5cf6]', selectedBg: 'border-[#8b5cf6] bg-[#8b5cf6]/15' },
-];
-
-function RegOpenOverview({ data }: { data: OverviewData }) {
-  const { myRegistration, user, accessToken, refetch } = useTournament();
-  const { tournament, top_teams } = data;
-
-  const [registering, setRegistering] = useState(false);
-  const [showRankModal, setShowRankModal] = useState(false);
-  const [rankError, setRankError] = useState<string | null>(null);
-  const [selectedRole, setSelectedRole] = useState<RegRole>('player');
-  const [showRolePicker, setShowRolePicker] = useState(false);
-
-  const isLoggedIn = !!user;
-  const isRegistered = !!myRegistration && myRegistration.status !== 'withdrawn';
-  const isOnTeam = myRegistration?.status === 'on_team';
-  const isFreeAgent = isRegistered && !isOnTeam;
-  const myTeam = isOnTeam ? (myRegistration as any)?.team : null;
-
-  const approvedTeams = top_teams.filter(
-    t => !(t as any).approval_status || (t as any).approval_status === 'approved',
-  );
-  const pendingTeams = top_teams.filter(
-    t => (t as any).approval_status === 'pending_approval' || (t as any).approval_status === 'pending',
-  );
-  const maxTeams = (tournament as any).max_teams ?? 0;
-  const regEndDate = (tournament as any).registration_end_date as string | null;
-  const tournamentStartDate = ((tournament as any).tournament_start_date ?? tournament.start_date) as string | null;
-
-  // Days remaining (for urgency color on the reg-close card)
-  const daysLeftReg = (() => {
-    if (!regEndDate) return null;
-    const diff = new Date(regEndDate).getTime() - Date.now();
-    return diff <= 0 ? 0 : Math.ceil(diff / (1000 * 60 * 60 * 24));
-  })();
-  const regUrgent = daysLeftReg !== null && daysLeftReg <= 3;
-
-  async function handleRegister(role: RegRole, selfReportedMedal?: string) {
-    if (!isLoggedIn) { toast.error('You need to be logged in to register.'); return; }
-    setRegistering(true);
-    setRankError(null);
-    try {
-      const body: Record<string, string> = { role };
-      if (selfReportedMedal) body.self_reported_rank = selfReportedMedal;
-      const res = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments/${tournament.id}/register`,
-        { method: 'POST', headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) },
-      );
-      const result = await res.json();
-      if (!res.ok) {
-        if (result.rank_unknown) { setShowRankModal(true); return; }
-        if (result.rank_ineligible) { setRankError(result.error || 'Rank not eligible'); toast.error('Rank not eligible'); return; }
-        throw new Error(result.error || 'Registration failed');
-      }
-      toast.success(result.message || "You're registered! 🌽");
-      setShowRolePicker(false);
-      await refetch();
-    } catch (err: any) {
-      console.error('Registration error:', err);
-      toast.error(err.message || 'Registration failed. Try again.');
-    } finally { setRegistering(false); }
-  }
-
-  return (
-    <div className="space-y-6 sm:space-y-8">
-      {showRankModal && (
-        <RankModal
-          currentRank={null}
-          onClose={() => setShowRankModal(false)}
-          onSelect={(rankId) => {
-            setShowRankModal(false);
-            const medal = RANK_MEDALS[rankId] || null;
-            if (medal) handleRegister(selectedRole, medal);
-          }}
-        />
-      )}
-
-      {/* ── HERO BANNER ── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#10b981]/20 via-[#10b981]/10 to-transparent border-2 border-[#10b981]/40 rounded-2xl p-6 sm:p-8">
-        <div className="absolute -top-10 -right-10 w-48 h-48 bg-[#10b981]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-5">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#10b981]/15 border-2 border-[#10b981]/40 flex items-center justify-center flex-shrink-0">
-            <Users className="w-8 h-8 sm:w-10 sm:h-10 text-[#10b981]" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#10b981]/20 border border-[#10b981]/40 text-[11px] font-black uppercase tracking-widest text-[#10b981]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
-                Registration Open
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-foreground leading-tight mb-2">
-              Spots are filling up — sign up now!
-            </h2>
-            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              {tournament.description
-                ? tournament.description.split('.')[0] + '.'
-                : `Register for ${tournament.name} and compete with the best in The Corn Field.`}
-            </p>
-            <div className="mt-4">
-              {!isLoggedIn ? (
-                <span className="text-sm text-muted-foreground italic">Log in to register</span>
-              ) : isRegistered ? (
-                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border ${isOnTeam ? 'bg-[#10b981]/15 border-[#10b981]/40' : 'bg-[#3b82f6]/15 border-[#3b82f6]/40'}`}>
-                  <Trophy className={`w-4 h-4 ${isOnTeam ? 'text-[#10b981]' : 'text-[#3b82f6]'}`} />
-                  <div>
-                    <p className={`text-xs font-bold leading-none mb-0.5 ${isOnTeam ? 'text-[#10b981]' : 'text-[#3b82f6]'}`}>{isOnTeam ? 'On Team' : 'Free Agent'}</p>
-                    <p className="text-sm font-black text-foreground leading-none">{isOnTeam && myTeam ? myTeam.team_name : 'Registered'}</p>
-                  </div>
-                </div>
-              ) : showRolePicker ? (
-                <div className="space-y-3">
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Choose your role</p>
-                  <div className="flex flex-wrap gap-2">
-                    {ROLE_OPTIONS.map(opt => (
-                      <button
-                        key={opt.role}
-                        onClick={() => setSelectedRole(opt.role)}
-                        className={`px-3 py-2 rounded-xl border-2 text-sm font-bold transition-all ${selectedRole === opt.role ? opt.selectedBg + ' ' + opt.color : 'border-border bg-muted text-muted-foreground hover:border-border/80'}`}
-                      >
-                        {opt.label}
-                        <span className={`block text-[10px] font-semibold mt-0.5 ${selectedRole === opt.role ? opt.color + '/80' : 'text-muted-foreground/70'}`}>{opt.desc}</span>
-                      </button>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleRegister(selectedRole)}
-                      disabled={registering}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#10b981] hover:bg-[#059669] text-white font-bold text-sm transition-all disabled:opacity-60 shadow-md"
-                    >
-                      <Users className="w-4 h-4" />
-                      {registering ? 'Registering…' : `Register as ${selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}`}
-                    </button>
-                    <button onClick={() => setShowRolePicker(false)} className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1">Cancel</button>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setShowRolePicker(true)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#10b981] hover:bg-[#059669] text-white font-bold text-sm transition-all shadow-lg shadow-[#10b981]/25"
-                >
-                  <Users className="w-4 h-4" />
-                  Register Now
-                </button>
-              )}
-              {rankError && (
-                <p className="text-xs text-[#ef4444] bg-[#ef4444]/10 border border-[#ef4444]/30 rounded-lg px-3 py-2 mt-2 max-w-sm">{rankError}</p>
-              )}
-            </div>
-          </div>
-          {regEndDate && (
-            <div className={`flex-shrink-0 text-center border-2 rounded-2xl px-4 py-4 self-start sm:self-auto min-w-[90px] ${regUrgent ? 'bg-[#ef4444]/10 border-[#ef4444]/40' : 'bg-soil/70 border-[#10b981]/30'}`}>
-              <div className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${regUrgent ? 'text-[#ef4444]/80' : 'text-muted-foreground'}`}>Reg Closes</div>
-              <div className={`text-sm font-black leading-tight ${regUrgent ? 'text-[#ef4444]' : 'text-[#10b981]'}`}>
-                {formatDateShort(regEndDate)}
-              </div>
-              {daysLeftReg !== null && daysLeftReg > 0 && (
-                <div className="text-[9px] text-muted-foreground/60 uppercase tracking-wide mt-1">
-                  {daysLeftReg} day{daysLeftReg === 1 ? '' : 's'} left
-                </div>
-              )}
-              {daysLeftReg === 0 && (
-                <div className={`text-[9px] font-bold uppercase tracking-wide mt-1 ${regUrgent ? 'text-[#ef4444]/80' : 'text-muted-foreground'}`}>Last chance!</div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ── STATS STRIP ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-card border-2 border-border rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Users className="w-4 h-4 text-[#3b82f6]" />
-            <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Registered</p>
-          </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">{tournament.total_players}</p>
-          <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">Players</p>
-        </div>
-        <div className="bg-card border-2 border-border rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Trophy className="w-4 h-4 text-harvest" />
-            <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Teams</p>
-          </div>
-          <p className="text-2xl sm:text-3xl font-black text-foreground">
-            {approvedTeams.length}
-            {maxTeams > 0 && <span className="text-base text-muted-foreground font-semibold">/{maxTeams}</span>}
-          </p>
-          <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">
-            {pendingTeams.length > 0 ? `+${pendingTeams.length} Pending` : 'Forming'}
-          </p>
-        </div>
-        <div className="bg-card border-2 border-border rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Clock className={`w-4 h-4 ${regUrgent ? 'text-[#ef4444]' : 'text-[#f59e0b]'}`} />
-            <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Reg Closes</p>
-          </div>
-          {regEndDate ? (
-            <>
-              <p className={`text-sm sm:text-base font-black leading-tight ${regUrgent ? 'text-[#ef4444]' : 'text-foreground'}`}>
-                {formatDateShort(regEndDate)}
-              </p>
-              <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wide">
-                {daysLeftReg === 0 ? 'Last chance!' : daysLeftReg !== null ? `${daysLeftReg} day${daysLeftReg === 1 ? '' : 's'} left` : 'Closed'}
-              </p>
-            </>
-          ) : (
-            <>
-              <p className="text-2xl sm:text-3xl font-black text-foreground">—</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">No Deadline Set</p>
-            </>
-          )}
-        </div>
-        <div className="bg-card border-2 border-border rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Calendar className="w-4 h-4 text-[#8b5cf6]" />
-            <p className="text-xs sm:text-sm font-semibold text-muted-foreground">Tournament</p>
-          </div>
-          {tournamentStartDate ? (
-            <>
-              <p className="text-sm sm:text-base font-black text-foreground leading-tight">
-                {formatDateShort(tournamentStartDate)}
-              </p>
-              <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wide">
-                {(() => {
-                  const diff = new Date(tournamentStartDate).getTime() - Date.now();
-                  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-                  if (days <= 0) return 'Starting soon';
-                  return `${days} day${days === 1 ? '' : 's'} away`;
-                })()}
-              </p>
-            </>
-          ) : (
-            <>
-              <p className="text-2xl sm:text-3xl font-black text-foreground">TBD</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5 uppercase tracking-wide">Date Pending</p>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* ── YOUR STATUS ── */}
-      {isLoggedIn && (
-        <div className="bg-card border-2 border-border rounded-2xl p-4 sm:p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Trophy className="w-5 h-5 text-harvest" />
-            <h3 className="text-lg sm:text-xl font-bold text-foreground">Your Status</h3>
-          </div>
-          {isOnTeam && myTeam ? (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <TeamLogo teamTag={myTeam.team_tag} tournamentName={tournament.name} size="lg" className="w-14 h-14 flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-[#10b981] mb-1">✓ You're on a team</p>
-                <p className="text-base font-black text-foreground truncate">{myTeam.team_name}</p>
-                <p className="text-xs text-muted-foreground font-semibold">[{myTeam.team_tag}]</p>
-              </div>
-            </div>
-          ) : isFreeAgent ? (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#3b82f6]/15 border-2 border-[#3b82f6]/30 flex items-center justify-center flex-shrink-0">
-                <Users className="w-7 h-7 text-[#3b82f6]" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-[#3b82f6] mb-1">✓ Registered as Free Agent</p>
-                <p className="text-sm text-muted-foreground">Captains can invite you, or request to join a team from the <span className="font-semibold text-foreground">Teams tab</span>.</p>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-muted border-2 border-border flex items-center justify-center flex-shrink-0">
-                  <Users className="w-7 h-7 text-muted-foreground" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-base font-bold text-foreground mb-1">Not registered yet</p>
-                  <p className="text-sm text-muted-foreground">Choose your role below and join the tournament. Players compete, coaches lead their squad, and staff help run the show.</p>
-                </div>
-              </div>
-              {/* Role picker */}
-              <div className="flex flex-wrap gap-2">
-                {ROLE_OPTIONS.map(opt => (
-                  <button
-                    key={opt.role}
-                    onClick={() => setSelectedRole(opt.role)}
-                    className={`px-3 py-2 rounded-xl border-2 text-sm font-bold transition-all ${selectedRole === opt.role ? opt.selectedBg + ' ' + opt.color : 'border-border bg-muted text-muted-foreground hover:border-border/80'}`}
-                  >
-                    {opt.label}
-                    <span className={`block text-[10px] font-semibold mt-0.5 ${selectedRole === opt.role ? opt.color + '/80' : 'text-muted-foreground/70'}`}>{opt.desc}</span>
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => handleRegister(selectedRole)}
-                disabled={registering}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#10b981] hover:bg-[#059669] text-white font-bold text-sm transition-all disabled:opacity-60 shadow-md shadow-[#10b981]/20"
-              >
-                <Users className="w-4 h-4" />
-                {registering ? 'Registering…' : `Register as ${selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}`}
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ── TEAMS FORMING ── */}
-      {top_teams.length > 0 ? (
-        <div className="bg-card border-2 border-border rounded-2xl p-4 sm:p-6">
-          <div className="flex items-center gap-2 mb-4 sm:mb-5">
-            <Trophy className="w-5 h-5 text-harvest" />
-            <h3 className="text-lg sm:text-xl font-bold text-foreground">Teams Forming</h3>
-            {approvedTeams.length > 0 && (
-              <span className="ml-auto text-xs font-bold bg-harvest/10 text-harvest px-2.5 py-0.5 rounded-full flex-shrink-0">
-                {approvedTeams.length} Approved
-              </span>
-            )}
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {[...approvedTeams, ...pendingTeams].map((team) => {
-              const isPending = (team as any).approval_status === 'pending_approval' || (team as any).approval_status === 'pending';
-              const rosterCount = (team as any).roster_count ?? 0;
-              const MAX_ROSTER = 5;
-              const isFull = rosterCount >= MAX_ROSTER;
-              return (
-                <div key={team.id} className={`bg-muted rounded-xl border-2 p-3 sm:p-4 flex items-center gap-3 transition-all ${isPending ? 'border-[#f59e0b]/30' : isFull ? 'border-[#10b981]/30' : 'border-border'}`}>
-                  <TeamLogo teamTag={team.team_tag} tournamentName={tournament.name} size="md" className="w-10 h-10 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm text-foreground truncate">{team.team_name}</p>
-                    <p className="text-[11px] text-muted-foreground font-semibold">[{team.team_tag}]</p>
-                  </div>
-                  <div className="flex-shrink-0 flex flex-col items-end gap-1.5">
-                    {isPending
-                      ? <span className="text-[9px] font-black uppercase tracking-widest text-[#f59e0b] bg-[#f59e0b]/10 px-1.5 py-0.5 rounded-full">Pending</span>
-                      : isFull
-                      ? <span className="text-[9px] font-black uppercase tracking-widest text-[#10b981] bg-[#10b981]/10 px-1.5 py-0.5 rounded-full">Full</span>
-                      : <span className="text-[9px] font-black uppercase tracking-widest text-[#3b82f6] bg-[#3b82f6]/10 px-1.5 py-0.5 rounded-full">Recruiting</span>
-                    }
-                    {rosterCount > 0 && (
-                      <div className="flex items-center gap-[3px]">
-                        {Array.from({ length: MAX_ROSTER }).map((_, i) => (
-                          <div key={i} className={`w-2 h-2 rounded-sm ${i < rosterCount ? (isFull ? 'bg-[#10b981]' : 'bg-[#3b82f6]') : 'bg-border/60'}`} />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      ) : (
-        <div className="bg-card border-2 border-dashed border-border rounded-2xl p-8 text-center">
-          <div className="text-4xl mb-3">🌽</div>
-          <h3 className="text-lg font-black text-foreground mb-2">No Teams Yet</h3>
-          <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-            Be the first to create a team! Register, then head to the <span className="font-semibold text-foreground">Teams tab</span> to get started.
-          </p>
-        </div>
-      )}
-
-      {/* ── ABOUT ── */}
-      {tournament.description && (
-        <div className="bg-card border-2 border-border rounded-2xl p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-bold text-foreground mb-3">About This Tournament</h3>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed whitespace-pre-wrap">{tournament.description}</p>
-        </div>
-      )}
-
-      <Footer />
-    </div>
-  );
-}

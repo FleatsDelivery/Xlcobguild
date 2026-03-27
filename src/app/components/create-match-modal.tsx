@@ -111,7 +111,7 @@ export function CreateMatchModal({ tournamentId, availableTeams, onClose, onSave
                 ) : (
                   <span className="text-field-dark/40">Select Team 1</span>
                 )}
-                <span className="text-2xl font-black text-field-dark">
+                <span className="text-2xl font-bold text-field-dark">
                   {formData.team1_score} - {formData.team2_score}
                 </span>
                 {selectedTeam2 ? (

@@ -175,7 +175,7 @@ function StatChip({ label, value, color }: { label: string; value: string; color
   return (
     <span className="inline-flex items-center gap-1">
       <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wide">{label}</span>
-      <span className="text-sm font-black" style={{ color }}>{value}</span>
+      <span className="text-sm font-bold" style={{ color }}>{value}</span>
     </span>
   );
 }
@@ -192,7 +192,7 @@ function PlacementBadge({ placement }: { placement: number | null }) {
     <div className={`flex items-center gap-1 ${style.badgeBg} ${style.badgeText} rounded-full pl-2 pr-2.5 py-1 border ${style.badgeBorder}`}>
       {style.icon === 'crown' && <Crown className="w-3.5 h-3.5 flex-shrink-0" />}
       {style.icon === 'trophy' && <Trophy className="w-3.5 h-3.5 flex-shrink-0" />}
-      <span className="text-xs font-black leading-none">{label}</span>
+      <span className="text-xs font-bold leading-none">{label}</span>
     </div>
   );
 }
@@ -355,14 +355,14 @@ function FinishedTeamCard({ team, tournament }: { team: TeamData; tournament: an
           {/* Middle: name + tag + big score + mobile stats/heroes */}
           <div className="flex-1 min-w-0">
             {/* Name [Tag] on one line */}
-            <h3 className={`font-black truncate text-foreground leading-tight ${isChampion ? 'text-xl sm:text-2xl' : 'text-base sm:text-lg'}`}>
+            <h3 className={`font-bold truncate text-foreground leading-tight ${isChampion ? 'text-xl sm:text-2xl' : 'text-base sm:text-lg'}`}>
               {team.team_name}{' '}
               <span className="text-muted-foreground font-semibold">[{team.team_tag}]</span>
             </h3>
 
             {/* Big W–L score */}
             {hasStats && (
-              <div className={`font-black leading-none mt-1 ${isChampion ? 'text-4xl sm:text-5xl' : 'text-3xl sm:text-4xl'}`}>
+              <div className={`font-bold leading-none mt-1 ${isChampion ? 'text-4xl sm:text-5xl' : 'text-3xl sm:text-4xl'}`}>
                 <span style={{ color: '#10b981' }}>{team.wins}</span>
                 <span className="text-muted-foreground mx-1">–</span>
                 <span style={{ color: '#ef4444' }}>{team.losses}</span>
@@ -498,7 +498,7 @@ function FinishedTeamsList({ teams, tournament }: { teams: TeamData[]; tournamen
 
   return (
     <div className="space-y-4 sm:space-y-5">
-      <h2 className="text-2xl sm:text-3xl font-black text-foreground">
+      <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
         Final Standings
         <span className="text-muted-foreground font-semibold text-lg ml-2">({sorted.length})</span>
       </h2>

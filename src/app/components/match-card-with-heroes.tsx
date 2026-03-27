@@ -166,11 +166,11 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                   tournamentName={match.tournament_name}
                 />
                 <div className="min-w-0">
-                  <h3 className={`text-lg sm:text-2xl font-black truncate ${team1Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                  <h3 className={`text-lg sm:text-2xl font-bold truncate ${team1Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                     {match.team1.name}
                   </h3>
                   {team1Won && match.winner_team_id && (
-                    <p className="text-xs font-black uppercase tracking-widest text-[#10b981]">Victory</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-[#10b981]">Victory</p>
                   )}
                   <p className="text-sm text-muted-foreground font-semibold">
                     {match.team1.tag && <span>{match.team1.tag} - </span>}
@@ -181,7 +181,7 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
 
               {/* Right: Score */}
               <div className="text-right flex-shrink-0">
-                <p className={`text-3xl sm:text-6xl font-black ${team1Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                <p className={`text-3xl sm:text-6xl font-bold ${team1Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                   {team1Score}
                 </p>
                 <p className="text-xs text-muted-foreground font-bold uppercase tracking-wide mt-1">Score</p>
@@ -264,7 +264,7 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
 
                       {/* KDA */}
                       <div className="text-right">
-                        <p className="text-sm font-black text-foreground">
+                        <p className="text-sm font-bold text-foreground">
                           {stat.kills}/{stat.deaths}/{stat.assists}
                         </p>
                         <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wide">KDA</p>
@@ -316,7 +316,7 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                 <Swords className="w-8 h-8 text-white" />
               </div>
               <div className="text-center">
-                <p className="text-2xl font-black text-foreground">VS</p>
+                <p className="text-2xl font-bold text-foreground">VS</p>
               </div>
             </div>
           </div>
@@ -327,7 +327,7 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
               <div className="h-px flex-1 bg-border" />
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-harvest to-amber text-white">
                 <Swords className="w-4 h-4" />
-                <span className="text-sm font-black">VS</span>
+                <span className="text-sm font-bold">VS</span>
               </div>
               <div className="h-px flex-1 bg-border" />
             </div>
@@ -351,11 +351,11 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
                   tournamentName={match.tournament_name}
                 />
                 <div className="min-w-0">
-                  <h3 className={`text-lg sm:text-2xl font-black truncate ${team2Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                  <h3 className={`text-lg sm:text-2xl font-bold truncate ${team2Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                     {match.team2.name}
                   </h3>
                   {team2Won && match.winner_team_id && (
-                    <p className="text-xs font-black uppercase tracking-widest text-[#10b981]">Victory</p>
+                    <p className="text-xs font-bold uppercase tracking-widest text-[#10b981]">Victory</p>
                   )}
                   <p className="text-sm text-muted-foreground font-semibold">
                     {match.team2.tag && <span>{match.team2.tag} - </span>}
@@ -366,7 +366,7 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
 
               {/* Right: Score */}
               <div className="text-right flex-shrink-0">
-                <p className={`text-3xl sm:text-6xl font-black ${team2Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                <p className={`text-3xl sm:text-6xl font-bold ${team2Won ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                   {team2Score}
                 </p>
                 <p className="text-xs text-muted-foreground font-bold uppercase tracking-wide mt-1">Score</p>
@@ -449,7 +449,7 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
 
                       {/* KDA */}
                       <div className="text-right">
-                        <p className="text-sm font-black text-foreground">
+                        <p className="text-sm font-bold text-foreground">
                           {stat.kills}/{stat.deaths}/{stat.assists}
                         </p>
                         <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wide">KDA</p>

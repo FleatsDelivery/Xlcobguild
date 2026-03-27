@@ -507,6 +507,7 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
           tournament_id,
           person_id,
           role,
+          status,
           person:kkup_persons!person_id(
             id,
             steam_id,
@@ -515,6 +516,7 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
           )
         `)
         .eq('tournament_id', tournamentId)
+        .not('status', 'eq', 'withdrawn')
         .order('person_id', { ascending: true });
 
       if (regError) {
@@ -590,6 +592,7 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
             created_at: null,
             tcf_plus_active: lu?.tcf_plus_active || false,
             badge_rank: lu?.opendota_data?.badge_rank || null,
+            status: reg.status,
           };
         });
 
@@ -671,6 +674,7 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
           created_at: null,
           tcf_plus_active: lu?.tcf_plus_active || false,
           badge_rank: lu?.opendota_data?.badge_rank || null,
+          status: 'registered',
         };
       });
 
@@ -691,6 +695,7 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
           created_at: null,
           tcf_plus_active: lu?.tcf_plus_active || false,
           badge_rank: lu?.opendota_data?.badge_rank || null,
+          status: 'registered',
         };
       });
 
@@ -1556,6 +1561,22 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
         return c.json({ error: 'Tournament not found' }, 404);
       }
 
+      // Fetch prizes and awards (needed for all overview responses)
+      const { data: prizes } = await supabase
+        .from('kkup_prizes')
+        .select('*')
+        .eq('tournament_id', tournamentId)
+        .order('sort_order', { ascending: true });
+
+      const { data: awards } = await supabase
+        .from('prize_awards')
+        .select(`
+          id, prize_id, amount_cents, recipient_user_id, team_id,
+          recipient:users!recipient_user_id(id, discord_username, discord_avatar),
+          team:kkup_teams!team_id(id, team_name, team_tag, logo_url)
+        `)
+        .eq('tournament_id', tournamentId);
+
       // Fetch all teams (no placement column needed!)
       const { data: teams, error: teamsError } = await supabase
         .from('kkup_teams')
@@ -1822,7 +1843,9 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
           return cov && cov.total >= 5;
         });
 
-        return c.json({
+         // prizes/awards fetched at top
+ 
+         return c.json({
           tournament: {
             id: tournament.id,
             name: tournament.name,
@@ -1834,6 +1857,8 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
             tournament_start_date: tournament.tournament_start_date,
             max_teams: tournament.max_teams,
             status: tournament.status,
+            prize_pool: tournament.prize_pool,
+            prize_pool_donations: tournament.prize_pool_donations,
             total_teams: teams?.length || 0,
             total_players: preTournamentPlayerCount,
             total_registrants: totalRegistrantCount,
@@ -1854,7 +1879,9 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
           most_picked_heroes: [],
           top_players: [],
           data_source: 'none',
-          empty_state: true
+          empty_state: true,
+          prizes: prizes || [],
+          awards: awards || [],
         });
       }
 
@@ -2183,6 +2210,8 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
           start_date: tournament.start_date,
           end_date: tournament.end_date,
           status: tournament.status,
+          prize_pool: tournament.prize_pool,
+          prize_pool_donations: tournament.prize_pool_donations,
           total_teams: teams?.length || 0,
           total_players: totalParticipants, // Now includes players + coaches + staff
           total_matches: matches.length,
@@ -2201,7 +2230,9 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
         most_picked_heroes: mostPickedHeroes,
         top_players: topPlayers,
         data_source: dataSource,
-        empty_state: false
+        empty_state: false,
+        prizes: prizes || [],
+        awards: awards || [],
       });
     } catch (err) {
       console.error('Unexpected error fetching overview data:', err);

@@ -122,7 +122,7 @@ export function EditBracketSeriesModal({
                 </div>
                 <div className="text-xs text-muted-foreground">{series.team1?.tag || 'TBD'}</div>
               </div>
-              <div className="text-2xl font-black text-foreground">
+              <div className="text-2xl font-bold text-foreground">
                 {series.team1_score} - {series.team2_score}
               </div>
               <div className="text-right">

@@ -147,7 +147,7 @@ export function HallOfFameCoachesTab({ coaches, selectedTab, searchTerm, coaches
                   >
                     {/* Rank */}
                     <td className="py-3 px-3 sm:px-6 text-center">
-                      <span className={`font-black text-sm ${index < 3 ? 'text-harvest' : 'text-muted-foreground'}`}>
+                      <span className={`font-bold text-sm ${index < 3 ? 'text-harvest' : 'text-muted-foreground'}`}>
                         {index + 1}
                       </span>
                     </td>
@@ -181,7 +181,7 @@ export function HallOfFameCoachesTab({ coaches, selectedTab, searchTerm, coaches
                     {/* Championships */}
                     <td className="py-3 px-3 sm:px-6 text-center">
                       {stats.championships > 0 ? (
-                        <span className="inline-flex items-center gap-1 font-black text-sm text-yellow-600">
+                        <span className="inline-flex items-center gap-1 font-bold text-sm text-yellow-600">
                           <Trophy className="w-3.5 h-3.5" />
                           {stats.championships}
                         </span>

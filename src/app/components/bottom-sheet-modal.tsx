@@ -183,7 +183,7 @@ export function BottomSheetModal({
 
       {/* Card — slides up from bottom */}
       <div
-        className={`relative w-full ${maxWidth} mx-auto transition-transform duration-300 ease-out ${isAnimating ? 'translate-y-0' : 'translate-y-full'}`}
+        className={`relative w-full ${maxWidth} mx-auto transition-transform duration-700 ease-[cubic-bezier(0.34,1.76,0.64,1)] ${isAnimating ? 'translate-y-0' : 'translate-y-full'}`}
       >
         <div className="bg-card rounded-t-3xl shadow-2xl max-h-[90vh] sm:max-h-[85vh] flex flex-col overflow-hidden mx-0 sm:mx-4 sm:pb-20">
           {enhancedChildren}

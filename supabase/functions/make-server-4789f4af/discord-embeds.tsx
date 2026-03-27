@@ -1,7 +1,7 @@
 // Discord Embed builders for MVP request messages
 // Ensures consistent format between Discord bot commands and web webhook notifications
 
-const SITE_URL = 'https://thecornfield.figma.site';
+const SITE_URL = 'https://kernelkup.com';
 
 // ── Helper: send a webhook message (non-critical, fire-and-forget) ──
 export async function sendWebhookEmbed(webhookUrl: string, embed: any, content?: string): Promise<string | null> {
@@ -67,23 +67,23 @@ export function buildRegistrationEmbed(opts: {
 }) {
   const { emoji: roleEmoji, label: roleLabel } = getRoleDisplay(opts.staffRole || opts.role);
 
-  const title = opts.isStaffApproval
-    ? `${roleEmoji} Staff Member Approved!`
+  const embedTitle = opts.isStaffApproval
+    ? `## ${roleEmoji} Staff Member Approved!`
     : opts.isReRegistration
-      ? `🔄 Player Re-Registered!`
+      ? `## 🔄 Player Re-Registered!`
       : opts.isEarlyAccess
-        ? `⭐ Early Access Registration!`
-        : `🌽 New Registration!`;
+        ? `## ⭐ Early Access Registration!`
+        : `## 🌽 New Registration!`;
 
   const playerMention = opts.discordId ? `<@${opts.discordId}>` : `**${opts.discordUsername}**`;
 
-  const description = opts.isStaffApproval
+  const embedDescription = `${embedTitle}\n\n` + (opts.isStaffApproval
     ? `${playerMention} has been approved as **${roleLabel}** for **${opts.tournamentName}**! 🎉`
     : opts.isReRegistration
       ? `${playerMention} has re-registered for **${opts.tournamentName}**! Welcome back! 🌾`
       : opts.isEarlyAccess
         ? `${playerMention} used their **TCF+ early access** to register for **${opts.tournamentName}**! ⭐🌽`
-        : `${playerMention} has registered for **${opts.tournamentName}**! 🌾`;
+        : `${playerMention} has registered for **${opts.tournamentName}**! 🌾`);
 
   const color = opts.isStaffApproval ? 0xF59E0B : opts.isReRegistration ? 0x8B5CF6 : opts.isEarlyAccess ? 0xF1C60F : 0xA4CA00;
 
@@ -105,9 +105,8 @@ export function buildRegistrationEmbed(opts: {
   // discord_avatar is already a full URL from Supabase Auth metadata
   const avatarUrl = opts.discordAvatar || undefined;
 
-  const embed = {
-    title,
-    description,
+  const embed: any = {
+    description: embedDescription,
     color,
     fields,
     // Author line: player name + profile picture
@@ -312,13 +311,31 @@ export function buildKkupAnnouncementEmbed(opts: {
     inline: false,
   });
 
-  const embed = {
-    title,
-    description,
+  // Generate slug to find banner URL
+  const slug = opts.tournamentName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  const imageUrl = slug && supabaseUrl && slug.length >= 3
+    ? `${supabaseUrl}/storage/v1/object/public/make-4789f4af-kkup-assets/${slug}/league_banner.png`
+    : undefined;
+
+  const embedTitle = isNewDrop
+    ? `## 🌽🎉 NEW TOURNAMENT DROPPED! 🎉🌽`
+    : `## ${phase.emoji} ${opts.tournamentName} — ${phase.label}!`;
+
+  const embedDescription = isNewDrop
+    ? `${embedTitle}\n\n**${opts.tournamentName}** has been announced! 🔥\nGet ready, kernels — a new ${typeLabel} is on the horizon!`
+    : `${embedTitle}\n\n${phase.description}`;
+
+  const embed: any = {
+    description: embedDescription,
     color: phase.color,
     fields,
     timestamp: new Date().toISOString(),
   };
+
+  if (imageUrl) {
+    embed.image = { url: imageUrl };
+  }
 
   return { embed };
 }
@@ -522,6 +539,7 @@ export function buildResolvedMVPEmbed(
   screenshotUrl: string,
   status: 'approved' | 'denied',
   reviewerUsername: string,
+  newRankName?: string | null,
 ) {
   const actionEmoji = action === 'rank_up' ? '⬆️' : action === 'rank_down' ? '⬇️' : '⭐';
   const actionText = action === 'rank_up' ? 'Rank Up' : action === 'rank_down' ? 'Rank Down' : 'Prestige';
@@ -551,7 +569,9 @@ export function buildResolvedMVPEmbed(
       },
       {
         name: '📊 Status',
-        value: statusText,
+        value: status === 'approved' && newRankName 
+          ? `${statusText}\n**${targetUsername}** is now **${newRankName}**` 
+          : statusText,
         inline: true,
       },
       {

@@ -1,15 +1,15 @@
 // /website slash command handler — Quick link to the web app
-import { InteractionResponseType, jsonResponse } from './utils.ts';
+import { InteractionResponseType } from './utils.ts';
 
-export async function handleWebsite(_body: any): Promise<Response> {
-  return jsonResponse({
+export async function handleWebsite(_body: any): Promise<any> {
+  return {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       embeds: [{
         title: '🌽 The Corn Field',
         description: 'Your guild portal — leaderboard, tournaments, profile, and more.',
         color: 0xD6A615,
-        url: 'https://thecornfield.figma.site/',
+        url: 'https://kernelkup.com/',
       }],
       components: [{
         type: 1,
@@ -17,11 +17,11 @@ export async function handleWebsite(_body: any): Promise<Response> {
           type: 2,
           style: 5,
           label: 'Open Website',
-          url: 'https://thecornfield.figma.site/',
+          url: 'https://kernelkup.com/',
           emoji: { name: '🌐' },
         }],
       }],
       flags: 64, // Ephemeral
     },
-  });
+  };
 }

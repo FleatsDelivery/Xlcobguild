@@ -10,6 +10,7 @@ import type { Hono } from "npm:hono";
 import { PREFIX } from "./helpers.ts";
 import * as kv from "./kv_store.tsx";
 import { createUserActivity } from "./routes-notifications.ts";
+import { syncDiscordUserRoles } from "./discord-api.ts";
 
 export function registerAuthRoutes(app: Hono, supabase: any, anonSupabase: any) {
 
@@ -142,6 +143,9 @@ export function registerAuthRoutes(app: Hono, supabase: any, anonSupabase: any) 
       }
 
       console.log('Created new user with role:', role);
+
+      // Sync Discord roles for new user (Earwig + Unaffiliated)
+      syncDiscordUserRoles(supabase, newUser.id, 1, 0);
 
       // Log first-time registration (non-critical)
       try {
@@ -311,6 +315,9 @@ export function registerAuthRoutes(app: Hono, supabase: any, anonSupabase: any) 
         console.error('Error granting onboarding rank-up:', updateError);
         return c.json({ error: 'Failed to grant rank-up' }, 500);
       }
+
+      // Sync Discord roles (background/best-effort)
+      syncDiscordUserRoles(supabase, dbUser.id, newRankId, dbUser.prestige_level);
 
       // Mark as claimed
       await kv.set(`onboarding_reward:${dbUser.id}`, 'true');

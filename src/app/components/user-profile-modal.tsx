@@ -330,7 +330,7 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                   />
                 ) : (
                   <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-4 border-card shadow-xl bg-gradient-to-br from-harvest to-kernel-gold flex items-center justify-center">
-                    <span className="text-white text-3xl sm:text-4xl font-black">{u.discord_username[0].toUpperCase()}</span>
+                    <span className="text-white text-3xl sm:text-4xl font-bold">{u.discord_username[0].toUpperCase()}</span>
                   </div>
                 )}
               </TcfPlusAvatarRing>
@@ -339,7 +339,7 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
 
           {/* Name below avatar */}
           <div className="text-center pt-12 sm:pt-14 pb-2 px-4 flex-shrink-0">
-            <h3 className="text-xl sm:text-2xl font-black text-foreground truncate max-w-[280px] mx-auto">
+            <h3 className="text-xl sm:text-2xl font-bold text-foreground truncate max-w-[280px] mx-auto">
               {u.discord_username}
             </h3>
           </div>
@@ -359,7 +359,7 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                 <span className="text-4xl leading-none">{RANK_EMOJIS[u.rank_id] || '\u{1F33D}'}</span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="text-lg font-black text-harvest truncate">{u.ranks.name}</p>
+                    <p className="text-lg font-bold text-harvest truncate">{u.ranks.name}</p>
                     {u.prestige_level > 0 && (
                       <span className="px-2 py-0.5 bg-[#fbbf24]/20 text-[#d97706] text-[10px] font-bold rounded-full flex items-center gap-0.5 flex-shrink-0">
                         <Star className="w-3 h-3" /> Prestige {u.prestige_level}
@@ -407,7 +407,7 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                       {hasDotaRank ? (
                         <>
                           <RankBadge medal={badgeRank!.medal} stars={badgeRank!.stars} size="2xl" />
-                          <p className="text-[10px] font-black mt-1.5 text-center whitespace-nowrap" style={{ color: getMedalAccent(badgeRank!.medal) }}>
+                          <p className="text-[10px] font-bold mt-1.5 text-center whitespace-nowrap" style={{ color: getMedalAccent(badgeRank!.medal) }}>
                             {badgeRank!.medal} {badgeRank!.stars > 0 ? badgeRank!.stars : ''}
                           </p>
                         </>
@@ -436,7 +436,7 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                                 ) : (
                                   <div className="w-full h-16 sm:h-20 bg-muted flex items-center justify-center text-[10px] text-muted-foreground">?</div>
                                 )}
-                                <span className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-soil/80 text-white text-[9px] font-black flex items-center justify-center">
+                                <span className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-soil/80 text-white text-[9px] font-bold flex items-center justify-center">
                                   {i + 1}
                                 </span>
                                 {/* Gradient fade at bottom for text readability */}
@@ -446,7 +446,7 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                               {/* Stats line */}
                               <div className="px-1.5 py-1 flex items-center justify-between gap-1">
                                 <span className="text-[9px] text-muted-foreground truncate">{hero.games} Games</span>
-                                <span className="text-[9px] font-black whitespace-nowrap" style={{ color: wrColor }}>{wr.toFixed(0)}% WR</span>
+                                <span className="text-[9px] font-bold whitespace-nowrap" style={{ color: wrColor }}>{wr.toFixed(0)}% WR</span>
                               </div>
                             </div>
                           );
@@ -465,13 +465,13 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                   <div className="grid grid-cols-4 gap-2">
                     {totalDotaGames !== null && (
                       <div className="bg-card/60 rounded-xl p-2 text-center border border-border/50">
-                        <p className="text-base sm:text-lg font-black text-foreground">{totalDotaGames.toLocaleString()}</p>
+                        <p className="text-base sm:text-lg font-bold text-foreground">{totalDotaGames.toLocaleString()}</p>
                         <p className="text-[9px] font-bold text-muted-foreground uppercase">Games</p>
                       </div>
                     )}
                     {dotaWinrate !== null && (
                       <div className={`rounded-xl p-2 text-center border ${dotaWinrate >= 50 ? 'bg-[#10b981]/8 border-[#10b981]/20' : 'bg-[#ef4444]/8 border-[#ef4444]/20'}`}>
-                        <p className={`text-base sm:text-lg font-black ${dotaWinrate >= 50 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                        <p className={`text-base sm:text-lg font-bold ${dotaWinrate >= 50 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                           {dotaWinrate.toFixed(1)}%
                         </p>
                         <p className="text-[9px] font-bold text-muted-foreground uppercase">Win Rate</p>
@@ -480,11 +480,11 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                     {winLoss && (
                       <>
                         <div className="bg-[#10b981]/8 rounded-xl p-2 text-center border border-[#10b981]/20">
-                          <p className="text-base sm:text-lg font-black text-[#10b981]">{(winLoss.win || 0).toLocaleString()}</p>
+                          <p className="text-base sm:text-lg font-bold text-[#10b981]">{(winLoss.win || 0).toLocaleString()}</p>
                           <p className="text-[9px] font-bold text-muted-foreground uppercase">Wins</p>
                         </div>
                         <div className="bg-[#ef4444]/8 rounded-xl p-2 text-center border border-[#ef4444]/20">
-                          <p className="text-base sm:text-lg font-black text-[#ef4444]">{(winLoss.lose || 0).toLocaleString()}</p>
+                          <p className="text-base sm:text-lg font-bold text-[#ef4444]">{(winLoss.lose || 0).toLocaleString()}</p>
                           <p className="text-[9px] font-bold text-muted-foreground uppercase">Losses</p>
                         </div>
                       </>
@@ -531,14 +531,14 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                           <div className="flex justify-center mb-1">
                             <TrophyImage type="kernel_kup_champion" size="xl" />
                           </div>
-                          <p className="text-xl font-black text-harvest">{kkupStats.championships.kernel_kup}x</p>
+                          <p className="text-xl font-bold text-harvest">{kkupStats.championships.kernel_kup}x</p>
                           <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wide">KK Champ</p>
                         </div>
                       )}
                       {kkupStats.championships.heaps_n_hooks > 0 && (
                         <div className="flex-1 bg-card/70 rounded-xl p-3 text-center border border-[#10b981]/15">
                           <span className="text-2xl block mb-1">{'\u2693'}</span>
-                          <p className="text-xl font-black text-[#10b981]">{kkupStats.championships.heaps_n_hooks}x</p>
+                          <p className="text-xl font-bold text-[#10b981]">{kkupStats.championships.heaps_n_hooks}x</p>
                           <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wide">H&H Champ</p>
                         </div>
                       )}
@@ -547,7 +547,7 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                           <div className="flex justify-center mb-1">
                             <TrophyImage type="popd_kernel_mvp" size="xl" />
                           </div>
-                          <p className="text-xl font-black text-[#dc2626]">{kkupStats.popd_kernels}x</p>
+                          <p className="text-xl font-bold text-[#dc2626]">{kkupStats.popd_kernels}x</p>
                           <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wide">Pop'd Kernel</p>
                         </div>
                       )}
@@ -559,11 +559,11 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                 <div className="px-4 pb-3">
                   <div className="grid grid-cols-3 gap-2">
                     <div className="bg-card/60 rounded-xl p-2.5 text-center border border-border/50">
-                      <p className="text-lg font-black text-foreground">{kkupStats.tournaments_played}</p>
+                      <p className="text-lg font-bold text-foreground">{kkupStats.tournaments_played}</p>
                       <p className="text-[9px] font-bold text-muted-foreground uppercase">Tourneys</p>
                     </div>
                     <div className="bg-card/60 rounded-xl p-2.5 text-center border border-border/50">
-                      <p className="text-lg font-black">
+                      <p className="text-lg font-bold">
                         <span className="text-[#10b981]">{kkupStats.wins}</span>
                         <span className="text-muted-foreground/30">-</span>
                         <span className="text-[#ef4444]">{kkupStats.losses}</span>
@@ -572,14 +572,14 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                     </div>
                     {kkupStats.total_games > 0 ? (
                       <div className={`rounded-xl p-2.5 text-center border ${((kkupStats.wins / kkupStats.total_games) * 100) >= 50 ? 'bg-[#10b981]/8 border-[#10b981]/20' : 'bg-[#ef4444]/8 border-[#ef4444]/20'}`}>
-                        <p className={`text-lg font-black ${((kkupStats.wins / kkupStats.total_games) * 100) >= 50 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+                        <p className={`text-lg font-bold ${((kkupStats.wins / kkupStats.total_games) * 100) >= 50 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
                           {((kkupStats.wins / kkupStats.total_games) * 100).toFixed(0)}%
                         </p>
                         <p className="text-[9px] font-bold text-muted-foreground uppercase">Win Rate</p>
                       </div>
                     ) : (
                       <div className="bg-card/60 rounded-xl p-2.5 text-center border border-border/50">
-                        <p className="text-lg font-black text-muted-foreground">-</p>
+                        <p className="text-lg font-bold text-muted-foreground">-</p>
                         <p className="text-[9px] font-bold text-muted-foreground uppercase">Win Rate</p>
                       </div>
                     )}
@@ -602,10 +602,10 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                           <p className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
                             <Star className="w-3 h-3 text-harvest" /> KKup Signature Hero
                           </p>
-                          <p className="text-sm font-black text-foreground truncate">{kkupStats.most_played_hero.name}</p>
+                          <p className="text-sm font-bold text-foreground truncate">{kkupStats.most_played_hero.name}</p>
                         </div>
                         <div className="text-right flex-shrink-0">
-                          <p className="text-lg font-black text-harvest">{kkupStats.most_played_hero.games}</p>
+                          <p className="text-lg font-bold text-harvest">{kkupStats.most_played_hero.games}</p>
                           <p className="text-[9px] font-bold text-muted-foreground uppercase">Games</p>
                         </div>
                       </div>
@@ -615,7 +615,7 @@ export function UserProfileModal({ user, currentUser, onClose, onUpdate }: UserP
                     <div className="bg-card/60 rounded-xl p-3 border border-border/50">
                       <div className="flex items-center justify-between">
                         <p className="text-[10px] font-bold text-muted-foreground uppercase">Avg KDA / Game</p>
-                        <p className="text-sm font-black">
+                        <p className="text-sm font-bold">
                           <span className="text-[#10b981]">{(kkupStats.total_kills / kkupStats.total_games).toFixed(1)}</span>
                           <span className="text-muted-foreground/30"> / </span>
                           <span className="text-[#ef4444]">{(kkupStats.total_deaths / kkupStats.total_games).toFixed(1)}</span>

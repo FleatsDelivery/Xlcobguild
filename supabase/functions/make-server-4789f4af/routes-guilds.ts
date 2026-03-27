@@ -16,94 +16,14 @@ import { PREFIX, requireAuth } from "./helpers.ts";
 import { isOfficer } from "./roles.ts";
 import { DISCORD_SERVER_ID } from "./discord-config.ts";
 import { createNotification, createAdminLog, createUserActivity } from "./routes-notifications.ts";
-
-// ── Discord API Helpers ─────────────────────────────────────────────
-
-const DISCORD_API = 'https://discord.com/api/v10';
-
-/** Create a Discord role in the TCF server. Returns the role ID or null. */
-async function createDiscordRole(name: string, color: string): Promise<string | null> {
-  const botToken = Deno.env.get('DISCORD_BOT_TOKEN');
-  if (!botToken) { console.error('DISCORD_BOT_TOKEN not set — skipping role creation'); return null; }
-
-  // Convert hex color to decimal integer
-  const colorInt = parseInt(color.replace('#', ''), 16);
-
-  try {
-    const res = await fetch(`${DISCORD_API}/guilds/${DISCORD_SERVER_ID}/roles`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bot ${botToken}` },
-      body: JSON.stringify({ name, color: colorInt, permissions: '0', mentionable: true }),
-    });
-    if (!res.ok) { console.error('Discord role create failed:', res.status, await res.text()); return null; }
-    const role = await res.json();
-    console.log(`Created Discord role "${name}" → ${role.id}`);
-    return role.id;
-  } catch (err) { console.error('Discord role create error:', err); return null; }
-}
-
-/** Update a Discord role's name/color. */
-async function updateDiscordRole(roleId: string, updates: { name?: string; color?: string }): Promise<void> {
-  const botToken = Deno.env.get('DISCORD_BOT_TOKEN');
-  if (!botToken || !roleId) return;
-
-  const body: any = {};
-  if (updates.name) body.name = updates.name;
-  if (updates.color) body.color = parseInt(updates.color.replace('#', ''), 16);
-
-  try {
-    const res = await fetch(`${DISCORD_API}/guilds/${DISCORD_SERVER_ID}/roles/${roleId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bot ${botToken}` },
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) console.error('Discord role update failed:', res.status, await res.text());
-  } catch (err) { console.error('Discord role update error:', err); }
-}
-
-/** Delete a Discord role. */
-async function deleteDiscordRole(roleId: string): Promise<void> {
-  const botToken = Deno.env.get('DISCORD_BOT_TOKEN');
-  if (!botToken || !roleId) return;
-
-  try {
-    const res = await fetch(`${DISCORD_API}/guilds/${DISCORD_SERVER_ID}/roles/${roleId}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bot ${botToken}` },
-    });
-    if (!res.ok) console.error('Discord role delete failed:', res.status, await res.text());
-  } catch (err) { console.error('Discord role delete error:', err); }
-}
-
-/** Add a Discord role to a user. */
-async function addDiscordRoleToUser(discordUserId: string, roleId: string): Promise<void> {
-  const botToken = Deno.env.get('DISCORD_BOT_TOKEN');
-  if (!botToken || !roleId || !discordUserId) return;
-
-  try {
-    const res = await fetch(`${DISCORD_API}/guilds/${DISCORD_SERVER_ID}/members/${discordUserId}/roles/${roleId}`, {
-      method: 'PUT',
-      headers: { 'Authorization': `Bot ${botToken}` },
-    });
-    if (!res.ok) console.error(`Discord add role ${roleId} to user ${discordUserId} failed:`, res.status, await res.text());
-  } catch (err) { console.error('Discord add role error:', err); }
-}
-
-/** Remove a Discord role from a user. */
-async function removeDiscordRoleFromUser(discordUserId: string, roleId: string): Promise<void> {
-  const botToken = Deno.env.get('DISCORD_BOT_TOKEN');
-  if (!botToken || !roleId || !discordUserId) return;
-
-  try {
-    const res = await fetch(`${DISCORD_API}/guilds/${DISCORD_SERVER_ID}/members/${discordUserId}/roles/${roleId}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bot ${botToken}` },
-    });
-    if (!res.ok) console.error(`Discord remove role ${roleId} from user ${discordUserId} failed:`, res.status, await res.text());
-  } catch (err) { console.error('Discord remove role error:', err); }
-}
-
-// ── Route Registration ──────────────────────────────────────────────
+import { 
+  createDiscordRole, 
+  updateDiscordRole, 
+  deleteDiscordRole, 
+  addDiscordRoleToUser, 
+  removeDiscordRoleFromUser,
+  syncDiscordUserRoles
+} from "./discord-api.ts";
 
 export function registerGuildRoutes(app: Hono, supabase: any, anonSupabase: any) {
 
@@ -200,7 +120,7 @@ export function registerGuildRoutes(app: Hono, supabase: any, anonSupabase: any)
 
       // Validation
       if (!name || name.trim().length < 2) return c.json({ error: 'Guild name must be at least 2 characters' }, 400);
-      if (!name || name.trim().length > 30) return c.json({ error: 'Guild name cannot exceed 30 characters' }, 400);
+      if (name.trim().length > 30) return c.json({ error: 'Guild name cannot exceed 30 characters' }, 400);
       if (!color) return c.json({ error: 'Guild color is required' }, 400);
       if (!logo_url) return c.json({ error: 'Guild logo is required' }, 400);
       if (tag && tag.trim().length > 5) return c.json({ error: 'Guild tag cannot exceed 5 characters' }, 400);
@@ -249,6 +169,13 @@ export function registerGuildRoutes(app: Hono, supabase: any, anonSupabase: any)
         return c.json({ error: `Failed to create guild: ${insertError.message}` }, 500);
       }
 
+      // Close old membership if any
+      await supabase
+        .from('guild_wars_memberships')
+        .update({ left_at: new Date().toISOString(), rank_on_leave: dbUser.rank_id, prestige_on_leave: dbUser.prestige_level })
+        .eq('user_id', dbUser.id)
+        .is('left_at', null);
+
       // Auto-join the creator to their guild
       await supabase
         .from('users')
@@ -263,34 +190,14 @@ export function registerGuildRoutes(app: Hono, supabase: any, anonSupabase: any)
           .eq('id', dbUser.id);
       }
 
-      // Create membership record
+      // Create new membership record
       await supabase
         .from('guild_wars_memberships')
         .insert({ user_id: dbUser.id, guild_id: guild.id });
 
-      // Assign Discord role to creator
-      if (discordRoleId && dbUser.discord_id) {
-        addDiscordRoleToUser(dbUser.discord_id, discordRoleId);
-      }
-
-      // Remove old guild Discord role if they had one
-      if (dbUser.guild_id && dbUser.guild_id !== guild.id) {
-        const { data: oldGuild } = await supabase
-          .from('guild_wars_guilds')
-          .select('discord_role_id')
-          .eq('id', dbUser.guild_id)
-          .maybeSingle();
-        if (oldGuild?.discord_role_id && dbUser.discord_id) {
-          removeDiscordRoleFromUser(dbUser.discord_id, oldGuild.discord_role_id);
-        }
-
-        // Close old membership
-        await supabase
-          .from('guild_wars_memberships')
-          .update({ left_at: new Date().toISOString(), rank_on_leave: dbUser.rank_id, prestige_on_leave: dbUser.prestige_level })
-          .eq('user_id', dbUser.id)
-          .is('left_at', null);
-      }
+      // Sync Discord roles (Rank 1 + New Guild Role)
+      // @ts-ignore: EdgeRuntime is available in Supabase
+      EdgeRuntime.waitUntil(syncDiscordUserRoles(supabase, dbUser.id));
 
       // Log
       try {
@@ -422,10 +329,9 @@ export function registerGuildRoutes(app: Hono, supabase: any, anonSupabase: any)
         // Create Unaffiliated membership records
         for (const user of (affectedUsers || [])) {
           await supabase.from('guild_wars_memberships').insert({ user_id: user.id, guild_id: unaffiliated.id });
-          // Remove Discord role from displaced users
-          if (guild.discord_role_id && user.discord_id) {
-            removeDiscordRoleFromUser(user.discord_id, guild.discord_role_id);
-          }
+          // Sync Discord roles for displaced users
+          // @ts-ignore: EdgeRuntime is available in Supabase
+          EdgeRuntime.waitUntil(syncDiscordUserRoles(supabase, user.id));
         }
       }
 
@@ -545,28 +451,9 @@ export function registerGuildRoutes(app: Hono, supabase: any, anonSupabase: any)
         .from('guild_wars_memberships')
         .insert({ user_id: dbUser.id, guild_id: guildId });
 
-      // Discord role swap
-      if (dbUser.discord_id) {
-        // Remove old guild's Discord role
-        if (oldGuild?.discord_role_id) {
-          removeDiscordRoleFromUser(dbUser.discord_id, oldGuild.discord_role_id);
-        } else if (dbUser.guild_id && dbUser.guild_id !== unaffiliated?.id) {
-          // Old guild might have been fetched even if not "oldGuild" — try removing from the previous guild
-          const { data: prevGuild } = await supabase
-            .from('guild_wars_guilds')
-            .select('discord_role_id')
-            .eq('id', dbUser.guild_id)
-            .maybeSingle();
-          if (prevGuild?.discord_role_id) {
-            removeDiscordRoleFromUser(dbUser.discord_id, prevGuild.discord_role_id);
-          }
-        }
-
-        // Add new guild's Discord role
-        if (guild.discord_role_id) {
-          addDiscordRoleToUser(dbUser.discord_id, guild.discord_role_id);
-        }
-      }
+      // Discord role swap (Rank, Prestige, and Guild)
+      // @ts-ignore: EdgeRuntime is available in Supabase
+      EdgeRuntime.waitUntil(syncDiscordUserRoles(supabase, dbUser.id));
 
       // Log
       try {
@@ -652,10 +539,9 @@ export function registerGuildRoutes(app: Hono, supabase: any, anonSupabase: any)
         .from('guild_wars_memberships')
         .insert({ user_id: dbUser.id, guild_id: unaffiliated.id });
 
-      // Remove Discord role
-      if (dbUser.discord_id && currentGuild?.discord_role_id) {
-        removeDiscordRoleFromUser(dbUser.discord_id, currentGuild.discord_role_id);
-      }
+      // Sync Discord roles (Guild Role removed, Unaffiliated role added if any)
+      // @ts-ignore: EdgeRuntime is available in Supabase
+      EdgeRuntime.waitUntil(syncDiscordUserRoles(supabase, dbUser.id));
 
       // Log
       try {

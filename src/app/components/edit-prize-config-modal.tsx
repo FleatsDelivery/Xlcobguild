@@ -237,7 +237,7 @@ export function EditPrizeConfigModal({
           <div className="flex flex-col sm:flex-row items-center gap-4">
             {/* REMOVED: Pie Chart Preview — eliminated recharts dependency */}
             <div className="flex-1 text-center sm:text-left">
-              <p className="text-3xl font-black text-foreground">
+              <p className="text-3xl font-bold text-foreground">
                 ${(totalCents / 100).toFixed(2)}
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -293,7 +293,7 @@ export function EditPrizeConfigModal({
                       <p className="text-[11px] text-muted-foreground truncate">{cat.description || 'No description'}</p>
                     </div>
                     <div className="text-right flex-shrink-0">
-                      <p className="text-sm font-black text-foreground">${(cat.amount_cents / 100).toFixed(2)}</p>
+                      <p className="text-sm font-bold text-foreground">${(cat.amount_cents / 100).toFixed(2)}</p>
                       <p className="text-[10px] text-muted-foreground">{percent}%</p>
                     </div>
                   </button>

@@ -1,14 +1,14 @@
 // /suggestion slash command handler — Send a suggestion to the officer inbox
-import { errorResponse, InteractionResponseType, jsonResponse } from './utils.ts';
+import { errorResponse, InteractionResponseType } from './utils.ts';
 
-export async function handleSuggestion(body: any, supabase: any): Promise<Response> {
+export async function handleSuggestion(body: any, supabase: any): Promise<any> {
   try {
     const discordUser = body.member?.user || body.user;
     const discordId = discordUser?.id;
     const username = discordUser?.username || discordUser?.global_name || 'Unknown';
 
     if (!discordId) {
-      return jsonResponse(errorResponse('Could not identify your Discord account.'));
+      return errorResponse('Could not identify your Discord account.');
     }
 
     // Get the suggestion text
@@ -16,11 +16,11 @@ export async function handleSuggestion(body: any, supabase: any): Promise<Respon
     const suggestion = options.find((opt: any) => opt.name === 'text')?.value;
 
     if (!suggestion || suggestion.trim().length === 0) {
-      return jsonResponse(errorResponse('Please provide a suggestion!'));
+      return errorResponse('Please provide a suggestion!');
     }
 
     if (suggestion.length > 1000) {
-      return jsonResponse(errorResponse('Suggestion is too long! Please keep it under 1000 characters.'));
+      return errorResponse('Suggestion is too long! Please keep it under 1000 characters.');
     }
 
     // Look up the user's TCF profile for richer logging
@@ -52,12 +52,12 @@ export async function handleSuggestion(body: any, supabase: any): Promise<Respon
 
     if (kvError) {
       console.error('Failed to store suggestion in admin_log:', kvError);
-      return jsonResponse(errorResponse('Failed to submit your suggestion. Please try again later.'));
+      return errorResponse('Failed to submit your suggestion. Please try again later.');
     }
 
     console.log(`Suggestion submitted by ${username} (${discordId}): ${suggestion.substring(0, 80)}`);
 
-    return jsonResponse({
+    return {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
         embeds: [{
@@ -71,9 +71,9 @@ export async function handleSuggestion(body: any, supabase: any): Promise<Respon
         }],
         flags: 64, // Ephemeral
       },
-    });
-  } catch (error) {
+    };
+  } catch (error: any) {
     console.error('Error handling /suggestion command:', error);
-    return jsonResponse(errorResponse('An unexpected error occurred. Please try again later.'));
+    return errorResponse(`An unexpected error occurred: ${error.message || 'Unknown error'}`);
   }
 }

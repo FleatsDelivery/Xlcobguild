@@ -169,7 +169,7 @@ export function EditMatchModal({ match, tournamentId, availableTeams, onClose, o
                   <span className="font-bold text-field-dark">{selectedTeam1.name}</span>
                 </div>
               )}
-              <span className="text-2xl font-black text-field-dark">
+              <span className="text-2xl font-bold text-field-dark">
                 {formData.team1_score} - {formData.team2_score}
               </span>
               {selectedTeam2 && (

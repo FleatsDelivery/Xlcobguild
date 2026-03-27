@@ -104,28 +104,34 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
       const enrichedTournaments = await Promise.all(
         (tournaments || []).map(async (t: any) => {
           try {
-            // Get active registrations (non-withdrawn)
+            // Get exact counts for registrations and staff (active only)
+            const [{ count: regCount }, { count: staffCount }] = await Promise.all([
+              supabase.from('kkup_registrations').select('id', { count: 'exact', head: true }).eq('tournament_id', t.id).neq('status', 'withdrawn'),
+              supabase.from('kkup_staff_applications').select('id', { count: 'exact', head: true }).eq('tournament_id', t.id).neq('status', 'withdrawn')
+            ]);
+
+            // Fetch recent registrations for preview (limited for performance)
             const { data: regs, error: regError } = await supabase
               .from('kkup_registrations')
               .select('id, user_id, status, registered_at, person:kkup_persons!person_id(display_name, avatar_url)')
               .eq('tournament_id', t.id)
               .neq('status', 'withdrawn')
               .order('registered_at', { ascending: false })
-              .limit(50);
+              .limit(30);
 
             if (regError) {
               console.error(`Reg enrichment error for ${t.id}:`, regError);
-              return { ...t, registration_count: 0, player_previews: [], teams_count: 0 };
+              return { ...t, registration_count: 0, player_previews: [], team_count: 0 };
             }
 
-            // Get active staff applications (non-withdrawn)
+            // Fetch recent staff for preview
             const { data: staffApps, error: staffError } = await supabase
               .from('kkup_staff_applications')
               .select('id, user_id, status, created_at, person:kkup_persons!person_id(display_name, avatar_url)')
               .eq('tournament_id', t.id)
               .neq('status', 'withdrawn')
               .order('created_at', { ascending: false })
-              .limit(20);
+              .limit(10);
 
             if (staffError) {
               console.error(`Staff enrichment error for ${t.id}:`, staffError);
@@ -133,18 +139,15 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
 
             const allRegs = regs || [];
             const allStaff = staffApps || [];
-            const totalRegistrants = allRegs.length + allStaff.length;
-            const onTeamCount = allRegs.filter((r: any) => r.status === 'on_team').length;
+            const totalRegistrants = (regCount || 0) + (staffCount || 0);
 
             // Count unique teams
             let teamsCount = 0;
-            if (onTeamCount > 0) {
-              const { count } = await supabase
-                .from('kkup_teams')
-                .select('id', { count: 'exact', head: true })
-                .eq('tournament_id', t.id);
-              teamsCount = count || 0;
-            }
+            const { count: tCount } = await supabase
+              .from('kkup_teams')
+              .select('id', { count: 'exact', head: true })
+              .eq('tournament_id', t.id);
+            teamsCount = tCount || 0;
 
             // Collect user IDs from both registrations and staff apps for Discord avatars
             const regUserIds = allRegs.map((r: any) => r.user_id).filter(Boolean);
@@ -330,6 +333,22 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
         teamsCount = teamCount || 0;
       }
 
+      // Fetch prizes and awards
+      const { data: prizes } = await supabase
+        .from('kkup_prizes')
+        .select('*')
+        .eq('tournament_id', tournamentId)
+        .order('sort_order', { ascending: true });
+
+      const { data: awards } = await supabase
+        .from('prize_awards')
+        .select(`
+          id, prize_id, amount_cents, recipient_user_id, team_id,
+          recipient:users!recipient_user_id(id, discord_username, discord_avatar),
+          team:kkup_teams!team_id(id, team_name, team_tag, logo_url)
+        `)
+        .eq('tournament_id', tournamentId);
+
       return c.json({
         tournament: {
           ...tournament,
@@ -338,6 +357,8 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
           player_count: registrationCount, // Same value, different field name
           teams_count: teamsCount,
           team_count: teamsCount, // Same value, different field name
+          prizes: prizes || [],
+          awards: awards || [],
         },
       });
     } catch (error: any) {
@@ -524,7 +545,7 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
         'tournament_start_date', 'tournament_end_date',
         'max_teams', 'min_teams', 'max_team_size', 'min_team_size',
         'casters_needed', 'staff_needed',
-        'prize_pool', 'youtube_url', 'twitch_url_1', 'twitch_url_2',
+        'prize_pool', 'prize_pool_donations', 'youtube_url', 'twitch_url_1', 'twitch_url_2',
         'league_id', 'kkup_season',
         'min_rank', 'max_rank',
         // Winner assignment fields (officer admin tools)
@@ -1405,13 +1426,38 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
           await clearCoachAssignment(supabase, cTeam.id);
           console.log(`Removed coach ${person.display_name} from team "${cTeam.team_name}" (player withdrew)`);
         }
+
+        // Also clean up any pending coach assignments directly by person_id for this tournament
+        await supabase
+          .from('kkup_coach_assignments')
+          .delete()
+          .eq('tournament_id', tournamentId)
+          .eq('person_id', person.id);
+
+        // Expire any pending invites this person received for this tournament
+        // Invites don't have tournament_id, but the team they point to does.
+        const { data: teamIds } = await supabase
+          .from('kkup_teams')
+          .select('id')
+          .eq('tournament_id', tournamentId);
+        
+        if (teamIds && teamIds.length > 0) {
+          const ids = teamIds.map(t => t.id);
+          await supabase
+            .from('kkup_team_invites')
+            .update({ status: 'expired', updated_at: new Date().toISOString() })
+            .in('team_id', ids)
+            .eq('invitee_person_id', person.id)
+            .eq('status', 'pending');
+        }
+
       } catch (coachErr) {
-        console.error('Non-critical: coach removal during withdrawal failed:', coachErr);
+        console.error('Non-critical: coach/invite cleanup during withdrawal failed:', coachErr);
       }
 
-      // ── Staff application withdrawal ──
+      // ── Staff application + Roster cleanup ──
       // If this user has a staff/caster application for this tournament, withdraw it
-      // Uses the real kkup_staff_applications table (migrated from KV)
+      // And remove them from the official staff roster (kkup_tournament_staff)
       try {
         await supabase
           .from('kkup_staff_applications')
@@ -1419,9 +1465,16 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
           .eq('tournament_id', tournamentId)
           .eq('user_id', auth.dbUser.id)
           .neq('status', 'withdrawn');
-        console.log(`Staff application auto-withdrawn for ${auth.dbUser.discord_username} (player withdrew from tournament)`);
+        
+        await supabase
+          .from('kkup_tournament_staff')
+          .delete()
+          .eq('tournament_id', tournamentId)
+          .eq('person_id', person.id);
+
+        console.log(`Staff app + roster cleaned for ${auth.dbUser.discord_username} (withdrew from tournament)`);
       } catch (staffErr) {
-        console.error('Non-critical: staff app withdrawal during tournament withdrawal failed:', staffErr);
+        console.error('Non-critical: staff cleanup during tournament withdrawal failed:', staffErr);
       }
 
       // Update registration status
@@ -1690,167 +1743,6 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
   });
 
 
-  // ═══════════════════════════════════════════════════════
-  // 9. LIST REGISTRATIONS (Public — includes free agents + on-team)
-  // ═══════════════════════════════════════════════════════
 
-  app.get(`${PREFIX}/kkup/tournaments/:id/registrations`, async (c) => {
-    try {
-      const tournamentId = c.req.param('id');
-
-      // Verify tournament exists
-      const { data: tournament, error: fetchError } = await supabase
-        .from('kkup_tournaments')
-        .select('*')
-        .eq('id', tournamentId)
-        .single();
-
-      if (fetchError || !tournament) {
-        return c.json({ error: 'Tournament not found' }, 404);
-      }
-
-      // Optional filter by status
-      const statusFilter = c.req.query('status'); // 'registered', 'on_team', 'withdrawn', or omit for all active
-
-      let query = supabase
-        .from('kkup_registrations')
-        .select(`
-          id, tournament_id, person_id, user_id, status, role, registered_at, withdrawn_at,
-          person:kkup_persons!person_id(id, steam_id, display_name, avatar_url)
-        `)
-        .eq('tournament_id', tournamentId)
-        .order('registered_at', { ascending: true });
-
-      if (statusFilter) {
-        query = query.eq('status', statusFilter);
-      } else {
-        // Default: exclude withdrawn
-        query = query.neq('status', 'withdrawn');
-      }
-
-      const { data: registrations, error: regError } = await query;
-
-      if (regError) {
-        console.error('Fetch registrations error:', regError);
-        return c.json({ error: `Failed to fetch registrations: ${regError.message}` }, 500);
-      }
-
-      // ── Enrich registrations with user data (avatar, rank, role) ──
-      const userIds = (registrations || []).map((r: any) => r.user_id).filter(Boolean);
-      const userMap = new Map<string, any>();
-      if (userIds.length > 0) {
-        const { data: users } = await supabase
-          .from('users')
-          .select('id, discord_id, discord_username, discord_avatar, rank_id, prestige_level, role, steam_id, created_at, opendota_data, tcf_plus_active, twitch_username, twitch_avatar, ranks:ranks!rank_id(id, name, display_order)')
-          .in('id', userIds);
-        (users || []).forEach((u: any) => userMap.set(u.id, u));
-      }
-
-      // ── Detect first-timers: persons NOT in any previous tournament ──
-      const personIds = (registrations || []).map((r: any) => r.person_id).filter(Boolean);
-      const firstTimerSet = new Set<string>();
-      if (personIds.length > 0) {
-        // Check kkup_registrations in OTHER tournaments
-        const { data: priorRegs } = await supabase
-          .from('kkup_registrations')
-          .select('person_id')
-          .in('person_id', personIds)
-          .neq('tournament_id', tournamentId)
-          .neq('status', 'withdrawn');
-        // Also check historical team rosters (Phase 1 players who were imported)
-        const { data: priorRosters } = await supabase
-          .from('kkup_team_rosters')
-          .select('person_id, team:kkup_teams!team_id(tournament_id)')
-          .in('person_id', personIds);
-        
-        const hasHistory = new Set<string>();
-        (priorRegs || []).forEach((r: any) => hasHistory.add(r.person_id));
-        (priorRosters || []).forEach((r: any) => {
-          if (r.team?.tournament_id && r.team.tournament_id !== tournamentId) {
-            hasHistory.add(r.person_id);
-          }
-        });
-        personIds.forEach((pid: string) => {
-          if (!hasHistory.has(pid)) firstTimerSet.add(pid);
-        });
-      }
-
-      // Enrich each registration
-      const enrichRegistration = (reg: any) => {
-        const linkedUser = userMap.get(reg.user_id);
-        return {
-          ...reg,
-          is_first_timer: firstTimerSet.has(reg.person_id),
-          linked_user: linkedUser ? {
-            id: linkedUser.id,
-            discord_id: linkedUser.discord_id || null,
-            discord_username: linkedUser.discord_username,
-            discord_avatar: linkedUser.discord_avatar,
-            rank_id: linkedUser.rank_id,
-            prestige_level: linkedUser.prestige_level || 0,
-            role: linkedUser.role,
-            steam_id: linkedUser.steam_id || null,
-            created_at: linkedUser.created_at,
-            badge_rank: linkedUser.opendota_data?.badge_rank || null,
-            opendota_data: linkedUser.opendota_data || null,
-            ranks: linkedUser.ranks || null,
-            tcf_plus_active: linkedUser.tcf_plus_active || false,
-            twitch_username: linkedUser.twitch_username || null,
-            twitch_avatar: linkedUser.twitch_avatar || null,
-          } : null,
-        };
-      };
-
-      const enrichedRegistrations = (registrations || []).map(enrichRegistration);
-
-      // Separate into free agents (players only) and on-team players
-      const freeAgents = enrichedRegistrations.filter((r: any) =>
-        (r.status === 'free_agent' || r.status === 'registered') && r.role === 'player'
-      );
-      const onTeam = enrichedRegistrations.filter((r: any) => r.status === 'on_team');
-
-      // Separate coaches from registrations
-      const coaches = enrichedRegistrations.filter((r: any) => r.role === 'coach');
-
-      // For on-team players, look up which team they're on
-      const onTeamWithTeamInfo = await Promise.all(
-        onTeam.map(async (reg: any) => {
-          const { data: rosterEntry } = await supabase
-            .from('kkup_team_rosters')
-            .select('team_id, team:kkup_teams!team_id(id, team_name, team_tag, logo_url)')
-            .eq('person_id', reg.person_id)
-            .maybeSingle();
-
-          return {
-            ...reg,
-            team: rosterEntry?.team || null,
-          };
-        })
-      );
-
-      // Count summary
-      const totalActive = (registrations || []).length;
-      const freeAgentCount = freeAgents.length;
-      const onTeamCount = onTeam.length;
-      const coachCount = coaches.length;
-
-      return c.json({
-        tournament,
-        summary: {
-          total_active: totalActive,
-          free_agents: freeAgentCount,
-          on_team: onTeamCount,
-          coaches: coachCount,
-        },
-        registrations: safeClone(enrichedRegistrations),
-        free_agents: safeClone(freeAgents),
-        on_team: safeClone(onTeamWithTeamInfo),
-        coaches: safeClone(coaches),
-      });
-    } catch (error: any) {
-      console.error('List registrations error:', error);
-      return c.json({ error: 'Internal server error listing registrations: ' + error.message }, 500);
-    }
-  });
 
 }

@@ -72,7 +72,7 @@ export function ActiveTournamentCard({ tournament, onClick }: ActiveTournamentCa
               <Crown className="w-7 h-7 sm:w-8 sm:h-8 text-kernel-gold" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-2xl sm:text-3xl font-black text-white truncate leading-tight">{tournament.name}</h3>
+              <h3 className="text-2xl sm:text-3xl font-bold text-white truncate leading-tight">{tournament.name}</h3>
               <p className="text-white/60 text-sm sm:text-base mt-1">
                 {tournament.tournament_type === 'kernel_kup' ? '🌽 5v5 Captains Mode' : '🪝 1v1 Duel'}
               </p>

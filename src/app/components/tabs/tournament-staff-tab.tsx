@@ -12,6 +12,7 @@ import { useTournament } from '@/app/contexts/tournament-context';
 import { projectId, publicAnonKey } from '/utils/supabase/info';
 import { TwitchIcon } from '@/lib/icons';
 import { TcfPlusAvatarRing } from '@/app/components/tcf-plus-avatar-ring';
+import { TcfPlusBadge } from '@/app/components/tcf-plus-badge';
 import { Footer } from '@/app/components/footer';
 import { TabNoData } from '@/app/components/tab-no-data';
 
@@ -36,7 +37,7 @@ interface StaffData {
 }
 
 export function TournamentStaffTab() {
-  const { tournament } = useTournament();
+  const { tournament, staff, myRegistration, myStaffApp, user } = useTournament();
   const [staffData, setStaffData] = useState<StaffData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,7 +67,64 @@ export function TournamentStaffTab() {
 
         const data = await res.json();
         console.log('🌽 Staff Tab: Received data from backend:', data);
-        setStaffData(data);
+        
+        // Final combined list from context: official staff + current user if staff
+        const allContextStaff = [...(staff || [])];
+        const isUserStaff = ((myRegistration as any)?.role === 'staff' || myStaffApp?.status === 'approved') && (myRegistration as any)?.status !== 'withdrawn';
+        
+        if (isUserStaff && user?.id) {
+          const isAlreadyInList = allContextStaff.some(s => s.person_id === user.id);
+          if (!isAlreadyInList) {
+            // Build Discord avatar URL if hash is provided
+            const discordAvatarUrl = user.discord_avatar
+              ? (user.discord_avatar.startsWith('http')
+                  ? user.discord_avatar
+                  : `https://cdn.discordapp.com/avatars/${user.discord_id}/${user.discord_avatar}.png?size=256`)
+              : (user?.user_metadata?.avatar_url || null);
+
+            // Determine role name - prioritize application preference
+            const roleMap: Record<string, string> = {
+              caster: 'Caster',
+              producer: 'Producer',
+              helper: 'Tournament Helper',
+              tournament_director: 'Tournament Director',
+            };
+            const appRole = myStaffApp?.role_preference ? roleMap[myStaffApp.role_preference] : null;
+            const regRole = (myRegistration as any)?.role;
+            const finalRole = appRole || (regRole === 'player' ? 'Staff' : regRole) || 'Staff';
+
+            allContextStaff.push({
+              person_id: user.id,
+              display_name: user?.discord_username || user?.user_metadata?.display_name || user?.email?.split('@')[0] || 'Me',
+              avatar_url: discordAvatarUrl,
+              role: finalRole,
+              steam_id: '',
+              tcf_plus: !!user?.tcf_plus_active,
+            });
+          }
+        }
+
+        // Fallback: If no stream grouping returned, use the flat staff list from context
+        if ((!data.streams || data.streams.length === 0) && allContextStaff.length > 0) {
+          console.log('🌽 Staff Tab: Using context staff fallback');
+          setStaffData({
+            streams: [{
+              name: 'Unassigned',
+              staff: allContextStaff.map(s => ({
+                id: s.person_id,
+                person_id: s.person_id,
+                name: s.display_name,
+                avatar: s.avatar_url,
+                role: s.role,
+                tcf_plus: !!s.tcf_plus,
+                twitch_username: null,
+                twitch_avatar: null
+              }))
+            }]
+          });
+        } else {
+          setStaffData(data);
+        }
       } catch (err) {
         console.error('Error fetching staff:', err);
         setError(err instanceof Error ? err.message : 'Unknown error');
@@ -201,6 +259,7 @@ export function TournamentStaffTab() {
                         <p className="font-bold text-foreground truncate text-sm sm:text-base">
                           {member.name}
                         </p>
+                        {member.tcf_plus && <TcfPlusBadge size="sm" />}
                         {member.twitch_username && (
                           <a
                             href={`https://twitch.tv/${member.twitch_username}`}
