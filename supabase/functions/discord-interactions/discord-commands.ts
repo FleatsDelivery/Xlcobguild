@@ -99,6 +99,10 @@ export const DISCORD_COMMANDS = [
 
   // ── Progression ────────────────────────────────────────────────────
   {
+    name: 'syncmyroles',
+    description: 'Synchronize your Discord roles with your website profile profile',
+  },
+  {
     name: 'mvp',
     description: 'Submit an MVP request for rank up or rank down',
     options: [

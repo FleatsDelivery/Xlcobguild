@@ -1,5 +1,5 @@
-import { 
-  InteractionResponseType, 
+import {
+  InteractionResponseType,
   jsonResponse,
 } from './utils.ts';
 import { SELF_ASSIGN_ROLES } from './roles-config.ts';
@@ -12,14 +12,33 @@ export async function handleSetupReactRoles(body: any, _supabase: any) {
   // Check for Administrator permission (0x8) or specific role IDs if needed
   // For now, let's assume if they can run the command it's because Discord permission system allowed it.
   // But we can add a secondary check if we have the role IDs here.
-  
+
   const embed = {
-    title: '🌾 The Corn Field — Role Kiosk',
-    description: 'Use the dropdown menu below to select your interests! You can pick as many as you like. We\'ll use these to ping you for specific events and groups.\n\n**Available Roles:**\n' + 
-      SELF_ASSIGN_ROLES.map(r => `${r.emoji} **${r.name}**`).join('\n'),
+    title: '🌾 The Corn Field - Self Service Role Kiosk',
+    description:
+      '## 🌽 Select Your Roles\n' +
+      '*Customize your experience by selecting your roles below.*\n' +
+      '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    fields: [
+      {
+        value:
+          `**${SELF_ASSIGN_ROLES[0].emoji} ${SELF_ASSIGN_ROLES[0].name}** - this is the main Dota 2 role here in The Corn Field\n` +
+          `**${SELF_ASSIGN_ROLES[1].emoji} ${SELF_ASSIGN_ROLES[1].name}** - for all your Turbo gaming needs\n` +
+          `**${SELF_ASSIGN_ROLES[2].emoji} ${SELF_ASSIGN_ROLES[2].name}** - if you want to join the weekend battle cup squad`,
+        inline: true,
+      },
+      {
+        name: '\u200b', // Zero-width space
+        value:
+          `**${SELF_ASSIGN_ROLES[3].emoji} ${SELF_ASSIGN_ROLES[3].name}** - join the community Valheim server!\n` +
+          `**${SELF_ASSIGN_ROLES[4].emoji} ${SELF_ASSIGN_ROLES[4].name}** - this role allows you to create polls\n` +
+          `**${SELF_ASSIGN_ROLES[5].emoji} ${SELF_ASSIGN_ROLES[5].name}** - this is for the folks who would like to work on custom games, discord bot functionality, and other fun projects`,
+        inline: true,
+      }
+    ],
     image: { url: 'https://kernelkup.com/role_kiosk.png' },
     color: 0xA4CA00, // Husk-bright
-    footer: { text: 'The Corn Field • Roles are al la carte' },
+    footer: { text: 'Use the dropdown menu to change your roles' },
     timestamp: new Date().toISOString(),
   };
 

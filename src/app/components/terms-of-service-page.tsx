@@ -10,7 +10,7 @@ import { FileText, ShieldCheck, Users, Trophy, ShoppingBag, AlertTriangle, Scale
 import { Footer } from '@/app/components/footer';
 
 const EFFECTIVE_DATE = 'March 2, 2026';
-const CONTACT_DISCORD = 'https://discord.gg/rHYPrdYGGh';
+const CONTACT_DISCORD = 'https://discord.gg/cXyWrP6yUw';
 
 interface SectionProps {
   icon: React.ReactNode;

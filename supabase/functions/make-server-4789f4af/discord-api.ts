@@ -2,7 +2,15 @@
  * Discord API Utilities — Guild Wars Role Sync
  * Shared functions for managing Discord roles via the Bot API.
  */
-import { DISCORD_SERVER_ID, DISCORD_RANK_ROLES, DISCORD_PRESTIGE_ROLES, getOldRankRoleIds, getOldPrestigeRoleIds } from "./discord-config.ts";
+import { 
+  DISCORD_SERVER_ID, 
+  DISCORD_RANK_ROLES, 
+  DISCORD_PRESTIGE_ROLES, 
+  DISCORD_ADMIN_ROLES,
+  DISCORD_SPECIAL_ROLES,
+  getOldRankRoleIds, 
+  getOldPrestigeRoleIds 
+} from "./discord-config.ts";
 
 const DISCORD_API = 'https://discord.com/api/v10';
 
@@ -86,7 +94,7 @@ export async function updateDiscordMemberRoles(discordUserId: string, roles: str
   if (!botToken || !discordUserId) return;
 
   try {
-    const res = await fetch(`${DISCORD_API}/guilds/${DISCORD_SERVER_ID}/members/${discordUserId}`, {
+    const res = await fetch(`${DISCORD_API}/guilds/${Deno.env.get('DISCORD_SERVER_ID')}/members/${discordUserId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bot ${botToken}` },
       body: JSON.stringify({ roles }),
@@ -138,7 +146,7 @@ export async function syncDiscordUserRoles(
     // 1. Fetch user plus their guild's discord_role_id
     const { data: user, error: userError } = await supabase
       .from('users')
-      .select('discord_id, rank_id, prestige_level, guild_id, guild_wars_guilds!users_guild_id_fkey(discord_role_id)')
+      .select('discord_id, rank_id, prestige_level, guild_id, role, tcf_plus_active, guild_wars_guilds!users_guild_id_fkey(discord_role_id)')
       .eq('id', userId)
       .single();
 
@@ -152,11 +160,40 @@ export async function syncDiscordUserRoles(
     const currentRankId = user.rank_id || 1;
     const currentPrestigeLevel = user.prestige_level || 0;
 
-    // 2. Fetch ALL rank and prestige role mappings from the database
-    const [{ data: rankRoles }, { data: prestigeRanks }] = await Promise.all([
+    // 2. Fetch ALL rank and prestige role mappings + tournament status
+    const [
+      { data: rankRoles }, 
+      { data: prestigeRanks },
+      { data: registrations },
+      { data: staffAssignments }
+    ] = await Promise.all([
       supabase.from('ranks').select('id, discord_role_id'),
-      supabase.from('prestige_ranks').select('level, discord_role_id')
+      supabase.from('prestige_ranks').select('level, discord_role_id'),
+      supabase.from('kkup_registrations')
+        .select('role, tournament_id, kkup_tournaments!inner(status)')
+        .eq('user_id', userId)
+        .in('kkup_tournaments.status', ['upcoming', 'registration_open', 'registration_closed', 'roster_lock', 'live']),
+      supabase.from('kkup_tournament_staff')
+        .select('role, tournament_id, kkup_tournaments!inner(status)')
+        .eq('person_id', userId) // Note: this might need steam_id or person_id lookup if user_id isn't match
+        .in('kkup_tournaments.status', ['upcoming', 'registration_open', 'registration_closed', 'roster_lock', 'live'])
     ]);
+
+    // Fallback for staff if person_id is different (lookup person_id from steam_id)
+    let finalStaff = staffAssignments;
+    if (!staffAssignments || staffAssignments.length === 0) {
+      const { data: userData } = await supabase.from('users').select('steam_id').eq('id', userId).single();
+      if (userData?.steam_id) {
+        const { data: person } = await supabase.from('kkup_persons').select('id').eq('steam_id', userData.steam_id).single();
+        if (person?.id) {
+          const { data: staff } = await supabase.from('kkup_tournament_staff')
+            .select('role, tournament_id, kkup_tournaments!inner(status)')
+            .eq('person_id', person.id)
+            .in('kkup_tournaments.status', ['upcoming', 'registration_open', 'registration_closed', 'roster_lock', 'live']);
+          if (staff) finalStaff = staff;
+        }
+      }
+    }
 
     if (!rankRoles || !prestigeRanks) {
       console.error('syncDiscordUserRoles: Failed to fetch role mappings from database');
@@ -167,9 +204,26 @@ export async function syncDiscordUserRoles(
     const ALL_MANAGED_ROLES = new Set<string>();
     rankRoles.forEach((r: any) => { if (r.discord_role_id) ALL_MANAGED_ROLES.add(r.discord_role_id); });
     prestigeRanks.forEach((p: any) => { if (p.discord_role_id) ALL_MANAGED_ROLES.add(p.discord_role_id); });
+    
+    // Add Special/Admin Roles to managed set
+    Object.values(DISCORD_ADMIN_ROLES).forEach(id => ALL_MANAGED_ROLES.add(id));
+    Object.values(DISCORD_SPECIAL_ROLES).forEach(id => ALL_MANAGED_ROLES.add(id));
+    // Note: Guild roles are NOT managed via a set here because they are user-specific and dynamic,
+    // but we add/remove them by checking the guild_id. 
+    // Actually, we should PROBABLY include the 3 default guild roles in the managed set if we want to be clean.
+    ALL_MANAGED_ROLES.add('1478543774383739022'); // XLCOB
+    ALL_MANAGED_ROLES.add('1478543805459337257'); // EAFD
+    ALL_MANAGED_ROLES.add('1478543838069919836'); // FTHOG
 
     const targetRankRole = rankRoles.find((r: any) => r.id === currentRankId)?.discord_role_id;
     const targetPrestigeRole = prestigeRanks.find((p: any) => p.level === currentPrestigeLevel)?.discord_role_id;
+    const targetAdminRole = DISCORD_ADMIN_ROLES[user.role];
+    const targetTcfPlusRole = user.tcf_plus_active ? DISCORD_SPECIAL_ROLES.TCF_PLUS : null;
+
+    // Tournament role targets
+    let targetPlayerRole = (registrations || []).some((r: any) => r.role === 'player' || r.role === 'undecided') ? DISCORD_SPECIAL_ROLES.PLAYER : null;
+    let targetCoachRole = (registrations || []).some((r: any) => r.role === 'coach') ? DISCORD_SPECIAL_ROLES.COACH : null;
+    let targetCasterRole = (finalStaff || []).some((r: any) => r.role?.toLowerCase().includes('caster')) ? DISCORD_SPECIAL_ROLES.CASTER : null;
 
     // 4. Fetch current member roles from Discord
     const member = await getDiscordMember(discordUserId);
@@ -187,6 +241,11 @@ export async function syncDiscordUserRoles(
     if (targetRankRole) newRoles.add(targetRankRole);
     if (targetPrestigeRole) newRoles.add(targetPrestigeRole);
     if (guildRoleId) newRoles.add(guildRoleId);
+    if (targetAdminRole) newRoles.add(targetAdminRole);
+    if (targetTcfPlusRole) newRoles.add(targetTcfPlusRole);
+    if (targetPlayerRole) newRoles.add(targetPlayerRole);
+    if (targetCoachRole) newRoles.add(targetCoachRole);
+    if (targetCasterRole) newRoles.add(targetCasterRole);
 
     // 6. Apply atomic update if different
     const sortedExisting = [...existingRoles].sort().join(',');

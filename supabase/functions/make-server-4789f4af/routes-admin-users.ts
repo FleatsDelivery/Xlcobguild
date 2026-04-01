@@ -152,4 +152,33 @@ export function registerAdminUsersRoutes(app: Hono, supabase: any, anonSupabase:
     }
   });
 
+  // Public/Service-Role endpoint for individual user sync (used by Bot)
+  app.post(`${PREFIX}/sync-discord-user`, async (c) => {
+    try {
+      const { discord_id } = await c.req.json();
+      if (!discord_id) return c.json({ error: 'Missing discord_id' }, 400);
+
+      // Find user by discord_id
+      const { data: user, error: userError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('discord_id', discord_id)
+        .maybeSingle();
+
+      if (userError || !user) {
+        console.error(`sync-discord-user: User not found for ${discord_id}`, userError);
+        return c.json({ error: 'User not found on kernelkup.com. Please link your account first!' }, 404);
+      }
+
+      // Trigger sync in background
+      // @ts-ignore: EdgeRuntime is available
+      EdgeRuntime.waitUntil(syncDiscordUserRoles(supabase, user.id));
+
+      return c.json({ success: true, message: 'Synchronization started.' });
+    } catch (error) {
+      console.error('Individual sync error:', error);
+      return c.json({ error: 'Internal server error' }, 500);
+    }
+  });
+
 }

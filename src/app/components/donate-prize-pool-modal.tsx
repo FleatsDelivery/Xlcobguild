@@ -4,83 +4,29 @@
  * Lets users donate to the Kernel Kup prize pool via Stripe Checkout.
  * 95% goes directly to the prize pool, 5% platform fee for backend costs.
  *
- * When opened from the Secret Shop (no tournament props), it auto-fetches
- * the next upcoming tournament so the user knows exactly where their
- * donation is going.
+ * Users can now leave an optional note specifying how they'd like their donation used.
  */
-import { useState, useEffect } from 'react';
-import { Heart, DollarSign, Trophy, Sparkles, Loader2, Info, CalendarDays, Scale } from 'lucide-react';
+import { useState } from 'react';
+import { Heart, DollarSign, Trophy, Sparkles, Loader2, Info, Scale } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { BottomSheetModal } from '@/app/components/bottom-sheet-modal';
 import { createCheckoutSession } from '@/lib/stripe';
 import { saveCheckoutContext, clearCheckoutContext } from '@/lib/checkout-context';
 import { toast } from 'sonner';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
 
 interface DonatePrizePoolModalProps {
-  tournamentName?: string;
-  currentPrizePool?: number;
-  currentDonations?: number;
-  tournamentId?: string;
   onClose: () => void;
-}
-
-interface NextTournament {
-  id: string;
-  name: string;
-  start_date: string;
-  status: string;
-  prize_pool: number;
-  prize_pool_donations: number;
 }
 
 const PRESET_AMOUNTS = [5, 10, 25, 50, 100];
 
 export function DonatePrizePoolModal({
-  tournamentName,
-  currentPrizePool,
-  currentDonations,
-  tournamentId,
   onClose,
 }: DonatePrizePoolModalProps) {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState('');
+  const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
-
-  // Auto-fetch next upcoming tournament when no explicit tournament is provided
-  const [nextTournament, setNextTournament] = useState<NextTournament | null>(null);
-  const [fetchingTournament, setFetchingTournament] = useState(!tournamentId);
-
-  useEffect(() => {
-    // If a tournament was explicitly provided, no need to fetch
-    if (tournamentId) return;
-
-    const fetchNext = async () => {
-      try {
-        const res = await fetch(
-          `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments/next-upcoming`,
-          { headers: { 'Authorization': `Bearer ${publicAnonKey}` } },
-        );
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        if (data.tournament) {
-          setNextTournament(data.tournament);
-        }
-      } catch (err) {
-        console.error('Failed to fetch next upcoming tournament for donation modal:', err);
-      } finally {
-        setFetchingTournament(false);
-      }
-    };
-    fetchNext();
-  }, [tournamentId]);
-
-  // Resolve which tournament we're donating to
-  const resolvedId = tournamentId || nextTournament?.id;
-  const resolvedName = tournamentName || nextTournament?.name;
-  const resolvedPool = currentPrizePool ?? (nextTournament?.prize_pool || 0);
-  const resolvedDonations = currentDonations ?? (nextTournament?.prize_pool_donations || 0);
-  const totalPool = resolvedPool + resolvedDonations;
 
   const effectiveAmount = selectedAmount ?? (customAmount ? parseFloat(customAmount) : 0);
   const isValidAmount = effectiveAmount >= 1 && effectiveAmount <= 500;
@@ -110,13 +56,11 @@ export function DonatePrizePoolModal({
       saveCheckoutContext({
         type: 'donation',
         amount: effectiveAmount,
-        tournamentName: resolvedName,
-        tournamentId: resolvedId,
       });
       const url = await createCheckoutSession({
         type: 'donation',
         amount: amountCents,
-        ...(resolvedId ? { tournament_id: resolvedId } : {}),
+        note: note.trim() || undefined,
       });
       window.location.href = url;
     } catch (err: any) {
@@ -126,11 +70,6 @@ export function DonatePrizePoolModal({
       setLoading(false);
     }
   };
-
-  // Format the start date nicely
-  const startDateStr = nextTournament?.start_date
-    ? new Date(nextTournament.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    : null;
 
   return (
     <BottomSheetModal onClose={onClose} maxWidth="max-w-lg">
@@ -144,61 +83,12 @@ export function DonatePrizePoolModal({
           </div>
           <h3 className="text-xl font-bold text-foreground">Prize Pool Donation</h3>
           <p className="text-sm text-muted-foreground mt-1">
-            {resolvedName ? `Support ${resolvedName}` : 'Fuel the competition'}
+            Fuel the competition
           </p>
-
-          {/* Tournament target badge */}
-          {fetchingTournament ? (
-            <div className="mt-3 px-4 py-1.5 rounded-full bg-muted border border-border">
-              <span className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-                <Loader2 className="w-3 h-3 animate-spin" />
-                Finding next tournament...
-              </span>
-            </div>
-          ) : resolvedName ? (
-            <div className="mt-3 flex flex-col items-center gap-1.5">
-              {/* Prize pool total */}
-              {totalPool > 0 && (
-                <div className="px-4 py-1.5 rounded-full bg-kernel-gold/10 border border-kernel-gold/20">
-                  <span className="text-sm font-bold text-kernel-gold flex items-center gap-1.5">
-                    <DollarSign className="w-4 h-4" />
-                    Current Pool: ${totalPool.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                  </span>
-                </div>
-              )}
-              {/* Donation breakdown if there are donations */}
-              {resolvedPool > 0 && resolvedDonations > 0 && (
-                <span className="text-[10px] text-muted-foreground">
-                  ${resolvedPool.toFixed(0)} base + ${resolvedDonations.toFixed(2)} from donations
-                </span>
-              )}
-            </div>
-          ) : (
-            <div className="mt-3 px-4 py-1.5 rounded-full bg-muted border border-border">
-              <span className="text-xs font-medium text-muted-foreground">
-                No upcoming tournament found — donation will be applied when one is created
-              </span>
-            </div>
-          )}
         </div>
       </BottomSheetModal.Header>
 
       <BottomSheetModal.Body className="space-y-5">
-        {/* Target tournament callout (only when auto-resolved from Secret Shop) */}
-        {!tournamentId && resolvedName && startDateStr && (
-          <div className="flex items-center gap-3 rounded-xl bg-harvest/6 border border-harvest/12 p-3">
-            <div className="w-9 h-9 rounded-lg bg-harvest/12 flex items-center justify-center flex-shrink-0">
-              <CalendarDays className="w-4.5 h-4.5 text-harvest" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-foreground">Donating to {resolvedName}</p>
-              <p className="text-[11px] text-muted-foreground">
-                Starting {startDateStr} · Your donation goes directly to this prize pool
-              </p>
-            </div>
-          </div>
-        )}
-
         {/* Preset Amounts */}
         <div>
           <p className="text-sm font-bold text-foreground mb-2">Select an Amount</p>
@@ -237,6 +127,19 @@ export function DonatePrizePoolModal({
           <p className="text-xs text-muted-foreground mt-1">Minimum $1 · Maximum $500</p>
         </div>
 
+        {/* Note (Optional) */}
+        <div>
+          <p className="text-sm font-bold text-foreground mb-1">Note (Optional)</p>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Let us know how you'd like this used (e.g., 'Kernel Kup 10', 'Infrastructure', etc.)"
+            rows={2}
+            className="w-full p-3 rounded-xl border-2 border-border focus:border-kernel-gold bg-input-background text-foreground text-sm outline-none focus:ring-2 focus:ring-kernel-gold/15 transition-all resize-none"
+            maxLength={300}
+          />
+        </div>
+
         {/* Split Breakdown */}
         {isValidAmount && (
           <div className="bg-kernel-gold/5 rounded-xl p-4 border border-kernel-gold/20">
@@ -251,7 +154,7 @@ export function DonatePrizePoolModal({
                 <div className="mt-1.5 space-y-1">
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-muted-foreground">
-                      Prize Pool (95%){resolvedName ? ` → ${resolvedName}` : ''}
+                      Prize Pool (95%)
                     </span>
                     <span className="font-bold text-kernel-gold">${prizePoolShare.toFixed(2)}</span>
                   </div>
@@ -269,7 +172,7 @@ export function DonatePrizePoolModal({
         <div className="flex items-start gap-2 px-1">
           <Info className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
           <p className="text-xs text-muted-foreground leading-relaxed">
-            95% of every donation goes directly to the {resolvedName || 'Kernel Kup'} prize pool. 5% covers platform and payment processing costs. You'll be redirected to Stripe for secure checkout.
+            95% of every donation goes directly to the prize pool or your requested target. 5% covers platform and payment processing costs. You'll be redirected to Stripe for secure checkout.
           </p>
         </div>
 

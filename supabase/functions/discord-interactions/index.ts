@@ -25,6 +25,7 @@ import { handleCreateParty } from './cmd-createparty.ts';
 import { handlePartyButton } from './cmp-createparty-buttons.ts';
 import { handleReport } from './cmd-report.ts';
 import { handleSetupReactRoles } from './cmd-setup-react-roles.ts';
+import { handleSyncMyRoles } from './cmd-sync-roles.ts';
 import { handleRoleSelect } from './cmp-role-select.ts';
 
 console.log('--- DISCORD INTERACTIONS LIVE (V3 - CONFIG SYNCED) ---');
@@ -127,6 +128,8 @@ Deno.serve(async (req) => {
           return dispatchCommand(handleCreateParty);
         case 'report':
           return dispatchCommand(handleReport);
+        case 'syncmyroles':
+          return dispatchCommand(handleSyncMyRoles);
         case 'setup-react-roles':
           return dispatchCommand(handleSetupReactRoles);
         case 'joingiveaway':

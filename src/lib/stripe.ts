@@ -20,6 +20,7 @@ export interface CheckoutParams {
   merch_variant_name?: string;
   merch_price_cents?: number;
   merch_image_url?: string;
+  note?: string;
 }
 
 // ── Checkout Session ───────────────────────────────────────────────────

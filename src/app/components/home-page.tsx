@@ -11,6 +11,7 @@ import { SuccessModal } from '@/app/components/success-modal';
 import { TcfPlusAvatarRing } from '@/app/components/tcf-plus-avatar-ring';
 import { TcfPlusBadge } from '@/app/components/tcf-plus-badge';
 import { PopEmoji } from '@/app/components/pop-emoji';
+import { PatchNotesLetter } from '@/app/components/patch-notes-letter';
 
 // ═══════════════════════════════════════════════════════
 // LAZY DISCORD WIDGET — only loads iframe when scrolled into view
@@ -44,7 +45,7 @@ function LazyDiscordWidget() {
       <div className="w-full">
         {visible ? (
           <iframe
-            src="https://discordapp.com/widget?id=1106456864989925388&theme=dark"
+            src="https://discordapp.com/widget?id=1475609583086075904&theme=dark"
             width="100%"
             height="500"
             allowTransparency={true}
@@ -770,9 +771,19 @@ export function HomePage({ user, onboarding, onRefresh, onBadgeRefresh }: { user
           </div>
         )}
 
-        {/* ── Live Tournament Banner ── */}
+        {/* ── The Final Announcement ── */}
+        <PatchNotesLetter />
+
+        {/* ── New Tournaments ── */}
         {liveTournaments.length > 0 && (
-          <HomeLiveTournamentBanner tournament={liveTournaments[0]} />
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold text-foreground px-2">🏆 New Tournaments</h3>
+            <div className="grid grid-cols-1 gap-4 sm:gap-6">
+              {liveTournaments.map(tournament => (
+                <HomeLiveTournamentBanner key={tournament.id} tournament={tournament} />
+              ))}
+            </div>
+          </div>
         )}
 
         {/* MVP Submission Form */}

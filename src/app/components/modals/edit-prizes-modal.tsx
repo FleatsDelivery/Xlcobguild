@@ -265,9 +265,9 @@ export function EditPrizesModal({ onClose }: EditPrizesModalProps) {
         )}
 
         {activeTab === 'config' ? (
-          <div className="space-y-6">
+          <div className="bg-muted rounded-xl p-5 border-2 border-border shadow-sm space-y-6">
             {/* Total Prize Pool Overview */}
-            <div className="bg-muted rounded-xl p-5 border-2 border-border shadow-sm">
+            <div>
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="w-5 h-5 text-harvest" />
                 <h3 className="text-base font-bold text-foreground justify-between uppercase tracking-wider">Prize Pool Config</h3>
@@ -305,9 +305,12 @@ export function EditPrizesModal({ onClose }: EditPrizesModalProps) {
               </div>
             </div>
 
+            {/* Divider between sections */}
+            <div className="border-t border-border/60" />
+
             {/* Prize Tiers */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Crown className="w-4 h-4 text-harvest" />
                   <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">Prize Distribution Tiers</h3>
@@ -334,7 +337,7 @@ export function EditPrizesModal({ onClose }: EditPrizesModalProps) {
                       : Number(prize.value || 0).toFixed(2);
                     
                     return (
-                      <div key={idx} className="bg-card rounded-xl border border-border p-4 flex flex-col sm:flex-row gap-3 relative group">
+                      <div key={idx} className="bg-background rounded-xl border border-border p-4 flex flex-col sm:flex-row gap-3 relative group">
                         <div className="flex-1 space-y-3">
                           <div className="grid grid-cols-12 gap-3">
                             <div className="col-span-12 sm:col-span-4 space-y-1">
@@ -398,7 +401,7 @@ export function EditPrizesModal({ onClose }: EditPrizesModalProps) {
                 )}
                 
                 {prizes.length > 0 && (
-                  <div className="flex justify-between items-center p-3 mt-4 bg-harvest/5 rounded-xl border border-harvest/20">
+                  <div className="flex justify-between items-center p-3 mt-2 bg-harvest/5 rounded-xl border border-harvest/20">
                     <span className="text-sm font-medium text-foreground">Total Percentage Allocated</span>
                     <span className={`text-sm font-bold ${
                       prizes.reduce((sum, p) => sum + (p.value_type === 'percentage' ? (p.value || 0) : 0), 0) > 100 
@@ -481,7 +484,7 @@ export function EditPrizesModal({ onClose }: EditPrizesModalProps) {
                           <option key={team.id} value={team.id}>{team.team_name} {team.team_tag ? `[${team.team_tag}]` : ''}</option>
                         ))
                       : players.map((player: any) => (
-                          <option key={player.user_id} value={player.user_id}>{player.person?.display_name || 'Unknown'}</option>
+                          <option key={player.person_id || player.user_id || player.id} value={player.user_id || player.id}>{player.player_name || player.person?.display_name || 'Unknown'}</option>
                         ))}
                   </select>
                 </div>

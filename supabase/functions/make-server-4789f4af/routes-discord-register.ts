@@ -111,6 +111,10 @@ const DISCORD_COMMANDS = [
     description: 'Send the self-assignable roles message with buttons (Owner only)',
     default_member_permissions: '8', // ADMINISTRATOR
   },
+  {
+    name: 'syncmyroles',
+    description: 'Sync your Discord roles with your website profile (Rank, Title, TCF+, Tournament roles)',
+  },
 ];
 
 // ── Route registration ───────────────────────────────────────────────

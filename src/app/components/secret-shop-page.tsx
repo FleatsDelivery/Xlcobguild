@@ -75,36 +75,41 @@ const MEMBERSHIP_TIERS: MembershipTier[] = [
     name: 'Free',
     price: '$0',
     priceNote: 'forever',
-    description: 'Everything you need to participate in the community and compete in Kernel Kups.',
+    description: "Dota is free to play. Discord is free to download. TCF should be free at its core. That's not changing.",
     featured: false,
     perks: [
-      { label: 'Kernel Kup registration (ticket required)', included: true },
-      { label: 'Create & manage up to 3 teams', included: true },
-      { label: 'Join a guild or play solo in Guild Wars', included: true },
+      { label: 'Play in Kernel Kup (just gotta grab a ticket)', included: true },
+      { label: 'Create & manage 1 KKUP team', included: true },
+      { label: 'Join and participate in Guild Wars', included: true },
       { label: 'Enter public giveaways', included: true },
-      { label: 'Play as player, coach, or staff', included: true },
-      { label: 'Custom game GitHub repos', included: true },
-      { label: 'Most Discord & Twitch bot commands', included: true },
+      { label: 'Access to most bot commands', included: true },
+      { label: 'Join the DEV TEAM and get GitHub access', included: true },
+      { label: 'TCF Customer Portal access (powered by Stripe)', included: true },
     ],
   },
   {
     id: 'tcf-plus',
     name: 'TCF+',
     price: '$20',
-    priceNote: '/ year',
-    description: 'The elevated experience. Skip the ticket line, lead your own guild, and unlock exclusive perks.',
+    priceNote: '/ year billed annually',
+    description: "",
     featured: true,
-    includesFreeNote: true,
+    includesFreeNote: false,
     perks: [
-      { label: 'Free KKup registration (no ticket needed)', included: true, highlight: true },
-      { label: 'Early KKup registration window', included: true, highlight: true },
-      { label: 'Create & manage up to 20 teams', included: true, highlight: true },
-      { label: 'Members-only giveaway eligibility', included: true, highlight: true },
-      { label: 'Exclusive Discord & Twitch roles (TCF+)', included: true, highlight: true },
-      { label: '/mvp Discord command', included: true, highlight: true },
-      { label: '/mystats Twitch command', included: true, highlight: true },
-      { label: 'Free birthday present (opt-in)', included: true, highlight: true },
-      { label: '1 bonus KKup ticket on signup', included: true, highlight: true },
+      { label: 'All the perks of a free membership', included: true, highlight: true },
+      { label: 'Free Kernel Kup registrations (no ticket needed)', included: true, highlight: true },
+      { label: 'Early registration access during Upcoming phase', included: true, highlight: true },
+      { label: '+1 bonus KKUP ticket on purchase', included: true, highlight: true },
+      { label: 'Discord soundboard access', included: true, highlight: true },
+      { label: 'Exclusive Discord & Twitch roles', included: true, highlight: true },
+      { label: '2x giveaway entries', included: true, highlight: true },
+      { label: 'Create & manage up to 20 KKUP teams', included: true, highlight: true },
+      { label: 'Create & manage your own Guild (Guild Wars)', included: true, highlight: true },
+      { label: 'Full access to all bot commands', included: true, highlight: true },
+      { label: 'Access to future community game servers (Valheim + whatever we add)', included: true, highlight: true },
+      { label: 'Annual birthday reward (opt-in, obviously)', included: true, highlight: true },
+      { label: 'Anything else I decide to add down the road', included: true, highlight: true },
+      { label: 'Community Officers receive free memberships', included: true, highlight: true },
     ],
   },
 ];
@@ -202,13 +207,12 @@ function MembershipCard({ tier, user, subscriptionStatus }: { tier: MembershipTi
 
   return (
     <div
-      className={`relative rounded-2xl border-2 overflow-hidden transition-all ${
-        isTcfPlus
-          ? isCancelling
-            ? 'border-harvest/40 bg-card shadow-lg'
-            : 'border-harvest bg-card shadow-lg'
-          : 'border-border bg-card'
-      }`}
+      className={`relative rounded-2xl border-2 overflow-hidden transition-all ${isTcfPlus
+        ? isCancelling
+          ? 'border-harvest/40 bg-card shadow-lg'
+          : 'border-harvest bg-card shadow-lg'
+        : 'border-border bg-card'
+        }`}
     >
       {/* Featured badge */}
       {isTcfPlus && !isCancelling && (
@@ -253,7 +257,7 @@ function MembershipCard({ tier, user, subscriptionStatus }: { tier: MembershipTi
         </div>
 
         {/* Description */}
-        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4 sm:mb-5">
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4 sm:mb-5 whitespace-pre-line">
           {tier.description}
         </p>
 
@@ -341,9 +345,8 @@ function MembershipCard({ tier, user, subscriptionStatus }: { tier: MembershipTi
           {tier.perks.map((perk) => (
             <div key={perk.label} className="flex items-start gap-2.5">
               {perk.included ? (
-                <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                  perk.highlight ? 'bg-harvest/15' : 'bg-husk/15'
-                }`}>
+                <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${perk.highlight ? 'bg-harvest/15' : 'bg-husk/15'
+                  }`}>
                   <Check className={`w-2.5 h-2.5 ${perk.highlight ? 'text-harvest' : 'text-husk'}`} />
                 </div>
               ) : (
@@ -351,13 +354,12 @@ function MembershipCard({ tier, user, subscriptionStatus }: { tier: MembershipTi
                   <X className="w-2.5 h-2.5 text-muted-foreground/50" />
                 </div>
               )}
-              <span className={`text-xs sm:text-sm leading-snug ${
-                perk.included
-                  ? perk.highlight
-                    ? 'text-foreground font-semibold'
-                    : 'text-foreground'
-                  : 'text-muted-foreground/60 line-through'
-              }`}>
+              <span className={`text-xs sm:text-sm leading-snug ${perk.included
+                ? perk.highlight
+                  ? 'text-foreground font-semibold'
+                  : 'text-foreground'
+                : 'text-muted-foreground/60 line-through'
+                }`}>
                 {perk.label}
               </span>
             </div>
@@ -408,7 +410,7 @@ const TICKET_PRICE = 5; // $5 per ticket
 // Bulk discount tiers — mirrors server-side BULK_DISCOUNTS config
 const BULK_DISCOUNT_TIERS = [
   { minQty: 10, discountDollars: 2 },
-  { minQty: 5,  discountDollars: 1 },
+  { minQty: 5, discountDollars: 1 },
 ] as const; // ordered high-to-low so first match wins
 
 /** Returns the bulk discount for a given quantity, or null if none applies. */
@@ -516,29 +518,10 @@ export function SecretShopPage({ user }: { user: any }) {
   const [showDonateModal, setShowDonateModal] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState<SubscriptionStatus | null>(null);
   const [showFarewellModal, setShowFarewellModal] = useState(false);
-  const [nextTournament, setNextTournament] = useState<{ id: string; name: string; start_date: string; prize_pool: number; prize_pool_donations: number } | null>(null);
   const [merchProducts, setMerchProducts] = useState<PrintfulProduct[]>([]);
   const [merchLoading, setMerchLoading] = useState(true);
   const [merchError, setMerchError] = useState<string | null>(null);
   const [selectedMerchProduct, setSelectedMerchProduct] = useState<PrintfulProduct | null>(null);
-
-  // Fetch next upcoming tournament for donation context
-  useEffect(() => {
-    const fetchNext = async () => {
-      try {
-        const res = await fetch(
-          `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments/next-upcoming`,
-          { headers: { 'Authorization': `Bearer ${publicAnonKey}` } },
-        );
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data.tournament) setNextTournament(data.tournament);
-      } catch (err) {
-        console.error('Failed to fetch next upcoming tournament:', err);
-      }
-    };
-    fetchNext();
-  }, []);
 
   // Check for checkout result on mount
   useEffect(() => {
@@ -633,9 +616,11 @@ export function SecretShopPage({ user }: { user: any }) {
           );
         })()}
 
-        {/* Farewell modal */}
         {showFarewellModal && (
-          <MembershipFarewellModal onClose={() => { setShowFarewellModal(false); }} />
+          <MembershipFarewellModal
+            periodEnd={subscriptionStatus?.current_period_end || 0}
+            onClose={() => { setShowFarewellModal(false); }}
+          />
         )}
 
         {/* Section 1: Memberships */}
@@ -670,12 +655,19 @@ export function SecretShopPage({ user }: { user: any }) {
                 </div>
                 <h3 className="text-base sm:text-lg font-bold text-foreground">Purchase Tickets</h3>
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4">
-                Each ticket grants entry into one Kernel Kup tournament.
-                {user?.tcf_plus_active && (
-                  <span className="text-harvest font-semibold"> TCF+ members get free entry — you don't need tickets!</span>
-                )}
-              </p>
+              <div className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4">
+                <p className="mb-2 italic">Inspired by Battlecup. Yeah, I just straight up ripped off the format. It works.</p>
+                <ul className="list-disc pl-5 space-y-1 mb-4">
+                  <li>$5 per ticket</li>
+                  <li>Buy up to 10 at once</li>
+                  <li>Buy 5, get $1 off</li>
+                  <li>Ticket Punchcard: every 10 tickets purchased = 1 free ticket</li>
+                  <li>No expiry, non-refundable</li>
+                  <li>You can use your tickets on other players in your team</li>
+                  <li>Unused tickets stay in your Ticket Wallet</li>
+                  <li>TCF+ members do not need tickets.</li>
+                </ul>
+              </div>
 
               <div className="flex items-center gap-3">
                 {/* Quantity selector */}
@@ -806,11 +798,10 @@ export function SecretShopPage({ user }: { user: any }) {
                       {Array.from({ length: 10 }).map((_, i) => (
                         <div
                           key={i}
-                          className={`flex-1 h-2 rounded-full transition-colors ${
-                            i < progressInCurrentCycle
-                              ? 'bg-harvest'
-                              : 'bg-muted'
-                          }`}
+                          className={`flex-1 h-2 rounded-full transition-colors ${i < progressInCurrentCycle
+                            ? 'bg-harvest'
+                            : 'bg-muted'
+                            }`}
                         />
                       ))}
                     </div>
@@ -840,8 +831,8 @@ export function SecretShopPage({ user }: { user: any }) {
           <SectionHeader
             icon={Heart}
             iconColor="#ef4444"
-            title="Fuel the Prize Pool"
-            subtitle="Every dollar goes further than you think"
+            title="❤️ Donations"
+            subtitle="Fully optional, always"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
             {/* Donate Card */}
@@ -850,16 +841,13 @@ export function SecretShopPage({ user }: { user: any }) {
                 <div className="w-8 h-8 rounded-lg bg-[#ef4444]/10 flex items-center justify-center flex-shrink-0">
                   <Heart className="w-4 h-4 text-[#ef4444]" />
                 </div>
-                <h3 className="text-base sm:text-lg font-bold text-foreground">Prize Pool Donation</h3>
+                <h3 className="text-base sm:text-lg font-bold text-foreground">Make a Donation</h3>
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4">
-                95% of your donation goes directly to the tournament prize pool. 5% helps cover platform costs.
-                {nextTournament && (
-                  <span className="block mt-1 text-harvest font-semibold">
-                    Next up: {nextTournament.name}
-                  </span>
-                )}
-              </p>
+              <ul className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4 list-disc pl-5 space-y-1">
+                <li>Fully optional, always</li>
+                <li>You can add a note for how you'd like it used and I'll do my best to honor it</li>
+                <li>Subject to the 95/5 rule</li>
+              </ul>
               <button
                 onClick={() => setShowDonateModal(true)}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-harvest text-silk hover:bg-deep-corn transition-colors"
@@ -960,13 +948,12 @@ export function SecretShopPage({ user }: { user: any }) {
               </p>
             </div>
           ) : (
-            <div className={`grid gap-3 ${
-              merchProducts.length === 1
-                ? 'grid-cols-1 max-w-md'
-                : merchProducts.length === 2
-                  ? 'grid-cols-1 md:grid-cols-2'
-                  : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-            }`}>
+            <div className={`grid gap-3 ${merchProducts.length === 1
+              ? 'grid-cols-1 max-w-md'
+              : merchProducts.length === 2
+                ? 'grid-cols-1 md:grid-cols-2'
+                : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+              }`}>
               {merchProducts.map((product) => (
                 <MerchProductCard key={product.id} product={product} onSelect={(product) => { setSelectedMerchProduct(product); }} />
               ))}
@@ -974,7 +961,7 @@ export function SecretShopPage({ user }: { user: any }) {
           )}
 
           <p className="text-[10px] sm:text-xs text-muted-foreground mt-2.5 pl-1 italic">
-            All merch is printed and shipped via Printful. More products coming soon.
+            All merch is printed and shipped via Printful. Want to see more products? Let us know!
           </p>
         </div>
 
@@ -1016,7 +1003,7 @@ export function SecretShopPage({ user }: { user: any }) {
                 <span className="text-xs font-bold text-foreground">Operations</span>
               </div>
               <p className="text-[11px] text-muted-foreground leading-relaxed">
-                Figma, hosting, APIs, domain — the infrastructure that keeps TCF running.
+                Antigravity, hosting, APIs, domain — the infrastructure that keeps TCF running.
               </p>
             </div>
           </div>

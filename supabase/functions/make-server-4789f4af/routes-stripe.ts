@@ -120,7 +120,7 @@ export function registerStripeRoutes(app: any, supabase: any, anonSupabase: any)
       const { dbUser } = auth;
 
       const body = await c.req.json();
-      const { type, quantity, amount, tournament_id, merch_variant_id, merch_product_name, merch_variant_name, merch_price_cents, merch_image_url } = body as {
+      const { type, quantity, amount, tournament_id, merch_variant_id, merch_product_name, merch_variant_name, merch_price_cents, merch_image_url, note } = body as {
         type: OrderType;
         quantity?: number;
         amount?: number; // in cents, for donations
@@ -130,6 +130,7 @@ export function registerStripeRoutes(app: any, supabase: any, anonSupabase: any)
         merch_variant_name?: string;
         merch_price_cents?: number;
         merch_image_url?: string;
+        note?: string;
       };
 
       if (!type) return c.json({ error: 'Missing required field: type' }, 400);
@@ -195,6 +196,7 @@ export function registerStripeRoutes(app: any, supabase: any, anonSupabase: any)
           // Uses custom amount via price_data
           const donationAmountCents = amount && amount >= 100 ? amount : 500; // minimum $1, default $5
           if (tournament_id) metadata.tournament_id = tournament_id;
+          if (note) metadata.note = note.substring(0, 500); // Stripe max metadata val length is 500
 
           sessionParams = {
             mode: 'payment',
@@ -433,6 +435,7 @@ async function handleCheckoutCompleted(
     metadata: {
       stripe_customer_id: session.customer,
       tournament_id: meta.tournament_id || null,
+      note: meta.note || null,
     },
   });
 
@@ -452,7 +455,7 @@ async function handleCheckoutCompleted(
       break;
 
     case 'donation':
-      await fulfillDonation(userId, orderType, amountCents, meta.tournament_id, supabase);
+      await fulfillDonation(userId, orderType, amountCents, meta, supabase);
       break;
 
     case 'merch':
@@ -893,7 +896,7 @@ async function fulfillDonation(
   userId: string,
   type: OrderType,
   amountCents: number,
-  tournamentId: string | undefined,
+  meta: Record<string, string>,
   supabase: any,
 ) {
   const amountDollars = amountCents / 100;
@@ -901,63 +904,9 @@ async function fulfillDonation(
   const prizePoolContribution = amountDollars * 0.95;
   const prizePoolAmount = `$${prizePoolContribution.toFixed(2)}`;
 
-  console.log(`Prize Pool Donation fulfilled: ${amountStr} from user ${userId} (95% = ${prizePoolAmount} to prize pool)`);
-
-  // ── Resolve target tournament ──
-  // If a tournament_id was provided in checkout metadata, use it.
-  // Otherwise, auto-resolve to the next upcoming tournament.
-  let resolvedTournamentId = tournamentId;
-  let resolvedTournamentName = '';
-
-  try {
-    if (resolvedTournamentId) {
-      // Validate the provided tournament exists
-      const { data: t } = await supabase
-        .from('kkup_tournaments')
-        .select('id, name')
-        .eq('id', resolvedTournamentId)
-        .maybeSingle();
-      resolvedTournamentName = t?.name || '';
-    } else {
-      // Auto-resolve: find the next upcoming tournament (earliest start date, not completed/archived)
-      const { data: upcoming } = await supabase
-        .from('kkup_tournaments')
-        .select('id, name')
-        .not('status', 'in', '("completed","archived")')
-        .order('tournament_start_date', { ascending: true })
-        .limit(1);
-
-      if (upcoming && upcoming.length > 0) {
-        resolvedTournamentId = upcoming[0].id;
-        resolvedTournamentName = upcoming[0].name;
-        console.log(`Auto-resolved donation target to: ${resolvedTournamentName} (${resolvedTournamentId})`);
-      }
-    }
-  } catch (err) {
-    console.error('Non-critical: failed to resolve tournament for donation:', err);
-  }
-
-  // ── Increment prize_pool_donations on the target tournament ──
-  if (resolvedTournamentId) {
-    try {
-      const { data: tRow } = await supabase
-        .from('kkup_tournaments')
-        .select('prize_pool_donations')
-        .eq('id', resolvedTournamentId)
-        .single();
-
-      const currentDonations = tRow?.prize_pool_donations ?? 0;
-      const newDonations = currentDonations + prizePoolContribution;
-
-      await supabase
-        .from('kkup_tournaments')
-        .update({ prize_pool_donations: newDonations })
-        .eq('id', resolvedTournamentId);
-
-      console.log(`Updated prize_pool_donations for ${resolvedTournamentName}: ${currentDonations} -> ${newDonations}`);
-    } catch (err) {
-      console.error('Non-critical: failed to update tournament prize_pool_donations:', err);
-    }
+  console.log(`Donation fulfilled: ${amountStr} from user ${userId} (95% = ${prizePoolAmount} to prize pool target if applicable)`);
+  if (meta.note) {
+    console.log(`Donation note: ${meta.note}`);
   }
 
   // ── Update donation tracking on the user record ──
@@ -997,22 +946,20 @@ async function fulfillDonation(
   }
 
   // ── Activity log + admin log ──
-  const tournamentNote = resolvedTournamentName
-    ? ` for ${resolvedTournamentName}`
-    : '';
+  const noteDisplay = meta.note ? ` (Note: ${meta.note})` : '';
 
   try {
     await createUserActivity({
       user_id: userId,
       type: 'prize_pool_donated',
-      title: 'Prize Pool Donation',
-      description: `You donated ${amountStr}${tournamentNote} — ${prizePoolAmount} goes to the prize pool. Thank you!`,
+      title: 'Donation Received',
+      description: `You donated ${amountStr}${noteDisplay}. Thank you!`,
       related_url: '#secret-shop',
     });
 
     await createAdminLog({
       type: 'prize_pool_donation',
-      action: `Prize pool donation: ${amountStr} by ${donorUsername || userId} (${prizePoolAmount} to pool)${resolvedTournamentId ? ` → ${resolvedTournamentName}` : ''}`,
+      action: `Donation: ${amountStr} by ${donorUsername || userId}${noteDisplay}`,
     });
   } catch (err) {
     console.error('Non-critical: activity/notification for donation failed:', err);

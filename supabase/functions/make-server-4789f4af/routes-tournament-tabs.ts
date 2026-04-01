@@ -555,7 +555,7 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
         if (steamIds.length > 0) {
           const { data: linkedUsers } = await supabase
             .from('users')
-            .select('steam_id, tcf_plus_active, discord_avatar, opendota_data')
+            .select('id, steam_id, tcf_plus_active, discord_avatar, opendota_data')
             .in('steam_id', steamIds);
           for (const u of (linkedUsers || [])) userMap[u.steam_id] = u;
         }
@@ -581,6 +581,7 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
           return {
             id: reg.id,
             person_id: reg.person_id,
+            user_id: lu?.id || null,
             registration_type: reg.role,
             player_name: reg.person?.display_name || 'Unknown',
             avatar_url: lu?.discord_avatar || reg.person?.avatar_url,
@@ -639,7 +640,7 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
       if (allSteamIds.length > 0) {
         const { data: linkedUsers } = await supabase
           .from('users')
-          .select('steam_id, tcf_plus_active, discord_avatar, opendota_data')
+          .select('id, steam_id, tcf_plus_active, discord_avatar, opendota_data')
           .in('steam_id', allSteamIds);
         for (const u of (linkedUsers || [])) userMap[u.steam_id] = u;
       }
@@ -664,6 +665,7 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
         return {
           id: `roster-${r.team_id}-${r.person_id}`,
           person_id: r.person_id,
+          user_id: lu?.id || null,
           registration_type: 'player',
           player_name: r.person?.display_name || 'Unknown',
           avatar_url: lu?.discord_avatar || r.person?.avatar_url,
@@ -685,6 +687,7 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
         return {
           id: `coach-${p.id}`,
           person_id: p.id,
+          user_id: lu?.id || null,
           registration_type: 'coach',
           player_name: p.display_name || 'Unknown',
           avatar_url: lu?.discord_avatar || p.avatar_url,

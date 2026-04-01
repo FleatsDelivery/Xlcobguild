@@ -34,43 +34,49 @@ export const RANK_NAMES = [
 // Global cache for the Discord public key to speed up handshakes
 let cachedCryptoKey: CryptoKey | null = null;
 
-// Verify Discord request signature
+// Verify Discord request signature using official Ed25519 logic for Deno
 export async function verifyDiscordRequest(request: Request): Promise<boolean> {
   const signature = request.headers.get('x-signature-ed25519');
   const timestamp = request.headers.get('x-signature-timestamp');
   const publicKey = Deno.env.get('DISCORD_PUBLIC_KEY');
 
   if (!signature || !timestamp || !publicKey) {
-    console.error('Missing required headers or environment variable');
+    console.error('Missing signature headers or DISCORD_PUBLIC_KEY secret');
     return false;
   }
 
-  const body = await request.clone().text();
-
   try {
-    const encoder = new TextEncoder();
-    const message = encoder.encode(timestamp + body);
-    const signatureBytes = hexToBytes(signature);
+    // Clone the request to read body without consuming the original
+    const body = await request.clone().arrayBuffer();
+    
+    // Import the public key
+    const publicKeyBytes = hexToUint8Array(publicKey);
+    const cryptoKey = await crypto.subtle.importKey(
+      'raw',
+      publicKeyBytes,
+      { name: 'Ed25519' },
+      false,
+      ['verify']
+    );
 
-    // Use cached key if available, otherwise import it
-    if (!cachedCryptoKey) {
-      const publicKeyBytes = hexToBytes(publicKey);
-      cachedCryptoKey = await crypto.subtle.importKey(
-        'raw',
-        publicKeyBytes,
-        { name: 'Ed25519' },
-        false,
-        ['verify']
-      );
-      console.log('Discord public key imported and cached');
-    }
+    // Prepare message bytes (timestamp + body)
+    const timestampBytes = new TextEncoder().encode(timestamp);
+    const message = new Uint8Array(timestampBytes.length + body.byteLength);
+    message.set(timestampBytes);
+    message.set(new Uint8Array(body), timestampBytes.length);
 
+    // Verify
+    const signatureBytes = hexToUint8Array(signature);
     const isValid = await crypto.subtle.verify(
       'Ed25519',
-      cachedCryptoKey,
+      cryptoKey,
       signatureBytes,
       message
     );
+
+    if (!isValid) {
+      console.warn('Discord signature verification failed.');
+    }
 
     return isValid;
   } catch (error) {
@@ -79,10 +85,11 @@ export async function verifyDiscordRequest(request: Request): Promise<boolean> {
   }
 }
 
-function hexToBytes(hex: string): Uint8Array {
+// Faster hex to bytes implementation
+function hexToUint8Array(hex: string): Uint8Array {
   const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+  for (let i = 0; i < bytes.length; i++) {
+    bytes[i] = parseInt(hex.substring(i * 2, i * 2 + 2), 16);
   }
   return bytes;
 }

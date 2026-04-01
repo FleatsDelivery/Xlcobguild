@@ -25,7 +25,7 @@ const TwitchSvg = () => (
 
 // ─── Social link data ─────────────────────────────────────
 const SOCIAL_LINKS = [
-  { href: 'https://discord.gg/rHYPrdYGGh',                    label: 'Discord', Icon: DiscordSvg },
+  { href: 'https://discord.gg/cXyWrP6yUw',                    label: 'Discord', Icon: DiscordSvg },
   { href: 'https://www.youtube.com/@TheCornField_',            label: 'YouTube', Icon: YouTubeSvg },
   { href: 'https://steamcommunity.com/groups/TheCornField',    label: 'Steam',   Icon: SteamSvg  },
 ] as const;
