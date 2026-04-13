@@ -20,6 +20,7 @@ export interface Award {
     id: string;
     discord_username: string;
     discord_avatar: string | null;
+    tcf_plus_active?: boolean;
   };
   team?: {
     id: string;
@@ -64,6 +65,12 @@ export interface Tournament {
     team_tag: string;
     logo_url: string | null;
   };
+  popd_kernels?: Array<{
+    id: string;
+    discord_username: string;
+    discord_avatar: string | null;
+    tcf_plus_active: boolean;
+  }>;
   player_previews?: Array<{
     avatar: string | null;
     name: string;

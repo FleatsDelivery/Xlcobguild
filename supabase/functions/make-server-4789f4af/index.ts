@@ -49,6 +49,7 @@ import { registerSeasonRoutes } from "./routes-seasons.ts";
 import { registerBracketRoutes } from "./routes-bracket.ts";
 import { registerConfigRoutes } from "./routes-config.ts";
 import { registerBracketBuilderRoutes } from "./routes-bracket-builder.ts";
+import { registerSeedingRoutes } from "./routes-seeding.ts";
 
 import { PREFIX } from "./helpers.ts";
 
@@ -145,6 +146,7 @@ registerSeasonRoutes(app, supabase, anonSupabase);
 registerBracketRoutes(app, supabase, anonSupabase);
 registerConfigRoutes(app, supabase, anonSupabase);
 registerBracketBuilderRoutes(app, supabase, anonSupabase);
+registerSeedingRoutes(app, supabase, anonSupabase);
 
 // ── Start server ──
 Deno.serve(app.fetch);

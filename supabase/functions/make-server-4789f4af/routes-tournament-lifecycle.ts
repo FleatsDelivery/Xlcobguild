@@ -261,6 +261,38 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
         }
       }
 
+      // Enrich with popd kernels if available
+      let popd_kernels = [];
+      const pkIds = [tournament.popd_kernel_1_person_id, tournament.popd_kernel_2_person_id].filter(Boolean);
+      if (pkIds.length > 0) {
+        const { data: pkPersons } = await supabase
+          .from('kkup_persons')
+          .select('id, display_name, avatar_url, steam_id')
+          .in('id', pkIds);
+          
+        if (pkPersons && pkPersons.length > 0) {
+          const steamIds = pkPersons.map(p => p.steam_id).filter(Boolean);
+          let usersBySteam = new Map();
+          if (steamIds.length > 0) {
+            const { data: users } = await supabase
+              .from('users')
+              .select('id, discord_username, discord_avatar, tcf_plus_active, steam_id')
+              .in('steam_id', steamIds);
+            users?.forEach(u => usersBySteam.set(u.steam_id, u));
+          }
+          
+          popd_kernels = pkPersons.map(p => {
+             const u = p.steam_id ? usersBySteam.get(p.steam_id) : null;
+             return {
+               id: u ? u.id : p.id,
+               discord_username: u ? u.discord_username : p.display_name,
+               discord_avatar: u ? u.discord_avatar : p.avatar_url,
+               tcf_plus_active: u ? u.tcf_plus_active : false
+             };
+          });
+        }
+      }
+
       // Get counts based on tournament status
       const isCompleted = ['completed', 'archived'].includes(tournament.status);
       
@@ -344,7 +376,7 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
         .from('prize_awards')
         .select(`
           id, prize_id, amount_cents, recipient_user_id, team_id,
-          recipient:users!recipient_user_id(id, discord_username, discord_avatar),
+          recipient:users!recipient_user_id(id, discord_username, discord_avatar, tcf_plus_active),
           team:kkup_teams!team_id(id, team_name, team_tag, logo_url)
         `)
         .eq('tournament_id', tournamentId);
@@ -353,6 +385,7 @@ export function registerTournamentLifecycleRoutes(app: Hono, supabase: any, anon
         tournament: {
           ...tournament,
           winner,
+          popd_kernels,
           registration_count: registrationCount,
           player_count: registrationCount, // Same value, different field name
           teams_count: teamsCount,

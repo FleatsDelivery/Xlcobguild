@@ -289,3 +289,38 @@ export function calculateTeamRank(
     display: medal === 'Immortal' ? 'Immortal' : `${medal} ${stars}`,
   };
 }
+
+// ── OpenDota rank_tier Conversions ─────────────────────────────────────
+
+/** OpenDota medal tier number (1–7) → medal name */
+const OPENDOTA_MEDAL_MAP: Record<number, string> = {
+  1: 'Herald', 2: 'Guardian', 3: 'Crusader', 4: 'Archon',
+  5: 'Legend', 6: 'Ancient', 7: 'Divine', 8: 'Immortal',
+};
+
+/**
+ * Convert an OpenDota `rank_tier` integer to { medal, stars }.
+ * rank_tier encoding: tens digit = medal (1=Herald … 8=Immortal), units = stars (1–5)
+ * e.g. 63 → { medal: 'Ancient', stars: 3 }
+ * Returns null for null/0/unrecognised values.
+ */
+export function rankTierToDisplay(rankTier: number | null | undefined): { medal: string; stars: number } | null {
+  if (!rankTier || rankTier === 0) return null;
+  if (rankTier >= 80) return { medal: 'Immortal', stars: 0 };
+  const medalNum = Math.floor(rankTier / 10);
+  const stars = rankTier % 10;
+  const medal = OPENDOTA_MEDAL_MAP[medalNum];
+  if (!medal) return null;
+  return { medal, stars };
+}
+
+/**
+ * Convert an OpenDota `rank_tier` integer to the internal 1–36 numeric scale
+ * (same scale used by rankToNumeric / numericToRank for averaging).
+ * Unranked / null → 0 (worst seed).
+ */
+export function rankTierToNumeric(rankTier: number | null | undefined): number {
+  const display = rankTierToDisplay(rankTier);
+  if (!display) return 0;
+  return rankToNumeric(display.medal, display.stars);
+}

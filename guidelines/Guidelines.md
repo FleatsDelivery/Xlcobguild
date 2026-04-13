@@ -20,10 +20,23 @@ These principles guide every decision. When the rules below don't cover an edge 
 
 ## 1. File Size & Structure Rules
 
-### Hard Limits
-- **No single `.tsx` file over 800 lines.** If it's growing past that, it needs extraction.
-- **Page orchestrators (the main page component) should stay under 500-600 lines.** They own state, data fetching, and layout assembly -- not rendering every detail.
-- **Modals should stay under 400 lines.** If a modal form is getting complex, extract form sections into sub-components.
+### The Zone System (File Sizes)
+Instead of rigid hard limits, we use a Traffic Light system to evaluate component bloat.
+
+**1. General TSX Files (Tabs, sub-components, generic views)**
+- 🟢 **Green (0 - 800 lines):** Healthy. Keep building.
+- 🟡 **Yellow (800 - 1,000 lines):** Warning. Finish your current feature, but mentally prepare to extract visual components.
+- 🔴 **Red (1,000+ lines):** Stop. No new features until you extract child components and get back to Yellow.
+
+**2. Page Orchestrators (Main routing files handling state & layout)**
+- 🟢 **Green (0 - 500 lines):** Healthy.
+- 🟡 **Yellow (500 - 750 lines):** Warning. Data fetching and layout code is getting heavy.
+- 🔴 **Red (750+ lines):** Stop. The file is doing too much. Extract complex sections to child components.
+
+**3. Modals & Forms**
+- 🟢 **Green (0 - 350 lines):** Healthy.
+- 🟡 **Yellow (350 - 500 lines):** Warning. Form is getting complex.
+- 🔴 **Red (500+ lines):** Stop. If it's a wizard/stepper, break it down into `step-[name].tsx` components.
 
 ### The "One Tab = One File" Rule
 Any page with tabs MUST split tab content into separate files:

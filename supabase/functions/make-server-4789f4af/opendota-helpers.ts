@@ -96,3 +96,30 @@ export async function fetchOpenDotaMatches(
   console.log(`✅ [OpenDota] Successfully fetched ${results.length}/${matchIds.length} matches`);
   return results;
 }
+
+/**
+ * Fetch a player's rank_tier from OpenDota by their Steam 32-bit account ID.
+ * Returns the rank_tier integer (e.g. 63 = Ancient 3), or null if:
+ *   - Player has private match data enabled
+ *   - Player hasn't played ranked
+ *   - Request fails / OpenDota doesn't have data
+ *
+ * @param accountId - Steam 32-bit account ID (NOT 64-bit SteamID64)
+ */
+export async function fetchOpenDotaPlayerRank(accountId: string): Promise<number | null> {
+  try {
+    const response = await fetch(`${OPENDOTA_API_BASE}/players/${accountId}`);
+    if (!response.ok) {
+      console.warn(`⚠️ [OpenDota] Player ${accountId} returned ${response.status}`);
+      return null;
+    }
+    const data = await response.json();
+    // rank_tier is null for private/unranked players
+    if (!data || typeof data.rank_tier !== 'number' || data.rank_tier === 0) return null;
+    return data.rank_tier;
+  } catch (err) {
+    console.error(`❌ [OpenDota] Error fetching player ${accountId}:`, err);
+    return null;
+  }
+}
+

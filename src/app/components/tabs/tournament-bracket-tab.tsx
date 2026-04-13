@@ -8,133 +8,111 @@
  */
 
 import { useState, useEffect } from 'react';
-import { GitBranch, Lock, Trophy, Clock, Hammer, Eye } from 'lucide-react';
+import { GitBranch, Trophy, Clock, Hammer, Eye, Loader2 } from 'lucide-react';
 import { useTournament } from '@/app/contexts/tournament-context';
 import { isFinished } from '../tournament-state-config';
 import { TeamLogo } from '../team-logo';
 import { BracketBuilder } from '../bracket-builder';
 import { Footer } from '@/app/components/footer';
 import { projectId, publicAnonKey } from '/utils/supabase/info';
+import { groupMatchesIntoSeries, BracketSeries } from '@/lib/bracket-utils';
 
 // ═══════════════════════════════════════════════════════
 // FORMAT PREVIEW (early phases — no bracket yet)
 // ═══════════════════════════════════════════════════════
 
 function BracketFormatPreview({ tournament }: { tournament: any }) {
-  const format = tournament.format || 'Swiss';
-  const teamCapacity = tournament.team_capacity || 16;
+  const startDate = tournament.tournament_start_date
+    ? new Date(tournament.tournament_start_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+    : null;
 
   return (
-    <div className="space-y-6">
-      <div className="bg-card rounded-2xl border-2 border-border p-6 sm:p-8">
-        <div className="flex items-start gap-4 mb-6">
-          <div className="w-12 h-12 bg-[#8b5cf6]/10 rounded-xl flex items-center justify-center flex-shrink-0">
-            <GitBranch className="w-6 h-6 text-[#8b5cf6]" />
-          </div>
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold text-foreground mb-2">
-              {teamCapacity}-Team {format} Bracket
-            </h2>
-            <p className="text-muted-foreground">
-              The bracket will be generated automatically after Roster Lock based on team registrations and seeding.
-            </p>
-          </div>
-        </div>
-        <div className="bg-muted rounded-xl p-6">
-          <h3 className="font-bold text-foreground mb-3">How {format} Format Works</h3>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex gap-2"><span className="text-foreground">•</span><span>Single elimination bracket</span></li>
-            <li className="flex gap-2"><span className="text-foreground">•</span><span>Seeding based on average team rank</span></li>
-            <li className="flex gap-2"><span className="text-foreground">•</span><span>Winners advance, losers are eliminated</span></li>
-            <li className="flex gap-2"><span className="text-foreground">•</span><span>Best-of-3 series for semifinals and finals</span></li>
-          </ul>
-        </div>
+    <div className="bg-card rounded-2xl border-2 border-border p-10 sm:p-14 flex flex-col items-center text-center gap-4">
+      <div className="w-16 h-16 bg-harvest/10 rounded-2xl flex items-center justify-center">
+        <GitBranch className="w-8 h-8 text-harvest" />
       </div>
-
-      <div className="bg-card rounded-2xl border-2 border-border p-6">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-[#f59e0b]/10 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Lock className="w-6 h-6 text-[#f59e0b]" />
-          </div>
-          <div className="flex-1">
-            <h3 className="text-xl font-bold text-foreground mb-2">Bracket Generation</h3>
-            <p className="text-muted-foreground mb-4">
-              The bracket will be created automatically after teams lock their rosters.
-            </p>
-            <div className="space-y-3">
-              {[
-                { n: 1, label: 'Teams Lock Rosters', sub: tournament.roster_lock_date ? new Date(tournament.roster_lock_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'TBA' },
-                { n: 2, label: 'Bracket Auto-Generated', sub: 'Teams seeded by average rank' },
-                { n: 3, label: 'Tournament Starts', sub: tournament.tournament_start_date ? new Date(tournament.tournament_start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'TBA' },
-              ].map(({ n, label, sub }) => (
-                <div key={n} className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                    <span className="text-sm font-bold text-foreground">{n}</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-foreground text-sm">{label}</div>
-                    <div className="text-xs text-muted-foreground">{sub}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+      <div>
+        <h2 className="text-2xl font-bold text-foreground mb-2">Bracket Coming Soon</h2>
+        <p className="text-muted-foreground max-w-sm">
+          The bracket will be posted here once the tournament kicks off.
+          {startDate && <> Check back on <span className="font-semibold text-foreground">{startDate}</span>.</>}
+        </p>
       </div>
     </div>
   );
 }
 
+
 // ═══════════════════════════════════════════════════════
 // MATCH CARD (used inside bracket viewer columns)
 // ═══════════════════════════════════════════════════════
 
-function BracketMatchCard({ match, showScores }: { match: any; showScores: boolean }) {
-  const team1Won = match.winner_team_id && match.winner_team_id === match.team1_id;
-  const team2Won = match.winner_team_id && match.winner_team_id === match.team2_id;
+// ─── Layout Constants ─────────────────────────────────────────────────────────
+// CARD_H must match actual rendered height: sm TeamLogo (h-8=32px) + 2×py-2 (8px each) = 48px per row × 2 rows = 96px
+const CARD_H  = 100;  // px — height of each series card (two 48px rows + border)
+const CARD_W  = 240;  // px — width of each series card
+const MIN_GAP = 20;   // px — minimum gap between cards in the densest column
+const BASE_SLOT = CARD_H + MIN_GAP; // slot height for densest round
+const CONN_W  = 56;   // px — width of the connector SVG between columns
+const PAD_TOP = 52;   // px — top padding (room for column headers)
+
+// ─── Series Card ─────────────────────────────────────────────────────────────
+function BracketSeriesCard({ series, showScores, compact, tournamentName }: { series: BracketSeries; showScores: boolean; compact?: boolean; tournamentName?: string }) {
+  const t1w = series.team1_wins > series.team2_wins;
+  const t2w = series.team2_wins > series.team1_wins;
+  const finished = t1w || t2w;
 
   return (
-    <div className="bg-card rounded-xl border-2 border-border overflow-hidden hover:border-harvest/30 transition-all">
-      {/* Team 1 */}
-      <div className={`flex items-center gap-2.5 p-3 border-b border-border ${
-        team1Won ? 'bg-[#10b981]/10' : team2Won ? 'opacity-60' : ''
-      }`}>
-        <TeamLogo teamTag={match.team1?.team_tag || ''} size="sm" />
+    <div
+      className="rounded-xl border-2 border-border overflow-hidden shadow-sm hover:shadow-md transition-all hover:border-harvest/40"
+      style={{ width: CARD_W, background: 'var(--card)' }}
+    >
+      {/* Team 1 row */}
+      <div className={`flex items-center gap-2 px-2.5 py-2 border-b border-border ${t1w ? 'bg-[#10b981]/8' : finished ? 'opacity-50' : ''}`}>
+        <TeamLogo
+          teamTag={series.team1?.team_tag || ''}
+          teamName={series.team1?.team_name}
+          logoUrl={series.team1?.logo_url}
+          tournamentName={tournamentName}
+          size="sm"
+        />
         <div className="flex-1 min-w-0">
-          <div className="font-semibold text-foreground truncate text-sm">
-            {match.team1?.team_name || 'TBD'}
+          <div className={`text-[13px] font-semibold truncate ${t1w ? 'text-foreground' : 'text-foreground'}`}>
+            {series.team1?.team_name || 'TBD'}
           </div>
         </div>
-        {showScores && match.team1_score !== null && match.team1_score !== undefined && (
-          <div className={`text-xl font-bold ${team1Won ? 'text-[#10b981]' : 'text-muted-foreground'}`}>
-            {match.team1_score}
+        {showScores && (
+          <div className={`text-base font-black w-5 text-right ${t1w ? 'text-[#10b981]' : 'text-muted-foreground'}`}>
+            {series.team1_wins}
           </div>
         )}
       </div>
-
-      {/* Team 2 */}
-      <div className={`flex items-center gap-2.5 p-3 ${
-        team2Won ? 'bg-[#10b981]/10' : team1Won ? 'opacity-60' : ''
-      }`}>
-        <TeamLogo teamTag={match.team2?.team_tag || ''} size="sm" />
+      {/* Team 2 row */}
+      <div className={`flex items-center gap-2 px-2.5 py-2 ${t2w ? 'bg-[#10b981]/8' : finished ? 'opacity-50' : ''}`}>
+        <TeamLogo
+          teamTag={series.team2?.team_tag || ''}
+          teamName={series.team2?.team_name}
+          logoUrl={series.team2?.logo_url}
+          tournamentName={tournamentName}
+          size="sm"
+        />
         <div className="flex-1 min-w-0">
-          <div className="font-semibold text-foreground truncate text-sm">
-            {match.team2?.team_name || 'TBD'}
+          <div className={`text-[13px] font-semibold truncate ${t2w ? 'text-foreground' : 'text-foreground'}`}>
+            {series.team2?.team_name || 'TBD'}
           </div>
         </div>
-        {showScores && match.team2_score !== null && match.team2_score !== undefined && (
-          <div className={`text-xl font-bold ${team2Won ? 'text-[#10b981]' : 'text-muted-foreground'}`}>
-            {match.team2_score}
+        {showScores && (
+          <div className={`text-base font-black w-5 text-right ${t2w ? 'text-[#10b981]' : 'text-muted-foreground'}`}>
+            {series.team2_wins}
           </div>
         )}
       </div>
-
-      {/* Scheduled time (when no result yet) */}
-      {!match.winner_team_id && match.scheduled_time && (
-        <div className="px-3 py-1.5 bg-muted border-t border-border flex items-center gap-2">
-          <Clock className="w-3 h-3 text-muted-foreground" />
-          <span className="text-xs text-muted-foreground">
-            {new Date(match.scheduled_time).toLocaleDateString('en-US', {
+      {/* Scheduled time pill */}
+      {!finished && series.matches[0]?.scheduled_time && (
+        <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-muted/60 border-t border-border">
+          <Clock className="w-2.5 h-2.5 text-muted-foreground flex-shrink-0" />
+          <span className="text-[10px] text-muted-foreground">
+            {new Date(series.matches[0]?.scheduled_time).toLocaleDateString('en-US', {
               month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
             })}
           </span>
@@ -144,10 +122,91 @@ function BracketMatchCard({ match, showScores }: { match: any; showScores: boole
   );
 }
 
-// ═══════════════════════════════════════════════════════
-// PHASE-AWARE BRACKET VIEWER
-// ═══════════════════════════════════════════════════════
+// ─── Bracket Connector SVG ────────────────────────────────────────────────────
+// Draws the classic bracket elbow lines between adjacent columns.
+// fromSlotH / toSlotH are the slot heights in each column.
+// fromCount / toCount are the number of series in each column.
+// totalH is the full bracket height (same for both columns).
+function BracketConnector({
+  fromCount,
+  toCount,
+  fromSlotH,
+  toSlotH,
+  totalH,
+}: {
+  fromCount: number;
+  toCount: number;
+  fromSlotH: number;
+  toSlotH: number;
+  totalH: number;
+}) {
+  const paths: JSX.Element[] = [];
+  const mid = CONN_W / 2;
 
+  if (fromCount >= toCount && toCount > 0) {
+    // Seeded bracket pairing: fi=0 & fi=(N-1) → ti=0, fi=1 & fi=(N-2) → ti=1, etc.
+    const half = fromCount / 2;
+    for (let fi = 0; fi < fromCount; fi++) {
+      const ti = fi < half ? fi : fromCount - 1 - fi;
+      // Center Y of slot = slotIndex × slotH + slotH/2
+      // (cards are absolutely positioned inside slots; the slot self-centers them)
+      const fromCY = fi * fromSlotH + fromSlotH / 2;
+      const toCY   = ti * toSlotH   + toSlotH   / 2;
+      paths.push(
+        <path
+          key={`${fi}-${ti}`}
+          d={`M 0,${fromCY} H ${mid} V ${toCY} H ${CONN_W}`}
+          fill="none"
+          stroke="var(--border)"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      );
+    }
+  } else if (toCount > fromCount && fromCount > 0) {
+    // Expanding — single source splits out to multiple targets
+    const half = toCount / 2;
+    for (let ti = 0; ti < toCount; ti++) {
+      const fi = ti < half ? ti : toCount - 1 - ti;
+      const fromCY = fi * fromSlotH + fromSlotH / 2;
+      const toCY   = ti * toSlotH   + toSlotH   / 2;
+      paths.push(
+        <path
+          key={`${fi}-${ti}`}
+          d={`M 0,${fromCY} H ${mid} V ${toCY} H ${CONN_W}`}
+          fill="none"
+          stroke="var(--border)"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      );
+    }
+  } else {
+    // Same count — straight pass-through lines
+    for (let i = 0; i < fromCount; i++) {
+      const cy = i * fromSlotH + fromSlotH / 2;
+      paths.push(
+        <line key={i} x1={0} y1={cy} x2={CONN_W} y2={cy}
+          stroke="var(--border)" strokeWidth="1.5" strokeLinecap="round" />
+      );
+    }
+  }
+
+  return (
+    <svg
+      width={CONN_W}
+      height={totalH}
+      style={{ flexShrink: 0, overflow: 'visible' }}
+    >
+      {paths}
+    </svg>
+  );
+}
+
+
+// ─── Phase-Aware Bracket Viewer ────────────────────────────────────────────────
 const PHASE_DISPLAY: Record<string, { label: string; color: string }> = {
   group_stage: { label: 'Group Stage', color: '#3b82f6' },
   main_event:  { label: 'Main Event',  color: '#d6a615' },
@@ -162,14 +221,15 @@ function PhaseBracketViewer({
   bracketConfig,
   assigned,
   showScores,
+  tournamentName,
 }: {
   bracketConfig: any;
   assigned: Record<string, Record<string, any[]>>;
   showScores: boolean;
+  tournamentName?: string;
 }) {
   const phases: any[] = bracketConfig?.phases || [];
 
-  // If no phases configured yet, try to derive from match data
   const hasPhaseData = Object.keys(assigned).some(p =>
     Object.values(assigned[p]).some(g => g.length > 0)
   );
@@ -186,125 +246,203 @@ function PhaseBracketViewer({
     );
   }
 
-  // Merge phases from config with assigned match data
-  const renderedPhases: { key: string; name: string; order: number; groups: any[] }[] = [];
-
-  // Use config phases if available, else derive from data
-  const phaseList = phases.length > 0
-    ? phases.sort((a: any, b: any) => a.order - b.order)
+  // ── Build a flat ordered array of "rounds" (one per group) ───────────────
+  const phaseList = (phases.length > 0
+    ? [...phases].sort((a: any, b: any) => a.order - b.order)
     : Object.keys(assigned).map((key, i) => ({
-        key,
-        name: PHASE_DISPLAY[key]?.label || key,
-        order: i + 1,
+        key, name: PHASE_DISPLAY[key]?.label || key, order: i + 1,
         groups: Object.keys(assigned[key]).map((gName, j) => ({
-          name: gName,
-          order: j + 1,
+          name: gName, order: j + 1,
           matchup_type: assigned[key][gName][0]?.matchup_type,
         })),
-      }));
+      }))
+  );
 
+  interface BracketRound {
+    key: string;
+    label: string;
+    phaseLabel: string;
+    phaseColor: string;
+    matchupType?: string;
+    series: BracketSeries[];
+    winnersAdvanceTo: { phase_key: string; group_name: string } | null;
+  }
+
+  const rounds: BracketRound[] = [];
   for (const phase of phaseList) {
     const phaseMatches = assigned[phase.key] || {};
-    const groups = (phase.groups || [])
-      .sort((a: any, b: any) => a.order - b.order)
-      .map((g: any) => ({
-        ...g,
-        matches: (phaseMatches[g.name] || []).sort(
-          (a: any, b: any) => (a.game_number || 0) - (b.game_number || 0)
-        ),
-      }))
-      .filter((g: any) => g.matches.length > 0);
+    const display = PHASE_DISPLAY[phase.key] || { label: phase.name, color: '#8b5cf6' };
+    const sortedGroups = [...(phase.groups || [])].sort((a: any, b: any) => a.order - b.order);
 
-    // Also include any groups with matches not in config
-    const configGroupNames = new Set((phase.groups || []).map((g: any) => g.name));
-    for (const [gName, matches] of Object.entries(phaseMatches)) {
-      if (!configGroupNames.has(gName) && matches.length > 0) {
-        groups.push({
-          name: gName,
-          order: 99,
-          matches: matches.sort((a: any, b: any) => (a.game_number || 0) - (b.game_number || 0)),
-        });
-      }
-    }
-
-    if (groups.length > 0) {
-      renderedPhases.push({ key: phase.key, name: phase.name, order: phase.order, groups });
+    for (const g of sortedGroups) {
+      const rawMatches = (phaseMatches[g.name] || []).sort(
+        (a: any, b: any) => (a.game_number || 0) - (b.game_number || 0)
+      );
+      if (rawMatches.length === 0) continue;
+      const series = groupMatchesIntoSeries(rawMatches);
+      if (series.length === 0) continue;
+      rounds.push({
+        key: `${phase.key}__${g.name}`,
+        label: g.name,
+        phaseLabel: display.label,
+        phaseColor: display.color,
+        matchupType: g.matchup_type,
+        series,
+        winnersAdvanceTo: (g as any).winners_advance_to ?? null,
+      });
     }
   }
 
+  if (rounds.length === 0) {
+    return (
+      <div className="bg-card rounded-2xl border-2 border-border p-10 text-center">
+        <GitBranch className="w-14 h-14 text-muted-foreground mx-auto mb-4" />
+        <h3 className="text-xl font-bold text-foreground mb-2">No Matches Yet</h3>
+        <p className="text-muted-foreground">Matches will appear here once they are assigned to bracket groups.</p>
+      </div>
+    );
+  }
+
+  // ── Slot height math ─────────────────────────────────────────────────────
+  const maxSeries = Math.max(...rounds.map(r => r.series.length));
+  const totalH = maxSeries * BASE_SLOT;
+
+  const slotHeightFor = (count: number) => (count > 0 ? totalH / count : totalH);
+
+  // ── Champion — find winner of last round ──────────────────────────────────
+  const lastRound = rounds[rounds.length - 1];
+  const champion = showScores && lastRound?.series.length === 1
+    ? lastRound.series[0]
+    : null;
+  const championTeam = champion
+    ? (champion.team1_wins > champion.team2_wins ? champion.team1 : champion.team2_wins > champion.team1_wins ? champion.team2 : null)
+    : null;
+  const championWinnerId = champion?.winner_team_id;
+  const championTeamResolved =
+    championWinnerId && champion
+      ? (champion.team1_id === championWinnerId ? champion.team1 : champion.team2)
+      : null;
+
   return (
     <div className="bg-card rounded-2xl border-2 border-border overflow-hidden">
-      {/* Bracket: horizontal scroll */}
       <div className="overflow-x-auto">
-        <div className="min-w-max">
-          {renderedPhases.map((phase, phaseIdx) => {
-            const display = PHASE_DISPLAY[phase.key] || { label: phase.name, color: '#8b5cf6' };
+        <div
+          className="flex items-start"
+          style={{ padding: `${PAD_TOP}px 40px 40px 40px`, minWidth: 'max-content' }}
+        >
+          {rounds.map((round, ri) => {
+            const slotH = slotHeightFor(round.series.length);
+            const nextRound = rounds[ri + 1];
+
             return (
-              <div key={phase.key}>
-                {/* Phase Separator */}
-                <div
-                  className="flex items-center gap-3 px-6 py-3 border-b-2 border-border"
-                  style={{ background: `${display.color}18` }}
-                >
+              <div key={round.key} className="flex items-start">
+                {/* ── Column ─────────────────────────────────────────── */}
+                <div style={{ width: CARD_W, position: 'relative' }}>
+                  {/* Column Header */}
                   <div
-                    className="w-2 h-2 rounded-full flex-shrink-0"
-                    style={{ background: display.color }}
-                  />
-                  <span
-                    className="text-xs font-bold uppercase tracking-widest"
-                    style={{ color: display.color }}
+                    className="absolute left-0 right-0 text-center"
+                    style={{ top: -PAD_TOP + 4 }}
                   >
-                    {display.label}
-                  </span>
-                  {/* Separator line spanning across columns */}
-                  <div
-                    className="flex-1 h-px"
-                    style={{ background: `${display.color}40` }}
-                  />
-                  <span className="text-xs text-muted-foreground">
-                    {phase.groups.length} group{phase.groups.length !== 1 ? 's' : ''}
-                  </span>
+                    <div
+                      className="text-[9px] font-black uppercase tracking-[0.18em] mb-0.5"
+                      style={{ color: round.phaseColor }}
+                    >
+                      {round.phaseLabel}
+                    </div>
+                    <div className="text-sm font-bold text-foreground leading-tight">
+                      {round.label}
+                    </div>
+                    {round.matchupType && (
+                      <div className="mt-0.5 inline-block text-[9px] font-bold uppercase tracking-wider text-muted-foreground bg-muted rounded-full px-2 py-0.5">
+                        {matchupLabel(round.matchupType)}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Cards — absolutely positioned by slot */}
+                  <div style={{ position: 'relative', height: totalH }}>
+                    {round.series.map((series, si) => {
+                      const cardTop = si * slotH + (slotH - CARD_H) / 2;
+                      return (
+                        <div
+                          key={series.series_id}
+                          style={{ position: 'absolute', top: cardTop, left: 0 }}
+                        >
+                          <BracketSeriesCard series={series} showScores={showScores} tournamentName={tournamentName} />
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Advancement footer */}
+                  {round.winnersAdvanceTo && (() => {
+                    const targetPhase = phaseList.find((p: any) => p.key === round.winnersAdvanceTo!.phase_key);
+                    const targetPhaseName = targetPhase?.name || round.winnersAdvanceTo.phase_key;
+                    return (
+                      <div className="flex items-center justify-center gap-1 mt-2 text-[10px] text-muted-foreground">
+                        <span>↓</span>
+                        <span>Advancing to: <span className="font-semibold text-foreground">{targetPhaseName} — {round.winnersAdvanceTo.group_name}</span></span>
+                      </div>
+                    );
+                  })()}
                 </div>
 
-                {/* Match Group Columns */}
-                <div className="flex gap-0 divide-x-2 divide-border">
-                  {phase.groups.map((group: any) => (
-                    <div key={group.name} className="flex flex-col" style={{ minWidth: '260px' }}>
-                      {/* Column Header */}
-                      <div className="px-4 py-3 border-b border-border bg-muted/50 text-center">
-                        <div className="font-bold text-foreground text-sm">{group.name}</div>
-                        {group.matchup_type && (
-                          <div className="text-xs text-muted-foreground">
-                            {matchupLabel(group.matchup_type)}
-                          </div>
-                        )}
-                      </div>
-                      {/* Matches */}
-                      <div className="p-4 space-y-3 flex-1">
-                        {group.matches.map((match: any) => (
-                          <BracketMatchCard
-                            key={match.id}
-                            match={match}
-                            showScores={showScores}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                {/* ── Connector SVG to next round ───────────────────── */}
+                {nextRound && (
+                  <BracketConnector
+                    fromCount={round.series.length}
+                    toCount={nextRound.series.length}
+                    fromSlotH={slotH}
+                    toSlotH={slotHeightFor(nextRound.series.length)}
+                    totalH={totalH}
+                  />
+                )}
               </div>
             );
           })}
+
+          {/* ── Champion Badge ──────────────────────────────────────── */}
+          {championTeamResolved && (
+            <div
+              className="flex flex-col items-center justify-center"
+              style={{ width: 160, height: totalH, flexShrink: 0, paddingLeft: 8 }}
+            >
+              {/* Short connector line from left */}
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-10 h-12 flex items-center justify-center rounded-2xl bg-harvest/15 border-2 border-harvest/40 shadow-inner">
+                  <Trophy className="w-5 h-5 text-harvest" />
+                </div>
+                <div className="text-center">
+                  <div className="text-[9px] font-black uppercase tracking-[0.15em] text-harvest mb-1">Champion</div>
+                  <div className="flex flex-col items-center gap-1">
+                    <TeamLogo
+                      teamTag={championTeamResolved.team_tag || ''}
+                      teamName={championTeamResolved.team_name}
+                      logoUrl={championTeamResolved.logo_url}
+                      tournamentName={tournamentName}
+                      size="sm"
+                    />
+                    <div className="font-bold text-foreground text-sm text-center leading-tight max-w-[140px]">
+                      {championTeamResolved.team_name}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Mobile scroll hint */}
+      {/* Mobile hint */}
       <div className="md:hidden p-3 bg-muted border-t-2 border-border text-center">
-        <p className="text-xs text-muted-foreground">← Swipe to view all rounds →</p>
+        <p className="text-xs text-muted-foreground">← Swipe to view full bracket →</p>
       </div>
     </div>
   );
 }
+
+
+
 
 // ═══════════════════════════════════════════════════════
 // LEGACY VIEWER (kkup_bracket_series fallback)
@@ -333,9 +471,9 @@ function LegacyBracketViewer({ bracket, showScores }: { bracket: any; showScores
         </h2>
       </div>
       <div className="overflow-x-auto p-5">
-        <div className="flex gap-5 min-w-max">
+        <div className="flex gap-5 min-w-max items-start">
           {ROUND_ORDER.filter(r => bracket[r]?.length > 0).map(round => (
-            <div key={round} className="flex flex-col gap-4" style={{ minWidth: '260px' }}>
+            <div key={round} className="flex flex-col gap-4 w-64">
               <div className="text-center">
                 <h3 className="text-xs font-bold uppercase text-muted-foreground tracking-wide">
                   {ROUND_LABELS[round] || round}
@@ -343,7 +481,7 @@ function LegacyBracketViewer({ bracket, showScores }: { bracket: any; showScores
               </div>
               <div className="space-y-4">
                 {bracket[round].map((series: any) => {
-                  // Map series fields to match fields for BracketMatchCard
+                  // Map series fields to match fields for BracketSeriesCard
                   const mapped = {
                     id: series.id,
                     team1_id: series.radiant_team_id,
@@ -362,9 +500,9 @@ function LegacyBracketViewer({ bracket, showScores }: { bracket: any; showScores
                     scheduled_time: series.scheduled_time,
                   };
                   return (
-                    <BracketMatchCard
+                    <BracketSeriesCard
                       key={series.id}
-                      match={mapped}
+                      series={{...mapped, series_id: mapped.id, team1_wins: mapped.team1_score || 0, team2_wins: mapped.team2_score || 0, matches: [mapped]} as any}
                       showScores={showScores}
                     />
                   );
@@ -445,7 +583,7 @@ export function TournamentBracketTab() {
 
   useEffect(() => {
     if (!tournament) return;
-    const shouldFetch = ['roster_lock', 'live', 'completed', 'archived', 'active'].includes(tournament.status);
+    const shouldFetch = ['registration_closed', 'roster_lock', 'live', 'completed', 'archived', 'active'].includes(tournament.status);
     if (shouldFetch) {
       fetchData();
     } else {
@@ -456,7 +594,7 @@ export function TournamentBracketTab() {
   if (!tournament) return null;
 
   const finished = isFinished(tournament.status);
-  const showPreview = ['upcoming', 'registration_open', 'registration_closed'].includes(tournament.status);
+  const showPreview = ['upcoming', 'registration_open'].includes(tournament.status);
 
   // Determine which viewer to show: new phase-aware or legacy
   const hasNewBracketData = builderData &&
@@ -466,10 +604,11 @@ export function TournamentBracketTab() {
   const hasLegacyBracket = legacyBracket &&
     Object.values(legacyBracket).some((arr: any) => arr?.length > 0);
 
-  if (loading) {
+  if (loading && !builderData && !legacyBracket) {
     return (
-      <div className="flex items-center justify-center py-16">
-        <div className="text-muted-foreground text-sm">Loading bracket…</div>
+      <div className="flex flex-col items-center justify-center py-20 gap-4">
+        <Loader2 className="w-10 h-10 animate-spin text-harvest" />
+        <p className="text-muted-foreground animate-pulse font-medium">Loading Bracket Interface...</p>
       </div>
     );
   }
@@ -520,6 +659,7 @@ export function TournamentBracketTab() {
                     bracketConfig={builderData!.bracketConfig}
                     assigned={builderData!.assigned}
                     showScores={finished}
+                    tournamentName={tournament.name}
                   />
                 ) : hasLegacyBracket ? (
                   <LegacyBracketViewer bracket={legacyBracket} showScores={finished} />

@@ -60,6 +60,8 @@ interface Match {
   youtube_url: string | null;
   match_id: number | null;
   series_id: number | null;
+  phase?: string | null;
+  match_group?: string | null;
   tournament_name?: string;  // For TeamLogo dynamic URL generation
 }
 
@@ -110,7 +112,9 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-harvest text-white">
-              {match.stage.replace(/_/g, ' ').toUpperCase()}
+              {match.phase 
+                ? `${match.phase.replace(/_/g, ' ').toUpperCase()}${match.match_group ? ` • ${match.match_group.toUpperCase()}` : ''}`
+                : (match.stage ? match.stage.replace(/_/g, ' ').toUpperCase() : 'MATCH')}
             </span>
             <span className="text-sm text-white/80 font-semibold">
               {formatDate(match.scheduled_time)}
@@ -192,13 +196,13 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
             {team1Stats.length > 0 ? (
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Radiant Roster & Heroes</h4>
-                {team1Stats.map((stat) => {
+                {team1Stats.map((stat, index) => {
                   const heroName = resolveHeroName(stat);
                   const heroImage = resolveHeroImage(stat);
                   const avatarUrl = stat.avatar_url || stat.player?.avatar_url;
                   return (
                     <div
-                      key={stat.id}
+                      key={stat.id || `team1-stat-${index}`}
                       className={`flex items-center gap-3 p-2.5 rounded-lg border-2 transition-all ${
                         team1Won 
                           ? 'bg-[#10b981]/5 border-[#10b981]/20 hover:border-[#10b981]/40' 
@@ -276,9 +280,9 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
             ) : team1Roster && team1Roster.length > 0 ? (
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Team Roster ({team1Roster.length})</h4>
-                {team1Roster.map((rosterEntry) => (
+                {team1Roster.map((rosterEntry, index) => (
                   <div
-                    key={rosterEntry.id}
+                    key={rosterEntry.id || `team1-roster-${index}`}
                     className="flex items-center gap-3 p-2.5 rounded-lg border-2 bg-background border-border hover:border-harvest/30 transition-all"
                   >
                     {/* Player Avatar */}
@@ -377,13 +381,13 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
             {team2Stats.length > 0 ? (
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Dire Roster & Heroes</h4>
-                {team2Stats.map((stat) => {
+                {team2Stats.map((stat, index) => {
                   const heroName = resolveHeroName(stat);
                   const heroImage = resolveHeroImage(stat);
                   const avatarUrl = stat.avatar_url || stat.player?.avatar_url;
                   return (
                     <div
-                      key={stat.id}
+                      key={stat.id || `team2-stat-${index}`}
                       className={`flex items-center gap-3 p-2.5 rounded-lg border-2 transition-all ${
                         team2Won 
                           ? 'bg-[#10b981]/5 border-[#10b981]/20 hover:border-[#10b981]/40' 
@@ -461,9 +465,9 @@ export function MatchCardWithHeroes({ match, playerStats = [], team1Roster, team
             ) : team2Roster && team2Roster.length > 0 ? (
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wide">Team Roster ({team2Roster.length})</h4>
-                {team2Roster.map((rosterEntry) => (
+                {team2Roster.map((rosterEntry, index) => (
                   <div
-                    key={rosterEntry.id}
+                    key={rosterEntry.id || `team2-roster-${index}`}
                     className="flex items-center gap-3 p-2.5 rounded-lg border-2 bg-background border-border hover:border-harvest/30 transition-all"
                   >
                     {/* Player Avatar */}

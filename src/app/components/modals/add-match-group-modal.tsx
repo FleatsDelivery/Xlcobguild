@@ -16,6 +16,10 @@ export interface MatchGroupConfig {
   matchup_type: 'bo1' | 'bo2' | 'bo3' | 'bo5';
   is_final_node_group: boolean;
   order: number;
+  /** Where winners advance — { phase_key, group_name } or null */
+  winners_advance_to: { phase_key: string; group_name: string } | null;
+  /** Where losers advance (optional, e.g. lower bracket) */
+  losers_advance_to: { phase_key: string; group_name: string } | null;
 }
 
 const GROUP_TYPE_OPTIONS = [
@@ -52,6 +56,8 @@ const DEFAULTS: MatchGroupConfig = {
   matchup_type: 'bo3',
   is_final_node_group: false,
   order: 1,
+  winners_advance_to: null,
+  losers_advance_to: null,
 };
 
 export function AddMatchGroupModal({

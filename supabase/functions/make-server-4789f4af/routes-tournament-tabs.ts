@@ -1135,6 +1135,8 @@ export function registerTournamentTabRoutes(app: Hono, supabase: any, _anonSupab
           match_time,
           game_mode,
           series_id,
+          phase,
+          match_group,
           external_match_id,
           team1:kkup_teams!radiant_team_id(id, team_name, team_tag, logo_url, valve_team_id),
           team2:kkup_teams!dire_team_id(id, team_name, team_tag, logo_url, valve_team_id)

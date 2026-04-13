@@ -434,6 +434,34 @@ export function HomePage({ user, onboarding, onRefresh, onBadgeRefresh }: { user
     message: string;
     helpText?: string;
   } | null>(null);
+  const [isAnnouncementDismissed, setIsAnnouncementDismissed] = useState(false);
+
+  // Sync announcement dismissed state with user prop
+  useEffect(() => {
+    if (user?.seen_home_message === true) {
+      setIsAnnouncementDismissed(true);
+    } else {
+      setIsAnnouncementDismissed(false);
+    }
+  }, [user?.seen_home_message]);
+
+  const baseUrl = `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af`;
+
+  const handleDismissAnnouncement = async () => {
+    // Optimistically hide the announcement
+    setIsAnnouncementDismissed(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      await fetch(`${baseUrl}/users/me/home-message`, {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (onRefresh) await onRefresh();
+    } catch (error) {
+      console.error('Failed to dismiss announcement:', error);
+    }
+  };
 
   // Double-fetch guard
   const fetchedRef = useRef(false);
@@ -461,8 +489,6 @@ export function HomePage({ user, onboarding, onRefresh, onBadgeRefresh }: { user
     fetchedRef.current = true;
     fetchAllData();
   }, []);
-
-  const baseUrl = `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af`;
 
   const fetchAllData = async () => {
     // Get session once, share across both calls
@@ -772,7 +798,9 @@ export function HomePage({ user, onboarding, onRefresh, onBadgeRefresh }: { user
         )}
 
         {/* ── The Final Announcement ── */}
-        <PatchNotesLetter />
+        {!isAnnouncementDismissed && (
+          <PatchNotesLetter onDismiss={handleDismissAnnouncement} />
+        )}
 
         {/* ── New Tournaments ── */}
         {liveTournaments.length > 0 && (

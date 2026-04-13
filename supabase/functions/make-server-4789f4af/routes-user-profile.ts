@@ -342,6 +342,37 @@ export function registerUserProfileRoutes(app: Hono, supabase: any, anonSupabase
     }
   });
 
+  // Update seen_home_message (dismiss announcement)
+  app.patch(`${PREFIX}/users/me/home-message`, async (c) => {
+    try {
+      const accessToken = c.req.header('Authorization')?.split(' ')[1];
+      if (!accessToken) return c.json({ error: 'No access token provided' }, 401);
+
+      const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+      if (authError || !authUser) return c.json({ error: 'Unauthorized' }, 401);
+
+      const { data: dbUser, error: userError } = await supabase
+        .from('users').select('id').eq('supabase_id', authUser.id).single();
+      if (userError || !dbUser) return c.json({ error: 'User not found' }, 404);
+
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ seen_home_message: true })
+        .eq('id', dbUser.id);
+
+      if (updateError) {
+        console.error('Error updating home message state:', updateError);
+        return c.json({ error: 'Failed to update home message state' }, 500);
+      }
+
+      console.log(`User ${dbUser.id} dismissed the home announcement.`);
+      return c.json({ success: true });
+    } catch (error) {
+      console.error('Dismiss home message error:', error);
+      return c.json({ error: 'Internal server error' }, 500);
+    }
+  });
+
   // Get recent rank actions for a user
   app.get(`${PREFIX}/rank-actions/:userId`, async (c) => {
     try {

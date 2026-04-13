@@ -1,7 +1,11 @@
 import { useState } from 'react';
-import { BookOpen, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { BookOpen, Sparkles, ChevronDown, ChevronUp, X } from 'lucide-react';
 
-export function PatchNotesLetter() {
+interface PatchNotesLetterProps {
+  onDismiss?: () => void;
+}
+
+export function PatchNotesLetter({ onDismiss }: PatchNotesLetterProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -336,14 +340,14 @@ export function PatchNotesLetter() {
         </div>
       </div>
 
-      {/* Expand/Collapse Button */}
-      <div className={`mt-6 pt-4 flex justify-center ${!isExpanded ? 'border-t-0 relative' : 'border-t border-border'}`}>
+      {/* Expand/Collapse and Dismiss Buttons */}
+      <div className={`mt-6 pt-4 flex justify-between items-center sm:justify-center sm:gap-4 ${!isExpanded ? 'border-t-0 relative' : 'border-t border-border'}`}>
         {!isExpanded && (
           <div className="absolute bottom-full left-0 w-full h-32 bg-gradient-to-t from-card to-transparent pointer-events-none" />
         )}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center gap-2 px-6 py-2.5 bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold rounded-full transition-colors z-10"
+          className="flex items-center gap-2 px-4 sm:px-6 py-2.5 bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold rounded-full transition-colors z-10 text-sm sm:text-base"
         >
           {isExpanded ? (
             <>
@@ -355,6 +359,15 @@ export function PatchNotesLetter() {
             </>
           )}
         </button>
+
+        {onDismiss && (
+          <button
+            onClick={onDismiss}
+            className="flex items-center gap-2 px-4 sm:px-6 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 font-semibold rounded-full transition-colors z-10 text-sm sm:text-base"
+          >
+            Dismiss <X className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        )}
       </div>
     </div>
   );

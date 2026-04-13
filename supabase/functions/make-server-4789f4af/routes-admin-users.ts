@@ -124,6 +124,53 @@ export function registerAdminUsersRoutes(app: Hono, supabase: any, anonSupabase:
     }
   });
 
+  // Reset Home Announcement Message for all users (Owner only)
+  app.post(`${PREFIX}/admin/users/reset-home-message`, async (c) => {
+    try {
+      const accessToken = c.req.header('Authorization')?.split(' ')[1];
+      if (!accessToken) return c.json({ error: 'No access token provided' }, 401);
+
+      const { data: { user: authUser }, error: authError } = await anonSupabase.auth.getUser(accessToken);
+      if (authError || !authUser) return c.json({ error: 'Unauthorized' }, 401);
+
+      const { data: dbUser, error: userError } = await supabase
+        .from('users').select('role, discord_username').eq('supabase_id', authUser.id).single();
+      if (userError || !dbUser) return c.json({ error: 'User not found' }, 404);
+      if (dbUser.role !== 'owner') return c.json({ error: 'Only owners can reset global announcements' }, 403);
+
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ seen_home_message: false })
+        .neq('id', '00000000-0000-0000-0000-000000000000'); // dummy neq
+
+      // Alternative to update all rows is to omit filters, but some clients require at least one filter
+      // Actually simply `.not('id', 'is', null)` is safer:
+      const { error: trueUpdateError } = await supabase
+        .from('users')
+        .update({ seen_home_message: false })
+        .not('id', 'is', null);
+
+      if (trueUpdateError) {
+        console.error('Error resetting home messages:', trueUpdateError);
+        return c.json({ error: 'Failed to reset global announcements' }, 500);
+      }
+
+      // Log the admin action
+      try {
+        await createAdminLog({
+          type: 'announcement_reset',
+          action: 'Reset seen_home_message to false for all users',
+          actor_name: dbUser.discord_username || 'owner',
+        });
+      } catch (logErr) { console.error('Non-critical: announcement reset logging failed:', logErr); }
+
+      return c.json({ success: true, message: 'Global announcement has been reset for all users.' });
+    } catch (error) {
+      console.error('Reset home announcements error:', error);
+      return c.json({ error: 'Internal server error' }, 500);
+    }
+  });
+
   // Sync All Discord Roles (Owner only - Heavy operation)
   app.post(`${PREFIX}/admin/sync-all-discord-roles`, async (c) => {
     try {

@@ -25,7 +25,7 @@ async function requireOfficer(c: any, supabase: any, anonSupabase: any) {
   const { data: { user: authUser }, error } = await anonSupabase.auth.getUser(token);
   if (error || !authUser) return { ok: false, response: c.json({ error: 'Unauthorized' }, 401) };
   const { data: dbUser } = await supabase.from('users').select('*').eq('supabase_id', authUser.id).single();
-  if (!dbUser || !isOfficer(dbUser)) return { ok: false, response: c.json({ error: 'Officer access required' }, 403) };
+  if (!dbUser || !isOfficer(dbUser.role)) return { ok: false, response: c.json({ error: 'Officer access required' }, 403) };
   return { ok: true, dbUser };
 }
 
@@ -53,13 +53,13 @@ export function registerBracketBuilderRoutes(app: Hono, supabase: any, anonSupab
         .from('kkup_matches')
         .select(`
           id, external_match_id, series_id, match_status,
-          team1_id, team2_id, winner_team_id,
-          team1_score, team2_score,
+          radiant_team_id, dire_team_id, winning_team_id,
+          radiant_team_score, dire_team_score,
           phase, match_group, match_group_type, matchup_type,
           is_final_node_group, phase_order, match_group_order, game_number,
           scheduled_time,
-          team1:kkup_teams!team1_id(id, team_name, team_tag),
-          team2:kkup_teams!team2_id(id, team_name, team_tag)
+          team1:kkup_teams!radiant_team_id(id, team_name, team_tag, logo_url),
+          team2:kkup_teams!dire_team_id(id, team_name, team_tag, logo_url)
         `)
         .eq('tournament_id', tournamentId)
         .order('phase_order', { ascending: true, nullsFirst: false })
@@ -71,7 +71,14 @@ export function registerBracketBuilderRoutes(app: Hono, supabase: any, anonSupab
       }
 
       const bracketConfig = tournament.bracket_config || { phases: [] };
-      const allMatches = matches || [];
+      const allMatches = (matches || []).map(m => ({
+        ...m,
+        team1_id: m.radiant_team_id,
+        team2_id: m.dire_team_id,
+        winner_team_id: m.winning_team_id,
+        team1_score: m.radiant_team_score,
+        team2_score: m.dire_team_score,
+      }));
 
       // Organize matches by phase → match_group
       const assigned: Record<string, Record<string, any[]>> = {};

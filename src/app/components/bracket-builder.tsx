@@ -9,16 +9,19 @@
  *   kkup_matches columns                — actual phase/match_group assignments
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { toast } from 'sonner';
 import {
   Plus, Trash2, Pencil, ChevronDown, ChevronUp,
   Trophy, Star, Layers, CheckSquare, Square, X,
+  ArrowRight, Users, RefreshCw, Loader2,
 } from 'lucide-react';
 import { projectId, publicAnonKey } from '/utils/supabase/info';
 import { AddPhaseModal } from './modals/add-phase-modal';
 import { AddMatchGroupModal, type MatchGroupConfig } from './modals/add-match-group-modal';
 import { TeamLogo } from './team-logo';
+import { groupMatchesIntoSeries, type BracketSeries } from '@/lib/bracket-utils';
+import { rankTierToDisplay } from '@/lib/rank-utils';
 
 // ─── Types ────────────────────────────────────────────
 
@@ -31,6 +34,17 @@ interface BracketPhase {
 
 interface BracketConfig {
   phases: BracketPhase[];
+}
+
+interface SeedTeam {
+  team_id: string;
+  team_name: string;
+  team_tag: string;
+  logo_url?: string;
+  avg_rank_numeric: number;
+  avg_rank_label: string;
+  seed: number;
+  roster: Array<{ display_name: string; rank_tier: number | null; rank_label: string }>;
 }
 
 interface Match {
@@ -126,50 +140,104 @@ function MatchChip({ match, selected, onToggle }: {
   );
 }
 
+function SeriesChip({ series, selected, onToggle }: {
+  series: BracketSeries;
+  selected?: boolean;
+  onToggle?: () => void;
+}) {
+  const finished = series.team1_wins > series.team2_wins || series.team2_wins > series.team1_wins;
+  const content = (
+    <div className={`flex items-center gap-2 p-2.5 rounded-xl border-2 text-left transition-all w-full ${
+      selected
+        ? 'border-harvest bg-harvest/10'
+        : 'border-border bg-card hover:border-harvest/40'
+    }`}>
+      {onToggle && (
+        <div className="flex-shrink-0 text-harvest">
+          {selected ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4 text-muted-foreground" />}
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1 text-xs font-semibold text-foreground truncate">
+          <span className="truncate">{series.team1?.team_name || series.team1?.team_tag || 'TBD'}</span>
+          {finished && (
+            <span className="text-muted-foreground font-bold shrink-0">{series.team1_wins}–{series.team2_wins}</span>
+          )}
+          <span className="text-muted-foreground font-normal shrink-0">vs</span>
+          <span className="truncate">{series.team2?.team_name || series.team2?.team_tag || 'TBD'}</span>
+        </div>
+        <div className="text-xs text-muted-foreground">
+          {series.matches.length} game{series.matches.length !== 1 ? 's' : ''}
+          {finished ? (finished ? ` · Done` : '') : ' · In Progress'}
+        </div>
+      </div>
+      {finished && <div className="w-1.5 h-1.5 rounded-full bg-[#10b981] flex-shrink-0" />}
+    </div>
+  );
+  if (onToggle) return <button onClick={onToggle} className="w-full">{content}</button>;
+  return content;
+}
+
 // ─── Match Group Card ─────────────────────────────────
 
 function MatchGroupCard({
   group,
   phase,
+  allPhases,
   assignedMatches,
   unassigned,
   onEdit,
   onDelete,
   onAssign,
   onUnassign,
+  onAdvancementChange,
 }: {
   group: MatchGroupConfig;
   phase: BracketPhase;
+  allPhases: BracketPhase[];
   assignedMatches: Match[];
   unassigned: Match[];
   onEdit: () => void;
   onDelete: () => void;
   onAssign: (matchIds: string[]) => Promise<void>;
   onUnassign: (matchIds: string[]) => Promise<void>;
+  onAdvancementChange: (
+    field: 'winners_advance_to' | 'losers_advance_to',
+    value: { phase_key: string; group_name: string } | null
+  ) => void;
 }) {
   const [assigning, setAssigning] = useState(false);
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [selectedSeriesIds, setSelectedSeriesIds] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState(false);
 
-  const toggleSelect = (id: string) => {
-    setSelected(prev => {
+  // Group the incoming matches into series
+  const unassignedSeries = useMemo(() => groupMatchesIntoSeries(unassigned as any), [unassigned]);
+  const assignedSeries = useMemo(() => groupMatchesIntoSeries(assignedMatches as any), [assignedMatches]);
+
+  const toggleSelect = (seriesId: string) => {
+    setSelectedSeriesIds(prev => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      next.has(seriesId) ? next.delete(seriesId) : next.add(seriesId);
       return next;
     });
   };
 
   const handleSaveAssign = async () => {
-    if (!selected.size) return;
+    if (!selectedSeriesIds.size) return;
     setSaving(true);
-    await onAssign(Array.from(selected));
+    // Find all matching series and extract their match IDs
+    const seriesToAssign = unassignedSeries.filter(s => selectedSeriesIds.has(s.series_id));
+    const allMatchIds = seriesToAssign.flatMap(s => s.matches.map((m: any) => m.id));
+    
+    await onAssign(allMatchIds);
     setSaving(false);
-    setSelected(new Set());
+    setSelectedSeriesIds(new Set());
     setAssigning(false);
   };
 
-  const handleUnassignMatch = async (matchId: string) => {
-    await onUnassign([matchId]);
+  const handleUnassignSeries = async (series: BracketSeries) => {
+    const allMatchIds = series.matches.map((m: any) => m.id);
+    await onUnassign(allMatchIds);
   };
 
   return (
@@ -209,18 +277,18 @@ function MatchGroupCard({
         </div>
       </div>
 
-      {/* Assigned Matches */}
+      {/* Assigned Series */}
       <div className="p-3 space-y-2">
-        {assignedMatches.length === 0 && !assigning && (
+        {assignedSeries.length === 0 && !assigning && (
           <p className="text-xs text-muted-foreground text-center py-2">No matches assigned yet</p>
         )}
-        {assignedMatches.map(match => (
-          <div key={match.id} className="flex items-center gap-2">
+        {assignedSeries.map(series => (
+          <div key={series.series_id} className="flex items-center gap-2">
             <div className="flex-1">
-              <MatchChip match={match} />
+              <SeriesChip series={series} />
             </div>
             <button
-              onClick={() => handleUnassignMatch(match.id)}
+              onClick={() => handleUnassignSeries(series)}
               className="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-[#ef4444]/10 transition-colors flex-shrink-0"
               title="Remove from group"
             >
@@ -233,40 +301,40 @@ function MatchGroupCard({
         {assigning && (
           <div className="border-2 border-harvest/30 rounded-xl p-3 space-y-2 bg-harvest/5">
             <p className="text-xs font-semibold text-foreground mb-2">
-              Select unassigned matches to add:
+              Select unassigned series to add:
             </p>
-            {unassigned.length === 0 ? (
-              <p className="text-xs text-muted-foreground">No unassigned matches available.</p>
+            {unassignedSeries.length === 0 ? (
+              <p className="text-xs text-muted-foreground">No unassigned series available.</p>
             ) : (
-              unassigned.map(match => (
-                <MatchChip
-                  key={match.id}
-                  match={match}
-                  selected={selected.has(match.id)}
-                  onToggle={() => toggleSelect(match.id)}
+              unassignedSeries.map(series => (
+                <SeriesChip
+                  key={series.series_id}
+                  series={series}
+                  selected={selectedSeriesIds.has(series.series_id)}
+                  onToggle={() => toggleSelect(series.series_id)}
                 />
               ))
             )}
             <div className="flex gap-2 pt-1">
               <button
-                onClick={() => { setAssigning(false); setSelected(new Set()); }}
+                onClick={() => { setAssigning(false); setSelectedSeriesIds(new Set()); }}
                 className="flex-1 px-3 py-2 bg-muted hover:bg-muted/80 rounded-lg text-xs font-semibold text-foreground transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveAssign}
-                disabled={!selected.size || saving}
+                disabled={!selectedSeriesIds.size || saving}
                 className="flex-1 px-3 py-2 bg-harvest hover:bg-harvest/90 rounded-lg text-xs font-semibold text-soil transition-colors disabled:opacity-50"
               >
-                {saving ? 'Saving…' : `Assign (${selected.size})`}
+                {saving ? 'Saving…' : `Assign (${selectedSeriesIds.size})`}
               </button>
             </div>
           </div>
         )}
 
         {/* Assign button */}
-        {!assigning && unassigned.length > 0 && (
+        {!assigning && unassignedSeries.length > 0 && (
           <button
             onClick={() => setAssigning(true)}
             className="w-full flex items-center justify-center gap-2 py-2 rounded-xl border-2 border-dashed border-border hover:border-harvest/40 text-xs text-muted-foreground hover:text-foreground transition-all"
@@ -276,6 +344,68 @@ function MatchGroupCard({
           </button>
         )}
       </div>
+
+      {/* Advancement Links */}
+      <div className="px-3 pb-3 pt-1 border-t border-border space-y-2">
+        {/* Build dropdown options from all phases/groups, excluding self */}
+        {(() => {
+          const options: Array<{ label: string; phase_key: string; group_name: string }> = [];
+          for (const p of allPhases) {
+            for (const g of p.groups) {
+              if (p.key === phase.key && g.name === group.name) continue; // skip self
+              options.push({ label: `${p.name} — ${g.name}`, phase_key: p.key, group_name: g.name });
+            }
+          }
+          const makeValue = (v: { phase_key: string; group_name: string } | null) =>
+            v ? `${v.phase_key}::${v.group_name}` : '';
+          const parseValue = (s: string) => {
+            if (!s) return null;
+            const [phase_key, ...rest] = s.split('::');
+            return { phase_key, group_name: rest.join('::') };
+          };
+          return (
+            <>
+              <div>
+                <label className="block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Winners advance to
+                </label>
+                <select
+                  value={makeValue(group.winners_advance_to ?? null)}
+                  onChange={e => onAdvancementChange('winners_advance_to', parseValue(e.target.value))}
+                  className="w-full px-2 py-1.5 bg-card border border-border rounded-lg text-xs text-foreground focus:outline-none focus:border-harvest transition-colors"
+                >
+                  <option value="">Not Set</option>
+                  {options.map(o => (
+                    <option key={`${o.phase_key}::${o.group_name}`} value={`${o.phase_key}::${o.group_name}`}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {!group.is_final_node_group && (
+                <div>
+                  <label className="block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                    Losers advance to <span className="font-normal normal-case">(optional)</span>
+                  </label>
+                  <select
+                    value={makeValue(group.losers_advance_to ?? null)}
+                    onChange={e => onAdvancementChange('losers_advance_to', parseValue(e.target.value))}
+                    className="w-full px-2 py-1.5 bg-card border border-border rounded-lg text-xs text-foreground focus:outline-none focus:border-harvest transition-colors"
+                  >
+                    <option value="">Not Set</option>
+                    {options.map(o => (
+                      <option key={`${o.phase_key}::${o.group_name}`} value={`${o.phase_key}::${o.group_name}`}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </>
+          );
+        })()}
+      </div>
+
     </div>
   );
 }
@@ -284,6 +414,7 @@ function MatchGroupCard({
 
 function PhaseCard({
   phase,
+  allPhases,
   assigned,
   unassigned,
   onAddGroup,
@@ -292,8 +423,10 @@ function PhaseCard({
   onDeletePhase,
   onAssign,
   onUnassign,
+  onAdvancementChange,
 }: {
   phase: BracketPhase;
+  allPhases: BracketPhase[];
   assigned: Record<string, Match[]>;
   unassigned: Match[];
   onAddGroup: () => void;
@@ -302,6 +435,7 @@ function PhaseCard({
   onDeletePhase: () => void;
   onAssign: (groupName: string, matchIds: string[], group: MatchGroupConfig) => Promise<void>;
   onUnassign: (matchIds: string[]) => Promise<void>;
+  onAdvancementChange: (groupName: string, field: 'winners_advance_to' | 'losers_advance_to', value: { phase_key: string; group_name: string } | null) => void;
 }) {
   const color = PHASE_COLORS[phase.key] || '#8b5cf6';
   const [collapsed, setCollapsed] = useState(false);
@@ -362,12 +496,14 @@ function PhaseCard({
                 key={group.name}
                 group={group}
                 phase={phase}
+                allPhases={allPhases}
                 assignedMatches={assigned[group.name] || []}
                 unassigned={unassigned}
                 onEdit={() => onEditGroup(group)}
                 onDelete={() => onDeleteGroup(group.name)}
                 onAssign={(ids) => onAssign(group.name, ids, group)}
                 onUnassign={onUnassign}
+                onAdvancementChange={(field, value) => onAdvancementChange(group.name, field, value)}
               />
             ))}
         </div>
@@ -386,9 +522,24 @@ export function BracketBuilder({
   unassigned,
   onRefresh,
 }: BracketBuilderProps) {
-  const [config, setConfig] = useState<BracketConfig>(
-    initialConfig?.phases ? initialConfig : { phases: [] }
+  // Local draft state for the JSON bracket_config
+  const [draftConfig, setDraftConfig] = useState<BracketConfig>(
+    initialConfig?.phases ? JSON.parse(JSON.stringify(initialConfig)) : { phases: [] }
   );
+  
+  // Track if we have local changes to bracket_config
+  const hasChanges = useMemo(() => {
+    return JSON.stringify(draftConfig) !== JSON.stringify(initialConfig || { phases: [] });
+  }, [draftConfig, initialConfig]);
+
+  // Update draft when initialConfig changes (e.g. after a refresh), 
+  // but ONLY if we don't have local changes we're working on.
+  useEffect(() => {
+    if (!hasChanges) {
+      setDraftConfig(initialConfig?.phases ? JSON.parse(JSON.stringify(initialConfig)) : { phases: [] });
+    }
+  }, [initialConfig, hasChanges]);
+
   const [addPhaseOpen, setAddPhaseOpen] = useState(false);
   const [addGroupModal, setAddGroupModal] = useState<{
     phaseKey: string;
@@ -403,68 +554,68 @@ export function BracketBuilder({
     Authorization: `Bearer ${accessToken || publicAnonKey}`,
   };
 
-  const saveConfig = useCallback(async (newConfig: BracketConfig) => {
+  const saveConfig = useCallback(async () => {
     setSaving(true);
     try {
       const res = await fetch(
         `${apiBase}/kkup/tournaments/${tournamentId}/bracket-builder/config`,
-        { method: 'PUT', headers, body: JSON.stringify({ bracket_config: newConfig }) }
+        { method: 'PUT', headers, body: JSON.stringify({ bracket_config: draftConfig }) }
       );
       if (!res.ok) {
         const err = await res.json();
         throw new Error(err.error || 'Failed to save');
       }
+      toast.success('Bracket structure saved');
+      onRefresh(); // Re-fetch to sync all data
     } catch (err: any) {
       toast.error(`Failed to save structure: ${err.message}`);
     } finally {
       setSaving(false);
     }
-  }, [tournamentId, accessToken]);
+  }, [tournamentId, accessToken, draftConfig, onRefresh]);
+
+  const handleDiscard = () => {
+    setDraftConfig(initialConfig?.phases ? JSON.parse(JSON.stringify(initialConfig)) : { phases: [] });
+    toast.info('Changes discarded');
+  };
 
   // ── Phase operations ──
 
-  const handleAddPhase = async (phase: { key: 'group_stage' | 'main_event'; name: string }) => {
-    const maxOrder = config.phases.reduce((m, p) => Math.max(m, p.order), 0);
+  const handleAddPhase = (phase: { key: 'group_stage' | 'main_event'; name: string }) => {
+    const maxOrder = draftConfig.phases.reduce((m, p) => Math.max(m, p.order), 0);
     const newPhase: BracketPhase = {
       key: phase.key,
       name: phase.name,
       order: maxOrder + 1,
       groups: [],
     };
-    const newConfig = { ...config, phases: [...config.phases, newPhase] };
-    setConfig(newConfig);
-    await saveConfig(newConfig);
-    toast.success(`Phase "${phase.name}" added`);
+    setDraftConfig({ ...draftConfig, phases: [...draftConfig.phases, newPhase] });
+    toast.success(`Phase "${phase.name}" added locally. Remember to save.`);
   };
 
-  const handleDeletePhase = async (phaseKey: string) => {
-    const newConfig = { ...config, phases: config.phases.filter(p => p.key !== phaseKey) };
-    setConfig(newConfig);
-    await saveConfig(newConfig);
-    toast.success('Phase removed');
-    onRefresh();
+  const handleDeletePhase = (phaseKey: string) => {
+    setDraftConfig({ ...draftConfig, phases: draftConfig.phases.filter(p => p.key !== phaseKey) });
+    toast.success('Phase removed locally. Remember to save.');
   };
 
   // ── Group operations ──
 
-  const handleAddGroup = async (phaseKey: string, group: MatchGroupConfig) => {
-    const newConfig = {
-      ...config,
-      phases: config.phases.map(p =>
+  const handleAddGroup = (phaseKey: string, group: MatchGroupConfig) => {
+    setDraftConfig({
+      ...draftConfig,
+      phases: draftConfig.phases.map(p =>
         p.key === phaseKey
           ? { ...p, groups: [...p.groups, group] }
           : p
       ),
-    };
-    setConfig(newConfig);
-    await saveConfig(newConfig);
-    toast.success(`Group "${group.name}" added`);
+    });
+    toast.success(`Group "${group.name}" added locally. Remember to save.`);
   };
 
-  const handleEditGroup = async (phaseKey: string, oldName: string, updated: MatchGroupConfig) => {
-    const newConfig = {
-      ...config,
-      phases: config.phases.map(p =>
+  const handleEditGroup = (phaseKey: string, oldName: string, updated: MatchGroupConfig) => {
+    setDraftConfig({
+      ...draftConfig,
+      phases: draftConfig.phases.map(p =>
         p.key === phaseKey
           ? {
               ...p,
@@ -472,26 +623,42 @@ export function BracketBuilder({
             }
           : p
       ),
-    };
-    setConfig(newConfig);
-    await saveConfig(newConfig);
-    toast.success(`Group "${updated.name}" updated`);
+    });
+    toast.success('Group updated locally');
   };
 
   const handleDeleteGroup = async (phaseKey: string, groupName: string) => {
-    const newConfig = {
-      ...config,
-      phases: config.phases.map(p =>
+    // Note: We still unassign matches immediately in the DB to avoid orphaned rows
+    const matchesInGroup = (assigned[phaseKey]?.[groupName] || []).map((m: any) => m.id);
+    if (matchesInGroup.length > 0) {
+      try {
+        const res = await fetch(
+          `${apiBase}/kkup/tournaments/${tournamentId}/bracket-builder/unassign`,
+          { method: 'PUT', headers, body: JSON.stringify({ match_ids: matchesInGroup }) }
+        );
+        if (!res.ok) {
+          const err = await res.json();
+          toast.error(`Could not unassign matches: ${err.error}`);
+          return; 
+        }
+      } catch (err: any) {
+        toast.error(`Network error unassigning matches: ${err.message}`);
+        return;
+      }
+    }
+
+    // Update draft locally
+    setDraftConfig({
+      ...draftConfig,
+      phases: draftConfig.phases.map(p =>
         p.key === phaseKey
           ? { ...p, groups: p.groups.filter(g => g.name !== groupName) }
           : p
       ),
-    };
-    setConfig(newConfig);
-    await saveConfig(newConfig);
-    toast.success(`Group "${groupName}" removed`);
-    onRefresh();
+    });
+    toast.success(`Group "${groupName}" removed locally. Remember to save.`);
   };
+
 
   // ── Match assignment ──
 
@@ -541,12 +708,71 @@ export function BracketBuilder({
     }
   };
 
-  const existingPhaseKeys = config.phases.map(p => p.key);
+  const handleAdvancementChange = (
+    phaseKey: string,
+    groupName: string,
+    field: 'winners_advance_to' | 'losers_advance_to',
+    value: { phase_key: string; group_name: string } | null,
+  ) => {
+    setDraftConfig({
+      ...draftConfig,
+      phases: draftConfig.phases.map(p =>
+        p.key === phaseKey
+          ? {
+              ...p,
+              groups: p.groups.map(g =>
+                g.name === groupName ? { ...g, [field]: value } : g
+              ),
+            }
+          : p
+      ),
+    });
+  };
+
+  // ── Seed Teams state ──
+  const [seedData, setSeedData] = useState<SeedTeam[] | null>(null);
+  const [fetchingRanks, setFetchingRanks] = useState(false);
+  const [loadingSeeds, setLoadingSeeds] = useState(false);
+  const [seedOpen, setSeedOpen] = useState(false);
+
+  const loadSeeds = async () => {
+    setLoadingSeeds(true);
+    try {
+      const res = await fetch(`${apiBase}/kkup/tournaments/${tournamentId}/seeding`, { headers });
+      if (!res.ok) throw new Error((await res.json()).error);
+      const data: SeedTeam[] = await res.json();
+      setSeedData(data);
+    } catch (err: any) {
+      toast.error(`Failed to load seeds: ${err.message}`);
+    } finally {
+      setLoadingSeeds(false);
+    }
+  };
+
+  const handleFetchRanks = async () => {
+    setFetchingRanks(true);
+    try {
+      const res = await fetch(
+        `${apiBase}/kkup/tournaments/${tournamentId}/seeding/fetch-ranks`,
+        { method: 'POST', headers, body: '{}' }
+      );
+      if (!res.ok) throw new Error((await res.json()).error);
+      const result = await res.json();
+      toast.success(`Ranks fetched: ${result.saved} saved, ${result.skipped_private} private/unranked`);
+      await loadSeeds(); // reload with updated ranks
+    } catch (err: any) {
+      toast.error(`Rank fetch failed: ${err.message}`);
+    } finally {
+      setFetchingRanks(false);
+    }
+  };
+
+  const existingPhaseKeys = draftConfig.phases.map(p => p.key);
 
   return (
     <div className="space-y-6">
       {/* Builder Header */}
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-muted/30 p-4 rounded-2xl border-2 border-border">
         <div>
           <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
             <Trophy className="w-5 h-5 text-harvest" />
@@ -556,18 +782,126 @@ export function BracketBuilder({
             Define phases and match groups, then assign matches to each group.
           </p>
         </div>
+        <div className="flex items-center gap-2">
+          {hasChanges && (
+            <div className="flex items-center gap-2 mr-2 pr-4 border-r border-border">
+              <button
+                onClick={handleDiscard}
+                disabled={saving}
+                className="px-4 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+              >
+                Discard
+              </button>
+              <button
+                onClick={saveConfig}
+                disabled={saving}
+                className="flex items-center gap-2 px-6 py-2 bg-[#10b981] hover:bg-[#10b981]/90 rounded-xl font-bold text-sm text-white shadow-lg shadow-[#10b981]/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+              >
+                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckSquare className="w-4 h-4" />}
+                Save Changes
+              </button>
+            </div>
+          )}
+          <button
+            onClick={() => setAddPhaseOpen(true)}
+            disabled={existingPhaseKeys.length >= 2}
+            className="flex items-center gap-2 px-4 py-2 bg-harvest hover:bg-harvest/90 rounded-xl font-semibold text-sm text-soil transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <Plus className="w-4 h-4" />
+            Add Phase
+          </button>
+        </div>
+      </div>
+
+      {/* ── Seed Teams Panel ── */}
+      <div className="bg-card rounded-2xl border-2 border-border overflow-hidden">
         <button
-          onClick={() => setAddPhaseOpen(true)}
-          disabled={existingPhaseKeys.length >= 2}
-          className="flex items-center gap-2 px-4 py-2 bg-harvest hover:bg-harvest/90 rounded-xl font-semibold text-sm text-soil transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          onClick={() => { setSeedOpen(o => !o); if (!seedOpen && !seedData) loadSeeds(); }}
+          className="w-full flex items-center gap-3 p-4 hover:bg-muted/40 transition-colors"
         >
-          <Plus className="w-4 h-4" />
-          Add Phase
+          <Users className="w-4 h-4 text-harvest flex-shrink-0" />
+          <span className="font-bold text-foreground text-sm flex-1 text-left">Seed Teams</span>
+          <span className="text-xs text-muted-foreground">
+            {seedData ? `${seedData.length} teams ranked` : 'Click to load'}
+          </span>
+          {seedOpen ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
         </button>
+
+        {seedOpen && (
+          <div className="border-t border-border p-4 space-y-4">
+            <p className="text-xs text-muted-foreground">
+              Teams ranked by average Dota 2 MMR from their roster. Unranked / private players count as rank 0 (worst seed).
+            </p>
+
+            {/* Fetch controls */}
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={handleFetchRanks}
+                disabled={fetchingRanks}
+                className="flex items-center gap-2 px-3 py-2 bg-muted hover:bg-muted/80 rounded-xl text-xs font-semibold text-foreground transition-colors disabled:opacity-50"
+              >
+                {fetchingRanks ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
+                {fetchingRanks ? 'Fetching from OpenDota…' : 'Fetch Missing Ranks'}
+              </button>
+              {seedData && (
+                <button
+                  onClick={loadSeeds}
+                  disabled={loadingSeeds}
+                  className="flex items-center gap-2 px-3 py-2 bg-muted hover:bg-muted/80 rounded-xl text-xs font-semibold text-foreground transition-colors disabled:opacity-50"
+                >
+                  {loadingSeeds ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
+                  Reload
+                </button>
+              )}
+            </div>
+
+            {/* Loading state */}
+            {loadingSeeds && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">
+                <Loader2 className="w-4 h-4 animate-spin" /> Computing seeds…
+              </div>
+            )}
+
+            {/* Seed list */}
+            {seedData && !loadingSeeds && (
+              <>
+                <div className="space-y-2">
+                  {seedData.map(team => (
+                    <div key={team.team_id} className="flex items-center gap-3 p-2.5 bg-muted rounded-xl">
+                      <div className="w-7 h-7 rounded-full bg-harvest/20 flex items-center justify-center flex-shrink-0">
+                        <span className="text-xs font-black text-harvest">{team.seed}</span>
+                      </div>
+                      <TeamLogo teamTag={team.team_tag} logoUrl={team.logo_url} size="xs" />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm text-foreground truncate">{team.team_name}</div>
+                        <div className="text-xs text-muted-foreground">{team.avg_rank_label}</div>
+                      </div>
+                      <div className="text-right flex-shrink-0 text-xs text-muted-foreground">
+                        {team.roster.filter(r => r.rank_tier).length}/{team.roster.length} ranked
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {seedData.length >= 2 && (
+                  <div className="text-xs text-muted-foreground pt-2 border-t border-border space-y-0.5">
+                    <span className="font-semibold text-foreground block mb-1">Standard seeded pairings:</span>
+                    {Array.from({ length: Math.floor(seedData.length / 2) }, (_, i) => (
+                      <div key={i} className="flex items-center gap-1">
+                        <ArrowRight className="w-3 h-3" />
+                        Seed {i + 1} vs Seed {seedData.length - i}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Phase Cards */}
-      {config.phases.length === 0 && (
+      {draftConfig.phases.length === 0 && (
         <div className="bg-card rounded-2xl border-2 border-border border-dashed p-10 text-center">
           <Trophy className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
           <p className="text-foreground font-semibold">No phases defined yet</p>
@@ -577,15 +911,17 @@ export function BracketBuilder({
         </div>
       )}
 
-      {config.phases
+      {draftConfig.phases
         .sort((a, b) => a.order - b.order)
         .map(phase => {
           const phaseAssigned = assigned[phase.key] || {};
           return (
-            <PhaseCard
+          <PhaseCard
               key={phase.key}
               phase={phase}
+              allPhases={draftConfig.phases}
               assigned={phaseAssigned}
+
               unassigned={unassigned}
               onAddGroup={() =>
                 setAddGroupModal({
@@ -606,6 +942,9 @@ export function BracketBuilder({
                 handleAssign(groupName, matchIds, group, phase)
               }
               onUnassign={handleUnassign}
+              onAdvancementChange={(groupName, field, value) =>
+                handleAdvancementChange(phase.key, groupName, field, value)
+              }
             />
           );
         })}
@@ -645,7 +984,7 @@ export function BracketBuilder({
           phaseName={addGroupModal.phaseName}
           existing={addGroupModal.existing}
           nextOrder={
-            (config.phases.find(p => p.key === addGroupModal.phaseKey)?.groups.length || 0) + 1
+            (draftConfig.phases.find(p => p.key === addGroupModal.phaseKey)?.groups.length || 0) + 1
           }
           onSave={(group) => {
             if (addGroupModal.existing) {

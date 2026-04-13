@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Shield, Settings, Trophy, RefreshCw, Gamepad2, Upload, Loader2, AlertTriangle, ChevronRight, Gift, Users, Bell, Swords, DollarSign, Radio } from 'lucide-react';
+import { Shield, Settings, Trophy, RefreshCw, Gamepad2, Upload, Loader2, AlertTriangle, ChevronRight, Gift, Users, Bell, Swords, DollarSign, Radio, Megaphone } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
 import { Footer } from '@/app/components/footer';
@@ -39,10 +39,42 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
   const [isSyncing, setIsSyncing] = useState(false);
   const [showSyncConfirm, setShowSyncConfirm] = useState(false);
   const [refreshingOpenDota, setRefreshingOpenDota] = useState(false);
+  const [showRefreshOpenDotaConfirm, setShowRefreshOpenDotaConfirm] = useState(false);
   const [backfillingHeroes, setBackfillingHeroes] = useState(false);
   const [showBackfillConfirm, setShowBackfillConfirm] = useState(false);
   const [isSyncingDiscord, setIsSyncingDiscord] = useState(false);
   const [showDiscordSyncConfirm, setShowDiscordSyncConfirm] = useState(false);
+  const [resettingAnnouncement, setResettingAnnouncement] = useState(false);
+  const [showAnnouncementConfirm, setShowAnnouncementConfirm] = useState(false);
+
+  // Handler for resetting global announcement
+  const handleResetAnnouncement = async () => {
+    setResettingAnnouncement(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Please sign in to reset global announcement.');
+        setResettingAnnouncement(false);
+        return;
+      }
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/admin/users/reset-home-message`,
+        { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` } }
+      );
+      if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.error || 'Failed to reset announcement.');
+        setResettingAnnouncement(false);
+        return;
+      }
+      toast.success('Global announcement has been reset for all users!');
+    } catch (error) {
+      console.error('Error resetting announcement:', error);
+      toast.error('An unexpected error occurred. Please try again.');
+    } finally {
+      setResettingAnnouncement(false);
+    }
+  };
 
   // Handler for syncing names and logos
   const handleSyncNamesAndLogos = async () => {
@@ -297,7 +329,7 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
                 </button>
 
                 {/* Refresh All OpenDota Stats */}
-                <button onClick={handleRefreshOpenDota} disabled={refreshingOpenDota} className={adminBtnClass}>
+                <button onClick={() => setShowRefreshOpenDotaConfirm(true)} disabled={refreshingOpenDota} className={adminBtnClass}>
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-harvest to-amber flex items-center justify-center shadow-md">
                       {refreshingOpenDota ? <Loader2 className="w-6 h-6 text-white animate-spin" /> : <Gamepad2 className="w-6 h-6 text-white" />}
@@ -334,6 +366,22 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
                       <div className="text-left">
                         <p className="text-sm font-bold text-foreground">{isSyncingDiscord ? 'Syncing Roles...' : 'Sync Discord Roles'}</p>
                         <p className="text-xs text-muted-foreground">Reconcile all users app ranks with Discord roles</p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-harvest group-hover:translate-x-1 transition-transform" />
+                  </button>
+                )}
+
+                {/* Reset Global Announcement — Owner only */}
+                {isOwner && (
+                  <button onClick={() => setShowAnnouncementConfirm(true)} disabled={resettingAnnouncement} className={adminBtnClass}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center shadow-md">
+                        {resettingAnnouncement ? <Loader2 className="w-6 h-6 text-white animate-spin" /> : <Megaphone className="w-6 h-6 text-white" />}
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm font-bold text-foreground">{resettingAnnouncement ? 'Resetting...' : 'Reset Global Announcement'}</p>
+                        <p className="text-xs text-muted-foreground">Force all users to see the Home Page announcement again</p>
                       </div>
                     </div>
                     <ChevronRight className="w-5 h-5 text-harvest group-hover:translate-x-1 transition-transform" />
@@ -494,6 +542,20 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
         />
       )}
 
+      {showRefreshOpenDotaConfirm && (
+        <ConfirmModal
+          title="Refresh All User Stats"
+          message="This will sync MMR, medals, and match history for all members with OpenDota. Are you sure you want to proceed?"
+          confirmText="Yes, Sync Now"
+          confirmVariant="primary"
+          onConfirm={() => {
+            setShowRefreshOpenDotaConfirm(false);
+            handleRefreshOpenDota();
+          }}
+          onCancel={() => setShowRefreshOpenDotaConfirm(false)}
+        />
+      )}
+
       {showBackfillConfirm && (
         <ConfirmModal
           title="Confirm Backfill"
@@ -519,6 +581,20 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
             handleSyncDiscordRoles();
           }}
           onCancel={() => setShowDiscordSyncConfirm(false)}
+        />
+      )}
+
+      {showAnnouncementConfirm && (
+        <ConfirmModal
+          title="Reset Global Announcement"
+          message="Are you sure you want to reset the home announcement for everyone? This will make the message appear for all users again."
+          confirmText="Yes, Reset It"
+          confirmVariant="danger"
+          onConfirm={() => {
+            setShowAnnouncementConfirm(false);
+            handleResetAnnouncement();
+          }}
+          onCancel={() => setShowAnnouncementConfirm(false)}
         />
       )}
     </div>

@@ -16,13 +16,11 @@ import { Swords } from '@/lib/icons';
 import { TabNoData } from '../tab-no-data';
 
 // Phases where no matches exist yet — show static empty state, skip fetch
-const PRE_MATCH_PHASES = ['upcoming', 'registration_open', 'registration_closed', 'roster_lock'];
+const PRE_MATCH_PHASES = ['upcoming', 'registration_open'];
 
 const PRE_MATCH_SUBTITLES: Record<string, string> = {
-  upcoming:             'The tournament hasn\'t started yet. Match data will be available during the Live, Completed, and Archived phases.',
-  registration_open:    'Registration is open but no matches have been played. Match data will be available during the Live, Completed, and Archived phases.',
-  registration_closed:  'Registration has closed. Match data will be available during the Live, Completed, and Archived phases.',
-  roster_lock:          'Rosters are locked. Match data will be available once the tournament goes Live.',
+  upcoming:             'The tournament hasn\'t started yet. Match data will be available soon.',
+  registration_open:    'Registration is open but no matches have been played. Match data will be available once the bracket is built.',
 };
 
 export function TournamentMatchesTab() {
