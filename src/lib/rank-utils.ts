@@ -21,7 +21,7 @@ export const RANK_MEDALS: Record<number, string> = {
   71: 'Immortal', 72: 'Immortal', 73: 'Immortal', 74: 'Immortal', 75: 'Immortal', 80: 'Immortal',
 };
 
-const MEDAL_ORDER = ['Herald', 'Guardian', 'Crusader', 'Archon', 'Legend', 'Ancient', 'Divine', 'Immortal'] as const;
+export const MEDAL_ORDER = ['Herald', 'Guardian', 'Crusader', 'Archon', 'Legend', 'Ancient', 'Divine', 'Immortal'] as const;
 
 const MEDAL_COLORS: Record<string, string> = {
   Herald: '#8b7355',

@@ -137,6 +137,7 @@ export default function App() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState<PageType>('home');
+  const [currentHash, setCurrentHash] = useState(getEffectiveHash());
   const [devMode, setDevMode] = useState(false);
   const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
   const [officerPendingCount, setOfficerPendingCount] = useState(0);
@@ -201,6 +202,7 @@ export default function App() {
         localStorage.removeItem('tcf_current_hash');
         localStorage.removeItem('tcf_hash_timestamp');
       }
+      setCurrentHash(hash);
       setCurrentPage(hashToPage(hash));
       window.scrollTo(0, 0);
     };
@@ -575,7 +577,8 @@ export default function App() {
         )}
         {currentPage === 'tournament-hub' && (
           <TournamentHubPage
-            tournamentId={(window.location.hash || initialHash || localStorage.getItem('tcf_current_hash') || '').replace('#tournament-hub/', '')}
+            key={currentHash}
+            tournamentId={currentHash.replace('#tournament-hub/', '')}
             user={user}
             accessToken={session?.access_token || localStorage.getItem('supabase_token') || ''}
             onBack={() => { window.location.hash = '#kkup'; }}

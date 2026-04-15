@@ -7,11 +7,12 @@ import { TournamentGalleryTab } from './tabs/tournament-gallery-tab';
 import { TournamentPrizesTab } from './tabs/tournament-prizes-tab';
 import { TournamentStaffTab } from './tabs/tournament-staff-tab';
 import { EditTournamentModal } from './EditTournamentModal';
-import { useState } from 'react';
-import { ArrowLeft, AlertCircle, Settings } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, AlertCircle, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
 import { TournamentProvider, useTournament } from '@/app/contexts/tournament-context';
 import { getPhaseConfig, type TabKey } from './tournament-state-config';
 import { getTournamentBanner } from '@/lib/tournament-assets';
+import { projectId, publicAnonKey } from '/utils/supabase/info';
 import { PhaseTransitionArrows } from './phase-transition-arrows';
 // Other tabs will be imported as we build them
 
@@ -60,6 +61,39 @@ function TournamentHeader({ onBack }: { onBack: () => void }) {
   const { tournament, staff, myRegistration, myStaffApp, user, isOwner, accessToken, refetch } = useTournament();
   const [imageError, setImageError] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [adjacentTourneys, setAdjacentTourneys] = useState<{ prev: any, next: any }>({ prev: null, next: null });
+
+  useEffect(() => {
+    if (!tournament) return;
+    const fetchNavList = async () => {
+      try {
+        const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-4789f4af/kkup/tournaments`, {
+          headers: { 'Authorization': `Bearer ${publicAnonKey}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const tournaments = data.tournaments || [];
+          
+          const getNumber = (t: any) => {
+             const match = t.name.match(/Kernel Kup (\d+)|KKup (\d+)|KKUP (\d+)/i);
+             return match ? parseInt(match[1] || match[2] || match[3]) : 0;
+          };
+
+          // Sort descending: newest first 
+          const sorted = [...tournaments].sort((a, b) => getNumber(b) - getNumber(a)); 
+          const currentIndex = sorted.findIndex((t: any) => t.id === tournament.id);
+          
+          if (currentIndex !== -1) {
+            setAdjacentTourneys({
+              next: currentIndex > 0 ? sorted[currentIndex - 1] : null, // Newer is index - 1
+              prev: currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null  // Older is index + 1
+            });
+          }
+        }
+      } catch (err) {}
+    };
+    fetchNavList();
+  }, [tournament?.id]);
 
   if (!tournament) return null;
 
@@ -98,14 +132,32 @@ function TournamentHeader({ onBack }: { onBack: () => void }) {
   return (
     <div className="px-3 sm:px-4 pt-4 pb-2 bg-background">
       <div className="max-w-7xl mx-auto">
-        {/* Back Button - Above Card */}
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-4"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm font-semibold">Back to Kernel Kup</span>
-        </button>
+        {/* Navigation - Above Card */}
+        <div className="flex items-center justify-between mb-4 mt-2">
+          <div className="flex-1 flex justify-start">
+            {adjacentTourneys.next && (
+              <button
+                onClick={() => { window.location.hash = `#tournament-hub/${adjacentTourneys.next.id}`; }}
+                className="flex items-center gap-1.5 text-muted-foreground hover:text-harvest hover:bg-harvest/10 transition-colors bg-card border-2 border-border px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm group"
+              >
+                <ChevronLeft className="w-5 h-5 text-muted-foreground group-hover:text-harvest transition-colors" />
+                <span className="truncate max-w-[120px] sm:max-w-xs">{adjacentTourneys.next.name}</span>
+              </button>
+            )}
+          </div>
+
+          <div className="flex-1 flex justify-end">
+            {adjacentTourneys.prev && (
+              <button
+                onClick={() => { window.location.hash = `#tournament-hub/${adjacentTourneys.prev.id}`; }}
+                className="flex items-center gap-1.5 text-muted-foreground hover:text-harvest hover:bg-harvest/10 transition-colors bg-card border-2 border-border px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm group"
+              >
+                <span className="truncate max-w-[120px] sm:max-w-xs">{adjacentTourneys.prev.name}</span>
+                <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-harvest transition-colors" />
+              </button>
+            )}
+          </div>
+        </div>
 
         {/* Header Card - Two Column Layout */}
         <div className="bg-card rounded-2xl border-2 border-border p-6 sm:p-8">

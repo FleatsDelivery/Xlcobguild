@@ -26,7 +26,7 @@ import { rankTierToDisplay } from '@/lib/rank-utils';
 // ─── Types ────────────────────────────────────────────
 
 interface BracketPhase {
-  key: 'group_stage' | 'main_event';
+  key: string;
   name: string;
   order: number;
   groups: MatchGroupConfig[];
@@ -76,9 +76,14 @@ interface BracketBuilderProps {
 
 // ─── Helpers ──────────────────────────────────────────
 
+const MAX_PHASES = 6;
 const PHASE_COLORS: Record<string, string> = {
-  group_stage: '#3b82f6',
-  main_event:  '#d6a615',
+  play_in:       '#a855f7',
+  group_stage:   '#3b82f6',
+  group_stage_2: '#0ea5e9',
+  group_stage_3: '#2dd4bf',
+  main_event:    '#d6a615',
+  main_event_2:  '#f59e0b',
 };
 
 function matchupLabel(type?: string) {
@@ -191,6 +196,9 @@ function MatchGroupCard({
   onAssign,
   onUnassign,
   onAdvancementChange,
+  onMove,
+  isFirst,
+  isLast,
 }: {
   group: MatchGroupConfig;
   phase: BracketPhase;
@@ -205,6 +213,9 @@ function MatchGroupCard({
     field: 'winners_advance_to' | 'losers_advance_to',
     value: { phase_key: string; group_name: string } | null
   ) => void;
+  onMove?: (direction: 'up' | 'down') => void;
+  isFirst?: boolean;
+  isLast?: boolean;
 }) {
   const [assigning, setAssigning] = useState(false);
   const [selectedSeriesIds, setSelectedSeriesIds] = useState<Set<string>>(new Set());
@@ -260,6 +271,26 @@ function MatchGroupCard({
           </div>
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
+          {onMove && (
+            <>
+              <button
+                onClick={() => onMove('up')}
+                disabled={isFirst}
+                className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-card transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                title="Move match group up"
+              >
+                <ChevronUp className="w-3.5 h-3.5 text-muted-foreground" />
+              </button>
+              <button
+                onClick={() => onMove('down')}
+                disabled={isLast}
+                className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-card transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                title="Move match group down"
+              >
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+              </button>
+            </>
+          )}
           <button
             onClick={onEdit}
             className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-card transition-colors"
@@ -347,22 +378,46 @@ function MatchGroupCard({
 
       {/* Advancement Links */}
       <div className="px-3 pb-3 pt-1 border-t border-border space-y-2">
-        {/* Build dropdown options from all phases/groups, excluding self */}
         {(() => {
-          const options: Array<{ label: string; phase_key: string; group_name: string }> = [];
+          const groupOptions: Array<{ label: string; value: string }> = [];
+          
+          // 1. Existing groups across all phases
           for (const p of allPhases) {
             for (const g of p.groups) {
-              if (p.key === phase.key && g.name === group.name) continue; // skip self
-              options.push({ label: `${p.name} — ${g.name}`, phase_key: p.key, group_name: g.name });
+              if (p.key === phase.key && g.name === group.name) continue;
+              groupOptions.push({ 
+                label: `${p.name} — ${g.name}`, 
+                value: `${p.key}::${g.name}` 
+              });
             }
           }
-          const makeValue = (v: { phase_key: string; group_name: string } | null) =>
-            v ? `${v.phase_key}::${v.group_name}` : '';
-          const parseValue = (s: string) => {
-            if (!s) return null;
-            const [phase_key, ...rest] = s.split('::');
-            return { phase_key, group_name: rest.join('::') };
+
+          // 2. Virtual placement options for Main Event
+          const placementOptions = [
+            { label: '🏆 1st Place (Champion)', value: 'virtual::placement::1' },
+            { label: '🥈 2nd Place', value: 'virtual::placement::2' },
+            { label: '🥉 3rd Place', value: 'virtual::placement::3' },
+            { label: '4th Place', value: 'virtual::placement::4' },
+          ];
+
+          const makeValue = (v: any) => {
+            if (!v) return '';
+            if (v === 'eliminated') return 'eliminated';
+            // Handle both object and string (if stored as string in some legacy cases, though usually object)
+            if (typeof v === 'string') return v;
+            return `${v.phase_key}::${v.group_name}`;
           };
+
+          const parseValue = (s: string): any => {
+            if (!s) return null;
+            if (s === 'eliminated') return 'eliminated';
+            const [pk, ...rest] = s.split('::');
+            return { phase_key: pk, group_name: rest.join('::') };
+          };
+
+          const isMainEvent = phase.key === 'main_event';
+          const isFinal = group.is_final_node_group;
+
           return (
             <>
               <div>
@@ -370,37 +425,51 @@ function MatchGroupCard({
                   Winners advance to
                 </label>
                 <select
-                  value={makeValue(group.winners_advance_to ?? null)}
+                  value={makeValue(group.winners_advance_to)}
                   onChange={e => onAdvancementChange('winners_advance_to', parseValue(e.target.value))}
                   className="w-full px-2 py-1.5 bg-card border border-border rounded-lg text-xs text-foreground focus:outline-none focus:border-harvest transition-colors"
                 >
                   <option value="">Not Set</option>
-                  {options.map(o => (
-                    <option key={`${o.phase_key}::${o.group_name}`} value={`${o.phase_key}::${o.group_name}`}>
-                      {o.label}
-                    </option>
-                  ))}
+                  {isMainEvent && (
+                    <optgroup label="Final Placements">
+                      {placementOptions.map(o => (
+                        <option key={o.value} value={o.value}>{o.label}</option>
+                      ))}
+                    </optgroup>
+                  )}
+                  <optgroup label="Tournament Groups">
+                    {groupOptions.map(o => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </optgroup>
                 </select>
               </div>
-              {!group.is_final_node_group && (
-                <div>
-                  <label className="block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                    Losers advance to <span className="font-normal normal-case">(optional)</span>
-                  </label>
-                  <select
-                    value={makeValue(group.losers_advance_to ?? null)}
-                    onChange={e => onAdvancementChange('losers_advance_to', parseValue(e.target.value))}
-                    className="w-full px-2 py-1.5 bg-card border border-border rounded-lg text-xs text-foreground focus:outline-none focus:border-harvest transition-colors"
-                  >
-                    <option value="">Not Set</option>
-                    {options.map(o => (
-                      <option key={`${o.phase_key}::${o.group_name}`} value={`${o.phase_key}::${o.group_name}`}>
-                        {o.label}
-                      </option>
+
+              <div>
+                <label className="block text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                  Losers advance to <span className="font-normal normal-case">(optional)</span>
+                </label>
+                <select
+                  value={makeValue(group.losers_advance_to)}
+                  onChange={e => onAdvancementChange('losers_advance_to', parseValue(e.target.value))}
+                  className="w-full px-2 py-1.5 bg-card border border-border rounded-lg text-xs text-foreground focus:outline-none focus:border-harvest transition-colors"
+                >
+                  <option value="">Not Set</option>
+                  <option value="eliminated">❌ Eliminated</option>
+                  {isMainEvent && (
+                    <optgroup label="Final Placements">
+                      {placementOptions.map(o => (
+                        <option key={o.value} value={o.value}>{o.label}</option>
+                      ))}
+                    </optgroup>
+                  )}
+                  <optgroup label="Tournament Groups">
+                    {groupOptions.map(o => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
                     ))}
-                  </select>
-                </div>
-              )}
+                  </optgroup>
+                </select>
+              </div>
             </>
           );
         })()}
@@ -424,6 +493,10 @@ function PhaseCard({
   onAssign,
   onUnassign,
   onAdvancementChange,
+  onMovePhase,
+  isFirstPhase,
+  isLastPhase,
+  onMoveGroup,
 }: {
   phase: BracketPhase;
   allPhases: BracketPhase[];
@@ -436,6 +509,10 @@ function PhaseCard({
   onAssign: (groupName: string, matchIds: string[], group: MatchGroupConfig) => Promise<void>;
   onUnassign: (matchIds: string[]) => Promise<void>;
   onAdvancementChange: (groupName: string, field: 'winners_advance_to' | 'losers_advance_to', value: { phase_key: string; group_name: string } | null) => void;
+  onMovePhase?: (direction: 'up' | 'down') => void;
+  isFirstPhase?: boolean;
+  isLastPhase?: boolean;
+  onMoveGroup?: (groupName: string, direction: 'up' | 'down') => void;
 }) {
   const color = PHASE_COLORS[phase.key] || '#8b5cf6';
   const [collapsed, setCollapsed] = useState(false);
@@ -455,6 +532,26 @@ function PhaseCard({
           {phase.name.toUpperCase()}
         </span>
         <div className="flex items-center gap-1">
+          {onMovePhase && (
+            <>
+              <button
+                onClick={() => onMovePhase('up')}
+                disabled={isFirstPhase}
+                className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-muted/50 transition-colors disabled:opacity-30"
+                title="Move phase up"
+              >
+                <ChevronUp className="w-4 h-4 text-muted-foreground" />
+              </button>
+              <button
+                onClick={() => onMovePhase('down')}
+                disabled={isLastPhase}
+                className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-muted/50 transition-colors disabled:opacity-30"
+                title="Move phase down"
+              >
+                <ChevronDown className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </>
+          )}
           <button
             onClick={onAddGroup}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:opacity-80"
@@ -489,9 +586,9 @@ function PhaseCard({
               No match groups yet. Add one above.
             </p>
           )}
-          {phase.groups
-            .sort((a, b) => a.order - b.order)
-            .map(group => (
+          {[...phase.groups]
+            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+            .map((group, gi, arr) => (
               <MatchGroupCard
                 key={group.name}
                 group={group}
@@ -504,6 +601,9 @@ function PhaseCard({
                 onAssign={(ids) => onAssign(group.name, ids, group)}
                 onUnassign={onUnassign}
                 onAdvancementChange={(field, value) => onAdvancementChange(group.name, field, value)}
+                onMove={(dir) => onMoveGroup?.(group.name, dir)}
+                isFirst={gi === 0}
+                isLast={gi === arr.length - 1}
               />
             ))}
         </div>
@@ -581,10 +681,18 @@ export function BracketBuilder({
 
   // ── Phase operations ──
 
-  const handleAddPhase = (phase: { key: 'group_stage' | 'main_event'; name: string }) => {
-    const maxOrder = draftConfig.phases.reduce((m, p) => Math.max(m, p.order), 0);
+  const handleAddPhase = (phase: { key: string; name: string }) => {
+    // Ensure unique key
+    let uniqueKey = phase.key;
+    let counter = 1;
+    while (draftConfig.phases.some(p => p.key === uniqueKey)) {
+      uniqueKey = `${phase.key}_${counter}`;
+      counter++;
+    }
+
+    const maxOrder = draftConfig.phases.reduce((m, p) => Math.max(m, (p.order || 0)), 0);
     const newPhase: BracketPhase = {
-      key: phase.key,
+      key: uniqueKey,
       name: phase.name,
       order: maxOrder + 1,
       groups: [],
@@ -729,6 +837,81 @@ export function BracketBuilder({
     });
   };
 
+  const handleMovePhase = (phaseKey: string, direction: 'up' | 'down') => {
+    // 1. Get the current sort order (respecting defaults if order is missing)
+    const sorted = [...draftConfig.phases].sort((a, b) => {
+      const ao = a.order ?? (PHASE_SORT_ORDER[a.key] || 99);
+      const bo = b.order ?? (PHASE_SORT_ORDER[b.key] || 99);
+      return ao - bo;
+    });
+
+    const idx = sorted.findIndex(p => p.key === phaseKey);
+    if (idx === -1) return;
+
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= sorted.length) return;
+
+    // 2. Ensure both have concrete order numbers before swapping
+    sorted.forEach((p, i) => {
+      if (p.order === undefined || p.order === null) {
+        p.order = i + 1;
+      }
+    });
+
+    // 3. Swap order values
+    const a = sorted[idx];
+    const b = sorted[swapIdx];
+    const temp = a.order;
+    a.order = b.order;
+    b.order = temp;
+
+    // 4. Force a clean state update with new object references for the changed phases
+    setDraftConfig({
+      ...draftConfig,
+      phases: draftConfig.phases.map(p => {
+        const matching = sorted.find(s => s.key === p.key);
+        return matching ? { ...p, order: matching.order } : p;
+      })
+    });
+  };
+
+  const handleMoveGroup = (phaseKey: string, groupName: string, direction: 'up' | 'down') => {
+    setDraftConfig({
+      ...draftConfig,
+      phases: draftConfig.phases.map(p => {
+        if (p.key !== phaseKey) return p;
+
+        // 1. Get current sorted groups
+        const sortedGroups = [...p.groups].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        const idx = sortedGroups.findIndex(g => g.name === groupName);
+        if (idx === -1) return p;
+
+        const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+        if (swapIdx < 0 || swapIdx >= sortedGroups.length) return p;
+
+        // 2. Ensure unique order values exist
+        sortedGroups.forEach((g, i) => {
+          g.order = i + 1;
+        });
+
+        // 3. Swap
+        const a = sortedGroups[idx];
+        const b = sortedGroups[swapIdx];
+        const temp = a.order;
+        a.order = b.order;
+        b.order = temp;
+
+        return {
+          ...p,
+          groups: p.groups.map(g => {
+            const matching = sortedGroups.find(sg => sg.name === g.name);
+            return matching ? { ...g, order: matching.order } : g;
+          })
+        };
+      })
+    });
+  };
+
   // ── Seed Teams state ──
   const [seedData, setSeedData] = useState<SeedTeam[] | null>(null);
   const [fetchingRanks, setFetchingRanks] = useState(false);
@@ -804,7 +987,7 @@ export function BracketBuilder({
           )}
           <button
             onClick={() => setAddPhaseOpen(true)}
-            disabled={existingPhaseKeys.length >= 2}
+            disabled={existingPhaseKeys.length >= 6}
             className="flex items-center gap-2 px-4 py-2 bg-harvest hover:bg-harvest/90 rounded-xl font-semibold text-sm text-soil transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <Plus className="w-4 h-4" />
@@ -912,8 +1095,8 @@ export function BracketBuilder({
       )}
 
       {draftConfig.phases
-        .sort((a, b) => a.order - b.order)
-        .map(phase => {
+        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+        .map((phase, pi, arr) => {
           const phaseAssigned = assigned[phase.key] || {};
           return (
           <PhaseCard
@@ -945,6 +1128,10 @@ export function BracketBuilder({
               onAdvancementChange={(groupName, field, value) =>
                 handleAdvancementChange(phase.key, groupName, field, value)
               }
+              onMovePhase={(dir) => handleMovePhase(phase.key, dir)}
+              isFirstPhase={pi === 0}
+              isLastPhase={pi === arr.length - 1}
+              onMoveGroup={(groupName, dir) => handleMoveGroup(phase.key, groupName, dir)}
             />
           );
         })}

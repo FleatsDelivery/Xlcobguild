@@ -61,8 +61,6 @@ type PageType = 'home' | 'leaderboard' | 'requests' | 'rules' | 'profile' | 'kku
  */
 function getNavParent(page: PageType): PageType {
   switch (page) {
-    case 'tournament-hub':
-      return 'kkup';
     case 'giveaway-detail':
       return 'giveaways';
     case 'logo-management':

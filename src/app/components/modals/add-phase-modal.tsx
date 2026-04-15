@@ -8,10 +8,28 @@ import { X, GitBranch } from 'lucide-react';
 
 const PHASE_OPTIONS = [
   {
+    key: 'play_in',
+    name: 'Play In',
+    description: 'Qualifying play-in matches before the main bracket begins. e.g. 2 teams play for the last QF slot.',
+    color: '#a855f7',
+  },
+  {
     key: 'group_stage',
     name: 'Group Stage',
     description: 'Qualifying rounds — Quarterfinals, Semifinals, Round Robin, etc.',
     color: '#3b82f6',
+  },
+  {
+    key: 'group_stage_2',
+    name: 'Group Stage 2',
+    description: 'Secondary qualifying rounds or intermediate groups.',
+    color: '#0ea5e9',
+  },
+  {
+    key: 'group_stage_3',
+    name: 'Group Stage 3',
+    description: 'Tertiary qualifying rounds or final group phase.',
+    color: '#2dd4bf',
   },
   {
     key: 'main_event',
@@ -35,7 +53,7 @@ export function AddPhaseModal({ isOpen, onClose, onAdd, existingPhaseKeys }: Add
 
   if (!isOpen) return null;
 
-  const available = PHASE_OPTIONS.filter(p => !existingPhaseKeys.includes(p.key));
+  const available = PHASE_OPTIONS;
 
   const handleAdd = () => {
     const phase = PHASE_OPTIONS.find(p => p.key === selected);
@@ -68,7 +86,7 @@ export function AddPhaseModal({ isOpen, onClose, onAdd, existingPhaseKeys }: Add
         <div className="p-5 space-y-3">
           {available.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              Both phases have already been added.
+              All phases have already been added.
             </p>
           ) : (
             <>
