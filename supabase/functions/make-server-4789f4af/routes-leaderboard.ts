@@ -153,14 +153,8 @@ export function registerLeaderboardRoutes(app: Hono, supabase: any, anonSupabase
         const rankDiff = (b.rank_id || 0) - (a.rank_id || 0);
         if (rankDiff !== 0) return rankDiff;
 
-        const champDiff = (userStatsMap[b.id]?.championships || 0) - (userStatsMap[a.id]?.championships || 0);
-        if (champDiff !== 0) return champDiff;
-
-        const popdDiff = (userStatsMap[b.id]?.popdKernels || 0) - (userStatsMap[a.id]?.popdKernels || 0);
-        if (popdDiff !== 0) return popdDiff;
-
-        const badgeDiff = (b.opendota_data?.badge_rank?.rank_tier || 0) - (a.opendota_data?.badge_rank?.rank_tier || 0);
-        if (badgeDiff !== 0) return badgeDiff;
+        const mvpDiff = (b.mvp_count || 0) - (a.mvp_count || 0);
+        if (mvpDiff !== 0) return mvpDiff;
 
         return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
       });

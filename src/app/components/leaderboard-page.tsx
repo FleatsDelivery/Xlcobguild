@@ -1108,7 +1108,7 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
               {viewTab === 'towers' ? (
                 <>🌽 RANKING PRIORITY: <span className="text-foreground">SCORE</span> → <span className="text-foreground">MVP COUNT</span> → <span className="text-foreground">GUILD CAPACITY</span></>
               ) : (
-                <>🌽 RANKING PRIORITY: <span className="text-foreground">GUILD RANK</span> → <span className="text-foreground">PRESTIGE</span> → <span className="text-foreground">MVP COUNT</span></>
+                <>🌽 RANKING PRIORITY: <span className="text-foreground">PRESTIGE</span> → <span className="text-foreground">RANK</span> → <span className="text-foreground">MVP COUNT</span></>
               )}
             </p>
           </div>
