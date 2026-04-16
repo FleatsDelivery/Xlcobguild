@@ -242,10 +242,14 @@ function PlayerFeaturedCard({
           position === 3 ? 'border-orange-500 bg-orange-500 text-black shadow-orange-500/20' :
           'border-border/50 bg-black/60 text-white backdrop-blur-md'
         }`}>
-           {position === 1 ? '🥇 MVP' : 
-            position === 2 ? '🥈 ELITE' : 
-            position === 3 ? '🥉 PRO' : 
-            `#${position} STAR`}
+           {position === 1 ? '🏆 1ST PLACE' : 
+            position === 2 ? '🥈 2ND PLACE' : 
+            position === 3 ? '🥉 3RD PLACE' : 
+            `${position}${
+              (position % 10 === 1 && position % 100 !== 11) ? 'ST' :
+              (position % 10 === 2 && position % 100 !== 12) ? 'ND' :
+              (position % 10 === 3 && position % 100 !== 13) ? 'RD' : 'TH'
+            } PLACE`}
         </div>
 
         {/* Banner */}
@@ -889,8 +893,14 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
                           {/* ===== MOBILE LAYOUT (< sm) ===== */}
                           <div className="flex items-center gap-2 sm:hidden">
                             {/* Position # */}
-                            <div className={`w-7 h-7 rounded-lg ${getRankBadgeColor(position)} flex items-center justify-center flex-shrink-0 text-xs font-bold`}>
-                              {position <= 3 ? getMobileRankIcon(position) : `#${position}`}
+                            {/* Mobile Rank Box */}
+                            <div className={`w-9 h-9 rounded-lg ${getRankBadgeColor(position)} flex flex-col items-center justify-center flex-shrink-0 font-black shadow-sm`}>
+                              <span className="text-[10px] leading-none mb-0.5">{position}</span>
+                              <span className="text-[5px] uppercase opacity-90 leading-none">
+                                {(position % 10 === 1 && position % 100 !== 11) ? 'ST' :
+                                 (position % 10 === 2 && position % 100 !== 12) ? 'ND' :
+                                 (position % 10 === 3 && position % 100 !== 13) ? 'RD' : 'TH'} PLACE
+                              </span>
                             </div>
 
                             {/* Avatar */}
@@ -962,8 +972,14 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
                           {/* ===== DESKTOP LAYOUT (>= sm) ===== */}
                           <div className="hidden sm:flex items-center gap-4">
                             {/* Position Badge */}
-                            <div className={`w-12 h-12 rounded-xl ${getRankBadgeColor(position)} flex items-center justify-center flex-shrink-0 font-bold text-lg shadow-sm`}>
-                              {getRankIcon(position) || `#${position}`}
+                            {/* Desktop Rank Box */}
+                            <div className={`w-14 h-14 rounded-xl ${getRankBadgeColor(position)} flex flex-col items-center justify-center flex-shrink-0 font-black shadow-sm`}>
+                              <span className="text-sm leading-none mb-0.5">{position}</span>
+                              <span className="text-[8px] uppercase opacity-90 leading-none">
+                                {(position % 10 === 1 && position % 100 !== 11) ? 'ST' :
+                                 (position % 10 === 2 && position % 100 !== 12) ? 'ND' :
+                                 (position % 10 === 3 && position % 100 !== 13) ? 'RD' : 'TH'} PLACE
+                              </span>
                             </div>
 
                             {/* User Avatar */}
