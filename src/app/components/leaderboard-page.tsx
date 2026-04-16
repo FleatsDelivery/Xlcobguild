@@ -25,6 +25,7 @@ interface LeaderboardUser {
   twitch_avatar?: string | null;
   discord_id?: string | null;
   guild_id?: string | null;
+  mvp_count?: number;
   guild?: {
     id: string;
     name: string;
@@ -344,28 +345,33 @@ function TopThreePodium({
                   </span>
                 </div>
 
-                {/* Prestige */}
-                {u.prestige_level > 0 && (
-                  <p className="text-[10px] sm:text-xs text-amber-500 font-bold">
-                    Prestige {u.prestige_level}
-                  </p>
-                )}
+                {/* Prestige 5-Star Display */}
+                <div className="flex items-center justify-center gap-0.5 mt-1">
+                  {[1, 2, 3, 4, 5].map((level) => {
+                    const isAchieved = (u.prestige_level || 0) >= level;
+                    const starEmoji = level === 5 ? '💥' : '🌟';
+                    return (
+                      <span 
+                        key={level} 
+                        className={`text-[12px] leading-none ${
+                          isAchieved ? 'drop-shadow-sm' : 'opacity-15 grayscale'
+                        }`}
+                      >
+                        {starEmoji}
+                      </span>
+                    );
+                  })}
+                </div>
 
                 {/* Badges row */}
-                {(hasChampionships || hasPopdKernels) && (
-                  <div className="flex items-center justify-center gap-2 mt-1 text-xs">
-                    {hasChampionships && (
-                      <span title={`${u.kkup_stats!.championships}x Champion`}>
-                        <TrophyInline type="kernel_kup_champion" size="sm" /> {u.kkup_stats!.championships}
-                      </span>
-                    )}
-                    {hasPopdKernels && (
-                      <span title={`${u.kkup_stats!.popd_kernels}x MVP`}>
-                        <TrophyInline type="popd_kernel_mvp" size="sm" /> {u.kkup_stats!.popd_kernels}
-                      </span>
-                    )}
+                <div className="flex items-center justify-center gap-3 mt-1">
+                  <div className="flex flex-col items-center">
+                    <TrendingUp className="w-3.5 h-3.5 text-[#3b82f6]" />
+                    <p className="text-[10px] font-black text-[#3b82f6] leading-none mt-1">
+                      {u.mvp_count || 0} MVP
+                    </p>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           );
@@ -976,24 +982,22 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
                             </div>
 
                             {/* Minimal mobile badges */}
-                            <div className="flex items-center gap-1.5 flex-shrink-0">
-                              {hasChampionships && (
-                                <span title={`${leaderboardUser.kkup_stats!.championships}x Champion`}>
-                                  <TrophyInline type="kernel_kup_champion" size="xs" />
-                                </span>
-                              )}
-                              {hasPopdKernels && (
-                                <span title={`${leaderboardUser.kkup_stats!.popd_kernels}x MVP`}>
-                                  <TrophyInline type="popd_kernel_mvp" size="xs" />
-                                </span>
-                              )}
-                              {hasDotaBadge && (
-                                <RankBadge
-                                  medal={leaderboardUser.opendota_data!.badge_rank!.medal}
-                                  stars={leaderboardUser.opendota_data!.badge_rank!.stars}
-                                  size="sm"
-                                />
-                              )}
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                                <div className="flex flex-col items-center">
+                                  <TrendingUp className="w-3 h-3 text-[#3b82f6]" />
+                                  <span className="text-[8px] font-black text-[#3b82f6] leading-none mt-0.5">{leaderboardUser.mvp_count || 0}</span>
+                                </div>
+                                <div className="flex items-center gap-0.5 bg-foreground/5 px-1.5 py-1 rounded-lg border border-foreground/5">
+                                  {[1, 2, 3, 4, 5].map((level) => {
+                                    const isAchieved = (leaderboardUser.prestige_level || 0) >= level;
+                                    const starEmoji = level === 5 ? '💥' : '🌟';
+                                    return (
+                                      <span key={level} className={`text-[10px] leading-none ${isAchieved ? '' : 'opacity-10 grayscale'}`}>
+                                        {starEmoji}
+                                      </span>
+                                    );
+                                  })}
+                                </div>
                             </div>
                           </div>
 
@@ -1038,76 +1042,53 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
                               </div>
                             </div>
 
-                            {/* Right Side: Badges ordered by sort priority */}
+                            {/* Right Side: Players Stats (Rank, MVP, Prestige) */}
                             <div className="flex-shrink-0">
-                              <div className="flex items-center gap-3">
-                                {/* OpenDota Badge Rank */}
-                                {hasDotaBadge && (
-                                  <div className="flex flex-col items-center">
-                                    <RankBadge
-                                      medal={leaderboardUser.opendota_data!.badge_rank!.medal}
-                                      stars={leaderboardUser.opendota_data!.badge_rank!.stars}
-                                      size="xl"
-                                    />
-                                    <p className="text-xs font-bold text-harvest text-center leading-tight mt-0.5">
-                                      {leaderboardUser.opendota_data!.badge_rank!.medal}
-                                    </p>
-                                    <p className="text-xs text-muted-foreground">
-                                      {leaderboardUser.opendota_data!.badge_rank!.stars > 0 ? `★${leaderboardUser.opendota_data!.badge_rank!.stars}` : ''}
-                                    </p>
-                                  </div>
-                                )}
-
-                                {/* Pop'd Kernel MVP Award */}
-                                {hasPopdKernels && (
-                                  <div className="flex flex-col items-center">
-                                    <TrophyInline type="popd_kernel_mvp" size="lg" />
-                                    <p className="text-xs font-bold text-[#dc2626] text-center leading-tight mt-0.5">
-                                      {leaderboardUser.kkup_stats!.popd_kernels}x
-                                    </p>
-                                    <p className="text-xs text-muted-foreground">MVP</p>
-                                  </div>
-                                )}
-
-                                {/* Championship Badge */}
-                                {hasChampionships && (
-                                  <div className="flex flex-col items-center">
-                                    <TrophyInline type="kernel_kup_champion" size="lg" />
-                                    <p className="text-xs font-bold text-harvest text-center leading-tight mt-0.5">
-                                      {leaderboardUser.kkup_stats!.championships}x
-                                    </p>
-                                    <p className="text-xs text-muted-foreground">Champ</p>
-                                  </div>
-                                )}
-
+                              <div className="flex items-center gap-4">
                                 {/* Guild Rank */}
-                                <div className="flex flex-col items-center">
+                                <div className="flex flex-col items-center min-w-[60px]">
                                   {isPopdKernel ? (
                                     <Popcorn className="w-6 h-6 text-harvest mb-0.5" />
                                   ) : (
                                     <span className="text-xl mb-0.5">{emoji}</span>
                                   )}
-                                  <p className="text-xs font-bold text-harvest text-center leading-tight max-w-none truncate">
+                                  <p className="text-[10px] font-black text-harvest text-center uppercase tracking-tight">
                                     {leaderboardUser.ranks?.name || 'Unranked'}
                                   </p>
-                                  <p className="text-xs text-muted-foreground">
-                                    Rank {leaderboardUser.rank_id || 0}
+                                  <p className="text-[10px] text-muted-foreground font-bold">
+                                    RANK {leaderboardUser.rank_id || 0}
                                   </p>
                                 </div>
 
-                                {/* Prestige Badge */}
-                                <div className="flex flex-col items-center">
-                                  {leaderboardUser.prestige_level === 0 ? (
-                                    <Star className="w-5 h-5 text-[#fbbf24] fill-[#fbbf24] mb-0.5" />
-                                  ) : (
-                                    <span className="text-xl mb-0.5">🌟</span>
-                                  )}
-                                  <p className="text-xs font-bold text-[#fbbf24] text-center leading-tight">
-                                    Prestige
+                                {/* MVP Count */}
+                                <div className="flex flex-col items-center min-w-[60px]">
+                                  <div className="w-8 h-8 rounded-lg bg-[#3b82f6]/10 flex items-center justify-center mb-0.5">
+                                    <TrendingUp className="w-4 h-4 text-[#3b82f6]" />
+                                  </div>
+                                  <p className="text-[10px] font-black text-[#3b82f6] text-center uppercase">
+                                    {leaderboardUser.mvp_count || 0} MVP
                                   </p>
-                                  <p className="text-xs text-muted-foreground">
-                                    Level {leaderboardUser.prestige_level}
-                                  </p>
+                                </div>
+
+                                {/* Prestige 5-Star Display */}
+                                <div className="flex flex-col items-center bg-foreground/5 px-4 py-2 rounded-xl border border-foreground/5">
+                                  <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest leading-none mb-1.5">Prestige</p>
+                                  <div className="flex items-center gap-1">
+                                    {[1, 2, 3, 4, 5].map((level) => {
+                                      const isAchieved = (leaderboardUser.prestige_level || 0) >= level;
+                                      const starEmoji = level === 5 ? '💥' : '🌟';
+                                      return (
+                                        <span 
+                                          key={level} 
+                                          className={`text-[14px] leading-none transition-all duration-300 ${
+                                            isAchieved ? 'drop-shadow-sm scale-110' : 'opacity-10 grayscale'
+                                          }`}
+                                        >
+                                          {starEmoji}
+                                        </span>
+                                      );
+                                    })}
+                                  </div>
                                 </div>
                               </div>
                             </div>
