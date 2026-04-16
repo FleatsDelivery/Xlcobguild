@@ -59,8 +59,7 @@ export function registerLeaderboardRoutes(app: Hono, supabase: any, anonSupabase
           guildStatsMap[u.guild_id].total_mvp_count += Number(u.mvp_count || 0);
           
           const rankPoints = u.rank_id || 1;
-          const prestigePoints = (u.prestige_level || 0) * 10;
-          guildStatsMap[u.guild_id].kernels += (rankPoints + prestigePoints);
+          guildStatsMap[u.guild_id].kernels += rankPoints;
         }
       });
 
