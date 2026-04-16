@@ -540,7 +540,7 @@ export default function App() {
     <ThemeProvider>
     <ThemeEnforcer isTcfPlus={!!user?.tcf_plus_active} />
     <ThemeSyncer user={user} />
-    <div className="min-h-screen bg-background">
+    <div className="relative h-screen w-screen bg-background overflow-hidden">
       <Navigation 
         currentPage={currentPage} 
         onNavigate={setCurrentPage} 
@@ -550,7 +550,7 @@ export default function App() {
         officerPendingCount={officerPendingCount}
       />
       
-      <main className="pt-14 sm:pt-16 pb-4 sm:pb-20">
+      <main className="absolute inset-x-0 top-12 sm:top-14 bottom-0 sm:bottom-16 overflow-y-auto scrollbar-visible">
         {currentPage === 'home' && <HomePage user={user} onboarding={onboarding} onRefresh={handleRefreshUser} onBadgeRefresh={refreshBadgeCount} />}
         {currentPage === 'leaderboard' && <LeaderboardPage user={user} onRefresh={handleRefreshUser} />}
         {currentPage === 'requests' && <InboxPage user={user} onBadgeRefresh={refreshBadgeCount} />}

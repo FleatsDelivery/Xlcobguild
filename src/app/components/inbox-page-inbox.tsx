@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 import {
   Inbox, Bell, Loader2, CheckCircle, XCircle, Filter,
   UserPlus, Star, Gift, Trophy, Shield, ExternalLink,
-  AlertTriangle, Eye, Trash2, ArrowRight, DollarSign, Users,
+  AlertTriangle, Eye, Trash2, ArrowRight, DollarSign, Users, ShieldPlus,
 } from '@/lib/icons';
 import { Button } from '@/app/components/ui/button';
 import { timeAgo } from '@/lib/date-utils';
@@ -44,7 +44,7 @@ export interface ActionResult {
 
 const ICON_MAP: Record<string, React.ElementType> = {
   UserPlus, CheckCircle, XCircle, Star, Gift, Trophy, Shield, Bell,
-  Filter, Inbox, ExternalLink,
+  Filter, Inbox, ExternalLink, ShieldPlus,
 };
 
 function getIcon(iconName: string): React.ElementType {
@@ -72,6 +72,7 @@ interface InboxTabProps {
   onDismiss: (id: string) => void;
   onAction: (n: Notification) => void;
   onInviteAction: (n: Notification, action: 'accepted' | 'declined') => void;
+  onGuildInviteAction: (n: Notification, action: 'accepted' | 'declined') => void;
   onJoinRequestAction: (n: Notification, action: 'accepted' | 'declined' | 'dismissed') => void;
   onPrizeAction: (n: Notification, action: 'accepted' | 'declined') => void;
   actioningId: string | null;
@@ -91,6 +92,7 @@ export function InboxTab({
   onDismiss,
   onAction,
   onInviteAction,
+  onGuildInviteAction,
   onJoinRequestAction,
   onPrizeAction,
   actioningId,
@@ -195,6 +197,7 @@ export function InboxTab({
                 onDismiss={onDismiss}
                 onAction={onAction}
                 onInviteAction={onInviteAction}
+                onGuildInviteAction={onGuildInviteAction}
                 onJoinRequestAction={onJoinRequestAction}
                 onPrizeAction={onPrizeAction}
                 actioningId={actioningId}
@@ -243,6 +246,7 @@ function NotificationCard({
   onDismiss: (id: string) => void;
   onAction: (n: Notification) => void;
   onInviteAction: (n: Notification, action: 'accepted' | 'declined') => void;
+  onGuildInviteAction: (n: Notification, action: 'accepted' | 'declined') => void;
   onJoinRequestAction: (n: Notification, action: 'accepted' | 'declined' | 'dismissed') => void;
   onPrizeAction: (n: Notification, action: 'accepted' | 'declined') => void;
   actioningId: string | null;
@@ -253,9 +257,10 @@ function NotificationCard({
   const isActioned = n.status === 'actioned';
   const hasAction = !!n.action_url;
   const isTeamInvite = (n.type === 'team_invite' || n.type === 'coach_invite') && !isActioned;
+  const isGuildInvite = n.type === 'guild_invite' && !isActioned;
   const isJoinRequest = n.type === 'join_request' && !isActioned;
   const isPrizeAward = n.type === 'prize_awarded' && !isActioned;
-  const hasInlineActions = isTeamInvite || isJoinRequest || isPrizeAward;
+  const hasInlineActions = isTeamInvite || isGuildInvite || isJoinRequest || isPrizeAward;
   const isActioning = actioningId === n.id;
   const hasResult = !!actionResult;
 
@@ -355,6 +360,28 @@ function NotificationCard({
                     <ExternalLink className="w-3.5 h-3.5" />
                   </button>
                 )}
+              </div>
+            )}
+            
+            {/* Inline guild invite actions */}
+            {isGuildInvite && (
+              <div className="flex items-center gap-2 mt-3" onClick={e => e.stopPropagation()}>
+                <Button
+                  onClick={() => onGuildInviteAction(n, 'accepted')}
+                  disabled={isActioning}
+                  className="bg-[#10b981] hover:bg-[#10b981]/90 text-white font-bold text-xs rounded-xl h-8 px-4"
+                >
+                  {isActioning ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : <ShieldPlus className="w-3.5 h-3.5 mr-1" />}
+                  Accept & Join
+                </Button>
+                <Button
+                  onClick={() => onGuildInviteAction(n, 'declined')}
+                  disabled={isActioning}
+                  className="bg-muted hover:bg-muted/80 text-muted-foreground font-bold text-xs rounded-xl h-8 px-4"
+                >
+                  <XCircle className="w-3.5 h-3.5 mr-1" />
+                  Decline
+                </Button>
               </div>
             )}
 

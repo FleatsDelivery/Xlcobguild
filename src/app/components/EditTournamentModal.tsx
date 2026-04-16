@@ -118,6 +118,35 @@ export function EditTournamentModal({ tournament, onClose, onSave, onDeleted, le
   const [editMinRank, setEditMinRank] = useState<number>(tournament.min_rank ?? 1);
   const [editMaxRank, setEditMaxRank] = useState<number>(tournament.max_rank ?? 31);
 
+  // Synchronize form state with latest tournament prop (captures silent refetches)
+  useEffect(() => {
+    setName(tournament.name || '');
+    setDescription(tournament.description || '');
+    setTournamentType(tournament.tournament_type || 'kernel_kup');
+    setLeagueId(tournament.league_id?.toString() || '');
+    setPrizePool(tournament.prize_pool?.toString() || '');
+    setRegistrationStartDate(toDateTimeLocal(tournament.registration_start_date));
+    setRegistrationEndDate(toDateTimeLocal(tournament.registration_end_date));
+    setTournamentStartDate(toDateTimeLocal(tournament.tournament_start_date));
+    setTournamentEndDate(toDateTimeLocal(tournament.tournament_end_date));
+    setMaxTeams(tournament.max_teams?.toString() || '');
+    setMinTeams(tournament.min_teams?.toString() || '');
+    setMaxTeamSize(tournament.max_team_size?.toString() || '');
+    setMinTeamSize(tournament.min_team_size?.toString() || '');
+    setCastersNeeded(tournament.casters_needed?.toString() || '');
+    setStaffNeeded(tournament.staff_needed?.toString() || '');
+    setYoutubeUrl(tournament.youtube_url || '');
+    setTwitchUrl1(tournament.twitch_url_1 || '');
+    setTwitchUrl2(tournament.twitch_url_2 || '');
+    setBannerUrl(tournament.banner_url || '');
+    setLargeIconUrl(tournament.large_icon_url || '');
+    setSquareIconUrl(tournament.square_icon_url || '');
+    setSeason(tournament.kkup_season?.toString() || '');
+    setUseCustomRank(tournament.min_rank != null || tournament.max_rank != null);
+    setEditMinRank(tournament.min_rank ?? 1);
+    setEditMaxRank(tournament.max_rank ?? 31);
+  }, [tournament]);
+
   const apiBase = `https://${projectId}.supabase.co/functions/v1/make-server-4789f4af`;
   const accessToken = typeof window !== 'undefined' ? localStorage.getItem('supabase_token') : null;
   const authHeaders: Record<string, string> = {

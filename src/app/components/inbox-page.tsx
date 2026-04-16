@@ -311,16 +311,15 @@ export function InboxPage({ user, onBadgeRefresh }: InboxPageProps) {
 
   // Mark single read (optimistic badge update)
   const markRead = async (notifId: string) => {
-    // Optimistic local update
     const wasUnread = notifications.find(n => n.id === notifId)?.status === 'unread';
-    setNotifications(prev => prev.map(n =>
-      n.id === notifId ? { ...n, status: 'read' as const, read_at: new Date().toISOString() } : n
-    ));
     if (wasUnread) {
       const newCount = Math.max(0, unreadCount - 1);
       setUnreadCount(newCount);
       onBadgeRefresh?.(newCount);
     }
+    setNotifications(prev => prev.map(n =>
+      n.id === notifId ? { ...n, status: 'read' as const, read_at: new Date().toISOString() } : n
+    ));
 
     // Fire-and-forget server call
     try {
@@ -336,14 +335,13 @@ export function InboxPage({ user, onBadgeRefresh }: InboxPageProps) {
 
   // Dismiss — optimistic removal, Motion handles exit animation, server call in background
   const dismissNotif = async (notifId: string) => {
-    // Optimistic badge update
     const wasUnread = notifications.find(n => n.id === notifId)?.status === 'unread';
-    setNotifications(prev => prev.filter(n => n.id !== notifId));
     if (wasUnread) {
       const newCount = Math.max(0, unreadCount - 1);
       setUnreadCount(newCount);
       onBadgeRefresh?.(newCount);
     }
+    setNotifications(prev => prev.filter(n => n.id !== notifId));
     invalidateActivity();
 
     // Server call in background
@@ -386,16 +384,16 @@ export function InboxPage({ user, onBadgeRefresh }: InboxPageProps) {
     setActionResults(prev => new Map(prev).set(notifId, result));
 
     setTimeout(() => {
-      // Optimistic badge update — check if this was unread before removing
-      setNotifications(prev => {
-        const notif = prev.find(n => n.id === notifId);
-        if (notif?.status === 'unread') {
-          const newCount = Math.max(0, unreadCount - 1);
-          setUnreadCount(newCount);
-          onBadgeRefresh?.(newCount);
-        }
-        return prev.filter(n => n.id !== notifId);
-      });
+      // 1. Calculate side effects BEFORE updating notifications
+      const targetNotif = notifications.find(n => n.id === notifId);
+      if (targetNotif?.status === 'unread') {
+        const newCount = Math.max(0, unreadCount - 1);
+        setUnreadCount(newCount);
+        onBadgeRefresh?.(newCount);
+      }
+
+      // 2. Perform state updates
+      setNotifications(prev => prev.filter(n => n.id !== notifId));
       setActionResults(prev => {
         const next = new Map(prev);
         next.delete(notifId);
@@ -680,6 +678,44 @@ export function InboxPage({ user, onBadgeRefresh }: InboxPageProps) {
     }
   };
 
+  // Guild invite inline actions
+  const handleGuildInviteAction = async (notif: Notification, action: 'accepted' | 'declined') => {
+    const guildId = notif.metadata?.guild_id || notif.related_id;
+    if (!guildId) return;
+
+    setActioningId(notif.id);
+    try {
+      const headers = await getHeaders();
+      const res = await fetch(`${apiBase}/guilds/${guildId}/invite/${notif.id}/${action}`, {
+        method: 'POST',
+        headers
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'Unknown error' }));
+        setActionResults(prev => new Map(prev).set(notif.id, {
+          status: 'error',
+          message: err.error || `Failed to ${action} invite`
+        }));
+        setTimeout(() => {
+          setActionResults(prev => { const next = new Map(prev); next.delete(notif.id); return next; });
+        }, 4000);
+        return;
+      }
+
+      showResultAndRemove(notif.id, {
+        status: action === 'accepted' ? 'accepted' : 'declined',
+        message: action === 'accepted' ? 'Joined Guild!' : 'Invite declined.'
+      });
+      invalidateActivity();
+      if (action === 'accepted') fireMoneyConfetti();
+    } catch (err) {
+      console.error('Guild invite action error:', err);
+    } finally {
+      setActioningId(null);
+    }
+  };
+
   // Refresh handler (manual refresh button)
   const handleRefresh = () => {
     if (activeTab === 'inbox') {
@@ -814,6 +850,7 @@ export function InboxPage({ user, onBadgeRefresh }: InboxPageProps) {
             onDismiss={dismissNotif}
             onAction={handleActionClick}
             onInviteAction={handleInviteAction}
+            onGuildInviteAction={handleGuildInviteAction}
             onJoinRequestAction={handleJoinRequestAction}
             onPrizeAction={handlePrizeAction}
             actioningId={actioningId}

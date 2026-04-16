@@ -516,7 +516,7 @@ export function registerMVPRoutes(app: Hono, supabase: any, anonSupabase: any) {
       const action = request.action || 'rank_up';
 
       const { data: targetUser, error: targetError } = await supabase
-        .from('users').select('rank_id, prestige_level, guild_id').eq('id', userToRankUp).single();
+        .from('users').select('rank_id, prestige_level, guild_id, mvp_count').eq('id', userToRankUp).single();
       if (targetError || !targetUser) return c.json({ error: 'User not found' }, 404);
 
       const maxRank = targetUser.prestige_level === 5 ? 11 : 10;
@@ -554,9 +554,30 @@ export function registerMVPRoutes(app: Hono, supabase: any, anonSupabase: any) {
       if (updateRequestError) return c.json({ error: 'Failed to approve request' }, 500);
 
       const { error: updateUserError } = await supabase
-        .from('users').update({ rank_id: newRankId, prestige_level: newPrestigeLevel, updated_at: new Date().toISOString() })
+        .from('users').update({ 
+          rank_id: newRankId, 
+          prestige_level: newPrestigeLevel, 
+          updated_at: new Date().toISOString(),
+          mvp_count: (targetUser as any).mvp_count + 1
+        })
         .eq('id', userToRankUp);
       if (updateUserError) return c.json({ error: 'Failed to rank up user' }, 500);
+
+      // Also increment the guild's base Rank Score (current_rank)
+      if (targetUser.guild_id) {
+        const { data: guildData } = await supabase
+          .from('guild_wars_guilds')
+          .select('current_rank')
+          .eq('id', targetUser.guild_id)
+          .single();
+        
+        if (guildData) {
+          await supabase
+            .from('guild_wars_guilds')
+            .update({ current_rank: (guildData.current_rank || 0) + 1 })
+            .eq('id', targetUser.guild_id);
+        }
+      }
 
       // Sync Discord roles (background/best-effort)
       // @ts-ignore: EdgeRuntime is available in Supabase

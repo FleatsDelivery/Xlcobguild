@@ -96,6 +96,7 @@ export {
   Ban,
   Sparkles,
   Gamepad2,
+  ShieldPlus,
   
   // Time & Calendar
   Calendar,

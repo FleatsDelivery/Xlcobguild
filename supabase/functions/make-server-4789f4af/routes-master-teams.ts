@@ -86,7 +86,13 @@ export function registerMasterTeamsRoutes(app: Hono, supabase: any, anonSupabase
     try {
       const { data: masterTeams, error } = await supabase
         .from('kkup_master_teams')
-        .select('*')
+        .select(`
+          *,
+          captain:kkup_persons!current_captain_person_id (
+            id,
+            display_name
+          )
+        `)
         .order('current_name', { ascending: true });
 
       if (error) return c.json({ error: `Failed to fetch master teams: ${error.message}` }, 500);
@@ -106,6 +112,7 @@ export function registerMasterTeamsRoutes(app: Hono, supabase: any, anonSupabase
       const enriched = (masterTeams || []).map((mt: any) => ({
         ...mt,
         tournament_count: countsMap.get(mt.id) || 0,
+        // captain is already populated via join
       }));
 
       return c.json({ master_teams: enriched });
@@ -570,14 +577,51 @@ export function registerMasterTeamsRoutes(app: Hono, supabase: any, anonSupabase
 
       if (updateErr) return c.json({ error: `Failed to transfer captaincy: ${updateErr.message}` }, 500);
 
+      // Propagate change to active tournament teams
+      // Mutable statuses from team-formation: upcoming, registration_open, registration_closed
+      try {
+        const { data: activeTournaments } = await supabase
+          .from('kkup_tournaments')
+          .select('id')
+          .in('status', ['upcoming', 'registration_open', 'registration_closed']);
+        
+        const activeTourneyIds = (activeTournaments || []).map((t: any) => t.id);
+        
+        if (activeTourneyIds.length > 0) {
+          const { error: teamUpdateErr } = await supabase
+            .from('kkup_teams')
+            .update({ captain_person_id: new_captain_person_id })
+            .eq('master_team_id', id)
+            .in('tournament_id', activeTourneyIds);
+          
+          if (teamUpdateErr) {
+            console.error('Failed to propagate captaincy change to tournament teams:', teamUpdateErr);
+          }
+        }
+      } catch (propErr) {
+        console.error('Non-critical: Propagation of captaincy failed:', propErr);
+      }
+
       // Log: activity on actor
       try {
         await createUserActivity({
           user_id: auth.dbUser.supabase_id,
           type: 'master_team_captain_transferred',
           title: `Transferred captaincy of "${masterTeam.current_name}"`,
-          description: `Captain transferred from ${oldCaptainName} to ${newCaptain.display_name}`,
+          description: `Captain transferred from ${oldCaptainName} to ${newCaptain.display_name}.`,
           actor_name: auth.dbUser.discord_username || auth.dbUser.email,
+        });
+
+        await createAdminLog({
+          type: 'captain_transferred',
+          action: `Transferred captaincy of "${masterTeam.current_name}" from ${oldCaptainName} to ${newCaptain.display_name}`,
+          actor_id: auth.dbUser.id,
+          actor_name: auth.dbUser.discord_username || auth.dbUser.email,
+          details: {
+            master_team_id: id,
+            from_person_id: masterTeam.current_captain_person_id,
+            to_person_id: new_captain_person_id,
+          },
         });
       } catch (actErr) {
         console.error('Non-critical: activity log for captain transfer failed:', actErr);

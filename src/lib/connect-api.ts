@@ -148,6 +148,9 @@ export async function createAward(params: CreateAwardParams) {
   return apiPost('/award', params);
 }
 
+/** Alias for createAward in the Payout Manager context */
+export const createPayout = createAward;
+
 export async function acceptAward(awardId: string) {
   return apiPut(`/award/${awardId}/accept`);
 }

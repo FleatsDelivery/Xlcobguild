@@ -48,7 +48,7 @@ function LazyDiscordWidget() {
             src="https://discordapp.com/widget?id=1475609583086075904&theme=dark"
             width="100%"
             height="500"
-            allowTransparency={true}
+            allowFullScreen
             frameBorder="0"
             sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
             className="rounded-2xl w-full"

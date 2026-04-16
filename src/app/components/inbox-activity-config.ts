@@ -49,6 +49,7 @@ export const NOTIFICATION_TYPE_CONFIG: Record<string, TypeDisplayConfig> = {
   prize_awarded:        { label: 'Prize Awarded',      icon: 'DollarSign',  color: '#d6a615' },
   prize_paid:           { label: 'Prize Paid',         icon: 'Banknote',    color: '#10b981' },
   prize_revoked:        { label: 'Prize Revoked',      icon: 'XCircle',     color: '#ef4444' },
+  guild_invite:         { label: 'Guild Invite',       icon: 'ShieldPlus',  color: '#8b5cf6' },
 };
 
 // ── Activity type display config (personal audit trail) ──────────────
@@ -88,6 +89,11 @@ export const ACTIVITY_TYPE_CONFIG: Record<string, TypeDisplayConfig> = {
   // User lifecycle milestones
   account_created:          { label: 'Joined The Corn Field',  icon: 'Sprout',       color: '#10b981' },
   guild_joined:             { label: 'Joined Guild',           icon: 'Flag',         color: '#8b5cf6' },
+  guild_invite_sent:        { label: 'Guild Invite Sent',      icon: 'Send',         color: '#8b5cf6' },
+  guild_invite_accepted:    { label: 'Guild Invite Accepted',  icon: 'CheckCircle',  color: '#10b981' },
+  guild_invite_declined:    { label: 'Guild Invite Declined',  icon: 'XCircle',      color: '#ef4444' },
+  guild_left:               { label: 'Left Guild',             icon: 'LogOut',       color: '#ef4444' },
+  guild_kicked:             { label: 'Removed from Guild',     icon: 'UserMinus',    color: '#ef4444' },
   onboarding_reward:        { label: 'Onboarding Rank-Up',     icon: 'Gift',         color: '#d6a615' },
 
   // Inbox responses (created when user actions/dismisses inbox items)

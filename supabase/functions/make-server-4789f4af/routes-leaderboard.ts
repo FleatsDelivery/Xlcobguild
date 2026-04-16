@@ -20,7 +20,16 @@ export function registerLeaderboardRoutes(app: Hono, supabase: any, anonSupabase
         .from('users').select('role').eq('supabase_id', authUser.id).single();
       if (userError || !dbUser) return c.json({ error: 'User not found' }, 404);
 
-      // Get all users (all authenticated roles)
+      // Get all active guilds
+      const { data: guilds, error: guildsError } = await supabase
+        .from('guild_wars_guilds')
+        .select('id, name, tag, color, logo_url, member_limit, current_rank');
+
+      if (guildsError) {
+          console.error('Error fetching guilds:', guildsError);
+      }
+
+      // Get all users
       const { data: users, error: usersError } = await supabase
         .from('users')
         .select(`
@@ -28,20 +37,58 @@ export function registerLeaderboardRoutes(app: Hono, supabase: any, anonSupabase
           role, created_at, steam_id, opendota_data, tcf_plus_active, twitch_username, twitch_avatar,
           guild_id,
           ranks ( id, name, display_order ),
-          guild:guild_wars_guilds!users_guild_id_fkey ( id, name, tag, color, logo_url )
+          guild:guild_wars_guilds!users_guild_id_fkey ( id, name, tag, color, logo_url, member_limit, current_rank )
         `);
 
       if (usersError) {
-        console.error('Error fetching leaderboard:', usersError);
+        console.error('Error fetching leaderboard users:', usersError);
         return c.json({ error: 'Failed to fetch leaderboard' }, 500);
       }
 
-      // Compute KKUP stats for each user via steam_id → kkup_persons join
+      // 1. Calculate Guild Stats
+      const guildStatsMap: Record<string, { kernels: number; member_count: number; total_rank: number; total_prestige: number; total_mvp_count: number }> = {};
+      (guilds || []).forEach((g: any) => {
+        guildStatsMap[g.id] = { kernels: g.current_rank || 0, member_count: 0, total_rank: 0, total_prestige: 0, total_mvp_count: 0 };
+      });
+
+      (users || []).forEach((u: any) => {
+        if (u.guild_id && guildStatsMap[u.guild_id]) {
+          guildStatsMap[u.guild_id].member_count++;
+          guildStatsMap[u.guild_id].total_rank += (u.rank_id || 1);
+          guildStatsMap[u.guild_id].total_prestige += (u.prestige_level || 0);
+          guildStatsMap[u.guild_id].total_mvp_count += (u.mvp_count || 0);
+          
+          const rankPoints = u.rank_id || 1;
+          const prestigePoints = (u.prestige_level || 0) * 10;
+          guildStatsMap[u.guild_id].kernels += (rankPoints + prestigePoints);
+        }
+      });
+
+      const rankedGuilds = (guilds || [])
+        .map((g: any) => ({
+          ...g,
+          kernels: guildStatsMap[g.id]?.kernels || 0,
+          member_count: guildStatsMap[g.id]?.member_count || 0,
+          total_mvp_count: guildStatsMap[g.id]?.total_mvp_count || 0,
+          avg_rank_id: guildStatsMap[g.id]?.member_count > 0 
+            ? Math.round(guildStatsMap[g.id].total_rank / guildStatsMap[g.id].member_count) 
+            : 0,
+          avg_prestige: guildStatsMap[g.id]?.member_count > 0
+            ? Math.round(guildStatsMap[g.id].total_prestige / guildStatsMap[g.id].member_count)
+            : 0
+        }))
+        .sort((a: any, b: any) => {
+          // Rank Score > MVP Count > Guild Capacity (Member Count)
+          if (b.kernels !== a.kernels) return b.kernels - a.kernels;
+          if (b.total_mvp_count !== a.total_mvp_count) return b.total_mvp_count - a.total_mvp_count;
+          return b.member_count - a.member_count;
+        });
+
+      // 2. Compute KKUP stats for each user (Existing logic)
       const steamIds = (users || []).map((u: any) => u.steam_id).filter(Boolean);
       const userStatsMap: Record<string, { linked: boolean; championships: number; popdKernels: number }> = {};
 
       if (steamIds.length > 0) {
-        // Find all kkup_persons matched by steam_id
         const { data: persons } = await supabase
           .from('kkup_persons')
           .select('id, steam_id')
@@ -55,25 +102,21 @@ export function registerLeaderboardRoutes(app: Hono, supabase: any, anonSupabase
             personIds.push(p.id);
           }
 
-          // Get all team rosters for matched persons
           const { data: rosters } = await supabase
             .from('kkup_team_rosters')
             .select('person_id, team_id')
             .in('person_id', personIds);
 
-          // Build person_id → team_ids map
           const personTeams = new Map<string, string[]>();
           (rosters || []).forEach((r: any) => {
             if (!personTeams.has(r.person_id)) personTeams.set(r.person_id, []);
             personTeams.get(r.person_id)!.push(r.team_id);
           });
 
-          // Get all tournaments for championship & MVP lookups
           const { data: tournaments } = await supabase
             .from('kkup_tournaments')
             .select('id, winning_team_id, tournament_type, popd_kernel_1_person_id, popd_kernel_2_person_id');
 
-          // For each user, compute stats
           for (const u of (users || [])) {
             if (!u.steam_id || !personBySteamId.has(u.steam_id)) {
               userStatsMap[u.id] = { linked: false, championships: 0, popdKernels: 0 };
@@ -97,14 +140,13 @@ export function registerLeaderboardRoutes(app: Hono, supabase: any, anonSupabase
         }
       }
 
-      // Fill in any users not yet in the map
       for (const u of (users || [])) {
         if (!userStatsMap[u.id]) {
           userStatsMap[u.id] = { linked: false, championships: 0, popdKernels: 0 };
         }
       }
 
-      // Sort: prestige DESC > rank DESC > championships DESC > pop'd kernels DESC > badge DESC > created ASC
+      // Sort Users (Existing logic)
       const sortedUsers = [...(users || [])].sort((a: any, b: any) => {
         const prestigeDiff = (b.prestige_level || 0) - (a.prestige_level || 0);
         if (prestigeDiff !== 0) return prestigeDiff;
@@ -124,7 +166,6 @@ export function registerLeaderboardRoutes(app: Hono, supabase: any, anonSupabase
         return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
       });
 
-      // Attach KKUP stats to each user
       const usersWithStats = sortedUsers.map((u: any) => ({
         ...u,
         kkup_stats: {
@@ -134,11 +175,13 @@ export function registerLeaderboardRoutes(app: Hono, supabase: any, anonSupabase
         }
       }));
 
-      return c.json({ users: usersWithStats });
+      return c.json({
+        users: usersWithStats,
+        guilds: rankedGuilds
+      });
     } catch (error) {
       console.error('Get leaderboard error:', error);
       return c.json({ error: 'Internal server error' }, 500);
     }
   });
-
 }

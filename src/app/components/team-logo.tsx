@@ -32,27 +32,24 @@ export function TeamLogo({
 
   // Build ordered fallback queue for this team
   const buildQueue = (): string[] => {
-    const queue: string[] = [];
-    if (!teamTag) {
-      // No tag — only thing we can try is the DB URL
-      if (logoUrl) queue.push(logoUrl);
-      return queue;
+    const queueSet = new Set<string>();
+
+    // 1. Master team_logos folder (primary source of truth)
+    if (teamTag) {
+      queueSet.add(getTeamLogoUrl(teamTag, 'png'));
+      queueSet.add(getTeamLogoUrl(teamTag, 'jpg'));
     }
 
-    // 1. Master team_logos folder (png then jpg) — always first
-    queue.push(getTeamLogoUrl(teamTag, 'png'));
-    queue.push(getTeamLogoUrl(teamTag, 'jpg'));
+    // 2. DB logo_url (may be a custom upload or legacy path)
+    if (logoUrl) queueSet.add(logoUrl);
 
-    // 2. Tournament-specific folder (png then jpg) — if we know the tournament
-    if (tournamentName) {
-      queue.push(getTournamentTeamLogoUrl(tournamentName, teamTag, 'png'));
-      queue.push(getTournamentTeamLogoUrl(tournamentName, teamTag, 'jpg'));
+    // 3. Tournament-specific folder
+    if (tournamentName && teamTag) {
+      queueSet.add(getTournamentTeamLogoUrl(tournamentName, teamTag, 'png'));
+      queueSet.add(getTournamentTeamLogoUrl(tournamentName, teamTag, 'jpg'));
     }
 
-    // 3. DB logo_url as last resort (may be stale or wrong)
-    if (logoUrl) queue.push(logoUrl);
-
-    return queue;
+    return Array.from(queueSet);
   };
 
   // Rebuild queue when key props change, reset index

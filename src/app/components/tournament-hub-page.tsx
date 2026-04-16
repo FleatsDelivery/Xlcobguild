@@ -244,9 +244,11 @@ function TournamentHeader({ onBack }: { onBack: () => void }) {
                     showLeftArrow={true}
                   />
                   
-                  {/* Edit Tournament Button */}
                   <button
-                    onClick={() => setShowEditModal(true)}
+                    onClick={() => {
+                      refetch(true); // Silent refresh to avoid full-screen spinner
+                      setShowEditModal(true);
+                    }}
                     className="p-2 bg-harvest/10 hover:bg-harvest/20 text-harvest rounded-lg transition-colors"
                     title="Edit Tournament"
                   >

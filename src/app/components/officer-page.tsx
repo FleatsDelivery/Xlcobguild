@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Shield, Settings, Trophy, RefreshCw, Gamepad2, Upload, Loader2, AlertTriangle, ChevronRight, Gift, Users, Bell, Swords, DollarSign, Radio, Megaphone } from 'lucide-react';
+import { Shield, Settings, Trophy, RefreshCw, Gamepad2, Upload, Loader2, AlertTriangle, ChevronRight, Gift, Users, Bell, Swords, DollarSign, Radio, Megaphone, Banknote } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { projectId } from '/utils/supabase/info';
 import { Footer } from '@/app/components/footer';
-import { AwardMasterModal } from '@/app/components/award-master-modal';
+import { AwardPayoutModal } from '@/app/components/award-payout-modal';
 import { ConfirmModal } from '@/app/components/confirm-modal';
 import { UserManagement } from '@/app/components/user-management';
 import { RoleManagement } from '@/app/components/role-management';
@@ -11,9 +11,10 @@ import { GiveawayManager } from '@/app/components/giveaway-manager';
 import { OfficerNotificationManager } from '@/app/components/officer-notification-manager';
 import { OfficerTeamManager } from '@/app/components/officer-team-manager';
 import { OfficerRankConfig } from '@/app/components/officer-rank-config';
-import { PrizeManager } from '@/app/components/prize-manager';
+import { PayoutManager } from '@/app/components/payout-manager';
 import { toast } from 'sonner';
 import { isOfficer } from '@/lib/roles';
+import { AdminGuildWarsManager } from '@/app/components/admin-guild-wars-manager';
 
 interface OfficerPageProps {
   user: any;
@@ -23,9 +24,10 @@ interface OfficerPageProps {
 // ── TOC Section Config — ordered per spec ──
 const TOC_SECTIONS = [
   { id: 'admin-tools', label: 'Admin Tools', icon: Settings, color: 'text-harvest', bg: 'bg-harvest/10', ownerOnly: false },
-  { id: 'prize-manager', label: 'Prizes', icon: DollarSign, color: 'text-[#10b981]', bg: 'bg-[#10b981]/10', ownerOnly: true },
+  { id: 'payout-manager', label: 'Payouts', icon: DollarSign, color: 'text-[#10b981]', bg: 'bg-[#10b981]/10', ownerOnly: true },
   { id: 'user-management', label: 'User Manager', icon: Users, color: 'text-[#3b82f6]', bg: 'bg-[#3b82f6]/10', ownerOnly: true },
-  { id: 'guild-manager', label: 'Guilds', icon: Shield, color: 'text-[#6366f1]', bg: 'bg-[#6366f1]/10', ownerOnly: true },
+  { id: 'guild-wars-manager', label: 'Guild Wars', icon: Swords, color: 'text-harvest', bg: 'bg-harvest/10', ownerOnly: true },
+  { id: 'tag-manager', label: 'Tags', icon: Shield, color: 'text-[#6366f1]', bg: 'bg-[#6366f1]/10', ownerOnly: true },
   { id: 'team-manager', label: 'Teams', icon: Swords, color: 'text-[#8b5cf6]', bg: 'bg-[#8b5cf6]/10', ownerOnly: false },
   { id: 'giveaway-manager', label: 'Giveaways', icon: Gift, color: 'text-[#10b981]', bg: 'bg-[#10b981]/10', ownerOnly: true },
   { id: 'notification-manager', label: 'Notifications', icon: Bell, color: 'text-[#ec4899]', bg: 'bg-[#ec4899]/10', ownerOnly: true },
@@ -33,7 +35,7 @@ const TOC_SECTIONS = [
 
 export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
   // State for admin modals
-  const [showAwardMasterModal, setShowAwardMasterModal] = useState(false);
+  const [showAwardPayoutModal, setShowAwardPayoutModal] = useState(false);
 
   // State for admin actions
   const [isSyncing, setIsSyncing] = useState(false);
@@ -301,14 +303,14 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
 
               <div className="space-y-3">
                 {/* Award Master */}
-                <button onClick={() => setShowAwardMasterModal(true)} className={adminBtnClass}>
+                <button onClick={() => setShowAwardPayoutModal(true)} className={adminBtnClass}>
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center shadow-md">
-                      <Trophy className="w-6 h-6 text-white" />
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#10b981] to-[#3b82f6] flex items-center justify-center shadow-md">
+                      <Banknote className="w-6 h-6 text-white" />
                     </div>
                     <div className="text-left">
-                      <p className="text-sm font-bold text-foreground">Award Prizes</p>
-                      <p className="text-xs text-muted-foreground">Champions, Pop'd Kernel, MOTN, staff pay & more</p>
+                      <p className="text-sm font-bold text-foreground">Award Payout</p>
+                      <p className="text-xs text-muted-foreground">Quick award to any user via Stripe Connect</p>
                     </div>
                   </div>
                   <ChevronRight className="w-5 h-5 text-harvest group-hover:translate-x-1 transition-transform" />
@@ -430,15 +432,15 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
                  2. PRIZE MANAGER — Owner only
                  ════════════════════════════════════════════════ */}
             {isOwner && (
-              <div id="prize-manager" className="bg-card rounded-3xl p-6 sm:p-8 shadow-sm border-2 border-border mb-6 scroll-mt-6">
+              <div id="payout-manager" className="bg-card rounded-3xl p-6 sm:p-8 shadow-sm border-2 border-border mb-6 scroll-mt-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-foreground">Prize Manager</h2>
+                  <h2 className="text-xl font-bold text-foreground">Payout Manager</h2>
                   <DollarSign className="w-6 h-6 text-[#10b981]" />
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Award prize money to tournament winners and manage Stripe Connect payouts.
+                  Award funds to tournament winners, staff, and community members via Stripe Connect.
                 </p>
-                <PrizeManager />
+                <PayoutManager />
               </div>
             )}
 
@@ -452,16 +454,32 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
             )}
 
             {/* ════════════════════════════════════════════════
-                 4. GUILD MANAGER (Roles) — Owner only
+                 4. GUILD WARS MANAGER — Owner only
                  ════════════════════════════════════════════════ */}
             {isOwner && (
-              <div id="guild-manager" className="bg-card rounded-3xl p-6 sm:p-8 shadow-sm border-2 border-border mb-6 scroll-mt-6">
+              <div id="guild-wars-manager" className="bg-card rounded-3xl p-6 sm:p-8 shadow-sm border-2 border-border mb-6 scroll-mt-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold text-foreground">Guild Manager</h2>
+                  <h2 className="text-xl font-bold text-foreground">Guild Wars Manager</h2>
+                  <Swords className="w-6 h-6 text-harvest" />
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Manage official community guilds, branding, and member limits for shop expansions.
+                </p>
+                <AdminGuildWarsManager />
+              </div>
+            )}
+
+            {/* ════════════════════════════════════════════════
+                 4b. TAG MANAGER (Legacy Roles) — Owner only
+                 ════════════════════════════════════════════════ */}
+            {isOwner && (
+              <div id="tag-manager" className="bg-card rounded-3xl p-6 sm:p-8 shadow-sm border-2 border-border mb-6 scroll-mt-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-foreground">Tag Manager</h2>
                   <Shield className="w-6 h-6 text-[#6366f1]" />
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Create custom guild roles that appear as leaderboard tabs and user badges
+                  Create custom flair roles that appear as user filter tabs on the leaderboard.
                 </p>
                 <RoleManagement />
               </div>
@@ -519,11 +537,11 @@ export function OfficerPage({ user, onRefresh }: OfficerPageProps) {
       <Footer />
 
       {/* ── Modals ── */}
-      {showAwardMasterModal && (
-        <AwardMasterModal
-          onClose={() => setShowAwardMasterModal(false)}
+      {showAwardPayoutModal && (
+        <AwardPayoutModal
+          onClose={() => setShowAwardPayoutModal(false)}
           onSuccess={() => {
-            setShowAwardMasterModal(false);
+            setShowAwardPayoutModal(false);
           }}
         />
       )}

@@ -8,6 +8,7 @@ import { Swords, Plus, LogOut, Lock, TrendingUp, Award } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { MvpSubmissionModal } from '@/app/components/mvp-submission-modal';
 import { PopEmoji } from '@/app/components/pop-emoji';
+import { ProfileGuildManager } from '@/app/components/profile-guild-manager';
 
 interface ProfilePageGuildWarsProps {
   user: any;
@@ -86,7 +87,7 @@ export function ProfilePageGuildWars({ user, onSignOut, onRefresh, onBadgeRefres
               </div>
               <div>
                 <p className="text-sm sm:text-base font-bold text-foreground">MVP Count</p>
-                <p className="text-[11px] sm:text-xs text-muted-foreground">MVP Count resets at the end of each season</p>
+                <p className="text-[11px] sm:text-xs text-muted-foreground">My 2026 MVP Count</p>
               </div>
             </div>
             <div className="text-2xl sm:text-3xl font-black text-amber-500 tabular-nums">
@@ -193,33 +194,8 @@ export function ProfilePageGuildWars({ user, onSignOut, onRefresh, onBadgeRefres
         </div>
       )}
 
-      {/* ═══ My Guilds Manager (Placeholder) ═══ */}
-      <div className="bg-card rounded-2xl p-5 sm:p-6 border-2 border-border">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Swords className="w-5 h-5 text-harvest" />
-            <h2 className="text-lg font-bold text-foreground">My Guilds</h2>
-          </div>
-          <button
-            disabled
-            className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground bg-muted px-3 py-1.5 rounded-full cursor-not-allowed"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            Create Guild
-          </button>
-        </div>
-
-        {/* Placeholder — no guilds yet */}
-        <div className="border-2 border-dashed border-border rounded-xl p-8 text-center">
-          <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-3">
-            <Lock className="w-6 h-6 text-muted-foreground" />
-          </div>
-          <p className="text-sm font-bold text-foreground mb-1">Guild Wars Coming Soon</p>
-          <p className="text-xs text-muted-foreground max-w-xs mx-auto">
-            Create and manage your guilds, challenge other guilds to wars, and climb the guild leaderboard.
-          </p>
-        </div>
-      </div>
+      {/* ═══ My Guild Manager ═══ */}
+      <ProfileGuildManager user={user} onRefresh={onRefresh} />
 
       {/* ═══ Actions ═══ */}
       <div className="bg-card rounded-2xl p-5 sm:p-6 border-2 border-border">

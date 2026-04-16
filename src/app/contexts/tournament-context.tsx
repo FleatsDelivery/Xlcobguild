@@ -122,7 +122,7 @@ interface TournamentContextValue {
   accessToken: string;
   loading: boolean;
   error: string | null;
-  refetch: () => Promise<void>;
+  refetch: (silent?: boolean) => Promise<void>;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -155,8 +155,8 @@ export function TournamentProvider({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (silent = false) => {
+    if (!silent) setLoading(true);
     setError(null);
 
     try {
@@ -230,7 +230,7 @@ export function TournamentProvider({
       console.error('❌ Tournament context fetch error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load tournament data');
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
