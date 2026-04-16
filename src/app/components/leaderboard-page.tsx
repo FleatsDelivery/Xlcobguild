@@ -448,14 +448,14 @@ function GuildCard({
                  </div>
              </div>
              
-              <div className="flex flex-col items-center flex-shrink-0 ml-4">
-                 <CornMeter 
-                   kernels={guild.kernels} 
-                   mvpCount={guild.total_mvp_count}
-                   size="sm" 
-                   className="scale-110" 
-                 />
-              </div>
+               <div className="flex flex-col items-center flex-shrink-0 ml-4">
+                  <CornMeter 
+                    kernels={guild.kernels} 
+                    mvpCount={Number(guild.total_mvp_count || 0)}
+                    size="sm" 
+                    className="scale-110" 
+                  />
+               </div>
           </div>
            {/* Average Rank Display - Enhanced Design (Full Width) */}
            {guild.avg_rank_id && (

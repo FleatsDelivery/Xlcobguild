@@ -33,7 +33,7 @@ export const CornMeter: React.FC<CornMeterProps> = ({
                     <TrendingUp className="w-3 h-3 text-harvest animate-pulse" />
                  </div>
                  <span className="text-[8px] font-black text-harvest uppercase tracking-[0.2em] whitespace-nowrap">
-                   RANK
+                   SCORE
                  </span>
               </div>
               
@@ -46,7 +46,7 @@ export const CornMeter: React.FC<CornMeterProps> = ({
            </div>
 
            {/* Column 2: MVP Count (if provided) */}
-           {typeof mvpCount === 'number' && (
+           {mvpCount !== undefined && (
               <div className="flex-1 px-4 py-2.5 flex flex-col items-center justify-center min-w-[80px] bg-white/5">
                  <div className="flex items-center gap-1.5 mb-0.5">
                     <div className="relative">
@@ -59,7 +59,7 @@ export const CornMeter: React.FC<CornMeterProps> = ({
                  
                  <div className="relative">
                     <span className="text-xl font-black text-white tabular-nums tracking-tighter drop-shadow-lg">
-                      {mvpCount.toLocaleString()}
+                      {Number(mvpCount).toLocaleString()}
                     </span>
                     <div className="absolute -top-1 -left-2 -right-2 h-px bg-white/20 blur-[1px]" />
                  </div>
