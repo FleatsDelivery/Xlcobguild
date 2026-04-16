@@ -983,10 +983,6 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
 
                             {/* Minimal mobile badges */}
                             <div className="flex items-center gap-2 flex-shrink-0">
-                                <div className="flex flex-col items-center">
-                                  <TrendingUp className="w-3 h-3 text-[#3b82f6]" />
-                                  <span className="text-[8px] font-black text-[#3b82f6] leading-none mt-0.5">{leaderboardUser.mvp_count || 0}</span>
-                                </div>
                                 <div className="flex items-center gap-0.5 bg-foreground/5 px-1.5 py-1 rounded-lg border border-foreground/5">
                                   {[1, 2, 3, 4, 5].map((level) => {
                                     const isAchieved = (leaderboardUser.prestige_level || 0) >= level;
@@ -997,6 +993,10 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
                                       </span>
                                     );
                                   })}
+                                </div>
+                                <div className="flex flex-col items-center">
+                                  <TrendingUp className="w-3 h-3 text-[#3b82f6]" />
+                                  <span className="text-[8px] font-black text-[#3b82f6] leading-none mt-0.5">{leaderboardUser.mvp_count || 0}</span>
                                 </div>
                             </div>
                           </div>
@@ -1060,16 +1060,6 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
                                   </p>
                                 </div>
 
-                                {/* MVP Count */}
-                                <div className="flex flex-col items-center min-w-[60px]">
-                                  <div className="w-8 h-8 rounded-lg bg-[#3b82f6]/10 flex items-center justify-center mb-0.5">
-                                    <TrendingUp className="w-4 h-4 text-[#3b82f6]" />
-                                  </div>
-                                  <p className="text-[10px] font-black text-[#3b82f6] text-center uppercase">
-                                    {leaderboardUser.mvp_count || 0} MVP
-                                  </p>
-                                </div>
-
                                 {/* Prestige 5-Star Display */}
                                 <div className="flex flex-col items-center bg-foreground/5 px-4 py-2 rounded-xl border border-foreground/5">
                                   <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest leading-none mb-1.5">Prestige</p>
@@ -1090,6 +1080,16 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
                                     })}
                                   </div>
                                 </div>
+
+                                {/* MVP Count */}
+                                <div className="flex flex-col items-center min-w-[60px]">
+                                  <div className="w-8 h-8 rounded-lg bg-[#3b82f6]/10 flex items-center justify-center mb-0.5">
+                                    <TrendingUp className="w-4 h-4 text-[#3b82f6]" />
+                                  </div>
+                                  <p className="text-[10px] font-black text-[#3b82f6] text-center uppercase">
+                                    {leaderboardUser.mvp_count || 0} MVP
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -1108,7 +1108,7 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
               {viewTab === 'towers' ? (
                 <>🌽 RANKING PRIORITY: <span className="text-foreground">SCORE</span> → <span className="text-foreground">MVP COUNT</span> → <span className="text-foreground">GUILD CAPACITY</span></>
               ) : (
-                <>🌽 RANKING PRIORITY: <span className="text-foreground">PRESTIGE</span> → <span className="text-foreground">GUILD RANK</span> → <span className="text-foreground">CHAMPIONSHIPS</span> → <span className="text-foreground">POP'D KERNELS</span> → <span className="text-foreground">DOTA BADGE</span></>
+                <>🌽 RANKING PRIORITY: <span className="text-foreground">GUILD RANK</span> → <span className="text-foreground">PRESTIGE</span> → <span className="text-foreground">MVP COUNT</span></>
               )}
             </p>
           </div>
