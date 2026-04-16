@@ -33,7 +33,7 @@ export function registerLeaderboardRoutes(app: Hono, supabase: any, anonSupabase
       const { data: users, error: usersError } = await supabase
         .from('users')
         .select(`
-          id, discord_username, discord_avatar, discord_id, rank_id, prestige_level,
+          id, discord_username, discord_avatar, discord_id, rank_id, prestige_level, mvp_count,
           role, created_at, steam_id, opendota_data, tcf_plus_active, twitch_username, twitch_avatar,
           guild_id,
           ranks ( id, name, display_order ),
@@ -56,7 +56,7 @@ export function registerLeaderboardRoutes(app: Hono, supabase: any, anonSupabase
           guildStatsMap[u.guild_id].member_count++;
           guildStatsMap[u.guild_id].total_rank += (u.rank_id || 1);
           guildStatsMap[u.guild_id].total_prestige += (u.prestige_level || 0);
-          guildStatsMap[u.guild_id].total_mvp_count += (u.mvp_count || 0);
+          guildStatsMap[u.guild_id].total_mvp_count += Number(u.mvp_count || 0);
           
           const rankPoints = u.rank_id || 1;
           const prestigePoints = (u.prestige_level || 0) * 10;
