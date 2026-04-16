@@ -840,19 +840,7 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
           </div>
         ) : viewTab === 'towers' ? (
           <div className="space-y-6">
-            {/* Ranking Priority - Explicitly stated as requested */}
-            <div className="flex items-center gap-3 bg-card/60 backdrop-blur-md border border-harvest/10 rounded-2xl p-4 mb-2 shadow-sm">
-               <div className="w-8 h-8 rounded-lg bg-harvest/10 flex items-center justify-center border border-harvest/20">
-                  <Info className="w-4 h-4 text-harvest" />
-               </div>
-               <div className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.1em] leading-relaxed">
-                  Ranking Priority: <span className="text-foreground">Rank Score</span>
-                  <span className="mx-3 opacity-30">/</span>
-                  <span className="text-foreground">MVP Count</span>
-                  <span className="mx-3 opacity-30">/</span>
-                  <span className="text-foreground">Guild Capacity</span>
-               </div>
-            </div>
+            {/* Guild List */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {rankedGuilds.map((g, i) => (
                 <GuildCard 
@@ -1135,8 +1123,12 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
         {/* Info Card */}
         {!loading && users.length > 0 && (
           <div className="mt-3 sm:mt-6 bg-[#3b82f6]/5 rounded-xl sm:rounded-2xl p-3 sm:p-6 border-2 border-[#3b82f6]/20">
-            <p className="text-[10px] sm:text-sm text-muted-foreground text-center">
-              🌽 Ranked by Prestige → Guild Rank → Championships → Pop'd Kernels → Dota Badge
+            <p className="text-[10px] sm:text-sm text-muted-foreground text-center font-bold tracking-tight">
+              {viewTab === 'towers' ? (
+                <>🌽 RANKING PRIORITY: <span className="text-foreground">SCORE</span> → <span className="text-foreground">MVP COUNT</span> → <span className="text-foreground">GUILD CAPACITY</span></>
+              ) : (
+                <>🌽 RANKING PRIORITY: <span className="text-foreground">PRESTIGE</span> → <span className="text-foreground">GUILD RANK</span> → <span className="text-foreground">CHAMPIONSHIPS</span> → <span className="text-foreground">POP'D KERNELS</span> → <span className="text-foreground">DOTA BADGE</span></>
+              )}
             </p>
           </div>
         )}
