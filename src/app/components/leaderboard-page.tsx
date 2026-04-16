@@ -213,171 +213,123 @@ function LeaderboardSkeleton() {
 }
 
 // ═══════════════════════════════════════════════════════
-// TOP 3 PODIUM COMPONENT
+// PLAYER FEATURED CARD (Top Individuals)
 // ═══════════════════════════════════════════════════════
 
-const PODIUM_STYLES = [
-  // 1st place
-  {
-    bgGradient: 'from-yellow-400/20 to-amber-300/10',
-    border: 'border-yellow-400/60',
-    badgeBg: 'bg-gradient-to-br from-yellow-400 to-amber-500',
-    avatarSize: 'w-16 h-16 sm:w-20 sm:h-20',
-    avatarBorder: 'border-yellow-400',
-    nameSize: 'text-sm sm:text-lg',
-    crown: true,
-    padTop: 'pt-2',
-  },
-  // 2nd place
-  {
-    bgGradient: 'from-gray-300/20 to-gray-200/10',
-    border: 'border-gray-300/60',
-    badgeBg: 'bg-gradient-to-br from-gray-400 to-gray-500',
-    avatarSize: 'w-14 h-14 sm:w-16 sm:h-16',
-    avatarBorder: 'border-gray-300',
-    nameSize: 'text-xs sm:text-base',
-    crown: false,
-    padTop: 'pt-3 sm:pt-6',
-  },
-  // 3rd place
-  {
-    bgGradient: 'from-orange-300/20 to-orange-200/10',
-    border: 'border-orange-300/60',
-    badgeBg: 'bg-gradient-to-br from-orange-400 to-orange-500',
-    avatarSize: 'w-14 h-14 sm:w-16 sm:h-16',
-    avatarBorder: 'border-orange-300',
-    nameSize: 'text-xs sm:text-base',
-    crown: false,
-    padTop: 'pt-3 sm:pt-6',
-  },
-];
-
-function TopThreePodium({
-  users,
-  onUserClick,
-}: {
-  users: LeaderboardUser[];
-  onUserClick: (u: LeaderboardUser) => void;
+function PlayerFeaturedCard({ 
+  user, 
+  position, 
+  onClick 
+}: { 
+  user: LeaderboardUser; 
+  position: number; 
+  onClick: () => void;
 }) {
-  if (users.length < 3) return null;
-
-  // Render order: [2nd, 1st, 3rd]
-  const renderOrder = [1, 0, 2];
+  const guildColor = user.guild?.color || getRoleBadgeStyle(user.role).hex;
+  const emoji = rankEmojis[user.rank_id - 1];
+  const isPopdKernel = user.rank_id === 11;
+  const guildLabel = user.guild && user.guild.name !== 'Unaffiliated' ? user.guild.tag : getRoleDisplayName(user.role);
 
   return (
-    <div className="bg-card rounded-2xl border-2 border-border p-3 sm:p-6 mb-3 sm:mb-6">
-      <h2 className="text-base sm:text-xl font-bold text-foreground mb-0.5 text-center">
-        Top 3 MVPs
-      </h2>
-      <p className="text-[10px] sm:text-xs text-muted-foreground text-center mb-3 sm:mb-5">
-        Ranked by Prestige, Guild Rank, Championships, Pop'd Kernels
-      </p>
+     <div 
+        className="bg-card rounded-[2rem] border-2 border-border overflow-hidden group hover:border-harvest/50 transition-all hover:shadow-2xl relative flex flex-col h-full cursor-pointer shadow-sm" 
+        onClick={onClick}
+     >
+        {/* Position Badge */}
+        <div className={`absolute top-6 left-6 z-20 px-4 py-1.5 rounded-xl text-[11px] font-black border-2 shadow-2xl transition-transform hover:scale-105 ${
+          position === 1 ? 'border-yellow-400 bg-yellow-400 text-black shadow-yellow-400/20' :
+          position === 2 ? 'border-gray-300 bg-gray-300 text-black shadow-gray-300/20' :
+          position === 3 ? 'border-orange-500 bg-orange-500 text-black shadow-orange-500/20' :
+          'border-border/50 bg-black/60 text-white backdrop-blur-md'
+        }`}>
+           {position === 1 ? '🥇 MVP' : 
+            position === 2 ? '🥈 ELITE' : 
+            position === 3 ? '🥉 PRO' : 
+            `#${position} STAR`}
+        </div>
 
-      <div className="grid grid-cols-3 gap-2 sm:gap-5 items-end">
-        {renderOrder.map(dataIdx => {
-          const u = users[dataIdx];
-          const s = PODIUM_STYLES[dataIdx];
-          const emoji = rankEmojis[u.rank_id - 1];
-          const isPopdKernel = u.rank_id === 11;
-          const hasChampionships = u.kkup_stats?.linked && u.kkup_stats.championships > 0;
-          const hasPopdKernels = u.kkup_stats?.linked && u.kkup_stats.popd_kernels > 0;
-          const guildColor = u.guild?.color || getRoleBadgeStyle(u.role).hex;
-          const guildLabel = u.guild && u.guild.name !== 'Unaffiliated' ? u.guild.tag : getRoleDisplayName(u.role);
+        {/* Banner */}
+        <div className="h-28 relative overflow-hidden flex-shrink-0">
+           <div className="absolute inset-0 opacity-30" style={{ backgroundColor: guildColor }} />
+           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/50 to-card" />
+           <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: `radial-gradient(circle at 2px 2px, ${guildColor} 1px, transparent 0)`, backgroundSize: '16px 16px' }} />
+           
+           {/* Avatar overlapping banner */}
+           <div className="absolute -bottom-8 left-8 z-10">
+              <TcfPlusAvatarRing active={user.tcf_plus_active} size="md">
+                 {user.discord_avatar ? (
+                   <img src={user.discord_avatar} alt={user.discord_username} className="w-24 h-24 rounded-full border-4 border-card bg-card object-cover" />
+                 ) : (
+                   <div className="w-24 h-24 rounded-full bg-harvest/10 flex items-center justify-center border-4 border-card font-black">
+                      <span className="text-harvest text-3xl">{user.discord_username[0].toUpperCase()}</span>
+                   </div>
+                 )}
+              </TcfPlusAvatarRing>
+           </div>
+        </div>
 
-          return (
-            <div
-              key={u.id}
-              className={`${s.padTop} cursor-pointer group`}
-              onClick={() => onUserClick(u)}
-            >
-              <div className={`bg-gradient-to-br ${s.bgGradient} rounded-xl border-2 ${s.border} p-2.5 sm:p-4 text-center relative transition-all group-hover:scale-[1.03] group-hover:shadow-lg`}>
-                {/* Position badge */}
-                <div className={`${s.badgeBg} text-white rounded-full w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center font-bold text-xs sm:text-base mx-auto mb-1.5 sm:mb-2 border-2 border-card shadow-md`}>
-                  {dataIdx + 1}
-                </div>
-
-                {/* Crown for 1st */}
-                {s.crown && <Crown className="w-4 h-4 sm:w-6 sm:h-6 mx-auto mb-0.5 text-yellow-500" />}
-
-                {/* Avatar */}
-                <div className="flex justify-center mb-2 sm:mb-3">
-                <TcfPlusAvatarRing active={u.tcf_plus_active} size="sm">
-                {u.discord_avatar ? (
-                  <img
-                    src={u.discord_avatar}
-                    alt={u.discord_username}
-                    className={`${s.avatarSize} rounded-full border-4 ${s.avatarBorder} object-cover`}
-                    width={96}
-                    height={96}
-                  />
-                ) : (
-                  <div className={`${s.avatarSize} rounded-full bg-harvest/20 flex items-center justify-center border-4 ${s.avatarBorder}`}>
-                    <span className="text-harvest font-bold text-lg sm:text-2xl">
-                      {u.discord_username[0].toUpperCase()}
+        <div className="p-6 pt-10 flex flex-col flex-1">
+           <div className="flex justify-between items-start mb-6">
+              <div className="min-w-0 pr-4">
+                 <h3 className="text-xl font-black text-foreground mb-1 leading-tight group-hover:text-harvest transition-colors truncate">
+                    {user.discord_username}
+                 </h3>
+                 <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded-lg text-[10px] font-black text-white uppercase tracking-wider" style={{ backgroundColor: guildColor }}>
+                       {guildLabel}
                     </span>
+                 </div>
+              </div>
+
+               {/* MVP Count HUD Style */}
+               <div className="flex flex-col items-center flex-shrink-0 ml-4">
+                   <div className="w-10 h-10 rounded-xl bg-[#3b82f6]/10 flex items-center justify-center border border-[#3b82f6]/20 mb-1">
+                      <TrendingUp className="w-5 h-5 text-[#3b82f6]" />
+                   </div>
+                   <p className="text-[12px] font-black text-[#3b82f6] uppercase tabular-nums">{(user.mvp_count || 0).toLocaleString()}</p>
+                   <p className="text-[8px] font-bold text-[#3b82f6]/60 uppercase leading-none">MVPs</p>
+               </div>
+           </div>
+
+           {/* Rank & Prestige Display (Adapted from Guild Card) */}
+           <div className="relative mt-2 mb-6 group/rank w-full">
+              <div className="absolute -inset-2 bg-harvest/5 rounded-2xl blur-lg opacity-0 group-hover/rank:opacity-100 transition-opacity" />
+              <div className="relative flex items-center justify-between gap-3 bg-card/40 backdrop-blur-md rounded-2xl p-3 border border-border/50 shadow-sm overflow-hidden w-full">
+                <div className="flex items-center gap-2">
+                  <div className="w-11 h-11 rounded-xl bg-harvest/10 flex items-center justify-center text-2xl border border-harvest/20 shadow-inner group-hover/rank:rotate-[360deg] transition-all duration-700">
+                    {isPopdKernel ? <Popcorn className="w-6 h-6 text-harvest" /> : emoji}
                   </div>
-                )}
-                </TcfPlusAvatarRing>
+                  <div>
+                    <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest leading-none mb-1">MEMBER TIER</p>
+                    <p className="text-[14px] font-black text-foreground uppercase tracking-tighter leading-none truncate max-w-[100px]">
+                      {user.ranks?.name || 'Unranked'}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Name */}
-                <p className={`${s.nameSize} font-bold text-foreground mb-0.5 truncate`}>
-                  {u.discord_username}
-                </p>
-
-                {/* Guild pill */}
-                <span
-                  className="inline-block px-1.5 py-0.5 text-white text-[8px] sm:text-[10px] font-bold rounded-full mb-1"
-                  style={{ backgroundColor: guildColor }}
-                >
-                  {guildLabel}
-                </span>
-
-                {/* Rank */}
-                <div className="flex items-center justify-center gap-1 mb-1">
-                  {isPopdKernel ? (
-                    <Popcorn className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-harvest" />
-                  ) : (
-                    <span className="text-xs sm:text-sm">{emoji}</span>
-                  )}
-                  <span className="text-xs sm:text-sm font-bold text-foreground">
-                    {u.ranks?.name || 'Unranked'}
-                  </span>
-                </div>
-
-                {/* Prestige 5-Star Display */}
-                <div className="flex items-center justify-center gap-0.5 mt-1">
+                {/* 5-Star Prestige */}
+                <div className="flex items-center gap-1.5 px-3 bg-foreground/5 py-1.5 rounded-xl border border-foreground/5 shrink-0">
                   {[1, 2, 3, 4, 5].map((level) => {
-                    const isAchieved = (u.prestige_level || 0) >= level;
+                    const isAchieved = (user.prestige_level || 0) >= level;
                     const starEmoji = level === 5 ? '💥' : '🌟';
                     return (
-                      <span 
-                        key={level} 
-                        className={`text-[12px] leading-none ${
-                          isAchieved ? 'drop-shadow-sm' : 'opacity-15 grayscale'
-                        }`}
-                      >
+                      <span key={level} className={`text-[12px] leading-none transition-all duration-300 ${isAchieved ? 'drop-shadow-sm scale-110' : 'opacity-10 grayscale'}`}>
                         {starEmoji}
                       </span>
                     );
                   })}
                 </div>
-
-                {/* Badges row */}
-                <div className="flex items-center justify-center gap-3 mt-1">
-                  <div className="flex flex-col items-center">
-                    <TrendingUp className="w-3.5 h-3.5 text-[#3b82f6]" />
-                    <p className="text-[10px] font-black text-[#3b82f6] leading-none mt-1">
-                      {u.mvp_count || 0} MVP
-                    </p>
-                  </div>
-                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
+           </div>
+
+           <button 
+             className="w-full flex items-center justify-center gap-2 py-3 mt-auto rounded-2xl text-xs font-black bg-foreground text-background hover:bg-foreground/90 transition-all shadow-xl group/btn transform active:scale-95"
+           >
+              View Profile
+              <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+           </button>
+        </div>
+     </div>
   );
 }
 
@@ -673,11 +625,11 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
   // Inclusive guild list (now showing Unaffiliated)
   const rankedGuilds = guilds;
 
-  // For podium: use the global top 3 (not filtered)
-  const globalTop3 = users.slice(0, 3);
-  // For the list: skip top 3 only on "All" tab with no search
+  // For featured players: use the global top 4 (not filtered)
+  const globalTop4 = users.slice(0, 4);
+  // For the list: skip top 4 only on "All" tab with no search
   const isUnfilteredAll = activeTab === 'all' && !searchTerm;
-  const listUsers = isUnfilteredAll ? tabFilteredUsers.slice(3) : tabFilteredUsers;
+  const listUsers = isUnfilteredAll ? tabFilteredUsers.slice(4) : tabFilteredUsers;
 
   return (
     <div className="p-3 sm:p-6">
@@ -885,12 +837,18 @@ export function LeaderboardPage({ user, onRefresh }: { user: any; onRefresh?: ()
         ) : (
               <>
                 {/* Field of Battle (Individual Players) */}
-                {/* Top 3 Podium — only show on "All" tab with no search */}
-                {isUnfilteredAll && globalTop3.length >= 3 && (
-                  <TopThreePodium
-                    users={globalTop3}
-                    onUserClick={setSelectedUser}
-                  />
+                {/* Featured Top 4 Players — only show on "All" tab with no search */}
+                {isUnfilteredAll && globalTop4.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8">
+                     {globalTop4.map((u, i) => (
+                        <PlayerFeaturedCard 
+                           key={u.id}
+                           user={u}
+                           position={i + 1}
+                           onClick={() => setSelectedUser(u)}
+                        />
+                     ))}
+                  </div>
                 )}
 
                 {/* User List */}
